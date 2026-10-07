@@ -868,6 +868,8 @@ html[data-theme=light] .lgn{color:#4a4e5a}html[data-theme=light] .lgn:hover .lgt
 .setp input{font:inherit;font-size:12px;color:var(--ink);background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:5px 9px;height:28px;box-sizing:border-box;min-width:0;width:200px}.setp input:focus{outline:none;border-color:var(--a)}
 .mini .fxm .sw{opacity:.45}.mini .fxm{animation-name:fxmfade}
 .mr.me .mn .you{margin-right:0}
+.ver{opacity:.55;font-size:10px;margin-left:4px}
+input.bad{border-color:var(--neg)!important;box-shadow:0 0 0 2px rgba(255,107,107,.18)}
 </style>
 </head>
 <body>
@@ -893,7 +895,7 @@ html[data-theme=light] .lgn{color:#4a4e5a}html[data-theme=light] .lgn:hover .lgt
     <div class="labc"><span class="seg2" data-c="motion"><button data-v="normal" class="on">Normal</button><button data-v="reduced">Reduced</button></span><span class="seg2" data-c="sound"><button data-v="on" class="on">Sound</button><button data-v="off">Mute</button></span><button id="labplay" class="labp">▶ Play all</button></div>
     <div class="labbar"><span id="labnow" class="labnow">PREVIEW</span><span id="labsc" class="labsc"></span></div>
     <div id="labev" class="labev"></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone.</div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v26</span></div>
   </div>
 </header>
 <main>
@@ -1817,7 +1819,7 @@ function labPlayAll(){
   const step=()=>{if(!LAB.playing)return;if(i>=seq.length){labStop();return}const[k,first]=seq[i++];labRun(k,first);LAB.timer=setTimeout(step,(FXDUR[k]||1400)+650)};step();
 }
 function themeInit(){const t=load("theme")||"dark";document.documentElement.dataset.theme=t;document.querySelectorAll('#thm button').forEach(b=>{b.classList.toggle("on",b.dataset.v===t);b.onclick=e=>{e.stopPropagation();save("theme",b.dataset.v);themeInit()}});
-  const w=$("wkr");if(w&&!w.dataset.ok){w.dataset.ok=1;w.value=load("worker")||"";w.onchange=()=>save("worker",w.value.trim().replace(/\/$/,""))}}
+  const w=$("wkr");if(w&&!w.dataset.ok){w.dataset.ok=1;w.value=workerURL();w.oninput=()=>w.classList.toggle("bad",!!w.value.trim()&&!validURL(w.value));w.onchange=()=>{const v=w.value.trim().replace(/\/$/,"");if(!v||validURL(v))save("worker",v)}}}
 function labInit(){themeInit();
   const ev=$("labev");if(!ev||ev.dataset.ok)return;ev.dataset.ok=1;
   ev.innerHTML=LABEV.map(([cat,list])=>`<div class="lbc"><span class="lbh">${cat}</span><div class="lbl">${list.map(e=>`<button class="lbe" data-k="${e[0]}">${e[1]}</button>`).join("")}</div></div>`).join("");
@@ -2213,24 +2215,29 @@ function pvForm(p){
   document.querySelectorAll(".pcard").forEach(b=>b.classList.toggle("sel",b.dataset.p===p));const f=$("pvform"),cs=S.conns||getConns(),mine=cs.filter(x=>x.p===p);
   const add=c=>{S.conns=(S.conns||getConns()).filter(x=>x.key!==c.key).concat(c);saveConns();renderConns();pvForm(p);$("werr").textContent=""};
   const list=mine.length?`<div class="pmng">${mine.map(c=>{const st=(S.connStat||{})[c.key]||{};return`<div class="crow"><i class="pdot ${st.st||""}"></i><span class="cnm">${esc(c.username||c.name||("League "+(c.leagueId||"")))}</span>${st.n?`<small>${st.n} league${st.n>1?"s":""}</small>`:""}<button class="cx" data-k="${esc(c.key)}" title="Disconnect">✕</button></div>`}).join("")}</div>`:"";
-  const W=load("worker")||"";
-  const team=(prov,lid,proxy,fetchTeams)=>async()=>{$("werr").textContent="";try{const t=await fetchTeams();$("pteam").style.display="";$("pteam").innerHTML=`<select id="pts">${t.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("")}</select><button class="pcta" id="pta">Add as my team</button>`;
+  const W=workerURL();
+  const team=(prov,lid,proxy,fetchTeams)=>async()=>{$("werr").textContent="";try{if(!lid())throw new Error("Enter the league ID first.");proxy();const t=await fetchTeams();$("pteam").style.display="";$("pteam").innerHTML=`<select id="pts">${t.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("")}</select><button class="pcta" id="pta">Add as my team</button>`;
     $("pta").onclick=()=>add({key:prov+":"+lid(),p:prov,leagueId:lid(),teamId:+$("pts").value,proxy:proxy()})}catch(e){$("werr").textContent=e.message}};
   let h="";
   if(p==="sleeper")h=`<div class="wrow"><input id="user" placeholder="Sleeper username" autocapitalize="none" spellcheck="false"><button class="pcta" id="pvadd">Connect</button></div>`;
   else if(p==="espn")h=`<div class="wrow"><input id="lid" placeholder="ESPN league ID" inputmode="numeric"><input id="prx" placeholder="Proxy (private leagues)" value="${esc(W)}"><button class="pcta" id="pfind">Find teams</button></div><div class="wrow" id="pteam" style="display:none"></div>`;
-  else if(p==="yahoo")h=`<div class="wrow"><input id="ywk" placeholder="Wingman Connect URL" value="${esc(W)}" spellcheck="false"><button class="pcta" id="yco">🔒 Sign in with Yahoo</button></div>`;
+  else if(p==="yahoo")h=`<div class="wrow"><input id="ywk" placeholder="https://… your Wingman Connect address" value="${esc(workerURL())}" spellcheck="false" inputmode="url"><button class="pcta" id="yco">🔒 Sign in with Yahoo</button></div>`;
   else if(p==="mfl"||p==="fleaflicker")h=`<div class="wrow"><input id="lid" placeholder="${p==="mfl"?"MFL":"Fleaflicker"} league ID" inputmode="numeric"><input id="prx" placeholder="Proxy (optional)" value=""><button class="pcta" id="pfind">Find teams</button></div><div class="wrow" id="pteam" style="display:none"></div>`;
   else if(p==="manual"){importUI(f,list);return}
   f.innerHTML=list+h;
   f.querySelectorAll(".cx").forEach(b=>b.onclick=()=>{S.conns=(S.conns||getConns()).filter(c=>c.key!==b.dataset.k);saveConns();renderConns();pvForm(p)});
-  const lid=()=>($("lid")||{}).value.trim(),proxy=()=>(($("prx")||{}).value||"").trim();
+  const lid=()=>($("lid")||{}).value.trim(),proxy=()=>{const v=(($("prx")||{}).value||"").trim().replace(/\/$/,"");if(v&&!validURL(v))throw new Error("The proxy must be an https:// address (or leave it empty).");return v};
   if(p==="sleeper"){const go=()=>{const u=$("user").value.trim();if(u)add({key:"sleeper:"+u.toLowerCase(),p:"sleeper",username:u})};$("pvadd").onclick=go;$("user").onkeydown=e=>{if(e.key==="Enter")go()}}
   if(p==="espn")$("pfind").onclick=team("espn",lid,proxy,async()=>((await PROV.espn.get({proxy:proxy()},lid(),"view=mTeam")).teams||[]).map(x=>({id:x.id,name:x.name||[x.location,x.nickname].join(" ")})));
   if(p==="mfl")$("pfind").onclick=team("mfl",lid,proxy,async()=>[].concat((((await PROV.mfl.get({proxy:proxy(),leagueId:lid()},"TYPE=league")).league||{}).franchises||{}).franchise||[]).map(x=>({id:x.id,name:x.name})));
   if(p==="fleaflicker")$("pfind").onclick=team("fleaflicker",lid,proxy,async()=>[].concat(...((await PROV.fleaflicker.get({proxy:proxy(),leagueId:lid()},"FetchLeagueStandings",`season=${S.season||new Date().getFullYear()}`)).divisions||[]).map(d=>d.teams||[])).map(t=>({id:t.id,name:t.name})));
-  if(p==="yahoo")$("yco").onclick=()=>{const w=$("ywk").value.trim().replace(/\/$/,"");if(!w)return;save("worker",w);save("yworker",w);location.href=w+"/yahoo/login?return="+encodeURIComponent(location.href.split("#")[0])};
+  if(p==="yahoo")$("yco").onclick=()=>{const w=$("ywk").value.trim().replace(/\/$/,"");
+    if(!validURL(w)){$("ywk").classList.add("bad");$("werr").textContent=w?"That isn't a Wingman Connect address. It should start with https:// (e.g. https://wingman-connect.yourname.workers.dev).":"Yahoo needs your Wingman Connect address first (https://…).";return}
+    save("worker",w);save("yworker",w);location.href=w+"/yahoo/login?return="+encodeURIComponent(location.origin+location.pathname)};
 }
+const validURL=u=>/^https:\/\/[a-z0-9.-]+\.[a-z]{2,}(:\d+)?(\/[^\s]*)?$/i.test(String(u||"").trim());
+const workerURL=()=>{const w=(load("worker")||"").trim().replace(/\/$/,"");return validURL(w)?w:""};
+try{if(load("worker")&&!validURL(load("worker")))save("worker","");if(load("yworker")&&!validURL(load("yworker")))save("yworker","")}catch(e){}
 function setupLink(){const cs=(S.conns||getConns()).filter(c=>c.p!=="yahoo").map(c=>{const x=Object.assign({},c);delete x.session;return x});
   return location.origin+location.pathname+"#wm_setup="+btoa(unescape(encodeURIComponent(JSON.stringify(cs)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
 (()=>{try{const m=location.hash.match(/wm_setup=([^&]+)/);if(m){const a=JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,"+").replace(/_/g,"/")))));const cur=getConns(),keys=new Set(cur.map(c=>c.key));
@@ -2291,7 +2298,7 @@ async function imPreview(cand){
 }
 /* screenshot → worker vision → candidate roster (image is sent once and not kept) */
 async function imImage(file){
-  const W=load("worker");$("werr").textContent="";
+  const W=workerURL();$("werr").textContent="";
   if(!W){$("imprev").innerHTML=`<div class="cna">Screenshot reading runs on your Wingman Connect worker. Add its URL in Settings → Connect, or use JSON.</div>`;return}
   $("imprev").innerHTML=`<div class="imload"><i class="spin"></i>Reading roster…</div>`;
   try{const img=await imShrink(file),r=await tfetch(W.replace(/\/$/,"")+"/vision/roster",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(img)},45000);
@@ -3158,7 +3165,7 @@ function setTab(t){
   else if(t==="p"){PK.lastHtml="";pkRender();pkTick()}
   else if(t==="t"){MV.lastHtml="";mvRender();mvTick()}
   else if(t==="f"){FD.lastHtml="";fdRender();fdTick()}
-  else{if(loggedIn){$("view").style.display=""}else if(!onWelcome){$("welcome").style.display=""}}
+  else{if(loggedIn){$("view").style.display="";$("welcome").style.display="none";applyVis()}else{$("welcome").style.display=""}}
 }
 document.querySelectorAll("header .tb").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
 SV.lastTick=0;setInterval(async()=>{const n=Date.now(),every=(+$("every").value||3)*1000;if(n-SV.lastTick>=(S.tab==="s"||S.tab==="p"?every:15000)){SV.lastTick=n;await svTick();if(S.tab==="p")await pkTick();else if(PK.weeks)await pkLoadNext(PK.weeks,15000);try{renderSweat()}catch(e){}}},1000);
