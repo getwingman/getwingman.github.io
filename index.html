@@ -864,6 +864,10 @@ html[data-theme=light] .lr.tier-rt .k{color:#7a7f8c}
 /* light mode: legacy light-gray text → readable mute */
 html[data-theme=light] .addr,html[data-theme=light] .cna,html[data-theme=light] .cov span,html[data-theme=light] .dt,html[data-theme=light] .fcs,html[data-theme=light] .flab b,html[data-theme=light] .gclk.pre,html[data-theme=light] .gst.mid,html[data-theme=light] .hl2,html[data-theme=light] .ins,html[data-theme=light] .lgn,html[data-theme=light] .lgt .sc,html[data-theme=light] .lgt.lead .sc,html[data-theme=light] .lgt.trail .sc,html[data-theme=light] .mt,html[data-theme=light] .pafoot,html[data-theme=light] .pat .ln,html[data-theme=light] .pcn,html[data-theme=light] .pgv em,html[data-theme=light] .pjf,html[data-theme=light] .pkins,html[data-theme=light] .rn,html[data-theme=light] .s2,html[data-theme=light] .setp label,html[data-theme=light] .sg,html[data-theme=light] .svg.pre,html[data-theme=light] .svjp,html[data-theme=light] .svrules span,html[data-theme=light] .swd,html[data-theme=light] .trf,html[data-theme=light] .upd,html[data-theme=light] .wn,html[data-theme=light] td.sw.rk{color:var(--mute)}
 html[data-theme=light] .lgn{color:#4a4e5a}html[data-theme=light] .lgn:hover .lgt2{color:var(--ink)}
+.wgo{align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}.wgo .pcta{min-width:150px}
+.setp input{font:inherit;font-size:12px;color:var(--ink);background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:5px 9px;height:28px;box-sizing:border-box;min-width:0;width:200px}.setp input:focus{outline:none;border-color:var(--a)}
+.mini .fxm .sw{opacity:.45}.mini .fxm{animation-name:fxmfade}
+.mr.me .mn .you{margin-right:0}
 </style>
 </head>
 <body>
@@ -900,7 +904,7 @@ html[data-theme=light] .lgn{color:#4a4e5a}html[data-theme=light] .lgn:hover .lgt
     <div id="pvform" class="pvform"></div>
     <div id="conlist" class="conlist"></div>
     <div id="werr" class="werr" role="alert"></div>
-    <div class="wrow wgo"><button id="go" class="pcta">Open my leagues</button><button id="wback" class="link" style="display:none">← Back to my matchups</button></div>
+    <div class="wrow wgo"><button id="go" class="pcta">Open my leagues</button><button id="wback" class="pcta ghost" style="display:none">← Back to my matchups</button><button id="wshare" class="pcta ghost" title="A link that sets up your leagues on any phone or computer (no passwords inside)">⧉ Copy setup link</button></div>
   </div></section>
   <div id="status" style="display:none"></div>
   <div class="split n2" id="view"></div>
@@ -915,6 +919,7 @@ const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
 const PEOPLE={solankit:"Ankit",solanki:"Ankit",indybobjones:"Bob",jayminpatel25:"Jaymin",rchoxi:"Ravi",ayeshajpatel:"Ayesha",aaryanbpatel:"Aaryan",aaryanpatel:"Aaryan",sammyd922:"Sammy",roythecowboy:"Roy",anjieamin:"Angie",angieamin:"Angie",sap16:"Samir",xparraidr:"Parag",rikinp22:"Rikin",kpatel:"Karan",kpatel0402:"Karan",roshanz0r:"Roshan",mykittleponys:"Kunal",sbatman63:"Shayan",suchitparikh:"Suchit",werdihego:"Phillip",vkashmoney:"Vikash",danstar88:"Daniel",rajann:"Rajan",sirrob21:"Robbie",kushal41:"Kushal",stevepatel:"Shital",rickenpatel:"Ricken",shreyp93:"Shrey",patelsah:"Sahil",primap:"Prima",visharg:"Visharg",rgandhi3:"Ronak",sampat1:"Samir",nimjpatel:"Nimesh"};
 const $=id=>document.getElementById(id);
+const quiet=()=>Date.now()<(S.quietUntil||0);
 const S={fx:{},drv:{},msq:{},eff:{},box:{},fl:{},fltxt:{},reg:{},effPrimed:false,okFast:false,e2s:null,pc:{},dirty:true,gsig:"",stxt:"",nflWeek:1,L:[],players:null,games:{},okGames:false,stats:{},statsHave:false,statsVol:0,statsRej:0,statsAt:0,okStats:false,desc:{},raw:null,rawAt:0,rawWeek:0,okProj:false,
   base:{},baseWeek:0,userId:null,season:null,week:1,timer:null,updated:0,busy:false,err:false,rz:{},rzAt:{},fired:{},cel:{},sound:true};
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -956,7 +961,8 @@ function notes(list,type,gain,len){
 const sounds={big:()=>notes([[523,0],[784,.05],[1047,.1],[1568,.16]],"sine",.32,.14),ms:()=>notes([[1047,0],[1319,.1],[1568,.2],[2093,.32]],"sine",.28,.22),boom:()=>notes([[147,0],[294,.08],[440,.16]],"triangle",.45,.25),win:()=>notes([[523,0],[659,.12],[784,.24],[1047,.4]],"triangle",.45,.3),loss:()=>notes([[294,0],[247,.2],[196,.4]],"triangle",.4,.35),td:()=>notes([[523,0],[659,.12],[784,.24],[1047,.36],[784,.54],[1047,.66]],"triangle",.5,.2),rz:()=>notes([[880,0],[1175,.14]],"sine",.4,.25),
   good:()=>notes([[660,0],[880,.12]],"sine",.35,.2),bad:()=>notes([[330,0],[247,.14]],"triangle",.4,.25),warn:()=>notes([[392,0],[330,.14]],"triangle",.3,.2),info:()=>{}};
 const TACC={td:"gold",boom:"gold",win:"gold",good:"green",bad:"red",loss:"red",warn:"amber",rz:"red",info:"cyan",big:"cyan",ms:"purple"},TPRI={td:3,win:3,boom:2,bad:2,rz:2,loss:2,good:1,big:1,ms:1,warn:1,info:0};
-function toast(kind,html,ms=4500){
+function toast(kind,html,ms=4500,o){
+  if(quiet()&&!(o&&o.force))return;
   const box=$("toasts");let raw=String(html),icon="";const m=raw.match(/^\s*((?:\p{Extended_Pictographic}|\p{Emoji_Presentation})(?:\uFE0F|\u200D\p{Extended_Pictographic})*)\s*/u);if(m){icon=m[1];raw=raw.slice(m[0].length)}
   const parts=raw.split(" · ");let title=parts.shift()||"",sub=parts.join(" · "),val="";
   const vm=title.match(/^(.*?)\s+([+−-]\d+(?:\.\d+)?)(\s.*|<.*)?$/);if(vm&&!/<[^>]*$/.test(vm[1])){title=vm[1];val=vm[2];if(vm[3])sub=(vm[3]+(sub?" · "+sub:"")).trim()}
@@ -966,6 +972,7 @@ function toast(kind,html,ms=4500){
   setTimeout(()=>{d.classList.add("out");setTimeout(()=>{if(d.remove)d.remove()},260)},ms);(sounds[kind]||sounds.info)();
 }
 function celebrate(pid,name,d,wpt){
+  if(quiet())return;
   if(S.cel[pid]&&Date.now()-S.cel[pid]<60000)return;S.cel[pid]=Date.now();
   const locked=S.sound&&!(AC&&AC.state==="running");
   toast("td",`🏈 ${esc(name)} TD${d!=null?" "+(d>=0?"+":"")+(+d).toFixed(1):""}${wpt||""}${locked?" · 🔇 tap to enable sound":""}`,locked?7000:5000);
@@ -1000,7 +1007,7 @@ async function loadGames(){
     const gs=JSON.stringify(Object.keys(g).map(k=>[k,g[k].sig,g[k].state,g[k].clock,g[k].detail]));if(gs!==S.gsig){S.gsig=gs;S.dirty=true}
     const prevG=S.games,now0=Date.now(),flip=[];if(prevG&&Object.keys(prevG).length)for(const t in g){const o=prevG[t];if(!o)continue;if(o.state==="pre"&&g[t].state==="in")flip.push([t,"live"]);else if(!o.rz&&g[t].rz)flip.push([t,"rz"])}
     S.games=g;S.okGames=true;
-    if(flip.length)vis().forEach(lg=>(lg.matchups||[]).forEach(m=>(m.starters||[]).forEach(id=>{const f=flip.find(x=>x[0]===pinfo(id).team);if(f&&!(S.fx[id]&&now0-S.fx[id].t<3000)){S.fx[id]={k:f[1],t:now0};S.dirty=true}})));
+    if(flip.length&&!quiet())vis().forEach(lg=>(lg.matchups||[]).forEach(m=>(m.starters||[]).forEach(id=>{const f=flip.find(x=>x[0]===pinfo(id).team);if(f&&!(S.fx[id]&&now0-S.fx[id].t<3000)){S.fx[id]={k:f[1],t:now0};S.dirty=true}})));
   }catch(e){S.okGames=false}
 }
 const frac=g=>!g?0:g.state==="post"?1:g.state==="pre"?0:g.period>4?.98:Math.min(.98,((g.period-1)*900+(900-(g.clock||0)))/3600);
@@ -1361,7 +1368,7 @@ function render(lg){
   h+=`<!--M:lineup--><div class="card tw"><table>${cg}<tbody>${t}</tbody></table></div>`;
   const shown=[A.roster_id,B&&B.roster_id],rows=lg.log.filter(e=>shown.includes(e.rid)).slice(0,60);
   const po=lg.playsOpen!==false;
-  h+=`<!--M:plays--><div class="card"><div class="lh ph" title="${po?"Collapse":"Expand"} plays"><span><span class="chev">${po?"▾":"▸"}</span>📡 Plays</span><small>${rows.length?rows.length+" this matchup":"none yet"}</small></div>`+(!po||!rows.length?"</div>":`<div class="lb">`+
+  h+=`<!--M:plays--><div class="card"><div class="lh ph" title="${po?"Collapse":"Expand"} plays"><span><span class="chev">${po?"▾":"▸"}</span>📡 Plays</span><small>${rows.length?rows.length+" this matchup":fin?"final":"none yet"}</small></div>`+(!po||!rows.length?"</div>":`<div class="lb">`+
     (rows.length?rows.map(e=>`<div class="lr ${e.mine?"me":""} ${e.kind==="TD"||/TD/.test(e.ptext||"")&&e.kind!=="ADJ"?"tier-td":/^(INT|FUM)$/.test(e.kind)?"tier-to":/^(SACK|DEF|FG)$/.test(e.kind)?"tier-big":"tier-rt"}"><span class="t">${hms(new Date(e.t))}</span><span class="k ${e.kind||""}">${KCHIP[e.kind]||"·"}</span><span class="d ${e.d<0?"m":"p"}">${sg(e.d)}</span><span class="pl2"><span class="pos ${esc(e.pos)}">${esc(e.pos)}</span><b>${esc(e.name)}</b><small>${esc(e.team)}</small></span><span class="pt2" title="${esc(e.ptext||"")}${e.wp!=null?" · WP "+pctPt(e.wp):""}">${esc(e.ptext||"")}${e.wp!=null?`<i class="wpa ${e.wp>=0?"up":"dn"}" style="width:${Math.max(6,Math.min(36,Math.abs(e.wp)*120)).toFixed(0)}px" title="Win probability ${pctPt(e.wp)}"></i>`:""}</span></div>`).join(""):`<div class="none">Waiting for the next play…</div>`)+`</div></div>`);
   h+=`<!--M:hook-->`;
   /* low/high strip: projected low (left), projected high (right), who's lowest/highest right now (center), and how tight it is */
@@ -1396,7 +1403,7 @@ function render(lg){
     if(done){const d=xs[0].total-xs[1].total,wn=team(lg,(d>=0?pr[0]:pr[1]).roster_id);ml=d===0?"✓ Tied":`✓ ${esc(wn.owner||wn.name)} +${f2(Math.abs(d))}`}
     else if(last)ml=`${(KCHIP[last.kind]||"·").split(" ")[0]} ${esc(lastName(last.name))} <b style="color:var(${last.d<0?"--neg":"--pos"})">${sg(last.d)}</b> · ${esc(last.ptext||"")}`;
     const myT=rids.includes(lg.mineRid);h+=`<button class="mini ${rids.includes(A.roster_id)?"on":""} ${myT?"mine":""} ${done?"done":""}" data-r="${pr[0].roster_id}" data-rids="${rids.join(" ")}" title="${done?"Final":`Win probability ${w}% – ${100-w}%`}">`+pr.map(m=>{const tm=team(lg,m.roster_id),q=m.points||0;
-      return`<div class="mr ${q===top&&top>0?"ld2":""} ${tm.mine?"me":""} ${hl&&q===hi?"hi":hl&&q===lo?"lo":""}"><span class="mn">${tm.mine?`<span class="you" title="Your team${lg.power&&lg.power[m.roster_id]?" · power rank #"+lg.power[m.roster_id].rank:""}">YOU</span>`:lg.power&&lg.power[m.roster_id]?`<span class="trk" title="Power rank">#${lg.power[m.roster_id].rank}</span>`:""}${esc(tm.owner||tm.name)}</span><span class="w">${f2(q)}</span></div>`}).join("")+((hl&&pr.some(m=>(m.points||0)===hi))||(hl&&pr.some(m=>(m.points||0)===lo))?`<span class="tbgs">${hl&&pr.some(m=>(m.points||0)===hi)?`<span class="tbg" title="League high this week">🔥</span>`:""}${hl&&pr.some(m=>(m.points||0)===lo)?`<span class="tbg" title="League low this week">🧊</span>`:""}</span>`:"")+
+      return`<div class="mr ${q===top&&top>0?"ld2":""} ${tm.mine?"me":""} ${hl&&q===hi?"hi":hl&&q===lo?"lo":""}"><span class="mn" title="${esc(tm.owner||tm.name)}${lg.power&&lg.power[m.roster_id]?" · power rank #"+lg.power[m.roster_id].rank:""}">${tm.mine?`<span class="you">YOU</span>`:esc(tm.owner||tm.name)}</span><span class="w">${f2(q)}</span></div>`}).join("")+((hl&&pr.some(m=>(m.points||0)===hi))||(hl&&pr.some(m=>(m.points||0)===lo))?`<span class="tbgs">${hl&&pr.some(m=>(m.points||0)===hi)?`<span class="tbg" title="League high this week">🔥</span>`:""}${hl&&pr.some(m=>(m.points||0)===lo)?`<span class="tbg" title="League low this week">🧊</span>`:""}</span>`:"")+
       `<div class="sb"><i style="width:${w}%"></i></div>${ml?`<div class="ml">${ml}</div>`:""}</button>`});
   h+=`</div>`;
   h+=`<!--M:bench-->`;
@@ -1524,6 +1531,7 @@ function alerts(now){
   rp.forEach(p=>{if(p.mine)mine.set(p.id,p);else opp.set(p.id,p)});
   const best={};vis().forEach(lg=>lg.log.forEach(e=>{if(e.t===now)best[e.pid]=Math.max(best[e.pid]??-99,e.d)}));
   const tdM=[],tdO=[];
+  if(quiet())return;   /* baseline still being built: these diffs are history, not news */
   /* one-shot cell effects for every displayed player (both teams), registered once per detected event */
   for(const id in S.desc){const ds=S.desc[id];if(ds.t!==now||!ds.f)continue;const f=ds.f,k=f.dtd?"dtd":f.dint?"int":f.dfr?"fr":f.safe?"safe":f.blk?"blk":f.dsack?"sack":f.fg?"fg":f.td?"td":null;
     if(k)S.fx[id]={k:k==="fg"&&f.boom?"fg50":k,t:now,pts:best[id]};}
@@ -1764,7 +1772,7 @@ function applyFx(el,lg){
   (lg&&lg.mfx||[]).forEach(m=>{if(now-m.t<(FXDUR[m.k]||1500))playEventAnimation(m.k,el.querySelector(m.sel),{age:now-m.t})});
   if(lg&&lg.mfx)lg.mfx=lg.mfx.filter(m=>now-m.t<4000);
 }
-function modFx(lg,k,sel){lg.mfx=lg.mfx||[];lg.mfx.push({k,sel,t:Date.now()});applyFx(lg.el,{mfx:[lg.mfx[lg.mfx.length-1]]})}
+function modFx(lg,k,sel){if(quiet())return;lg.mfx=lg.mfx||[];lg.mfx.push({k,sel,t:Date.now()});applyFx(lg.el,{mfx:[lg.mfx[lg.mfx.length-1]]})}
 /* =====================================================================
    SETTINGS · ANIMATION & EFFECTS LAB — previews call the same engine on a fake row (never the real board)
    ===================================================================== */
@@ -1797,7 +1805,7 @@ function labMsg(k){const lg=labLg(),sc=lg?lg.sc:{},P=x=>{const v=calcPts(x,sc);r
 function labRun(k,withSound){
   const ev=LABEV.flatMap(c=>c[1]).find(e=>e[0]===k);if(!ev)return;const tg=labTargets(k);
   tg.forEach(t=>{let kk=k;if((k==="td"||k==="otd")&&t.tagName==="TD")kk=t.classList.contains("r")?"otd":"td";playEventAnimation(kk,t,{side:t.classList.contains("r")?"L":"R",rm:LAB.motion==="reduced"})});
-  const m=labMsg(k);if(m){const prev=S.sound;S.sound=LAB.sound==="on"&&withSound!==false;if(S.sound)unlock();toast(m[0],m[1],2600);S.sound=prev}
+  const m=labMsg(k);if(m){const prev=S.sound;S.sound=LAB.sound==="on"&&withSound!==false;if(S.sound)unlock();toast(m[0],m[1],2600,{force:true});S.sound=prev}
   if((k==="td"||k==="dtd"||k==="win"||k==="upwin")&&LAB.motion!=="reduced")confetti();
   document.querySelectorAll("#labev .lbe").forEach(b=>b.classList.toggle("on",b.dataset.k===k));
   const nowEl=$("labnow");if(nowEl){const all=LABEV.flatMap(c=>c[1]),i=all.findIndex(e=>e[0]===k);nowEl.textContent=(LAB.playing?`${i+1} of ${all.length}`:"PREVIEW")+" · "+ev[1].toUpperCase()+(tg.length?"":" · nothing on screen")}
@@ -2223,6 +2231,10 @@ function pvForm(p){
   if(p==="fleaflicker")$("pfind").onclick=team("fleaflicker",lid,proxy,async()=>[].concat(...((await PROV.fleaflicker.get({proxy:proxy(),leagueId:lid()},"FetchLeagueStandings",`season=${S.season||new Date().getFullYear()}`)).divisions||[]).map(d=>d.teams||[])).map(t=>({id:t.id,name:t.name})));
   if(p==="yahoo")$("yco").onclick=()=>{const w=$("ywk").value.trim().replace(/\/$/,"");if(!w)return;save("worker",w);save("yworker",w);location.href=w+"/yahoo/login?return="+encodeURIComponent(location.href.split("#")[0])};
 }
+function setupLink(){const cs=(S.conns||getConns()).filter(c=>c.p!=="yahoo").map(c=>{const x=Object.assign({},c);delete x.session;return x});
+  return location.origin+location.pathname+"#wm_setup="+btoa(unescape(encodeURIComponent(JSON.stringify(cs)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
+(()=>{try{const m=location.hash.match(/wm_setup=([^&]+)/);if(m){const a=JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,"+").replace(/_/g,"/")))));const cur=getConns(),keys=new Set(cur.map(c=>c.key));
+  save("conns",JSON.stringify(cur.concat(a.filter(c=>c&&c.key&&c.p&&!keys.has(c.key)))));history.replaceState(null,"",location.pathname+location.search)}}catch(e){}})();
 function showWelcome(){$("welcome").style.display="";$("view").style.display="none";$("status").style.display="none";renderConns()}
 (()=>{try{const m=location.hash.match(/wm_yahoo=([^&]+)/);if(m){const w=load("yworker")||load("worker")||"";const c=getConns().filter(x=>x.p!=="yahoo").concat({key:"yahoo:"+w,p:"yahoo",worker:w,session:decodeURIComponent(m[1])});save("conns",JSON.stringify(c));history.replaceState(null,"",location.pathname+location.search)}}catch(e){}})();
 /* =====================================================================
@@ -2386,6 +2398,7 @@ function applyVis(){
 }
 async function start(){return connectAll()}
 async function connectAll(){
+  S.quietUntil=Date.now()+25000;   /* first ~25s: build the baseline silently (no toasts, sounds, confetti or cell effects) */
   clearInterval(S.timer);S.conns=getConns();
   if(!S.conns.length){showWelcome();return}
   try{
@@ -3153,6 +3166,7 @@ setInterval(()=>{if(S.tab==="t")mvTick()},30000);
 pkLoad();
 svInit().then(()=>{if(S.tab!=="m")setTab(S.tab)});
 $("go").onclick=connectAll;
+$("wshare").onclick=async()=>{const ok=await copyText(setupLink());const b=$("wshare");b.textContent=ok?"✓ Link copied":"Couldn't copy";setTimeout(()=>{b.textContent="⧉ Copy setup link"},2200)};
 
 $("week").onchange=()=>{S.L.forEach(l=>{l.rf={}});S.raw=null;S.baseWeek=0;S.stats={};S.statsHave=false;S.statsVol=0;S.desc={};S.stxt="";S.eff={};S.box={};S.fl={};S.fltxt={};S.reg={};S.effPrimed=false;S.okFast=false;S.dirty=true;S.L.forEach(l=>Object.assign(l,{mu:null,prev:{},delta:{},acc:{},off:{},offi:{},cmp:{},log:[],hist:{},focus:null,leadSign:0,lastHtml:"",primed:false}));refresh()};
 $("every").onchange=schedule;
