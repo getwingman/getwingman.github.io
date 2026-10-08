@@ -978,6 +978,41 @@ td.fxc+td.fxc,td.fxc{border-left-color:transparent;border-right-color:transparen
 .pgv.rz .rzd{display:none}
 @media(prefers-reduced-motion:reduce){.fx .fxst{display:none}.tag.tagpulse{animation:none;box-shadow:0 0 0 2px rgba(240,163,35,.6)}}
 .fx.rm .fxst{display:none}
+/* ===== custom import ===== */
+.imp2{display:flex;flex-direction:column;gap:10px}
+.imtgt:empty{display:none}.imtgt{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:7px 10px;border-radius:9px;background:rgba(139,92,246,.10);border:1px solid rgba(139,92,246,.35)}
+.drop2{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:150px;border:2px dashed rgba(139,92,246,.55);border-radius:14px;background:radial-gradient(120% 120% at 50% 0%,rgba(139,92,246,.10),rgba(34,211,238,.04));cursor:pointer;text-align:center;transition:background .15s,border-color .15s}
+.drop2:hover,.drop2:focus{outline:none;border-color:var(--b)}.drop2.hv{background:rgba(34,211,238,.10);border-color:var(--b)}
+.drop2 .dico{font-size:28px}.drop2 b{font-size:15px}.drop2 small{color:var(--mute);font-size:12px}
+.imshots:empty{display:none}.imshots{display:flex;gap:8px;flex-wrap:wrap}
+.shot{position:relative;width:58px;height:78px;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:#0e0e14}.shot img{width:100%;height:100%;object-fit:cover;opacity:.75}
+.shot i{position:absolute;right:3px;bottom:3px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:900;color:#fff}
+.shot.reading i,.shot.wait i{border:2px solid rgba(255,255,255,.25);border-top-color:var(--a);animation:spin .8s linear infinite}.shot.done i{background:var(--pos)}.shot.error{border-color:var(--neg)}.shot.error i{background:var(--neg)}
+.shx{position:absolute;top:2px;right:2px;border:0;background:rgba(0,0,0,.6);color:#fff;border-radius:6px;font-size:10px;cursor:pointer}
+.imsteps:empty{display:none}.imsteps{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;font-weight:700;color:var(--mute)}
+.stp{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;border:1px solid var(--line)}.stp.on{color:var(--ink);border-color:var(--a)}.stp.done{color:var(--pos);border-color:rgba(62,207,116,.45)}
+.stl{width:16px;height:1px;background:var(--line)}.imerr{width:100%;font-size:12px;font-weight:600;color:#ff9a9a;line-height:1.45}
+.imask{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:rgba(240,163,35,.08);border:1px solid rgba(240,163,35,.35);font-size:13px}
+.imcols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}@media(max-width:760px){.imcols{grid-template-columns:minmax(0,1fr)}}
+.imteam.solo{display:flex;flex-direction:column;gap:4px;justify-content:center;font-size:12px;color:var(--mute);padding:12px}.imteam.solo b{color:var(--ink)}
+.imtn{display:flex;align-items:center;gap:8px}.imtn small{margin-left:auto;color:var(--mute)}.imtn .them{font-size:8px;font-weight:900;letter-spacing:.07em;color:#03242b;background:var(--b);border-radius:4px;padding:1px 4px}
+.imr{grid-template-columns:78px minmax(0,1fr) minmax(0,1.2fr) 20px!important;height:32px}.imr.add{display:block!important;height:auto;margin-top:4px}.imr.add input,.imfind{width:100%;height:28px;box-sizing:border-box;font-size:12px}
+.imr .imc{display:none}.imslot{font-size:11px;height:26px;width:76px}.imr.needs{background:rgba(240,163,35,.07)}.imr.unresolved{background:rgba(255,107,107,.07)}.imr.confident .imok{color:var(--ink)}.imok small{color:var(--mute)}
+.imsc{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px}.imsc.need span:first-child{color:var(--up);font-weight:700}.imsc.ok b{color:var(--pos)}.imsc small{color:var(--mute)}
+#imok[disabled]{opacity:.45;cursor:not-allowed;filter:none}
+.imadv summary{cursor:pointer;color:var(--mute);font-size:12px}.imadv[open] summary{margin-bottom:8px}
+.pcta.sm{height:28px;padding:0 10px;font-size:12px}
+.estc{font:inherit;font-size:10px;font-weight:700;color:var(--mute);background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:999px;padding:1px 8px;margin-left:6px;cursor:pointer}.estc:hover{color:var(--ink);border-color:var(--a)}
+.lg.imp .mod[data-m="hook"],.lg.imp .mod[data-m="tiles"]{display:none}
+.imp2,.imp2 *{text-align:left}.drop2,.drop2 *{text-align:center}
+.imp2.has .drop2{min-height:70px;flex-direction:row;gap:10px}.imp2.has .drop2 .dico{font-size:20px}.imp2.has .drop2 small{display:none}
+.pvform .imr{display:grid!important;grid-template-columns:66px minmax(0,1fr) minmax(0,1.3fr) 22px!important;align-items:center;gap:8px;height:32px;padding:0 4px;border-radius:6px}
+.pvform .imr.add{display:block!important}
+.pvform .imslot,.pvform .imsel{height:26px;padding:0 4px;font-size:11px;min-width:0;width:100%;flex:none}
+.imsrc{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.imok{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.imok small{display:inline!important;font-weight:500;margin-left:4px;color:var(--mute)}
+.imteam{display:flex;flex-direction:column;gap:2px;padding:8px}.imtn{gap:8px;margin-bottom:4px}.imtn b{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.imtn .link{white-space:nowrap;font-size:11px}.imtn small{white-space:nowrap}
+.pvform .imr .cx{padding:0}
 </style>
 </head>
 <body>
@@ -996,14 +1031,13 @@ td.fxc+td.fxc,td.fxc{border-left-color:transparent;border-right-color:transparen
   <div id="setp" class="setp" role="dialog" aria-label="Settings">
     <div class="sph">General</div>
     <label>Theme<span class="seg2" data-c="theme" id="thm"><button data-v="dark">Dark</button><button data-v="light">Light</button></span></label>
-    <label>Wingman Connect<input id="wkr" placeholder="https://… (optional)" spellcheck="false"></label>
     <label>Refresh<select id="every" aria-label="Refresh rate"><option value="3" selected>every 3s</option><option value="5">every 5s</option><option value="10">every 10s</option><option value="15">every 15s</option><option value="30">every 30s</option><option value="60">every 1m</option><option value="0">off</option></select></label>
     <label>Alert sounds<button id="snd" title="Alert sounds">🔔</button></label>
     <div class="sph">Animation &amp; effects</div>
     <div class="labc"><span class="seg2" data-c="motion"><button data-v="normal" class="on">Normal</button><button data-v="reduced">Reduced</button></span><span class="seg2" data-c="sound"><button data-v="on" class="on">Sound</button><button data-v="off">Mute</button></span><button id="labplay" class="labp">▶ Play all</button></div>
     <div class="labbar"><span id="labnow" class="labnow">PREVIEW</span><span id="labsc" class="labsc"></span></div>
     <div id="labev" class="labev"></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v32</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v33</span></div>
   </div>
 </header>
 <main>
@@ -1473,7 +1507,7 @@ function render(lg){
     bar=`<div class="bar${sw?" swg":""}"><i class="seg fa${sw?" sw":""}" style="width:${ok?p:50}%${ok?"":";background:#2a2a33"}${sw?`;--w0:${w0}%;animation-delay:-${Date.now()-sw.t}ms`:""}"></i><i class="seg fb" style="width:${ok?100-p:50}%${ok?"":";background:#23232b"}"></i>${ok?`<span class="bpl">${p}%</span><span class="bpr">${100-p}%</span>`:""}<span class="wpl" tabindex="0" data-flt="${lg.id}">Win probability<span class="tip">${needLine(lg,A,B,a,b,ta,tb)}</span></span></div>`}
   const liveM=[...a.rows,...(b?b.rows:[])].some(r=>r&&!r.empty&&dc(r)==="l"),hs=fin?"hs-final":liveM?"hs-live":"hs-up";lg._live=liveM;
   let h=`<!--M:hero--><div class="card hero ${hs}"><div class="hg">
-    ${nm(ta,a,0,A.roster_id)}<a class="lgn" ${lg.adapter.leagueUrl(lg)?`href="${esc(lg.adapter.leagueUrl(lg))}" target="_blank" rel="noopener"`:""} title="Open ${esc(lg.league.name)} in ${esc(lg.adapter.name)} · ${lg.fmt} scoring"><span class="lgt2">${esc(lg.league.name)}</span><span class="fmt">${lg.fmt}</span></a>${b?nm(tb,b,1,B.roster_id):""}
+    ${nm(ta,a,0,A.roster_id)}<a class="lgn" ${lg.adapter.leagueUrl(lg)?`href="${esc(lg.adapter.leagueUrl(lg))}" target="_blank" rel="noopener"`:""} title="Open ${esc(lg.league.name)} in ${esc(lg.adapter.name)} · ${lg.fmt} scoring"><span class="lgt2">${esc(lg.league.name)}</span><span class="fmt">${lg.fmt}${lg.estScoring?"?":""}</span>${lg.provider==="manual"?`<span class="estc" role="button" tabindex="0" data-upd="${esc(lg.conn.key)}" title="Roster snapshot from your screenshots (${agoS(lg.importedAt)}). Points are Wingman estimates from live NFL stats${lg.estScoring?" with an assumed scoring format":" with your "+esc(lg.fmt)+" scoring"}, not your app's official score. Tap to update the roster.">📸 ${agoS(lg.importedAt)||"snapshot"} · est.</span>`:""}</a>${b?nm(tb,b,1,B.roster_id):""}
     <div class="pt a">${f2(a.total)}</div><div class="wk"></div>${b?`<div class="pt b">${f2(b.total)}</div>`:""}
     ${pj(a,0)}${b?pj(b,1):""}
   </div>${bar}</div>`;
@@ -2342,12 +2376,20 @@ PROV.fleaflicker={name:"Fleaflicker",status:"ready",method:"api",poll:30000,
 /* custom import (formerly "manual") */
 PROV.manual._legacy=PROV.manual.connect;PROV.manual.name="Custom Import";PROV.manual.method="import";PROV.manual.status="ready";
 PROV.manual.connect=async function(c){
-  if(!c.data)return PROV.manual._legacy(c);const d=c.data,sc=typeof d.scoring==="object"&&d.scoring?d.scoring:SCORING_PRESETS[d.scoring||"half"]||SCORING_PRESETS.half;
+  if(!c.data)return PROV.manual._legacy(c);
+  if(c.data.v===2){const d=c.data,sc=typeof d.scoring==="object"&&d.scoring?d.scoring:SCORING_PRESETS[d.scoring]||SCORING_PRESETS.half,teams=d.teams.slice().sort((a,b)=>(b.mine?1:0)-(a.mine?1:0));
+    const slots=(d.slots&&d.slots.length?d.slots:["QB","RB","RB","WR","WR","TE","FLEX","K","DEF"]).concat(["BN"]);
+    const rosters=teams.map((t,i)=>({roster_id:i+1,owner_id:"custom:"+i,players:t.players.map(p=>p.id),slotted:t.players.filter(p=>p.section==="starter").map(p=>({id:p.id,slot:p.slot})),reserve:t.players.filter(p=>p.section==="ir").map(p=>p.id),taxi:[],settings:{wins:0,losses:0,ties:0,fpts:0}}));
+    const users=teams.map((t,i)=>({user_id:"custom:"+i,display_name:t.owner||(t.mine?"You":t.name),metadata:{team_name:t.name||(t.mine?"My team":"Opponent")}}));
+    return[mkLeague({provider:"manual",id:"manual:"+c.key,lid:c.key,name:d.name||"Imported league",slots,sc,raw:d.scoring,rosters,users,mineRid:1,extra:{conn:c,pairs:teams.length>1?[[0,1]]:[[0]],estScoring:!d.scoringVerified,importedAt:d.updatedAt,scoringEvidence:d.scoringEvidence||""}})]}const d=c.data,sc=typeof d.scoring==="object"&&d.scoring?d.scoring:SCORING_PRESETS[d.scoring||"half"]||SCORING_PRESETS.half;
   const slots=(d.slots&&d.slots.length?d.slots:["QB","RB","RB","WR","WR","TE","FLEX","K","DEF"]).concat(["BN"]);
   const rosters=d.teams.map((t,i)=>({roster_id:i+1,owner_id:"custom:"+i,players:t.players.map(p=>p.id).filter(Boolean),starters:t.players.filter(p=>p.slot&&p.slot!=="BN").map(p=>p.id),reserve:[],taxi:[],settings:{wins:0,losses:0,ties:0,fpts:0}}));
   const users=d.teams.map((t,i)=>({user_id:"custom:"+i,display_name:t.owner||t.name,metadata:{team_name:t.name}}));
   return[mkLeague({provider:"manual",id:"manual:"+c.key,lid:c.key,name:d.name||"Imported league",slots,sc,raw:d.scoring,rosters,users,mineRid:(d.teams.findIndex(t=>t.mine)+1)||1,extra:{conn:c,pairs:d.matchups}})]};
-PROV.manual.matchups=async function(lg){const sl=lg.league.roster_positions.filter(x=>x!=="BN"&&x!=="IR"),pairs=lg.pairs&&lg.pairs.length?lg.pairs:lg.rosters.reduce((a,r,i)=>i%2?a:a.concat([[i,i+1]]),[]);
+PROV.manual.matchups=async function(lg){
+  if(lg.rosters.some(r=>r.slotted)){const sl=lg.league.roster_positions.filter(x=>x!=="BN"&&x!=="IR");
+    return lg.rosters.map((r,i)=>{const pool=(r.slotted||[]).slice(),starters=sl.map(s=>{let k=pool.findIndex(x=>x.slot===s);if(k<0){const el=ELIG2[s]||[s];k=pool.findIndex(x=>el.includes(pinfo(x.id).pos))}return k<0?"0":pool.splice(k,1)[0].id});
+      return{roster_id:r.roster_id,matchup_id:lg.rosters.length>1?1:100+i,starters,players:r.players,players_points:{},points:0}})}const sl=lg.league.roster_positions.filter(x=>x!=="BN"&&x!=="IR"),pairs=lg.pairs&&lg.pairs.length?lg.pairs:lg.rosters.reduce((a,r,i)=>i%2?a:a.concat([[i,i+1]]),[]);
   const mid={};pairs.forEach(([x,y],k)=>{mid[x]=k+1;mid[y]=k+1});
   return lg.rosters.map((r,i)=>{const pool=(r.starters&&r.starters.length?r.starters:r.players).slice(),starters=sl.map(s=>{const el=ELIG2[s]||[s],k=pool.findIndex(id=>el.includes(pinfo(id).pos));return k<0?"0":pool.splice(k,1)[0]});
     return{roster_id:r.roster_id,matchup_id:mid[i]||100+i,starters,players:r.players,players_points:{},points:0}})};
@@ -2386,7 +2428,7 @@ function pvForm(p){
   let h="";
   if(p==="sleeper")h=`<div class="wrow"><input id="user" placeholder="Sleeper username" autocapitalize="none" spellcheck="false"><button class="pcta" id="pvadd">Connect</button></div>`;
   else if(p==="espn")h=`<div class="wrow"><input id="lid" placeholder="ESPN league ID" inputmode="numeric"><input id="prx" placeholder="Proxy (private leagues)" value="${esc(W)}"><button class="pcta" id="pfind">Find teams</button></div><div class="wrow" id="pteam" style="display:none"></div>`;
-  else if(p==="yahoo")h=`<div class="wrow"><button class="pcta" id="yco">🔒 Sign in with Yahoo</button><button class="pcta ghost" id="yadv" title="Use a different Wingman Connect server">⚙</button></div><div class="wrow" id="yadvw" style="display:none"><input id="ywk" placeholder="https://… Wingman Connect address" value="${esc(workerURL())}" spellcheck="false" inputmode="url"></div>`;
+  else if(p==="yahoo")h=`<div class="wrow"><button class="pcta" id="yco">🔒 Sign in with Yahoo</button></div>`;
   else if(p==="mfl"||p==="fleaflicker")h=`<div class="wrow"><input id="lid" placeholder="${p==="mfl"?"MFL":"Fleaflicker"} league ID" inputmode="numeric"><input id="prx" placeholder="Proxy (optional)" value=""><button class="pcta" id="pfind">Find teams</button></div><div class="wrow" id="pteam" style="display:none"></div>`;
   else if(p==="manual"){importUI(f,list);return}
   f.innerHTML=list+h;
@@ -2396,9 +2438,7 @@ function pvForm(p){
   if(p==="espn")$("pfind").onclick=team("espn",lid,proxy,async()=>((await PROV.espn.get({proxy:proxy()},lid(),"view=mTeam")).teams||[]).map(x=>({id:x.id,name:x.name||[x.location,x.nickname].join(" ")})));
   if(p==="mfl")$("pfind").onclick=team("mfl",lid,proxy,async()=>[].concat((((await PROV.mfl.get({proxy:proxy(),leagueId:lid()},"TYPE=league")).league||{}).franchises||{}).franchise||[]).map(x=>({id:x.id,name:x.name})));
   if(p==="fleaflicker")$("pfind").onclick=team("fleaflicker",lid,proxy,async()=>[].concat(...((await PROV.fleaflicker.get({proxy:proxy(),leagueId:lid()},"FetchLeagueStandings",`season=${S.season||new Date().getFullYear()}`)).divisions||[]).map(d=>d.teams||[])).map(t=>({id:t.id,name:t.name})));
-  if(p==="yahoo")$("yadv").onclick=()=>{const w=$("yadvw");w.style.display=w.style.display==="none"?"":"none"};
-  if(p==="yahoo")$("yco").onclick=()=>{const w=$("ywk").value.trim().replace(/\/$/,"");
-    if(!validURL(w)){$("ywk").classList.add("bad");$("werr").textContent=w?"That isn't a Wingman Connect address. It should start with https:// (e.g. https://wingman-connect.yourname.workers.dev).":"Yahoo needs your Wingman Connect address first (https://…).";return}
+  if(p==="yahoo")$("yco").onclick=()=>{const w=workerURL();
     save("worker",w);save("yworker",w);location.href=w+"/yahoo/login?return="+encodeURIComponent(location.origin+location.pathname)};
 }
 const validURL=u=>/^https:\/\/[a-z0-9.-]+\.[a-z]{2,}(:\d+)?(\/[^\s]*)?$/i.test(String(u||"").trim());
@@ -2415,24 +2455,151 @@ function showWelcome(){$("welcome").style.display="";$("view").style.display="no
    CUSTOM IMPORT — JSON · screenshot/image · screen capture → normalized candidate roster → confirm → league
    Extraction runs on your Wingman Connect worker (vision model key stays server-side); images are never stored.
    ===================================================================== */
-const IMP={cand:null};
-function importUI(f,list){
-  f.innerHTML=list+`<div class="imp"><div class="imtabs"><button class="imt on" data-m="json">{ } JSON</button><button class="imt" data-m="shot">🖼 Screenshot</button><button class="imt" data-m="cap">🖥 Capture window</button></div><div id="imbody"></div><div id="imprev"></div></div>`;
+/* =====================================================================
+   CUSTOM IMPORT — screenshot → Reading → Matching → Ready → Start tracking
+   Screenshots are read on the shared Wingman Connect worker (Workers AI); images stay in memory only.
+   Imports are roster SNAPSHOTS: points are estimated live from NFL stats with the league's verified scoring.
+   ===================================================================== */
+const IMP={shots:[],teams:[],scoring:null,provider:"",target:null,queue:Promise.resolve()};
+const agoS=t=>{if(!t)return"";const m=Math.round((Date.now()-t)/60000);return m<1?"just now":m<60?m+"m ago":m<1440?Math.round(m/60)+"h ago":Math.round(m/1440)+"d ago"};
+const SLOTMAP={"W/R/T":"FLEX","RB/WR/TE":"FLEX","FLX":"FLEX","FLEX":"FLEX","W/R":"WRRB_FLEX","RB/WR":"WRRB_FLEX","W/T":"REC_FLEX","WR/TE":"REC_FLEX","Q/W/R/T":"SUPER_FLEX","SUPER FLEX":"SUPER_FLEX","SUPERFLEX":"SUPER_FLEX","SFLX":"SUPER_FLEX","OP":"SUPER_FLEX","D/ST":"DEF","DST":"DEF","DEF":"DEF","D":"DEF","K":"K","PK":"K","QB":"QB","RB":"RB","WR":"WR","TE":"TE","BN":"BN","BENCH":"BN","IR":"IR","RES":"IR"};
+const normSlot=(s,sec)=>sec==="bench"?"BN":sec==="ir"?"IR":SLOTMAP[String(s||"").toUpperCase().trim()]||"";
+const SLOT_OPTS=["QB","RB","WR","TE","FLEX","SUPER_FLEX","WRRB_FLEX","REC_FLEX","K","DEF","BN","IR"];
+function impReset(target){IMP.shots.forEach(s=>s.thumb&&URL.revokeObjectURL(s.thumb));IMP.shots=[];IMP.teams=[];IMP.scoring=null;IMP.provider="";IMP.target=target||null}
+function importUI(f){
+  const imports=(S.conns||getConns()).filter(c=>c.p==="manual");
+  f.innerHTML=`${imports.length?`<div class="pmng">${imports.map(c=>`<div class="crow"><i class="pdot ok"></i><span class="cnm">${esc(c.name||"Imported league")}</span><small>${c.data&&c.data.updatedAt?"📸 "+agoS(c.data.updatedAt):""}</small><button class="pcta ghost sm" data-up="${esc(c.key)}">Update roster</button><button class="cx" data-k="${esc(c.key)}" title="Remove">✕</button></div>`).join("")}</div>`:""}
+  <div class="imp2">
+    <div id="imtgt" class="imtgt"></div>
+    <div class="drop2" id="imdrop" tabindex="0" role="button" aria-label="Add screenshots: paste, drop or choose"><b class="dico">📸</b><b>Paste, drop or choose screenshots</b><small>Your lineup or matchup screen · Ctrl+V works · add more than one if needed</small><input type="file" id="imimg" accept="image/png,image/jpeg,image/webp" multiple hidden></div>
+    <div id="imshots" class="imshots"></div><div id="imsteps" class="imsteps"></div><div id="imprev"></div>
+    <details class="imadv"><summary>Advanced options</summary><div class="wrow"><button class="pcta ghost" id="imjsonb">{ } Paste JSON</button><button class="pcta ghost" id="imcapb">🖥 Capture a window</button></div><div id="imadvb"></div></details>
+  </div>`;
   f.querySelectorAll(".cx").forEach(b=>b.onclick=()=>{S.conns=(S.conns||getConns()).filter(c=>c.key!==b.dataset.k);saveConns();renderConns();pvForm("manual")});
-  const tabs=f.querySelectorAll(".imt");tabs.forEach(t=>t.onclick=()=>{tabs.forEach(x=>x.classList.toggle("on",x===t));imMode(t.dataset.m)});imMode("json");
+  f.querySelectorAll("[data-up]").forEach(b=>b.onclick=()=>{impReset(b.dataset.up);imRender();$("imdrop").focus()});
+  const d=$("imdrop");d.onclick=()=>$("imimg").click();d.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();$("imimg").click()}};
+  $("imimg").onchange=e=>{imAdd([...e.target.files]);e.target.value=""};
+  d.ondragover=e=>{e.preventDefault();d.classList.add("hv")};d.ondragleave=()=>d.classList.remove("hv");
+  d.ondrop=e=>{e.preventDefault();d.classList.remove("hv");imAdd([...e.dataTransfer.files])};
+  $("imjsonb").onclick=()=>{$("imadvb").innerHTML=`<textarea id="imj" placeholder='{"name":"Family League","scoring":"half","teams":[{"name":"Mine","mine":true,"players":["WR CeeDee Lamb","BUF D/ST"]}]}'></textarea><div class="wrow"><label class="pcta ghost filel">Upload .json<input type="file" id="imf" accept=".json,application/json" hidden></label><button class="pcta" id="imgo">Use this JSON</button></div>`;
+    $("imf").onchange=async e=>{const fl=e.target.files[0];if(fl)$("imj").value=await fl.text()};
+    $("imgo").onclick=async()=>{try{const c=imFromJson(JSON.parse($("imj").value));await imEnsurePlayers();impReset(IMP.target);c.teams.forEach((t,i)=>imAddTeam({name:t.name,owner:t.owner,players:t.players.map(p=>({name:p.name,pos:p.pos,nfl_team:p.team,slot:p.slot,section:/^(BN|BENCH)$/i.test(p.slot||"")?"bench":/^IR$/i.test(p.slot||"")?"ir":"starter",legible:true}))},t.mine?"mine":i===0?"mine":"opp",false));
+      if(typeof c.scoring==="object"||/^(ppr|half|std|standard)$/i.test(c.scoring||""))IMP.scoring={format:typeof c.scoring==="object"?"custom":c.scoring==="std"?"standard":c.scoring,rules:typeof c.scoring==="object"?c.scoring:null,evidence:"from your JSON",verified:true};imRender()}catch(e){$("werr").textContent=e instanceof SyntaxError?"That isn't valid JSON: "+e.message:e.message}}};
+  $("imcapb").onclick=imCapture;
+  imRender();
 }
-function imMode(m){
-  const b=$("imbody");$("imprev").innerHTML="";
-  if(m==="json"){b.innerHTML=`<textarea id="imj" placeholder='{"name":"Family League","scoring":"half","teams":[{"name":"Mine","mine":true,"players":["WR CeeDee Lamb","BUF D/ST"]},{"name":"Opponent","players":["QB Josh Allen"]}]}'></textarea><div class="wrow"><label class="pcta ghost filel">Upload .json<input type="file" id="imf" accept=".json,application/json" hidden></label><button class="pcta" id="imgo">Preview</button></div>`;
-    $("imf").onchange=async e=>{const fl=e.target.files[0];if(fl)$("imj").value=await fl.text()};$("imgo").onclick=()=>{try{imPreview(imFromJson(JSON.parse($("imj").value))).catch(e=>{$("werr").textContent=e.message})}catch(e){$("werr").textContent=e instanceof SyntaxError?"That isn't valid JSON: "+e.message:e.message}}}
-  else if(m==="shot"){b.innerHTML=`<div class="drop" id="imdrop" tabindex="0"><b>Drop, paste or choose a roster screenshot</b><small>Any fantasy app</small><input type="file" id="imimg" accept="image/*" hidden></div>`;
-    const d=$("imdrop");d.onclick=()=>$("imimg").click();$("imimg").onchange=e=>{const fl=e.target.files[0];if(fl)imImage(fl)};
-    d.ondragover=e=>{e.preventDefault();d.classList.add("hv")};d.ondragleave=()=>d.classList.remove("hv");d.ondrop=e=>{e.preventDefault();d.classList.remove("hv");const fl=[...e.dataTransfer.files].find(x=>/^image\//.test(x.type));if(fl)imImage(fl)}}
-  else if(m==="cap"){const ok=!!(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia);b.innerHTML=ok?`<div class="drop"><button class="pcta" id="imcap">🖥 Choose window or tab to capture</button><small>One frame, only when you click</small></div>`:`<div class="drop"><b>Screen capture isn't available in this browser</b><small>Use a screenshot instead</small></div>`;
-    if(ok)$("imcap").onclick=imCapture}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-upd]");if(!b)return;e.preventDefault();e.stopPropagation();showWelcome();pvForm("manual");impReset(b.dataset.upd);imRender();setTimeout(()=>{const d=$("imdrop");if(d){d.scrollIntoView({block:"center"});d.focus()}},50)},true);
+document.addEventListener("paste",e=>{if(!$("imdrop")||$("welcome").style.display==="none")return;const fs=[...((e.clipboardData||{}).items||[])].filter(x=>/^image\//.test(x.type)).map(x=>x.getAsFile()).filter(Boolean);if(fs.length){e.preventDefault();imAdd(fs)}});
+async function imEnsurePlayers(){if(!S.players||!S.xw||!Object.keys(S.xw.name||{}).length){await getPlayers();buildXW()}}
+function imAdd(files){
+  files=files.filter(f=>f&&/^image\/(png|jpeg|webp)$/.test(f.type)).slice(0,6-IMP.shots.length);
+  if(!files.length){$("werr").textContent="Add a PNG or JPG screenshot.";return}$("werr").textContent="";
+  files.forEach(file=>{const sh={id:Math.random().toString(36).slice(2),thumb:URL.createObjectURL(file),status:"wait"};IMP.shots.push(sh);IMP.queue=IMP.queue.then(()=>imRead(sh,file))});imRender();
 }
-document.addEventListener("paste",e=>{if(!$("imdrop")||$("welcome").style.display==="none")return;const it=[...(e.clipboardData||{}).items||[]].find(x=>/^image\//.test(x.type));if(it){e.preventDefault();imImage(it.getAsFile())}});
-/* JSON → candidate roster (strings like "WR CeeDee Lamb" or objects {name,pos,team,slot}) */
+/* one screenshot at a time (friendly to the rate limit); tall phone screenshots are sliced so small names stay legible */
+async function imRead(sh,file){
+  sh.status="reading";imRender();
+  try{const images=await imPrepare(file);await imEnsurePlayers();
+    const r=await tfetch(workerURL()+"/vision/roster",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({images})},90000);
+    let j={};try{j=await r.json()}catch(e){}
+    if(!r.ok)throw new Error((j.error||`Couldn't read that screenshot (${r.status}).`)+(j.hint?" "+j.hint:""));
+    sh.status="done";sh.provider=j.provider||"";sh.screen=j.screen;imMergeResult(j,sh)}
+  catch(e){sh.status="error";sh.err=/Failed to fetch|NetworkError|aborted/i.test(e.message)?"Couldn't reach the screenshot reader. Check your connection and try again.":e.message}
+  imRender();
+}
+function imPrepare(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),im=new Image();
+  im.onload=()=>{URL.revokeObjectURL(u);const W=im.naturalWidth,H=im.naturalHeight,out=[];
+    const cut=(sy,sh)=>{const k=Math.min(1080/W,1)*(W<640?1.5:1),c=document.createElement("canvas");c.width=Math.round(W*k);c.height=Math.round(sh*k);const x=c.getContext("2d");x.imageSmoothingQuality="high";x.drawImage(im,0,sy,W,sh,0,0,c.width,c.height);out.push({mediaType:"image/jpeg",data:c.toDataURL("image/jpeg",.88).split(",")[1]})};
+    if(H/W>1.9){let n=Math.min(4,Math.ceil(H/(W*1.35))),tile=Math.ceil(H/n*1.12),step=Math.floor((H-tile)/Math.max(1,n-1));for(let i=0;i<n;i++)cut(Math.min(H-tile,i*step),tile)}
+    else{const k=Math.min(1,1600/Math.max(W,H))*(Math.max(W,H)<900?1.5:1),c=document.createElement("canvas");c.width=Math.round(W*k);c.height=Math.round(H*k);const x=c.getContext("2d");x.imageSmoothingQuality="high";x.drawImage(im,0,0,c.width,c.height);out.push({mediaType:"image/jpeg",data:c.toDataURL("image/jpeg",.88).split(",")[1]})}
+    res(out)};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error("That file isn't a readable image."))};im.src=u})}
+/* merge a read screenshot into the working import: same-named teams merge, duplicate players collapse, nothing is guessed */
+function imMergeResult(j,sh){
+  if(!IMP.provider&&j.provider)IMP.provider=j.provider;
+  if(j.scoring&&j.scoring.format&&j.scoring.format!=="unknown"&&j.scoring.evidence&&!(IMP.scoring&&IMP.scoring.verified&&IMP.scoring.user))IMP.scoring={format:j.scoring.format,evidence:j.scoring.evidence,rules:j.scoring.rules||[],verified:true};
+  const two=(j.teams||[]).filter(t=>t.players&&t.players.length).length===2;
+  (j.teams||[]).forEach((t,i)=>{if(!t.players||!t.players.length)return;
+    let role=null,assumed=false;
+    if(IMP.target){const c=(S.conns||getConns()).find(x=>x.key===IMP.target),mine=c&&c.data&&c.data.teams.find(x=>x.mine),opp=c&&c.data&&c.data.teams.find(x=>!x.mine);
+      if(mine&&nmKey(mine.name)&&nmKey(mine.name)===nmKey(t.name))role="mine";else if(opp&&nmKey(opp.name)&&nmKey(opp.name)===nmKey(t.name))role="opp"}
+    if(!role&&two){role=/right|bottom/.test(t.position_on_screen||"")||i===1?"opp":"mine";assumed=true}
+    imAddTeam(t,role,assumed,sh.id)});
+}
+function imAddTeam(t,role,assumed,shot){
+  let T=IMP.teams.find(x=>t.name&&nmKey(x.name)===nmKey(t.name));
+  if(!T){T={id:Math.random().toString(36).slice(2),name:t.name||"",owner:t.owner||"",role,assumed,players:[],shots:[]};IMP.teams.push(T)}
+  else if(role&&!T.role){T.role=role;T.assumed=assumed}
+  if(shot&&!T.shots.includes(shot))T.shots.push(shot);
+  (t.players||[]).forEach(p=>{const pos=p.pos==="DST"?"DEF":p.pos,key=nmKey(p.name)+"|"+pos;
+    const m=imMatch({name:p.name,pos,team:p.nfl_team});if(p.legible===false&&m.conf==="confident")m.conf="needs";
+    const dup=T.players.find(x=>x.key===key||(m.id&&m.conf==="confident"&&x.m.id===m.id));
+    if(dup){if(!dup.slot&&p.slot)dup.slot=normSlot(p.slot,p.section);return}
+    T.players.push({key,name:p.name,pos,team:p.nfl_team||"",slot:normSlot(p.slot,p.section)||(p.section==="bench"?"BN":""),m})});
+}
+function imStage(){const rd=IMP.shots.filter(s=>s.status==="reading"||s.status==="wait").length;if(rd)return"reading";if(!IMP.teams.length)return IMP.shots.length?"none":"idle";
+  if(IMP.teams.some(t=>!t.role)||IMP.teams.some(t=>t.role!=="skip"&&t.players.some(p=>p.m.conf!=="confident")))return"matching";return"ready"}
+function imRender(){
+  const tg=$("imtgt");if(!tg)return;const tc=IMP.target&&(S.conns||getConns()).find(x=>x.key===IMP.target);
+  tg.innerHTML=tc?`<span>Updating <b>${esc(tc.name)}</b> · settings and scoring stay as they are</span><button class="link" id="imcancel">cancel</button>`:"";if(tc)$("imcancel").onclick=()=>{impReset();imRender()};
+  $("imshots").innerHTML=IMP.shots.map(s=>`<div class="shot ${s.status}" title="${esc(s.err||"")}"><img src="${s.thumb}" alt=""><i>${s.status==="done"?"✓":s.status==="error"?"!":""}</i>${s.status==="error"?`<button class="shx" data-rm="${s.id}" title="Remove">✕</button>`:""}</div>`).join("");
+  $("imshots").querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{IMP.shots=IMP.shots.filter(s=>s.id!==b.dataset.rm);imRender()});
+  const st=imStage(),rd=IMP.shots.filter(s=>s.status==="done"||s.status==="error").length,errs=IMP.shots.filter(s=>s.status==="error");
+  $("imsteps").innerHTML=IMP.shots.length?["reading","matching","ready"].map((k,i)=>{const idx=["reading","matching","ready"].indexOf(st),on=k===st,done=idx>i||st==="ready"&&k==="ready";
+    return`<span class="stp ${on?"on":""} ${done?"done":""}">${k==="reading"?(st==="reading"?`<i class="spin"></i>Reading ${rd}/${IMP.shots.length}`:"Reading"):k==="matching"?"Matching":"Ready"}</span>`}).join('<i class="stl"></i>')+(errs.length?`<div class="imerr">${errs.map(e=>esc(e.err)).join("<br>")}</div>`:""):"";
+  const P=$("imprev");if(!IMP.teams.length){P.innerHTML="";return}
+  const ask=IMP.teams.filter(t=>!t.role),mine=IMP.teams.find(t=>t.role==="mine"),opp=IMP.teams.find(t=>t.role==="opp");
+  const opts=p=>{const cs=(p.m.cands||[]).slice(0,8);return`<select class="imsel">${p.m.conf!=="confident"?'<option value="">— choose —</option>':""}${cs.map(id=>`<option value="${id}" ${id===p.m.id?"selected":""}>${esc(pinfo(id).name)} · ${esc(pinfo(id).pos)} · ${esc(pinfo(id).team||"FA")}</option>`).join("")}<option value="?">Search…</option></select>`};
+  const row=(T,p,i)=>`<div class="imr ${p.m.conf}" data-t="${T.id}" data-i="${i}"><select class="imslot">${SLOT_OPTS.map(s=>`<option ${s===(p.slot||"")?"selected":""}>${s}</option>`).join("")}${p.slot?"":'<option value="" selected>slot?</option>'}</select>
+    <span class="imsrc" title="Read from the screenshot">${esc([p.name,p.pos,p.team].filter(Boolean).join(" · "))}</span>
+    ${p.m.conf==="confident"?`<span class="imok">✓ ${esc(pinfo(p.m.id).name)} <small>${esc(pinfo(p.m.id).team||"")}</small></span>`:p.m.conf==="needs"&&(p.m.cands||[]).length?opts(p):`<input class="imfind" list="imdl" placeholder="Find player…">`}<button class="cx" data-del title="Remove">✕</button></div>`;
+  const block=(T,label)=>!T?"":`<div class="imteam"><div class="imtn"><span class="${T.role==="mine"?"you":"them"}">${label}</span><b>${esc(T.name||"Unnamed team")}</b>${T.assumed&&T.role==="mine"?`<button class="link" data-swap title="Guessed from the screen layout">swap teams</button>`:""}<small>${T.players.length} players</small></div>
+    ${T.players.map((p,i)=>row(T,p,i)).join("")}<div class="imr add"><input class="imadd" list="imdl" data-t="${T.id}" placeholder="+ Add a missing player"></div></div>`;
+  const sc=IMP.scoring,fmtL={ppr:"PPR",half:"Half-PPR",standard:"Standard",custom:"Custom",est:"Not sure"};
+  const scHtml=sc&&sc.verified&&!sc.user?`<div class="imsc ok">Scoring <b>${fmtL[sc.format]||sc.format}</b> <small title="${esc(sc.evidence)}">· seen in your screenshot</small> <button class="link" data-scx>change</button></div>`
+    :`<div class="imsc ${sc&&sc.format?"":"need"}"><span>Scoring</span><span class="seg2">${["ppr","half","standard","est"].map(k=>`<button data-sc="${k}" class="${sc&&sc.format===k?"on":""}">${fmtL[k]}</button>`).join("")}</span>${sc&&sc.format==="est"?'<small>points will be marked as estimates</small>':""}</div>`;
+  const canGo=mine&&mine.players.some(p=>p.m.id)&&(IMP.target||sc&&sc.format)&&!ask.length&&imStage()!=="reading";
+  const box=document.querySelector(".imp2");if(box)box.classList.toggle("has",IMP.teams.length>0);
+  P.innerHTML=`${ask.map(T=>`<div class="imask"><span>Whose team is <b>${esc(T.name||"this")}</b>? <small>${T.players.length} players</small></span><span class="seg2"><button data-role="mine" data-t="${T.id}">Mine</button><button data-role="opp" data-t="${T.id}">Opponent</button><button data-role="skip" data-t="${T.id}">Skip</button></span></div>`).join("")}
+    <div class="imcols">${block(mine,"YOU")}${opp?block(opp,"VS"):mine?`<div class="imteam solo"><b>Tracking your players</b><small>No opponent yet: Wingman won't invent one or show a win probability. Add their lineup screenshot any time.</small></div>`:""}</div>
+    ${IMP.target?"":scHtml}${IMP.target?"":`<div class="wrow"><input id="imname" placeholder="League name" value="${esc(IMP.name||[IMP.provider,mine&&mine.name].filter(Boolean).join(" · ")||"My league")}"></div>`}
+    <datalist id="imdl"></datalist><div class="wrow"><button class="pcta" id="imok" ${canGo?"":"disabled"}>${IMP.target?"Update roster":"Start tracking"}</button></div>`;
+  imDatalist();
+  P.querySelectorAll("[data-role]").forEach(b=>b.onclick=()=>{const T=IMP.teams.find(x=>x.id===b.dataset.t);if(b.dataset.role!=="skip"){const o=IMP.teams.find(x=>x.role===b.dataset.role);if(o)o.role=null}T.role=b.dataset.role;T.assumed=false;imRender()});
+  P.querySelectorAll("[data-swap]").forEach(b=>b.onclick=()=>{IMP.teams.forEach(t=>{if(t.role==="mine")t.role="opp";else if(t.role==="opp")t.role="mine";t.assumed=false});imRender()});
+  P.querySelectorAll("[data-sc]").forEach(b=>b.onclick=()=>{IMP.scoring={format:b.dataset.sc,verified:b.dataset.sc!=="est",user:true};imRender()});
+  P.querySelectorAll("[data-scx]").forEach(b=>b.onclick=()=>{IMP.scoring={format:"",user:true};imRender()});
+  const T0=el=>{const r=el.closest(".imr"),T=IMP.teams.find(x=>x.id===r.dataset.t);return[T,T&&T.players[+r.dataset.i]]};
+  P.querySelectorAll(".imslot").forEach(s=>s.onchange=()=>{const[,p]=T0(s);p.slot=s.value});
+  P.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{const[T,p]=T0(b);T.players.splice(T.players.indexOf(p),1);imRender()});
+  P.querySelectorAll(".imsel").forEach(s=>s.onchange=()=>{const[,p]=T0(s);if(s.value==="?"){p.m={id:null,conf:"unresolved",cands:p.m.cands}}else{p.m.id=s.value||null;p.m.conf=s.value?"confident":"needs"}imRender()});
+  P.querySelectorAll(".imfind").forEach(inp=>inp.onchange=()=>{const id=imPick(inp.value);if(!id)return;const[,p]=T0(inp);p.m={id,conf:"confident",cands:[id]};imRender()});
+  P.querySelectorAll(".imadd").forEach(inp=>inp.onchange=()=>{const id=imPick(inp.value);if(!id)return;const T=IMP.teams.find(x=>x.id===inp.dataset.t),q=pinfo(id);if(!T.players.some(x=>x.m.id===id))T.players.push({key:"add:"+id,name:q.name,pos:q.pos,team:q.team,slot:"BN",m:{id,conf:"confident",cands:[id]}});imRender()});
+  const nm=$("imname");if(nm)nm.oninput=()=>{IMP.name=nm.value};
+  const ok=$("imok");if(ok)ok.onclick=imFinish;
+}
+let IMDL=null;
+function imDatalist(){const dl=$("imdl");if(!dl)return;if(!IMDL){IMDL=Object.keys(S.players||{}).filter(id=>{const p=S.players[id];return p&&p.position&&/^(QB|RB|WR|TE|K|DEF)$/.test(p.position)&&(p.team||p.position==="DEF")}).map(id=>{const p=pinfo(id);return[id,`${p.name} · ${p.pos} · ${p.team||"FA"}`]})}
+  dl.innerHTML=IMDL.map(([,l])=>`<option value="${esc(l)}">`).join("")}
+const imPick=v=>{const x=(IMDL||[]).find(([,l])=>l===v);return x?x[0]:null};
+async function imFinish(){
+  const mine=IMP.teams.find(t=>t.role==="mine"),opp=IMP.teams.find(t=>t.role==="opp");if(!mine)return;
+  const left=[mine,opp].filter(Boolean).reduce((n,t)=>n+t.players.filter(p=>!p.m.id).length,0);
+  if(left&&!confirm(`${left} player${left>1?"s are":" is"} still unmatched and will be left out. Continue?`))return;
+  const pack=t=>({name:t.name||"",owner:t.owner||"",mine:t===mine,players:t.players.filter(p=>p.m.id).map(p=>({id:p.m.id,slot:p.slot||"BN",section:p.slot==="BN"?"bench":p.slot==="IR"?"ir":"starter"}))});
+  const slotsOf=t=>t.players.filter(p=>p.m.id&&p.slot&&p.slot!=="BN"&&p.slot!=="IR").map(p=>p.slot);
+  if(IMP.target){const c=(S.conns||getConns()).find(x=>x.key===IMP.target);if(!c)return;const d=c.data;
+    const keepOpp=d.teams.find(t=>!t.mine);d.teams=[pack(mine),...(opp?[pack(opp)]:keepOpp?[keepOpp]:[])];if(slotsOf(mine).length)d.slots=slotsOf(mine);d.updatedAt=Date.now();
+    saveConns();const lg=(S.L||[]).find(l=>l.conn&&l.conn.key===c.key);
+    if(lg){const[nl]=await PROV.manual.connect(c);Object.assign(lg,{rosters:nl.rosters,users:nl.users,league:nl.league,sc:nl.sc,estScoring:nl.estScoring,importedAt:nl.importedAt,tc:{},mu:null,muAt:0,lastHtml:"",primed:false})}
+    impReset();renderConns();$("imprev").innerHTML=`<div class="imdone">✓ Roster updated</div>`;if(lg){showWelcomeClose();refresh()}return}
+  const sc=IMP.scoring||{},fmt=sc.format==="standard"?"std":sc.format==="est"?"half":sc.format==="custom"?"half":sc.format;
+  const data={v:2,name:(IMP.name||($("imname")||{}).value||"My league").trim(),provider:IMP.provider||"",scoring:fmt,scoringVerified:sc.format!=="est"&&sc.format!=="custom",scoringEvidence:sc.evidence||(sc.user?"chosen by you":""),
+    slots:slotsOf(mine).length?slotsOf(mine):null,teams:[pack(mine),...(opp?[pack(opp)]:[])],updatedAt:Date.now()};
+  const key=String(Date.now());S.conns=(S.conns||getConns()).concat({key:"manual:"+key,p:"manual",name:data.name,data});saveConns();impReset();renderConns();
+  $("imprev").innerHTML=`<div class="imdone">✓ ${esc(data.name)} added</div>`;connectAll();
+}
+function showWelcomeClose(){$("welcome").style.display="none";if(S.tab==="m")$("view").style.display=""}
+
 function imFromJson(j){
   if(!j||!Array.isArray(j.teams)||!j.teams.length)throw new Error('Needs a "teams" array with at least one team');
   return{name:j.name||"Imported league",scoring:j.scoring||"half",slots:j.slots,matchups:j.matchups,provider:j.provider||"",teams:j.teams.map((t,i)=>{if(!Array.isArray(t.players))throw new Error(`Team ${i+1} needs a "players" array`);
@@ -2448,38 +2615,13 @@ function imMatch(p){
   const last=nmKey(String(p.name).split(" ").pop()),loose=Object.keys(S.players).filter(id=>{const q=S.players[id];return q.position&&(!p.pos||q.position===p.pos)&&nmKey(q.last_name||"")===last&&q.team}).slice(0,6);
   return{id:null,conf:loose.length?"needs":"unresolved",cands:loose};
 }
-async function imPreview(cand){
-  if(!S.players||!S.xw||!Object.keys(S.xw.name||{}).length){$("imprev").innerHTML=`<div class="imload"><i class="spin"></i>Matching players…</div>`;try{await getPlayers();buildXW()}catch(e){$("werr").textContent="Couldn't load the NFL player list: "+e.message;return}}
-  IMP.cand=cand;cand.teams.forEach(t=>t.players.forEach(p=>Object.assign(p,{m:imMatch(p)})));
-  const opt=(p,i,j)=>{const cs=p.m.cands||[];return`<select class="imsel" data-t="${i}" data-p="${j}"><option value="">— choose —</option>${cs.map(id=>`<option value="${id}" ${id===p.m.id?"selected":""}>${esc(pinfo(id).name)} · ${esc(pinfo(id).pos)} · ${esc(pinfo(id).team||"FA")}</option>`).join("")}</select>`};
-  $("imprev").innerHTML=`<div class="imh"><input id="imname" value="${esc(cand.name)}"><select id="imsc"><option value="half">Half-PPR</option><option value="ppr">PPR</option><option value="std">Standard</option>${typeof cand.scoring==="object"?'<option value="custom" selected>Custom scoring</option>':""}</select>${cand.provider?`<span class="pmeta">from ${esc(cand.provider)}</span>`:""}</div>`+
-    cand.teams.map((t,i)=>`<div class="imteam"><div class="imtn">${t.mine?'<span class="you">YOU</span>':""}<b>${esc(t.name)}</b></div>${t.players.map((p,j)=>`<div class="imr ${p.m.conf}"><i class="imc" title="${p.m.conf==="confident"?"Confident match":p.m.conf==="needs"?"Needs confirmation":"Unresolved"}"></i><span class="imsrc">${esc([p.slot||p.pos,p.name,p.team].filter(Boolean).join(" · "))}</span>${p.m.conf==="confident"?`<span class="imok">${esc(pinfo(p.m.id).name)}</span>`:opt(p,i,j)}</div>`).join("")}</div>`).join("")+
-    `<div class="wrow"><button class="pcta" id="imok">Import League</button></div>`;
-  if(typeof cand.scoring==="string")$("imsc").value=cand.scoring;
-  $("imprev").querySelectorAll(".imsel").forEach(s=>s.onchange=()=>{const p=cand.teams[+s.dataset.t].players[+s.dataset.p];p.m.id=s.value||null;p.m.conf=s.value?"confident":p.m.cands.length?"needs":"unresolved";s.closest(".imr").className="imr "+p.m.conf});
-  $("imok").onclick=()=>{const left=cand.teams.reduce((n,t)=>n+t.players.filter(p=>!p.m.id).length,0);
-    if(left&&!confirm(`${left} player${left>1?"s are":" is"} still unmatched and will be left out. Import anyway?`))return;
-    const sc=$("imsc").value==="custom"?cand.scoring:$("imsc").value,key=String(Date.now());
-    const data={name:$("imname").value||cand.name,scoring:sc,slots:cand.slots,matchups:cand.matchups,teams:cand.teams.map(t=>({name:t.name,owner:t.owner,mine:t.mine,players:t.players.filter(p=>p.m.id).map(p=>({id:p.m.id,slot:p.slot||""}))}))};
-    S.conns=(S.conns||getConns()).concat({key:"manual:"+key,p:"manual",name:data.name,data});saveConns();renderConns();$("imprev").innerHTML=`<div class="imdone">✓ ${esc(data.name)}</div>`};
-}
-/* screenshot → worker vision → candidate roster (image is sent once and not kept) */
-async function imImage(file){
-  const W=workerURL();$("werr").textContent="";
-  if(!W){$("imprev").innerHTML=`<div class="cna">Screenshot reading runs on your Wingman Connect worker. Add its URL in Settings → Connect, or use JSON.</div>`;return}
-  $("imprev").innerHTML=`<div class="imload"><i class="spin"></i>Reading roster…</div>`;
-  try{const img=await imShrink(file),r=await tfetch(W.replace(/\/$/,"")+"/vision/roster",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(img)},45000);
-    if(!r.ok)throw new Error("Extraction failed ("+r.status+")");const j=await r.json();
-    imPreview(imFromJson({name:j.teamName||"Imported team",scoring:"half",provider:j.provider,teams:[{name:j.teamName||"My team",mine:true,players:(j.players||[]).map(p=>({name:p.name,pos:p.pos,team:p.team,slot:p.slot}))}]}))}
-  catch(e){$("imprev").innerHTML="";$("werr").textContent=e.message}
-}
-function imShrink(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),im=new Image();im.onload=()=>{const k=Math.min(1,1600/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);
-  res({mediaType:"image/jpeg",data:c.toDataURL("image/jpeg",.85).split(",")[1]})};im.onerror=()=>rej(new Error("Couldn't read that image"));im.src=u})}
 async function imCapture(){
-  let st;try{st=await navigator.mediaDevices.getDisplayMedia({video:true,audio:false})}catch(e){$("werr").textContent="Capture was cancelled or blocked: try a screenshot";return}
-  try{const v=document.createElement("video");v.srcObject=st;v.muted=true;await v.play();await new Promise(r=>setTimeout(r,250));const c=document.createElement("canvas");c.width=v.videoWidth;c.height=v.videoHeight;c.getContext("2d").drawImage(v,0,0);
-    st.getTracks().forEach(t=>t.stop());c.toBlob(b=>imImage(b),"image/png")}catch(e){st.getTracks().forEach(t=>t.stop());$("werr").textContent="Couldn't capture that window"}
+  if(!(navigator.mediaDevices&&navigator.mediaDevices.getDisplayMedia)){$("werr").textContent="Window capture isn't available in this browser. Take a screenshot and paste it instead.";return}
+  let st;try{st=await navigator.mediaDevices.getDisplayMedia({video:true,audio:false})}catch(e){$("werr").textContent="Capture was cancelled. You can paste a screenshot instead.";return}
+  try{const v=document.createElement("video");v.srcObject=st;v.muted=true;await v.play();await new Promise(r=>setTimeout(r,300));const c=document.createElement("canvas");c.width=v.videoWidth;c.height=v.videoHeight;c.getContext("2d").drawImage(v,0,0);
+    st.getTracks().forEach(t=>t.stop());c.toBlob(b=>imAdd([new File([b],"capture.png",{type:"image/png"})]),"image/png")}catch(e){st.getTracks().forEach(t=>t.stop());$("werr").textContent="Couldn't capture that window."}
 }
+
 
 /* =====================================================================
    VISUAL SIGNALS (show first, exact values on hover)
@@ -2603,7 +2745,7 @@ async function connectAll(){
     vis().slice(6).forEach(lg=>{lg.hidden=true});   /* up to 6 leagues side by side; the rest stay one tap away */
     $("view").innerHTML="";
     const ro=window.ResizeObserver?new ResizeObserver(es=>es.forEach(e=>{const w=e.contentRect.width;if(w<700)e.target.classList.add("compact");else if(w>740)e.target.classList.remove("compact")})):null;
-    S.L.forEach(lg=>{lg.el=document.createElement("section");lg.el.className="lg";$("view").appendChild(lg.el);if(ro)ro.observe(lg.el)});
+    S.L.forEach(lg=>{lg.el=document.createElement("section");lg.el.className="lg"+(lg.provider==="manual"?" imp":"");$("view").appendChild(lg.el);if(ro)ro.observe(lg.el)});
     applyVis();
     $("welcome").style.display="none";$("view").style.display=S.tab!=="m"?"none":"";$("who").innerHTML=`🔗 <b>${S.L.length}</b>`;$("who").title="Connections";$("wback").style.display="";
     S.raw=null;S.baseWeek=0;await refresh();schedule();
