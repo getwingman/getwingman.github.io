@@ -905,6 +905,79 @@ td.fxc+td.fxc,td.fxc{border-left-color:transparent;border-right-color:transparen
 /* field: players who haven't played get a slim card instead of an empty field */
 .h2c.pre .mm{display:none}.h2c.pre .h2f{display:none}.h2c.pre{justify-content:center}
 .h2c .prez{display:none}.h2c.pre .prez{display:flex;align-items:center;justify-content:center;gap:6px;height:30px;border-radius:8px;font-size:11px;color:var(--mute);background:repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 9.09%,transparent 9.09% 18.18%)}
+/* ===== cell event scenes ===== */
+.fx-sack{--fc:#ff6b6b}.fx-td,.fx-fg,.fx-fg50,.fx-dtd{--fc:#f5c542}.fx-otd{--fc:#3dd6e6}.fx-live{--fc:#3ecf74}
+.fx.fxs .fxi,.fx.fxs .rg2,.fx.fxs .gp,.fx.fxs .fb{display:none}
+.fx-rz::before,.fx-live::before{content:none!important}
+.fx .fxst{position:absolute;inset:0;display:block}.fx.fxL .fxst{transform:scaleX(-1)}
+.fx .fxst>i{position:absolute;display:block;font-style:normal}
+.fx .bl{font-size:15px;line-height:1;width:16px;height:16px;margin:-8px 0 0 -8px;filter:drop-shadow(0 0 5px var(--fc,#f5c542));animation-duration:var(--fxd,1.5s);animation-fill-mode:both}
+.fx .bl::before{content:"";position:absolute;right:100%;top:50%;width:26px;height:2px;margin-top:-1px;border-radius:2px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--fc,#f5c542) 80%,transparent))}
+/* field goal: goalposts span the whole cell; ball arcs through the uprights */
+.fx .fp{right:7%;top:6%;bottom:6%;width:22px;animation:fxin var(--fxd) ease-out both}
+.fx .fp::before{content:"";position:absolute;left:0;right:0;top:0;height:56%;border:2.5px solid #f5c542;border-top:0;box-shadow:0 2px 10px rgba(245,197,66,.35)}
+.fx .fp::after{content:"";position:absolute;left:50%;top:56%;bottom:0;width:2.5px;margin-left:-1.25px;background:#f5c542}
+.fx-fg .bl,.fx-fg50 .bl{animation-name:fgarc;animation-timing-function:cubic-bezier(.35,.6,.45,1)}
+.fx-fg50 .bl{animation-name:fgarcl}.fx-fg50 .fp::before{box-shadow:0 0 16px rgba(245,197,66,.75)}
+@keyframes fgarc{0%{left:36%;top:84%;opacity:0;transform:rotate(0)}8%{opacity:1}55%{left:66%;top:16%;transform:rotate(240deg)}85%{left:89%;top:30%;opacity:1;transform:rotate(380deg)}100%{left:91%;top:32%;opacity:0}}
+@keyframes fgarcl{0%{left:22%;top:86%;opacity:0}8%{opacity:1}55%{left:60%;top:6%;transform:rotate(300deg)}85%{left:89%;top:28%;opacity:1;transform:rotate(460deg)}100%{left:91%;top:30%;opacity:0}}
+@keyframes fxin{0%{opacity:0}12%{opacity:1}85%{opacity:1}100%{opacity:0}}
+/* touchdown: carry into the end zone, goal-line flash, burst */
+.fx .ez{right:0;top:0;bottom:0;width:11%;background:linear-gradient(90deg,color-mix(in srgb,var(--fc) 15%,transparent),color-mix(in srgb,var(--fc) 45%,transparent));animation:ezfl var(--fxd) ease-out both}
+.fx .gl{right:11%;top:0;bottom:0;width:2px;background:var(--fc);box-shadow:0 0 10px var(--fc);animation:ezfl var(--fxd) ease-out both}
+.fx-td .bl,.fx-otd .bl,.fx-dtd .bl{top:50%;animation-name:tdrun;animation-timing-function:cubic-bezier(.4,0,.2,1)}
+@keyframes tdrun{0%{left:30%;opacity:0}10%{opacity:1}62%{left:93%;opacity:1}75%{left:94%;opacity:0}100%{left:94%;opacity:0}}
+@keyframes ezfl{0%,45%{opacity:0}60%{opacity:1}85%{opacity:.8}100%{opacity:0}}
+.fx .bst{right:2%;top:50%;width:34px;height:34px;margin-top:-17px;border-radius:50%;border:2.5px solid var(--fc);opacity:0;animation:bst var(--fxd) ease-out both}
+@keyframes bst{0%,58%{transform:scale(.2);opacity:0}66%{opacity:1}100%{transform:scale(2.2);opacity:0}}
+/* sack: the rusher arrives, impact rings */
+.fx .qb{left:62%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#e8e8ee;animation:qbhit var(--fxd) ease-out both}
+.fx .dl{top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--fc);box-shadow:0 0 10px var(--fc);animation:rush var(--fxd) cubic-bezier(.5,0,.75,0) both}
+@keyframes rush{0%{left:100%;opacity:0}10%{opacity:1}42%{left:66%}60%{left:64%;opacity:1}100%{left:64%;opacity:0}}
+@keyframes qbhit{0%{opacity:0}10%,42%{opacity:1;transform:none}52%{transform:translate(-6px,4px) rotate(-25deg)}90%{opacity:1}100%{opacity:0;transform:translate(-6px,4px) rotate(-25deg)}}
+.fx .sh{left:64%;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;border:2px solid var(--fc);opacity:0;animation:shk var(--fxd) ease-out both}.fx .sh.s2{animation-delay:.12s!important}
+@keyframes shk{0%,40%{transform:scale(.3);opacity:0}46%{opacity:1}100%{transform:scale(2.6);opacity:0}}
+/* interception: pass in the air, a glove snags it, the ball heads back */
+.fx-int .bl{animation-name:intarc}
+@keyframes intarc{0%{left:32%;top:80%;opacity:0}8%{opacity:1}48%{left:66%;top:22%}58%{left:70%;top:30%}100%{left:42%;top:60%;opacity:0}}
+.fx .hd{left:70%;top:28%;font-size:16px;margin:-9px 0 0 -9px;opacity:0;animation:hand var(--fxd) cubic-bezier(.2,1.6,.4,1) both}
+@keyframes hand{0%,40%{opacity:0;transform:scale(.3)}52%{opacity:1;transform:scale(1.2)}80%{opacity:1;transform:scale(1)}100%{opacity:0}}
+.fx .flash{inset:0;background:radial-gradient(circle at 70% 40%,color-mix(in srgb,var(--fc) 45%,transparent),transparent 45%);opacity:0;animation:flash var(--fxd) ease-out both}
+@keyframes flash{0%,46%{opacity:0}54%{opacity:1}100%{opacity:0}}
+/* fumble: loose-ball bounces, then the scoop */
+.fx-fr .bl{animation-name:loose}
+@keyframes loose{0%{left:40%;top:30%;opacity:0;transform:rotate(0)}8%{opacity:1}22%{left:50%;top:78%;transform:rotate(120deg)}36%{left:57%;top:38%}50%{left:63%;top:76%;transform:rotate(260deg)}62%{left:67%;top:56%}72%{left:69%;top:62%;transform:rotate(330deg)}90%{opacity:1}100%{left:69%;top:62%;opacity:0}}
+.fx .scoop{left:69%;top:62%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;border:2.5px solid var(--fc);opacity:0;animation:bst var(--fxd) ease-out both}
+/* safety: carrier driven back into his own end zone */
+.fx .ezl{left:0;top:0;bottom:0;width:11%;background:linear-gradient(270deg,transparent,color-mix(in srgb,var(--fc) 45%,transparent));animation:ezfl var(--fxd) ease-out both}
+.fx .car{top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#e8e8ee;animation:pushback var(--fxd) cubic-bezier(.3,0,.2,1) both}
+@keyframes pushback{0%{left:44%;opacity:0}10%{opacity:1}60%{left:5%}85%{opacity:1}100%{left:5%;opacity:0}}
+.fx-safe .flash{background:radial-gradient(circle at 6% 50%,color-mix(in srgb,var(--fc) 50%,transparent),transparent 40%)}
+/* blocked kick: the ball rises, a hand gets there first, deflection */
+.fx-blk .bl{animation-name:blkarc}
+@keyframes blkarc{0%{left:36%;top:84%;opacity:0}8%{opacity:1}40%{left:52%;top:34%;transform:rotate(90deg)}50%{left:54%;top:30%}100%{left:40%;top:96%;opacity:0;transform:rotate(-200deg)}}
+.fx-blk .hd{left:56%;top:24%}
+/* kickoff (player goes live): ball off the tee, long trail across the cell */
+.fx .tee{left:30%;bottom:16%;width:8px;height:6px;margin-left:-4px;border-radius:2px 2px 0 0;background:var(--fc);animation:fxin var(--fxd) both}
+.fx-live .bl{animation-name:kick}
+@keyframes kick{0%{left:30%;top:74%;opacity:0}8%{opacity:1;transform:rotate(0)}60%{left:72%;top:8%;transform:rotate(300deg)}100%{left:98%;top:40%;opacity:0;transform:rotate(520deg)}}
+/* red zone: broadcast-style slanted banner */
+.fx-rz{--fc:#e0262d}
+.fx .rzb{top:12%;bottom:12%;left:34%;right:4%;display:flex;align-items:center;justify-content:center;gap:8px;transform:skewX(-16deg);background:linear-gradient(90deg,#7a0d12,#e0262d 45%,#ff4747);box-shadow:0 0 18px rgba(224,38,45,.55),inset 0 1px 0 rgba(255,255,255,.25);border-left:4px solid #fff;animation:rzb var(--fxd) cubic-bezier(.2,.9,.2,1) both}
+.fx .rzb b{font-style:italic;font-weight:900;font-size:12px;letter-spacing:.08em;color:#fff;transform:skewX(16deg);text-shadow:0 1px 0 rgba(0,0,0,.35)}
+.fx.fxL .rzb b,.fx.fxL .rzb .chev{transform:scaleX(-1) skewX(16deg)}
+.fx .rzb .chev{position:static;font-style:normal;font-weight:900;color:#ffd0d0;letter-spacing:-2px;transform:skewX(16deg);animation:chev .5s linear infinite}
+@keyframes rzb{0%{clip-path:inset(0 100% 0 0);opacity:1}18%{clip-path:inset(0 0 0 0)}80%{clip-path:inset(0 0 0 0);opacity:1}100%{clip-path:inset(0 0 0 100%);opacity:0}}
+@keyframes chev{50%{opacity:.4}}
+.fx-rz .fl2,.fx-rz+.fxtag{display:none}
+/* status updates: the tag next to the name pulses, nothing is duplicated */
+.tag.tagpulse{animation:tagp var(--fxd,1.3s) ease-out both}
+@keyframes tagp{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(240,163,35,.0)}15%{transform:scale(1.45);box-shadow:0 0 0 6px rgba(240,163,35,.35)}35%{transform:scale(1.1)}55%{transform:scale(1.3);box-shadow:0 0 0 10px rgba(240,163,35,0)}100%{transform:scale(1)}}
+/* persistent red-zone state line: same broadcast language */
+.pgv.rz{gap:5px;color:#fff;font-style:italic;font-weight:900;letter-spacing:.04em}.pgv.rz::before{content:"RED ZONE";padding:0 6px;transform:skewX(-14deg);background:linear-gradient(90deg,#9b1218,#e0262d);border-left:2px solid #fff;font-size:9px;line-height:13px}
+.pgv.rz .rzd{display:none}
+@media(prefers-reduced-motion:reduce){.fx .fxst{display:none}.tag.tagpulse{animation:none;box-shadow:0 0 0 2px rgba(240,163,35,.6)}}
+.fx.rm .fxst{display:none}
 </style>
 </head>
 <body>
@@ -930,7 +1003,7 @@ td.fxc+td.fxc,td.fxc{border-left-color:transparent;border-right-color:transparen
     <div class="labc"><span class="seg2" data-c="motion"><button data-v="normal" class="on">Normal</button><button data-v="reduced">Reduced</button></span><span class="seg2" data-c="sound"><button data-v="on" class="on">Sound</button><button data-v="off">Mute</button></span><button id="labplay" class="labp">▶ Play all</button></div>
     <div class="labbar"><span id="labnow" class="labnow">PREVIEW</span><span id="labsc" class="labsc"></span></div>
     <div id="labev" class="labev"></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v31</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v32</span></div>
   </div>
 </header>
 <main>
@@ -1783,24 +1856,39 @@ async function copyReport(lg,btn){
    playEventAnimation(kind, target, {age, side, rm}) injects the effect into a cell or module,
    never changes its size, removes it when done, and never stacks two effects on one target.
    ===================================================================== */
-const FXDUR={fg:1400,fg50:1650,td:1400,otd:1400,dtd:1500,sack:1200,int:1300,fr:1350,safe:1300,blk:1200,live:1300,rz:1400,regret:1250,q:1300,out:1300,inj:1300,
+const FXDUR={fg:1500,fg50:1750,td:1500,otd:1500,dtd:1600,sack:1300,int:1500,fr:1500,safe:1400,blk:1400,live:1500,rz:1700,regret:1250,q:1300,out:1300,inj:1300,
   lead:1500,comeback:1600,hi:1500,lo:1500,upset:1600,win:1700,loss:1500,upwin:1800};
 const MODFX=new Set(["lead","comeback","hi","lo","upset","win","loss","upwin"]);
 const FXLAB={sack:["💥","SACK"],int:["🛑","INT"],fr:["🏈","FUMBLE"],dtd:["🏈","D/ST TD"],safe:["🛡","SAFETY"],blk:["✋","BLOCKED"],td:["🏈","TD"],otd:["🏈","TD"],
   live:["●","LIVE"],rz:["🔴","RED ZONE"],regret:["↑","BENCH"],q:["Q","QUESTIONABLE"],out:["O","OUT"],inj:["✚","STATUS"],
   lead:["🔄","OPPONENT TAKES LEAD"],comeback:["⚡","YOU TAKE THE LEAD"],hi:["🔥","LEAGUE HIGH"],lo:["🧊","LEAGUE LOW"],upset:["⚠","UPSET ALERT"],win:["🏆","WIN"],loss:["","FINAL · LOSS"],upwin:["🎉","UPSET WIN"]};
 const prefersRM=()=>!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
+/* Every cell event is a tiny play on a tiny field: the cell is the field (both rows), my side drives right,
+   the opponent's side is mirrored. Same engine for live events and the Animation Lab. */
+const FXSTATUS=new Set(["q","out","inj"]);
 function fxMarkup(k,o){
   const side=o.side==="L"?"fxL":"fxR",L=FXLAB[k]||["✦",""];
   if(MODFX.has(k))return`<span class="fxm fxm-${k}" aria-hidden="true"><i class="sw"></i><b class="fxp"><span>${L[0]}</span>${L[1]}</b></span>`;
-  if(k==="fg"||k==="fg50")return`<span class="fx fx-fg ${side}${k==="fg50"?" long":""}" aria-hidden="true"><i class="gp"></i><i class="fb">🏈</i><b class="fl2">${k==="fg50"?"GOOD · 50+":"GOOD"}</b></span>`;
-  return`<span class="fx fx-d fx-${k} ${side}" aria-hidden="true"><i class="rg2"></i><i class="fxi">${L[0]}</i><b class="fl2">${L[1]}</b></span>`;
+  const B='<i class="bl">🏈</i>',lab=k==="fg"?"GOOD":k==="fg50"?"GOOD · 50+":L[1];
+  const scene={
+    fg:`<i class="fp"></i>${B}`,fg50:`<i class="fp"></i>${B}`,
+    td:`<i class="ez"></i><i class="gl"></i>${B}<i class="bst"></i>`,otd:`<i class="ez"></i><i class="gl"></i>${B}<i class="bst"></i>`,dtd:`<i class="ez"></i><i class="gl"></i>${B}<i class="bst"></i>`,
+    sack:`<i class="qb"></i><i class="dl"></i><i class="sh"></i><i class="sh s2"></i>`,
+    int:`${B}<i class="hd">🧤</i><i class="flash"></i>`,
+    fr:`${B}<i class="scoop"></i>`,
+    safe:`<i class="ezl"></i><i class="car"></i><i class="flash"></i>`,
+    blk:`${B}<i class="hd">✋</i>`,
+    rz:`<i class="rzb"><b>RED ZONE</b><i class="chev">›››</i></i>`,
+    live:`<i class="tee"></i>${B}`,
+  }[k]||"";
+  return`<span class="fx fxs fx-${k} ${side}${k==="fg50"?" long":""}" aria-hidden="true"><i class="fxst">${scene}</i><b class="fl2">${FXSTATUS.has(k)||k==="rz"?"":lab}</b></span>`;
 }
 function playEventAnimation(k,target,o={}){
   if(!target||!FXLAB[k]&&k!=="fg"&&k!=="fg50")return null;
   const dur=FXDUR[k]||1400,age=Math.max(0,o.age||0);if(age>=dur)return null;
   const rm=o.rm!=null?o.rm:prefersRM(),mod=MODFX.has(k);
   target.querySelectorAll(":scope > .fx, :scope > .fxm").forEach(x=>x.remove());       /* never overlap */
+  if(FXSTATUS.has(k)){const tg=target.querySelector(".tag.inj");if(tg){tg.classList.remove("tagpulse");void tg.offsetWidth;tg.classList.add("tagpulse");tg.style.setProperty("--fxd",dur+"ms");tg.style.animationDelay=`-${age}ms`;setTimeout(()=>tg.classList.remove("tagpulse"),dur-age+60)}}
   target.classList.add(mod?"fxmc":"fxc");target.insertAdjacentHTML("afterbegin",fxMarkup(k,o));
   const node=target.firstElementChild;if(rm)node.classList.add("rm");
   if(!mod&&target.matches&&target.matches("td[data-pos]")){const sib=target.classList.contains("r")?target.previousElementSibling:target.nextElementSibling;
@@ -1809,7 +1897,7 @@ function playEventAnimation(k,target,o={}){
   const lab=!mod&&node.querySelector(".fl2"),r=target.getBoundingClientRect();
   if(lab&&lab.textContent&&r.width){let L=$("fxlayer");if(!L){L=document.createElement("div");L.id="fxlayer";document.body.appendChild(L)}
     const t=document.createElement("div");t.className="fxtag"+(rm?" rm":"");t.textContent=lab.textContent;t.style.setProperty("--fc",getComputedStyle(node).getPropertyValue("--fc")||"#f5c542");t.style.setProperty("--fxd",dur+"ms");t.style.animationDelay=`-${age}ms`;L.appendChild(t);
-    const w=t.offsetWidth,h=t.offsetHeight,x=o.side==="L"?r.left+10:r.right-w-10;let y=r.top-h+4;if(y<52)y=r.bottom-4;t.style.left=Math.max(4,Math.min(innerWidth-w-4,x))+"px";t.style.top=y+"px";setTimeout(()=>t.remove(),dur-age+60)}
+    const w=t.offsetWidth,h=t.offsetHeight,x=o.side==="L"?r.left+r.width*.3-w/2:r.right-r.width*.3-w/2;let y=r.top+(r.height-h)/2;t.style.left=Math.max(4,Math.min(innerWidth-w-4,x))+"px";t.style.top=y+"px";setTimeout(()=>t.remove(),dur-age+60)}
   node.style.setProperty("--fxd",dur+"ms");[node,...node.querySelectorAll("*")].forEach(c=>c.style.animationDelay=`-${age}ms`);
   setTimeout(()=>{if(node.parentNode)node.remove()},dur-age+60);
   return node;
