@@ -882,6 +882,15 @@ html[data-theme=light] .pcard2 div{color:var(--mute)}
 body.swl #view,body.swl main>div:not(#view){animation:swl .28s ease-out}body.swr #view,body.swr main>div:not(#view){animation:swr .28s ease-out}
 @keyframes swl{from{transform:translateX(24px);opacity:.6}}@keyframes swr{from{transform:translateX(-24px);opacity:.6}}
 @media(prefers-reduced-motion:reduce){body.swl #view,body.swr #view{animation:none}}
+.xpb{display:inline-flex;align-items:center;gap:2px;margin:0 3px;cursor:help;vertical-align:middle}.xpb svg{display:none}
+.xpb i{width:6px;height:6px;border-radius:50%;display:block}.xpb i.me{background:var(--a);box-shadow:0 0 4px rgba(167,133,255,.7)}.xpb i.op{background:var(--b);box-shadow:0 0 4px rgba(61,214,230,.7)}
+td.n.g-warn{background:rgba(255,107,107,.09);box-shadow:none}
+.fx.fxwash::after{background:color-mix(in srgb,var(--fc,#f5c542) 20%,transparent);box-shadow:inset 0 1px 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent),inset 0 -1px 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent)}
+.split.nmany{display:grid;grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:minmax(640px,calc((100% - 14px)/2));overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:10px;scrollbar-width:thin;scrollbar-color:#3a3a48 transparent}
+.split.nmany>.lg{scroll-snap-align:start;min-width:0}
+.split.nmany::-webkit-scrollbar{height:8px}.split.nmany::-webkit-scrollbar-thumb{background:#3a3a48;border-radius:4px}
+.lgs{overflow-x:auto;min-width:0;flex:0 1 auto;scrollbar-width:none;mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent)}
+@media(min-width:761px){header{flex-wrap:nowrap}.brand{flex:none}.ctl{flex:1 1 auto;min-width:0;flex-wrap:nowrap;justify-content:flex-end}.ctl>*:not(.lgs){flex:none}}.lgs::-webkit-scrollbar{display:none}.lgs .lgt{flex:none}
 </style>
 </head>
 <body>
@@ -907,7 +916,7 @@ body.swl #view,body.swl main>div:not(#view){animation:swl .28s ease-out}body.swr
     <div class="labc"><span class="seg2" data-c="motion"><button data-v="normal" class="on">Normal</button><button data-v="reduced">Reduced</button></span><span class="seg2" data-c="sound"><button data-v="on" class="on">Sound</button><button data-v="off">Mute</button></span><button id="labplay" class="labp">▶ Play all</button></div>
     <div class="labbar"><span id="labnow" class="labnow">PREVIEW</span><span id="labsc" class="labsc"></span></div>
     <div id="labev" class="labev"></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v27</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v28</span></div>
   </div>
 </header>
 <main>
@@ -1338,7 +1347,7 @@ function ncell(lg,r,right){
   const hasP=ref!=null;
   const pj=!S.okProj||!hasP?'<span class="pjc nop"></span>':hurt?`<span class="pjc f hurt${hd}" title="Left the game (${esc(r.p.inj)}): no more points expected, so his projection counts as ${f2(r.a)} in totals and win probability. Original ${refSrc}: ${f2(ref)}. It switches back to the original once the game ends.">${dl}<span class="pv">⊘ ${f2(r.a)}</span></span>`:fin?`<span class="pjc f${hd}" title="Original ${refSrc}">${dl}<span class="pv">${f2(ref)}</span></span>`:`<span class="pjc ${c}${hd}" title="Started the week at ${r.b==null?"–":f2(r.b)}">${dl}<span class="pv">${ar(c)} ${f2(r.e)}</span></span>`;
   const g=S.games[r.p.team],unpl=S.okGames&&(!g||g.state==="pre")&&!r.a,pts=unpl?`<b class="np" title="${g?"Game hasn't started":"No game this week"}">${g?"◌":"💤"}</b>`:`<b>${f2(r.a)}</b>`;
-  return`<td class="${c0} ${gcls(r.p)}${isRZ(r.p)?" g-rz":""}">${pts}${pj}</td>`;
+  return`<td class="${c0} ${gcls(r.p)}${isRZ(r.p)?" g-rz":""}${r.warn?" g-warn":""}">${pts}${pj}</td>`;
 }
 const KCHIP={PASS:"🎯 PASS",RUN:"🏃 RUN",SACK:"💥 SACK",INT:"🛑 INT",FUM:"🔻 FUM",FG:"🥅 FG",XP:"✔ XP",TD:"🏈 TD",DEF:"🛡 D/ST",ADJ:"⚖ ADJ"};
 
@@ -1362,7 +1371,7 @@ function render(lg){
   const cg=b?'<colgroup><col><col class="cn"><col class="cp"><col class="cn"><col></colgroup>':'<colgroup><col><col class="cn"><col class="cp"></colgroup>';
   const fin=!!b&&S.okGames&&a.left===0&&b.left===0;
   const dc=r=>{const c=gcls(r.p);return c==="g-live"?"l":c==="g-up"?"u":"f"};
-  let wa=null;if(b){const v=a.vr+b.vr;wa=v>0?Phi((a.proj-b.proj)/Math.sqrt(v)):(a.total>b.total?1:a.total<b.total?0:.5)}
+  let wa=null;if(b)wa=wpPair(a,b);
   const nT=lg.rosters.length,PT=(lg.league.settings||{}).playoff_teams||6;
   const meta=rid=>{const pw=lg.power&&lg.power[rid],od=lg.odds&&lg.odds[rid];return(pw?`<span class="mt" title="Power rank #${pw.rank} of ${nT} · all-play ${pw.ap} · ${pw.avg.toFixed(1)} pts/wk">#${pw.rank}</span>`:"")+(od!=null?`<span class="mt" title="Playoff odds: ${Math.round(od*100)}% (top ${PT} make it; 2,000 simulations of the rest of the regular season)${stakesTitle(lg,+rid)}">🏆${od>0&&od<.01?"<1":Math.round(od*100)}%${stakeArrow(lg,+rid)}</span>`:"")};
   const nm=(t,x,r,rid)=>`<div class="hn ${r?"r hnB":"hnA"}"><b title="${esc(t.name)}"><span class="tnm">${esc(t.name)}</span><span class="onm">${esc(t.owner||t.name)}</span></b><span class="hu"><span><span class="tnm">${esc(t.owner)} · </span>${esc(t.rec)}</span>${meta(rid)}${ico(x.total)}${x.issues&&x.issues.length?`<span class="iss" title="Lineup issues: ${esc(x.issues.join(" · "))}">⚠ ${x.issues.length}</span>`:""}</span></div>`;
@@ -1416,7 +1425,7 @@ function render(lg){
     let w=50;
     if(pr.length===2){const d=xs[0].total-xs[1].total;
       if(done)w=d>0?100:d<0?0:50;
-      else if(S.okProj&&S.okGames){const v=xs[0].vr+xs[1].vr;w=Math.round((v>0?Phi((xs[0].proj-xs[1].proj)/Math.sqrt(v)):(d>0?1:d<0?0:.5))*100)}
+      else if(S.okProj&&S.okGames){w=Math.round(wpPair(xs[0],xs[1])*100)}
       else{const s=xs[0].total+xs[1].total;w=s>0?Math.round(xs[0].total/s*100):50}}
     const last=lg.log.find(e=>rids.includes(e.rid));
     let ml="";
@@ -1598,7 +1607,7 @@ function leadChange(){
     if(S.week!==S.nflWeek||!S.okGames)return;
     const a=side(lg,A),b=side(lg,B),fin=a.left===0&&b.left===0,tb=team(lg,B.roster_id),who=esc(tb.owner||tb.name),L=esc(shortName(lg.league.name));
     if(lg.finSeen===undefined)lg.finSeen=fin;
-    const wpBase=(a.vr+b.vr)>0?Phi((a.bs-b.bs)/Math.sqrt(a.vr+b.vr)):.5,wpNow=(a.vr+b.vr)>0?Phi((a.proj-b.proj)/Math.sqrt(a.vr+b.vr)):.5;
+    const wpBase=wpPair(a,b,0,0,true),wpNow=wpPair(a,b);
     if(lg.finSeen===undefined){}else if(fin&&!lg.finSeen){lg.finSeen=true;toast(diff>0?"win":"loss",diff>0?`🏆 Final · You beat ${who} by ${f2(diff)} · ${L}`:diff<0?`Final · ${who} won by ${f2(-diff)} · ${L}`:`Final · Tied with ${who} · ${L}`,8000);if(diff>0)confetti();modFx(lg,diff>0?"win":"loss",".hero")}
     if(!fin&&S.okProj&&!lg.upSeen&&wpBase>=.6&&wpNow<.35&&a.left+b.left>0){lg.upSeen=true;lg.upsetAt=Date.now()}
     const close=!fin&&a.left<=2&&b.left<=2&&Math.abs(diff)<5;
@@ -1697,9 +1706,9 @@ function computeOdds(lg){
   const W0={},F0={};lg.rosters.forEach(r=>{const s=r.settings||{};W0[r.roster_id]=(s.wins||0)+.5*(s.ties||0);F0[r.roster_id]=(s.fpts||0)+(s.fpts_decimal||0)/100});
   let live=null;
   if(S.week===cur&&lg.matchups&&lg.matchups.length){live=[];const by={};lg.matchups.forEach(m=>(by[m.matchup_id]=by[m.matchup_id]||[]).push(m));
-    Object.values(by).forEach(pr=>{if(pr.length!==2)return;const x=side(lg,pr[0]),y=side(lg,pr[1]),v=x.vr+y.vr;
+    Object.values(by).forEach(pr=>{if(pr.length!==2)return;const x=side(lg,pr[0]),y=side(lg,pr[1]);
       const done=S.okGames&&x.left===0&&y.left===0,d=x.total-y.total;
-      live.push([pr[0].roster_id,pr[1].roster_id,done?(d>0?1:d<0?0:.5):v>0?Phi((x.proj-y.proj)/Math.sqrt(v)):(d>0?1:d<0?0:.5),x.proj,y.proj,x.total,y.total])})}
+      live.push([pr[0].roster_id,pr[1].roster_id,done?(d>0?1:d<0?0:.5):wpPair(x,y),x.proj,y.proj,x.total,y.total])})}
   const cnt={};ids.forEach(id=>cnt[id]=0);const me=lg.mineRid;let nW=0,nL=0,cW=0,cL=0,wonThis=null;
   for(let n=0;n<N;n++){const W={...W0},F={...F0};wonThis=null;
     se.fut.forEach(({w,m})=>{
@@ -1780,6 +1789,9 @@ function playEventAnimation(k,target,o={}){
   target.querySelectorAll(":scope > .fx, :scope > .fxm").forEach(x=>x.remove());       /* never overlap */
   target.classList.add(mod?"fxmc":"fxc");target.insertAdjacentHTML("afterbegin",fxMarkup(k,o));
   const node=target.firstElementChild;if(rm)node.classList.add("rm");
+  if(!mod&&target.matches&&target.matches("td[data-pos]")){const sib=target.classList.contains("r")?target.previousElementSibling:target.nextElementSibling;
+    if(sib&&sib.classList.contains("n")){sib.querySelectorAll(":scope > .fx").forEach(x=>x.remove());sib.classList.add("fxc");sib.insertAdjacentHTML("afterbegin",`<span class="fx fxwash fx-${k} ${o.side==="L"?"fxL":"fxR"}${rm?" rm":""}" aria-hidden="true"></span>`);
+      const w=sib.firstElementChild;w.style.setProperty("--fxd",dur+"ms");w.style.animationDelay=`-${age}ms`;setTimeout(()=>{if(w.parentNode)w.remove()},dur-age+60)}}
   const lab=!mod&&node.querySelector(".fl2"),r=target.getBoundingClientRect();
   if(lab&&lab.textContent&&r.width){let L=$("fxlayer");if(!L){L=document.createElement("div");L.id="fxlayer";document.body.appendChild(L)}
     const t=document.createElement("div");t.className="fxtag"+(rm?" rm":"");t.textContent=lab.textContent;t.style.setProperty("--fc",getComputedStyle(node).getPropertyValue("--fc")||"#f5c542");t.style.setProperty("--fxd",dur+"ms");t.style.animationDelay=`-${age}ms`;L.appendChild(t);
@@ -1858,7 +1870,27 @@ function labInit(){themeInit();
    every fantasy number goes through calcPts(stats, lg.sc); every WP number through wpModel().
    ===================================================================== */
 /* the same win-probability model the scoreboard uses, with optional point shifts per side */
-function wpModel(a,b,dA=0,dB=0){const v=a.vr+b.vr,d=(a.total+dA)-(b.total+dB);return v>0?Phi(((a.proj+dA)-(b.proj+dB))/Math.sqrt(v)):(d>0?1:d<0?0:.5)}
+/* ===== Win probability =====
+   P(win) = Φ( (μA − μB) / √Var(A − B) )
+   μ      = actual points so far + projected points still to come (league scoring)
+   σ_i    = max(floor_pos, cv_pos × player's full-game projection) × √(share of his game left)
+            → spread scales with how much a player is expected to score, and shrinks as his game runs out
+   Var    = Σσ² + 2Σρσσ within each lineup − 2Σρσσ across lineups, with game-script correlations:
+            same NFL team (QB↔WR .40, QB↔TE .35, QB↔RB .15, RB↔RB −.15, K↔offense .15–.20),
+            a D/ST vs the offense it faces (QB −.40, others −.20), and offenses in the same game (+.10 shootouts).
+   cv/floors reflect typical week-to-week fantasy volatility by position. */
+const SDK={QB:[.36,5],RB:[.52,4],WR:[.6,4],TE:[.65,3],K:[.5,3],DEF:[.7,3.5]};
+function rowSD(r){if(!r||r.empty||!(r.r>0))return 0;const k=SDK[r.p.pos]||[.6,4],full=r.b!=null?r.b:r.e;return Math.max(k[1],k[0]*Math.max(0,full||0))*Math.sqrt(Math.min(1,r.r))}
+const RHO_SAME={"QB-WR":.4,"QB-TE":.35,"QB-RB":.15,"RB-RB":-.15,"WR-WR":.05,"TE-WR":.05,"K-QB":.2,"K-RB":.15,"K-WR":.15,"K-TE":.15};
+function rho(p,q){if(!p||!q||!p.team||!q.team)return 0;const P=p.pos,Q=q.pos;
+  if(p.team===q.team){if(P==="DEF"||Q==="DEF")return 0;return RHO_SAME[[P,Q].sort().join("-")]||0}
+  const g=S.games&&S.games[p.team];if(!g||g.oppT!==q.team)return 0;
+  if(P==="DEF"&&Q==="DEF")return-.1;if(P==="DEF")return Q==="QB"?-.4:-.2;if(Q==="DEF")return P==="QB"?-.4:-.2;return .1}
+function sideSD(rows){const s=(rows||[]).filter(r=>r&&!r.empty).map(r=>[r,rowSD(r)]).filter(x=>x[1]>0);let v=0;for(let i=0;i<s.length;i++){v+=s[i][1]**2;for(let j=i+1;j<s.length;j++)v+=2*rho(s[i][0].p,s[j][0].p)*s[i][1]*s[j][1]}return{v,s}}
+function matchVar(a,b){const A=sideSD(a.rows),B=sideSD(b.rows);let c=0;A.s.forEach(([r,x])=>B.s.forEach(([q,y])=>{c+=rho(r.p,q.p)*x*y}));return Math.max(0,A.v+B.v-2*c)}
+function wpPair(a,b,dA=0,dB=0,base){if(!a||!b)return .5;const v=matchVar(a,b),d=(a.total+dA)-(b.total+dB);if(v<.05)return d>0?1:d<0?0:.5;
+  return Phi(((base?a.bs:a.proj)+dA-((base?b.bs:b.proj)+dB))/Math.sqrt(v))}
+function wpModel(a,b,dA=0,dB=0){return wpPair(a,b,dA,dB)}
 /* my matchup in a league, oriented so "me" is always side a */
 function myMatch(lg){const M=lg.matchups||[],A=M.find(m=>m.roster_id===lg.mineRid);if(!A)return null;const B=M.find(m=>m.matchup_id===A.matchup_id&&m.roster_id!==A.roster_id);if(!B)return null;
   const a=side(lg,A),b=side(lg,B);return{A,B,a,b,wp:wpModel(a,b)}}
@@ -1893,7 +1925,7 @@ function buildSignals(){
   vis().forEach(lg=>{const mm=myMatch(lg);if(!mm||S.week!==S.nflWeek)return;const{a,b,wp}=mm;lg.wpNow=wp;
     const L=sig.lev[lg.id]={};
     [[a,"me"],[b,"op"]].forEach(([x,sd])=>x.rows.forEach(r=>{if(!r||r.empty||settled(r.p)||!S.games[r.p.team])return;
-      const sdPts=(SD[r.p.pos]||6)*Math.sqrt(Math.max(.05,r.r||1)),pp=(sd==="me"?wpModel(a,b,1,0):wpModel(a,b,0,1))-wp,sw=(sd==="me"?wpModel(a,b,sdPts,0):wpModel(a,b,0,sdPts))-wp;
+      const sdPts=Math.max(1,rowSD(r)),pp=(sd==="me"?wpModel(a,b,1,0):wpModel(a,b,0,1))-wp,sw=(sd==="me"?wpModel(a,b,sdPts,0):wpModel(a,b,0,sdPts))-wp;
       L[r.p.id]={pp,sw,sdPts};
       const ev=eventPts(lg,r.p.pos),dwp=(sd==="me"?wpModel(a,b,ev,0):wpModel(a,b,0,ev))-wp;
       (sig.exp[r.p.id]=sig.exp[r.p.id]||[]).push({lg:lg.id,name:shortName(lg.league.name),side:sd,pts:ev,dwp,p:r.p})}));
@@ -1922,7 +1954,7 @@ function needMeter(lg,a,b,A){
 function cellCards(el){
   el.querySelectorAll("td[data-pos]").forEach(td=>{const nm=(td.querySelector(".fnm")||td.querySelector(".nm")||{}).textContent||"",notes=[];
     const push=t=>{t=String(t||"").split(" | ").filter(x=>x.trim()&&x.trim()!==nm.trim()).join(" · ").trim();if(t&&t.length>3&&!notes.includes(t)&&!notes.some(n=>n.includes(t)))notes.push(t)};
-    if(td.title){push(td.title);td.removeAttribute("title")}td.querySelectorAll("[title]").forEach(x=>{push(x.getAttribute("title"));x.removeAttribute("title")});
+    const pm=td.querySelector(".pm[title]");if(pm){push(pm.getAttribute("title"));pm.removeAttribute("title")}if(td.title){push(td.title);td.removeAttribute("title")}td.querySelectorAll("[title]").forEach(x=>{push(x.getAttribute("title"));x.removeAttribute("title")});
     td.dataset.card=JSON.stringify({nm,notes});
     if(window.matchMedia&&matchMedia("(hover:hover)").matches){let tm=0;td.onmouseenter=()=>{tm=setTimeout(()=>{const c=JSON.parse(td.dataset.card||"{}"),pts=(td.nextElementSibling&&td.nextElementSibling.classList.contains("n")?td.nextElementSibling:td.previousElementSibling)||null;
         fltShowHTML(`<div class="pcard2"><b>${esc(c.nm)}</b>${(c.notes||[]).map(n=>`<div>${esc(n)}</div>`).join("")}</div>`,td.getBoundingClientRect())},320)};td.onmouseleave=()=>{clearTimeout(tm);fltHide()}}});
@@ -2359,9 +2391,9 @@ function kickerViz(k){const yte=k.dist-17,x=Math.max(0,Math.min(100,100-yte)),dn
 function dstViz(c){const lo=Math.max(0,c.pa-3),hi=c.nx+6,X=v=>((v-lo)/(hi-lo)*100).toFixed(1);
   return`<span class="pgv dc" title="${svgEsc(`${c.pa} points allowed (${f2(c.cur)} fantasy) · next TD → ${c.nx} (${f2(c.nxp)})`)}"><svg viewBox="0 0 100 12" preserveAspectRatio="none"><rect x="0" y="4" width="${X(c.nx)}" height="4" fill="#35c98b" fill-opacity=".45"/><rect x="${X(c.nx)}" y="4" width="${100-X(c.nx)}" height="4" fill="#ff6b6b" fill-opacity=".45"/><circle cx="${X(c.pa)}" cy="6" r="3" fill="#e8e8ee"/><path d="M${X(c.nx)} 1v10" stroke="#ff6b6b" stroke-width="1.4"/></svg><em class="dn">−${f2(Math.abs(c.cur-c.nxp))}</em></span>`}
 /* cross-league exposure: purple bars up = helps me, cyan down = hurts me (one bar per league) */
-function expViz(id){const arr=S.sig&&S.sig.exp[id];if(!arr||arr.length<2||!arr.some(x=>Math.abs(x.dwp)>=.03))return"";
-  const bars=arr.map((x,i)=>{const h=Math.min(6.5,1+Math.abs(x.dwp)*28);return x.dwp>=0?`<rect x="${i*4}" y="${7-h}" width="3" height="${h}" rx="1" fill="#a785ff"/>`:`<rect x="${i*4}" y="7" width="3" height="${h}" rx="1" fill="#3dd6e6"/>`}).join("");
-  return`<span class="xpb" title="${svgEsc(expTitle(id))}"><svg viewBox="0 0 ${arr.length*4} 14" width="${arr.length*4}" height="14"><line x1="0" x2="${arr.length*4}" y1="7" y2="7" stroke="#ffffff" stroke-opacity=".2" stroke-width=".6"/>${bars}</svg></span>`}
+function expViz(id){const lg=S.rlg,arr=(S.sig&&S.sig.exp[id]||[]).filter(x=>!lg||x.lg!==lg.id);if(!arr.length)return"";
+  const note=[...new Set(arr.map(x=>x.side==="me"?`Also on your team in ${x.name}`:`You face him in ${x.name}`))].join(" · ");
+  return`<span class="xpb" title="${esc(note)}">${arr.map(x=>`<i class="${x.side==="me"?"me":"op"}"></i>`).join("")}</span>`}
 
 /* ---------- floating tooltip layer (never clipped, never behind other modules) ---------- */
 const FLT={el:null,key:null};
@@ -2433,6 +2465,7 @@ function renderChips(){
   if(h===S.chipHtml)return;S.chipHtml=h;box.innerHTML=h;
   if(box.querySelectorAll)box.querySelectorAll(".lgt").forEach(b=>b.onclick=()=>{
     const lg=S.L[+b.dataset.i];
+    if(!isPhone()&&lg.hidden&&vis().length>=6){toast("info","ℹ️ Up to 6 leagues at once · hide one first",2500,{force:true});return}
     if(isPhone()){if(lg.hidden){lg.hidden=false;lg.primed=false;lg.lastHtml=""}S.mob=lg.id;save("mob",lg.id);S.chipHtml="";applyVis();refresh();return}
     if(!lg.hidden&&vis().length===1)return;   /* keep at least one league on screen */
     lg.hidden=!lg.hidden;if(!lg.hidden){lg.primed=false;lg.lastHtml=""}
@@ -2440,7 +2473,7 @@ function renderChips(){
 }
 const mobId=()=>{const V=vis();if(!S.mob)S.mob=load("mob");return(V.find(l=>l.id===S.mob)||V[0]||{}).id};
 function applyVis(){
-  const V=vis(),ph=isPhone();$("view").className="split n"+(ph?1:Math.max(1,Math.min(V.length,4)));
+  const V=vis(),ph=isPhone();$("view").className="split n"+(ph?1:V.length>=3?"many":Math.max(1,V.length));
   S.L.forEach(lg=>{if(lg.el)lg.el.style.display=lg.hidden||(ph&&lg.id!==mobId())?"none":""});
   S.chipHtml="";renderChips();S.dirty=true;
 }
@@ -2463,6 +2496,7 @@ async function connectAll(){
     S.L=all.map(lg=>Object.assign(lg,{fmt:fmtOf(lg.sc),rosAt:Date.now(),mu:null,muAt:0,matchups:[],proj:null,focus:null,prev:{},delta:{},acc:{},off:{},offi:{},cmp:{},log:[],hist:{},leadSign:0,lastHtml:"",primed:false,
       hidden:hidden.includes(lg.id),benchOpen:load("bench_"+lg.id)!=="0",hookOpen:load("hook_"+lg.id)!=="0",playsOpen:load("plays_"+lg.id)!=="0",tc:{},el:null}));
     if(!vis().length)S.L[0].hidden=false;
+    vis().slice(6).forEach(lg=>{lg.hidden=true});   /* up to 6 leagues side by side; the rest stay one tap away */
     $("view").innerHTML="";
     const ro=window.ResizeObserver?new ResizeObserver(es=>es.forEach(e=>{const w=e.contentRect.width;if(w<700)e.target.classList.add("compact");else if(w>740)e.target.classList.remove("compact")})):null;
     S.L.forEach(lg=>{lg.el=document.createElement("section");lg.el.className="lg";$("view").appendChild(lg.el);if(ro)ro.observe(lg.el)});
@@ -3212,7 +3246,7 @@ function fdRender(){
   const info=(r,sd)=>{if(!r||r.empty)return null;const g=S.games[r.p.team],tt=g&&g.eid?fdTouches(r.p,g.eid):[];tt.forEach(t=>{t.pts=r2(fdPts(lg,t));if(FD.seen[t.id]===undefined)FD.seen[t.id]=FD.loaded[g.eid]?now:0});return{r,p:r.p,sd,g,tt}};
   const mine=a.rows.map(r=>info(r,"me")),theirs=b?b.rows.map(r=>info(r,"op")):[];
   const rel={},evs=new Set();[...mine,...theirs].forEach(x=>{if(!x||!x.g||!x.g.eid)return;x.tt.forEach(t=>{if(!rel[x.g.eid])rel[x.g.eid]={};const cur=rel[x.g.eid][t.id];if(!cur||(t.role!=="pass"))rel[x.g.eid][t.id]={p:x.p,side:x.sd,t,pts:t.pts}});if(x.g.state==="in")evs.add(x.g.eid)});
-  const p=b?Math.round(Phi((a.proj-b.proj)/Math.sqrt(Math.max(1,a.vr+b.vr)))*100):50;
+  const p=b?Math.round(wpPair(a,b)*100):50;
   const sel=S.L.length>1?`<div class="mvsel">${S.L.map(l=>`<button class="mvb ${l.id===lg.id?"on":""}" data-l="${l.id}">${esc(shortName(l.league.name))}</button>`).join("")}</div>`:"";
   let h=`<div class="card fhd"><div class="fsc"><span class="fme">${esc(ta.owner||ta.name)} <b>${f2(a.total)}</b></span><span class="fwp" title="Win probability ${p}%"><i style="width:${p}%"></i></span><span class="fop"><b>${b?f2(b.total):"–"}</b> ${b?esc(tb.owner||tb.name):""}</span></div>
     <div class="fctl">${sel}<span class="flg">${["QB","RB","WR","TE","K","DEF"].map(x=>`<span><i style="background:${POSC[x]}"></i>${x}</span>`).join("")}<span><i class="rme"></i>yours</span><span><i class="rop"></i>theirs</span></span><button class="mvb ${FD.showAll?"on":""}" id="fdall" title="Include incompletions, 0-yard plays and targets">${FD.showAll?"All plays":"Key plays"}</button><span class="fbeta">beta</span></div></div>`;
