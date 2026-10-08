@@ -916,7 +916,7 @@ td.n.g-warn{background:rgba(255,107,107,.09);box-shadow:none}
     <div class="labc"><span class="seg2" data-c="motion"><button data-v="normal" class="on">Normal</button><button data-v="reduced">Reduced</button></span><span class="seg2" data-c="sound"><button data-v="on" class="on">Sound</button><button data-v="off">Mute</button></span><button id="labplay" class="labp">▶ Play all</button></div>
     <div class="labbar"><span id="labnow" class="labnow">PREVIEW</span><span id="labsc" class="labsc"></span></div>
     <div id="labev" class="labev"></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v28</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v29</span></div>
   </div>
 </header>
 <main>
@@ -2124,7 +2124,7 @@ const YSLOT={"W/R/T":"FLEX","W/R":"WRRB_FLEX","W/T":"REC_FLEX","Q/W/R/T":"SUPER_
 PROV.yahoo={name:"Yahoo",status:"needs-proxy",poll:45000,
   async get(c,path){if(!c.worker)throw new Error("Yahoo needs your Wingman Connect worker URL");if(!c.session)throw new Error("Yahoo not authorized yet: press Connect");
     const r=await tfetch(c.worker.replace(/\/$/,"")+"/yahoo/api/"+path+(path.includes("?")?"&":"?")+"format=json",{headers:{"X-WM-Session":c.session}});
-    const ns=r.headers.get("X-WM-Session");if(ns){c.session=ns;saveConns()}if(r.status===401)throw new Error("Yahoo session expired: reconnect");if(!r.ok)throw new Error("Yahoo "+r.status);return yN((await r.json()).fantasy_content)},
+    const ns=r.headers.get("X-WM-Session");if(ns){c.session=ns;saveConns()}if(r.status===401)throw new Error("Yahoo session expired: reconnect");if(!r.ok){let d="";try{const j=await r.json();d=[j.detail,j.www].filter(Boolean).join(" · ")}catch(e){}throw new Error("Yahoo "+r.status+(d?": "+d.slice(0,220):""))}return yN((await r.json()).fantasy_content)},
   pid(p){return canon("yahoo",p.player_id,{name:p.name&&p.name.full,pos:p.display_position==="DEF"?"DEF":String(p.display_position||"").split(",")[0],team:NT(String(p.editorial_team_abbr||"").toUpperCase())})},
   async connect(c){
     const u=await this.get(c,"users;use_login=1/games;game_keys=nfl/leagues"),games=(yArr(u.users)[0]||{}).user||{};
