@@ -891,6 +891,20 @@ td.n.g-warn{background:rgba(255,107,107,.09);box-shadow:none}
 .split.nmany::-webkit-scrollbar{height:8px}.split.nmany::-webkit-scrollbar-thumb{background:#3a3a48;border-radius:4px}
 .lgs{overflow-x:auto;min-width:0;flex:0 1 auto;scrollbar-width:none;mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent)}
 @media(min-width:761px){header{flex-wrap:nowrap}.brand{flex:none}.ctl{flex:1 1 auto;min-width:0;flex-wrap:nowrap;justify-content:flex-end}.ctl>*:not(.lgs){flex:none}}.lgs::-webkit-scrollbar{display:none}.lgs .lgt{flex:none}
+.fx::after{box-shadow:none!important}
+.fx.fxR:not(.fxwash)::after{box-shadow:inset 1px 0 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent),inset 0 1px 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent),inset 0 -1px 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent)!important}
+.fx.fxL:not(.fxwash)::after{box-shadow:inset -1px 0 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent),inset 0 1px 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent),inset 0 -1px 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent)!important}
+.fx.fxwash.fxR::after{box-shadow:inset -1px 0 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent),inset 0 1px 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent),inset 0 -1px 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent)!important}
+.fx.fxwash.fxL::after{box-shadow:inset 1px 0 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent),inset 0 1px 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent),inset 0 -1px 0 color-mix(in srgb,var(--fc,#f5c542) 55%,transparent)!important}
+.fx.fxR:not(.fxwash)::after{background:linear-gradient(90deg,color-mix(in srgb,var(--fc,#f5c542) 10%,transparent),color-mix(in srgb,var(--fc,#f5c542) 20%,transparent))}
+.fx.fxL:not(.fxwash)::after{background:linear-gradient(270deg,color-mix(in srgb,var(--fc,#f5c542) 10%,transparent),color-mix(in srgb,var(--fc,#f5c542) 20%,transparent))}
+td.fxc+td.fxc,td.fxc{border-left-color:transparent;border-right-color:transparent}
+/* survivor */
+.gnm b{white-space:nowrap}.gfx.z{display:none}
+.sug b{white-space:nowrap}
+/* field: players who haven't played get a slim card instead of an empty field */
+.h2c.pre .mm{display:none}.h2c.pre .h2f{display:none}.h2c.pre{justify-content:center}
+.h2c .prez{display:none}.h2c.pre .prez{display:flex;align-items:center;justify-content:center;gap:6px;height:30px;border-radius:8px;font-size:11px;color:var(--mute);background:repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 9.09%,transparent 9.09% 18.18%)}
 </style>
 </head>
 <body>
@@ -916,7 +930,7 @@ td.n.g-warn{background:rgba(255,107,107,.09);box-shadow:none}
     <div class="labc"><span class="seg2" data-c="motion"><button data-v="normal" class="on">Normal</button><button data-v="reduced">Reduced</button></span><span class="seg2" data-c="sound"><button data-v="on" class="on">Sound</button><button data-v="off">Mute</button></span><button id="labplay" class="labp">▶ Play all</button></div>
     <div class="labbar"><span id="labnow" class="labnow">PREVIEW</span><span id="labsc" class="labsc"></span></div>
     <div id="labev" class="labev"></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v29</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v31</span></div>
   </div>
 </header>
 <main>
@@ -2284,7 +2298,7 @@ function pvForm(p){
   let h="";
   if(p==="sleeper")h=`<div class="wrow"><input id="user" placeholder="Sleeper username" autocapitalize="none" spellcheck="false"><button class="pcta" id="pvadd">Connect</button></div>`;
   else if(p==="espn")h=`<div class="wrow"><input id="lid" placeholder="ESPN league ID" inputmode="numeric"><input id="prx" placeholder="Proxy (private leagues)" value="${esc(W)}"><button class="pcta" id="pfind">Find teams</button></div><div class="wrow" id="pteam" style="display:none"></div>`;
-  else if(p==="yahoo")h=`<div class="wrow"><input id="ywk" placeholder="https://… your Wingman Connect address" value="${esc(workerURL())}" spellcheck="false" inputmode="url"><button class="pcta" id="yco">🔒 Sign in with Yahoo</button></div>`;
+  else if(p==="yahoo")h=`<div class="wrow"><button class="pcta" id="yco">🔒 Sign in with Yahoo</button><button class="pcta ghost" id="yadv" title="Use a different Wingman Connect server">⚙</button></div><div class="wrow" id="yadvw" style="display:none"><input id="ywk" placeholder="https://… Wingman Connect address" value="${esc(workerURL())}" spellcheck="false" inputmode="url"></div>`;
   else if(p==="mfl"||p==="fleaflicker")h=`<div class="wrow"><input id="lid" placeholder="${p==="mfl"?"MFL":"Fleaflicker"} league ID" inputmode="numeric"><input id="prx" placeholder="Proxy (optional)" value=""><button class="pcta" id="pfind">Find teams</button></div><div class="wrow" id="pteam" style="display:none"></div>`;
   else if(p==="manual"){importUI(f,list);return}
   f.innerHTML=list+h;
@@ -2294,12 +2308,14 @@ function pvForm(p){
   if(p==="espn")$("pfind").onclick=team("espn",lid,proxy,async()=>((await PROV.espn.get({proxy:proxy()},lid(),"view=mTeam")).teams||[]).map(x=>({id:x.id,name:x.name||[x.location,x.nickname].join(" ")})));
   if(p==="mfl")$("pfind").onclick=team("mfl",lid,proxy,async()=>[].concat((((await PROV.mfl.get({proxy:proxy(),leagueId:lid()},"TYPE=league")).league||{}).franchises||{}).franchise||[]).map(x=>({id:x.id,name:x.name})));
   if(p==="fleaflicker")$("pfind").onclick=team("fleaflicker",lid,proxy,async()=>[].concat(...((await PROV.fleaflicker.get({proxy:proxy(),leagueId:lid()},"FetchLeagueStandings",`season=${S.season||new Date().getFullYear()}`)).divisions||[]).map(d=>d.teams||[])).map(t=>({id:t.id,name:t.name})));
+  if(p==="yahoo")$("yadv").onclick=()=>{const w=$("yadvw");w.style.display=w.style.display==="none"?"":"none"};
   if(p==="yahoo")$("yco").onclick=()=>{const w=$("ywk").value.trim().replace(/\/$/,"");
     if(!validURL(w)){$("ywk").classList.add("bad");$("werr").textContent=w?"That isn't a Wingman Connect address. It should start with https:// (e.g. https://wingman-connect.yourname.workers.dev).":"Yahoo needs your Wingman Connect address first (https://…).";return}
     save("worker",w);save("yworker",w);location.href=w+"/yahoo/login?return="+encodeURIComponent(location.origin+location.pathname)};
 }
 const validURL=u=>/^https:\/\/[a-z0-9.-]+\.[a-z]{2,}(:\d+)?(\/[^\s]*)?$/i.test(String(u||"").trim());
-const workerURL=()=>{const w=(load("worker")||"").trim().replace(/\/$/,"");return validURL(w)?w:""};
+const WM_CONNECT="https://connect.getwingman.workers.dev";   /* the shared Wingman Connect server (Yahoo sign-in, private ESPN, screenshot import) */
+const workerURL=()=>{const w=(load("worker")||"").trim().replace(/\/$/,"");return validURL(w)?w:WM_CONNECT};
 try{if(load("worker")&&!validURL(load("worker")))save("worker","");if(load("yworker")&&!validURL(load("yworker")))save("yworker","")}catch(e){}
 function setupLink(){const cs=(S.conns||getConns()).filter(c=>c.p!=="yahoo").map(c=>{const x=Object.assign({},c);delete x.session;return x});
   return location.origin+location.pathname+"#wm_setup="+btoa(unescape(encodeURIComponent(JSON.stringify(cs)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
@@ -2648,11 +2664,11 @@ function svRender(){
   if(tl.length){
     const shareIf=(c,win)=>{const o=st.our-(win?0:c.our),p=st.pool-(win?0:c.our+c.oth);return p?o/p:0};
     const best=tl.filter(c=>!c.our).sort((a,b)=>b.oth-a.oth)[0],worst=tl.filter(c=>c.our).sort((a,b)=>b.our-a.our)[0];
-    if(best)ins.push(`<span class="ins g">🎯 Root against <b>${esc(best.t)}</b>: a loss knocks out ${best.oth} field lives and lifts our share to ${svFmtPct(shareIf(best,false))}</span>`);
-    if(worst)ins.push(`<span class="ins r">⚠ <b>${esc(worst.t)}</b> carry ${worst.our} of our lives (${worst.lets.join(", ")}) · ${pctS(wpOf(worst.t))} to win · a loss drops our share to ${svFmtPct(shareIf(worst,false))}</span>`);
+    if(best)ins.push(`<span class="ins g" title="If ${esc(best.t)} lose, ${best.oth} field lives are eliminated and our share rises to ${svFmtPct(shareIf(best,false))}">🎯 Root vs <b>${esc(best.t)}</b> · 💀${best.oth} · share → ${svFmtPct(shareIf(best,false))}</span>`);
+    if(worst)ins.push(`<span class="ins r" title="${esc(worst.t)} carry ${worst.our} of our lives; ${pctS(wpOf(worst.t))} to win; a loss drops our share to ${svFmtPct(shareIf(worst,false))}">⚠ <b>${esc(worst.t)}</b> · ${worst.lets.map(l=>`<span class="ltk">${l}</span>`).join("")} ${pctS(wpOf(worst.t))}</span>`);
   }
   const ext=st.pool?Math.round((st.our/st.pool)*jackpot/F):0;
-  if(lead&&lead.who!==SV.d.pool)ins.push(`<span class="ins">📈 Each friend's fair-share stake is ${svMoney(ext)}; ${esc(lead.who)} holds ${svFmtPct(lead.left/Math.max(1,st.pool))} of the pool</span>`);
+  if(lead&&lead.who!==SV.d.pool)ins.push(`<span class="ins" title="Each friend's fair-share stake is ${svMoney(ext)}; ${esc(lead.who)} holds ${svFmtPct(lead.left/Math.max(1,st.pool))} of the pool">📈 ${svMoney(ext)} each · leader ${esc(lead.who.split(" ")[0])} ${svFmtPct(lead.left/Math.max(1,st.pool))}</span>`);
   if(ins.length)h+=`<div class="insrow">${ins.join("")}</div>`;
   /* ---------- sweat board: one card per game, both teams, our lives vs the field, live odds ---------- */
   const gm={};Object.values(teams).forEach(c=>{const R=svRes(V,c.t)||{},o=R.oppN||"?",k=[c.t,o].sort().join("|");if(!gm[k])gm[k]=R.home===false?[c.t,o]:[o,c.t]});
@@ -2664,7 +2680,7 @@ function svRender(){
     const rootT=ours||(ca.oth>=cb.oth?b:a);   /* field-only game: root for the side fewer field lives are on */
     const cls=fin?(ours?((ours===a?Ra.r:Rb.r)==="W"?"g-won":"g-lost"):"g-fin"):danger?"g-danger":lv?"g-live":"g-pre";
     const tm=(t,R,c,side)=>{const win=fin&&R.r==="W",lose=fin&&R.r&&R.r!=="W";
-      return`<div class="gsd ${side} ${win?"w":""} ${lose?"x":""}">${svLogo(V,t,"tlm")}<div class="gnm"><b>${esc(t)}</b>${t===rootT&&!fin?`<span class="rootm" title="${ours?"Our lives ride on them":"More of the field is on the other side"}">🎯 root</span>`:""}</div>${R.me!=null&&R.st!=="pre"?`<span class="gsc">${R.me}</span>`:""}</div>`};
+      return`<div class="gsd ${side} ${win?"w":""} ${lose?"x":""}">${svLogo(V,t,"tlm")}<div class="gnm"><b title="${esc(t)}">${esc(NFL_NICK[String(t).toLowerCase()]||t)}</b>${t===rootT&&!fin?`<span class="rootm" title="${ours?"Our lives ride on them":"More of the field is on the other side"}">🎯 root</span>`:""}</div>${R.me!=null&&R.st!=="pre"?`<span class="gsc">${R.me}</span>`:""}</div>`};
     const lives=(c,side)=>`<div class="glv ${side}">${c.lets.map(x=>`<i class="${fin?((c===ca?Ra.r:Rb.r)==="W"?"ok":"dead"):danger&&c.our?"risk":""}" title="Life ${x}">${x}</i>`).join("")}<span class="gf" title="Field lives on this side">👥 ${c.oth}</span></div>`;
     const tot=Math.max(1,ca.oth+cb.oth+ca.our+cb.our),fa=(ca.oth+ca.our)/tot*100;
     /* live odds trail for this game */
@@ -2684,7 +2700,7 @@ function svRender(){
     if(!fin)foot=ours?`<span class="gst ${danger?"bad":safe?"ok":"mid"}" title="${esc(levTxt)}">${danger?"⚠":safe?"✓":"≈"} ${pctS(po)}${dlt?` <em class="${dlt>0?"up":"dn"}">${dlt>0?"▲":"▼"}${Math.abs(dlt)}</em>`:""}</span>${shrink}`:shrink;
     const sort=(ours?(danger?0:1):2)*1e5-(lv?levN*10:0)-(ca.oth+cb.oth);
     let chip="";if(fin){const wa=Ra.r==="W",wb=Rb.r==="W",W1=wa?a:wb?b:a,L1=W1===a?b:a,Rw=W1===a?Ra:Rb,Rl=W1===a?Rb:Ra,cw=W1===a?ca:cb,cl=W1===a?cb:ca;
-      chip=`<div class="gfc ${cw.our?"ok":cl.our?"bad":""}" title="${esc(a)} ${Ra.me??""} – ${Rb.me??""} ${esc(b)}">${svLogo(V,W1,"tlf")}<b>${esc(W1)}</b><span class="gfs">${Rw.me??""}–${Rl.me??""}</span><span class="pm">${esc(L1)}</span>${cw.our?`<span class="gfo ok">✓ ${cw.lets.join(",")}</span>`:""}${cl.our?`<span class="gfo bad">✗ ${cl.lets.join(",")}</span>`:""}<span class="gfx" title="Field lives eliminated by this result">💀${cl.oth}</span></div>`}
+      chip=`<div class="gfc ${cw.our?"ok":cl.our?"bad":""}" title="${esc(a)} ${Ra.me??""} – ${Rb.me??""} ${esc(b)}">${svLogo(V,W1,"tlf")}<b>${esc(W1)}</b><span class="gfs">${Rw.me??""}–${Rl.me??""}</span><span class="pm">${esc(L1)}</span>${cw.our?`<span class="gfo ok">✓ ${cw.lets.join(",")}</span>`:""}${cl.our?`<span class="gfo bad">✗ ${cl.lets.join(",")}</span>`:""}<span class="gfx${cl.oth?"":" z"}" title="Field lives eliminated by this result">💀${cl.oth}</span></div>`}
     return[sort,`<div class="gcard ${cls}${lv&&levS>=.15?" levc":""}" style="--lev:${Math.min(1,levS*2).toFixed(2)}" title="${esc(levTxt)}"><div class="grow">${tm(a,Ra,ca,"l")}${mid}${tm(b,Rb,cb,"r")}</div>${pr}<div class="gpk">${lives(ca,"l")}<div class="gsplit" title="Pool lives on each side"><i style="width:${fa.toFixed(0)}%"></i></div>${lives(cb,"r")}</div><div class="gft">${foot}</div></div>`,fin,chip]});
   gcards.sort((x,y)=>x[0]-y[0]);
   const gLive=gcards.filter(x=>!x[2]),gFin=gcards.filter(x=>x[2]);
@@ -2707,7 +2723,7 @@ function svRender(){
     const common=elig(aliveNow[0]).filter(x=>aliveNow.every(l=>elig(l).some(y=>y.t===x.t)));
     let sug="";
     if(common.length>=2&&aliveNow.length>=2){const[a,b]=common,na=Math.ceil(aliveNow.length/2),nb=aliveNow.length-na,k=1-(1-a.p)*(1-b.p),e=na*a.p+nb*b.p;
-      sug=`<div class="sug">💡 Suggested split: <b>${na}× ${esc(a.t)}</b> (${pctS(a.p)}) + <b>${nb}× ${esc(b.t)}</b> (${pctS(b.p)}) → <b>${pctS(k)}</b> to keep ≥1 life · ${e.toFixed(1)} expected lives. All on ${esc(a.t)}: ${pctS(a.p)} · ${(aliveNow.length*a.p).toFixed(1)} expected.</div>`}
+      sug=`<div class="sug" title="Splitting keeps at least one life ${pctS(k)} of the time (${e.toFixed(1)} expected lives). All on ${esc(a.t)}: ${pctS(a.p)}, ${(aliveNow.length*a.p).toFixed(1)} expected.">💡 <b>${na}× ${esc(a.t)}</b> ${pctS(a.p)} + <b>${nb}× ${esc(b.t)}</b> ${pctS(b.p)} → keep ≥1: <b>${pctS(k)}</b> · ${e.toFixed(1)} lives</div>`}
     else if(common.length){const a=common[0];sug=`<div class="sug">💡 Best available: <b>${esc(a.t)}</b> (${pctS(a.p)} to win).</div>`}
     plan=`${sug}${rows}<div class="svnote">${blocked.length?`Blocked (Thu/Wed): ${blocked.map(esc).join(", ")}. `:""}Byes: ${["49ers","Bears","Bengals","Bills","Broncos","Browns","Buccaneers","Cardinals","Chargers","Chiefs","Colts","Commanders","Cowboys","Dolphins","Eagles","Falcons","Giants","Jaguars","Jets","Lions","Packers","Panthers","Patriots","Raiders","Rams","Ravens","Saints","Seahawks","Steelers","Texans","Titans","Vikings"].filter(t=>!sched.includes(t)).join(", ")||"none"}. Win % from ESPN betting lines.</div>`;
   }
@@ -2829,7 +2845,9 @@ function sloDiscover(gs,known){
 function sloGuess(gs){const c=sloCandidates(gs),pick=c.find(k=>/home.*spread|spread.*home/i.test(k))||c.find(k=>/spread/i.test(k)&&!/away/i.test(k))||c.find(k=>/away.*spread|spread.*away/i.test(k));return pick?{p:pick,o:/away/i.test(pick)?-1:1}:null}
 async function sleeperLines(season,week,maxAge=600000){
   const key=season+":"+week;if(SLO.data[key]&&Date.now()-(SLO.at[key]||0)<maxAge)return SLO.data[key];SLO.at[key]=Date.now();
-  let j;try{j=await getJ(`https://api.sleeper.app/scores/nfl/regular/${season}/${week}`,true)}catch(e){SLO.status="Sleeper lines unavailable";return SLO.data[key]||{}}
+  let j;try{j=await getJ(`https://api.sleeper.app/scores/nfl/regular/${season}/${week}`,true)}catch(e){
+    try{j=await getJ(`${workerURL()}/sleeper/scores/nfl/regular/${season}/${week}`,true)}catch(e2){SLO.status="Sleeper lines unavailable (couldn't reach Sleeper)";return SLO.data[key]||{}}}
+  SLO.sample=Array.isArray(j)?j[0]:j&&typeof j==="object"?Object.values(j)[0]:j;
   const gs=sloGames(j);if(SLO.debug)console.log("[Wingman odds] Sleeper scores sample:",gs[0]&&gs[0].raw);
   const known=SLO_KNOWN[key];
   if(known){const b=sloDiscover(gs,known);if(b&&b.hit>=Math.max(3,Math.ceil(b.n*.8))){SLO.path=b.p;SLO.orient=b.o;save("slo_path",b.p);save("slo_orient",String(b.o));SLO.status=`Sleeper lines ✓ ${b.hit}/${b.n} validated (${b.p})`}
@@ -2906,7 +2924,7 @@ function pkRender(){
       ${kpi("Points ATS",`<b>${tot(me)}</b>`,`${tot(lead)-tot(me)} behind ${nm(lead.u)} · ${Math.round(myAcc*100)}% hit rate (pool ${Math.round(allC.filter(x=>x.p.c==="C").length/Math.max(1,allC.length)*100)}%)`)}
       ${kpi(`Week ${cw}`,`<b>${myW}</b><small> pts</small>`,`${myPend?`${myPend} pick${myPend>1?"s":""} pending · max ${maxP}`:"all graded"} · top ${lw.mx}`)}
       ${kpi(`W${cw} ${svMoney(d.pay.weekly)}`,`<b class="${wkDone(cw)?(lw.who.includes(me)?"up":"dn"):maxP>=lw.mx?"up":"dn"}">${wkDone(cw)?(lw.who.includes(me)?"Won":"Missed"):maxP>=lw.mx?"Alive":"Out"}</b>`,wkDone(cw)?`${lw.who.map(r=>nm(r.u)).join(", ")} with ${lw.mx}`:maxP>=lw.mx?`can still reach ${lw.mx}`:`${lw.mx-maxP} short even if you sweep`)}
-      ${(()=>{const o=pkOdds();return o?kpi("Payout odds",`<b>${pctX(o.first+o.second)}</b><small> top 2</small>`,`1st ${pctX(o.first)} · 2nd ${pctX(o.second)} · ~${svMoney(o.weekly)} more in weeklies · won ${svMoney(won)}`):""})()}
+      ${(()=>{const o=pkOdds();return o?kpi("Payout odds",`<b>${pctX(o.first+o.second)}</b><small> top 2</small>`,`1st ${pctX(o.first)} · 2nd ${pctX(o.second)} · +${svMoney(o.weekly)} wkly`):""})()}
     </div></div>`;
   /* weekly winners */
   h+=`<div class="pkw">${Array.from({length:18},(_,i)=>{const x=winners[i];if(!x)return`<div class="pkwc fut"><b>W${i+1}</b><span>${i<d.pay.weeks?svMoney(d.pay.weekly):"—"}</span></div>`;
@@ -2921,7 +2939,7 @@ function pkRender(){
       <div class="pam">${m?`<div class="cov ${tier}" title="Estimated chance ${esc(m.lean)} covers ${lineTxt(m.line)}"><i style="width:${conf}%"></i><span>${esc(m.lean)} ${conf}%</span></div><div class="sigs">${m.sig.map(s=>`<span class="sg ${s[1]>0?"h":"a"}" title="${esc(s[2])}">${esc(s[0])}</span>`).join("")||'<span class="sg">market only</span>'}</div>`:`<span class="pm">line not posted</span>`}</div></div>`}).join("");
   const mnf=G.filter(g=>new Date(g.date).getDay()===1).slice(-1)[0]||G[G.length-1];
   const picksTxt=G.map(g=>{const k=g.away+"@"+g.home,m=pkModel(g),t=myP[k]||(m&&m.lean);if(!t)return null;const ln=t===g.home?g.hs:-g.hs;return`${t} ${lineTxt(ln)}`}).filter(Boolean).join(", ");
-  const helpBody=G.length?`<div class="paw">${rowsN}</div><div class="pafoot"><span>${mnf&&mnf.ou?`🎲 Tiebreaker: guess <b>${Math.round(mnf.ou)}</b> total points for ${esc(mnf.away)} @ ${esc(mnf.home)} (the betting total).`:""}</span><button class="rep" id="pkleans" title="Fill every game you haven't picked with the model's lean">★ Use leans</button><button class="rep" id="pkcopy" title="Copy your picks (or the model's leans where you haven't picked)">📋 Copy picks</button></div><div class="svnote" title="${esc(SLO.status||"")}">Lines: Sleeper${SLO.status&&/✓/.test(SLO.status)?" ✓":""}. ★ = model lean. Cover % blends the betting line with ESPN's FPI projection, plus home-underdog, key-number and starting-QB-injury adjustments. It's a small edge, not a lock: the spread is set to make each side close to 50%. Your taps are saved in this browser; enter them in Sleeper before each kickoff.</div>`:`<div class="none">Week ${N} lines aren't posted yet.</div>`;
+  const helpBody=G.length?`<div class="paw">${rowsN}</div><div class="pafoot"><span>${mnf&&mnf.ou?`🎲 Tiebreaker: guess <b>${Math.round(mnf.ou)}</b> total points for ${esc(mnf.away)} @ ${esc(mnf.home)} (the betting total).`:""}</span><button class="rep" id="pkleans" title="Fill every game you haven't picked with the model's lean">★ Use leans</button><button class="rep" id="pkcopy" title="Copy your picks (or the model's leans where you haven't picked)">📋 Copy picks</button></div><div class="svnote" title="${esc(SLO.status||"")}">${SLO.status&&!/✓/.test(SLO.status)?`<button class="rep" id="slodbg" title="Copy Sleeper's raw game data so it can be checked">⧉ Copy line data</button> `:""}Lines: Sleeper${SLO.status&&/✓/.test(SLO.status)?" ✓":` · ${esc(SLO.status||"")}`}. ★ = model lean. Cover % blends the betting line with ESPN's FPI projection, plus home-underdog, key-number and starting-QB-injury adjustments. It's a small edge, not a lock: the spread is set to make each side close to 50%. Your taps are saved in this browser; enter them in Sleeper before each kickoff.</div>`:`<div class="none">Week ${N} lines aren't posted yet.</div>`;
   const nPick=G.filter(g=>myP[g.away+"@"+g.home]).length;
   h+=`<div class="svgrid">`+pkSec("help",`🔮 Week ${N} picks helper`,G.length?`${nPick}/${G.length} picked · ${G.filter(g=>pkModel(g)&&pkModel(g).p>=.55).length} stronger leans`:"",helpBody);
   /* ---------- this week live ---------- */
@@ -2951,6 +2969,7 @@ function pkRender(){
   if(h===PK.lastHtml)return;PK.lastHtml=h;el.innerHTML=h;
   el.querySelectorAll(".svh").forEach(x=>x.onclick=()=>{PK.open[x.dataset.k]=PK.open[x.dataset.k]===false;save("pk_open",JSON.stringify(PK.open));pkRender()});
   el.querySelectorAll(".pat").forEach(b=>b.onclick=()=>{if(b.disabled)return;const p=JSON.parse(load("pk_mine_"+N)||"{}");p[b.dataset.k]=p[b.dataset.k]===b.dataset.t?undefined:b.dataset.t;save("pk_mine_"+N,JSON.stringify(p));pkRender()});
+  const dbg=el.querySelector("#slodbg");if(dbg)dbg.onclick=async()=>{const ok=await copyText(JSON.stringify({status:SLO.status,sample:SLO.sample},null,1).slice(0,6000));dbg.textContent=ok?"✓ Copied: paste it to Claude":"Couldn't copy"};
   const lb=el.querySelector("#pkleans");if(lb)lb.onclick=()=>{const p=JSON.parse(load("pk_mine_"+N)||"{}");G.forEach(g=>{const k=g.away+"@"+g.home,m=pkModel(g);if(!p[k]&&g.st==="pre"&&m)p[k]=m.lean});save("pk_mine_"+N,JSON.stringify(p));pkRender()};
   const cb=el.querySelector("#pkcopy");if(cb)cb.onclick=async()=>{const ok=await copyText(`W${N} picks: ${picksTxt}`);toast(ok?"good":"bad",ok?"📋 Picks copied":"Couldn't copy",2500)};
 }
@@ -3258,7 +3277,8 @@ function fdRender(){
   /* HEAD TO HEAD */
   const pair=(x,sd,i)=>{if(!x)return`<div class="h2c empty"></div>`;const rd=fdRead(x.p,x.tt,x.r),uid=`${sd}${i}`;
     const ty=x.tt.filter(t=>/run|rec/.test(t.role)),line=x.p.pos==="QB"?(()=>{const ps=x.tt.filter(t=>t.role==="pass"),c=ps.filter(t=>!t.inc);return`${c.length}/${ps.length} · ${c.reduce((s,t)=>s+t.yd,0)} yds`})():x.p.pos==="K"||x.p.pos==="DEF"?`${x.tt.length} plays`:`${ty.length} touches · ${ty.reduce((s,t)=>s+t.yd,0)} yds`;
-    return`<div class="h2c ${sd}" style="--c:${POSC[x.p.pos]||"#ccc"}"><div class="h2h"><span class="h2a ${sd}"><img src="${avatarUrl(x.p)}" alt="" onerror="this.style.visibility='hidden'"></span><div class="h2n"><b>${esc(x.p.name)}</b><small><span class="pos ${esc(x.p.pos)}">${esc(x.p.pos)}</span> ${esc(gtextPlain(x.p))}</small></div><em>${f2(x.r.a)}</em></div>${miniMap(x.p,x.tt,sd,uid)}<div class="h2f"><span class="h2rd">${rd[0]} ${esc(rd[1])}</span><span class="pm">${line}</span></div></div>`};
+    const preG=!x.tt.length&&(!x.g||x.g.state==="pre");
+    return`<div class="h2c ${sd}${preG?" pre":""}" style="--c:${POSC[x.p.pos]||"#ccc"}"><div class="h2h"><span class="h2a ${sd}"><img src="${avatarUrl(x.p)}" alt="" onerror="this.style.visibility='hidden'"></span><div class="h2n"><b>${esc(x.p.name)}</b><small><span class="pos ${esc(x.p.pos)}">${esc(x.p.pos)}</span> ${esc(gtextPlain(x.p))}</small></div><em>${f2(x.r.a)}</em></div>${miniMap(x.p,x.tt,sd,uid)}<div class="prez">🕒 ${esc(x.g&&x.g.date?new Date(x.g.date).toLocaleDateString([],{weekday:"short"})+" "+hm(new Date(x.g.date)):"Hasn't played yet")}</div><div class="h2f"><span class="h2rd">${rd[0]} ${esc(rd[1])}</span><span class="pm">${line}</span></div></div>`};
   const rowsH=slots.map((sl,i)=>{const x=mine[i],y=theirs[i];if(!x&&!y)return"";const d=(x?x.r.a:0)-(y?y.r.a:0);
     return`<div class="h2r"><div class="h2l">${pair(x,"me",i)}</div><div class="h2m"><span class="h2s">${sl}</span><span class="h2d ${d>0?"me":d<0?"op":""}">${d===0?"=":(d>0?"◀ ":"")+"+"+f2(Math.abs(d))+(d<0?" ▶":"")}</span></div><div class="h2l">${pair(y,"op",i)}</div></div>`}).join("");
   h+=`<div class="fsec"><div class="fst">Head to head <small>every touch this week · dot size = fantasy points · gold ring = TD · always driving right →</small></div><div class="h2hd"><span class="me">${esc(ta.owner||ta.name)}</span><span></span><span class="op">${b?esc(tb.owner||tb.name):""}</span></div>${rowsH}</div>`;
