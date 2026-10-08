@@ -962,14 +962,14 @@ td.fxc+td.fxc,td.fxc{border-left-color:transparent;border-right-color:transparen
 .fx-live .bl{animation-name:kick}
 @keyframes kick{0%{left:30%;top:74%;opacity:0}8%{opacity:1;transform:rotate(0)}60%{left:72%;top:8%;transform:rotate(300deg)}100%{left:98%;top:40%;opacity:0;transform:rotate(520deg)}}
 /* red zone: broadcast-style slanted banner */
-.fx-rz{--fc:#e0262d}
+.fx-rz{--fc:#ff5a5a}
 .fx .rzb{top:12%;bottom:12%;left:34%;right:4%;display:flex;align-items:center;justify-content:center;gap:8px;transform:skewX(-16deg);background:linear-gradient(90deg,#7a0d12,#e0262d 45%,#ff4747);box-shadow:0 0 18px rgba(224,38,45,.55),inset 0 1px 0 rgba(255,255,255,.25);border-left:4px solid #fff;animation:rzb var(--fxd) cubic-bezier(.2,.9,.2,1) both}
 .fx .rzb b{font-style:italic;font-weight:900;font-size:12px;letter-spacing:.08em;color:#fff;transform:skewX(16deg);text-shadow:0 1px 0 rgba(0,0,0,.35)}
 .fx.fxL .rzb b,.fx.fxL .rzb .chev{transform:scaleX(-1) skewX(16deg)}
 .fx .rzb .chev{position:static;font-style:normal;font-weight:900;color:#ffd0d0;letter-spacing:-2px;transform:skewX(16deg);animation:chev .5s linear infinite}
 @keyframes rzb{0%{clip-path:inset(0 100% 0 0);opacity:1}18%{clip-path:inset(0 0 0 0)}80%{clip-path:inset(0 0 0 0);opacity:1}100%{clip-path:inset(0 0 0 100%);opacity:0}}
 @keyframes chev{50%{opacity:.4}}
-.fx-rz .fl2,.fx-rz+.fxtag{display:none}
+
 /* status updates: the tag next to the name pulses, nothing is duplicated */
 .tag.tagpulse{animation:tagp var(--fxd,1.3s) ease-out both}
 @keyframes tagp{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(240,163,35,.0)}15%{transform:scale(1.45);box-shadow:0 0 0 6px rgba(240,163,35,.35)}35%{transform:scale(1.1)}55%{transform:scale(1.3);box-shadow:0 0 0 10px rgba(240,163,35,0)}100%{transform:scale(1)}}
@@ -1013,6 +1013,37 @@ td.fxc+td.fxc,td.fxc{border-left-color:transparent;border-right-color:transparen
 .imok{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.imok small{display:inline!important;font-weight:500;margin-left:4px;color:var(--mute)}
 .imteam{display:flex;flex-direction:column;gap:2px;padding:8px}.imtn{gap:8px;margin-bottom:4px}.imtn b{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.imtn .link{white-space:nowrap;font-size:11px}.imtn small{white-space:nowrap}
 .pvform .imr .cx{padding:0}
+.shr{position:absolute;top:2px;left:2px;border:0;background:rgba(0,0,0,.6);color:#fff;border-radius:6px;font-size:11px;cursor:pointer}.imslow{width:100%;color:var(--mute);font-weight:500}
+.fx .rzb{display:none}
+.fx .chv{top:50%;margin-top:-9px;font-size:16px;font-weight:900;font-style:normal;line-height:18px;color:var(--fc);opacity:0;animation:chvm var(--fxd) ease-out both}.fx .chv.c2{animation-delay:.12s!important}.fx .chv.c3{animation-delay:.24s!important}
+@keyframes chvm{0%{left:52%;opacity:0}20%{opacity:.9}70%{left:80%;opacity:.9}100%{left:86%;opacity:0}}
+.fx-rz .ez{animation:rzpulse var(--fxd) ease-in-out both}@keyframes rzpulse{0%{opacity:0}25%,55%{opacity:.9}40%{opacity:.5}100%{opacity:0}}
+.pgv.rz{color:#ff8a8a;font-style:normal;font-weight:700;letter-spacing:0}.pgv.rz::before{content:"RZ";padding:0 5px;transform:none;background:transparent;border:1px solid rgba(255,90,90,.6);border-radius:4px;color:#ff8a8a;font-size:9px;line-height:12px}
+/* indicator + news tooltips */
+.tip1{font-size:12px;max-width:260px}
+.nws{display:flex;flex-direction:column;gap:3px;max-width:300px;font-size:12.5px;line-height:1.4}.nws b{font-size:12px;color:var(--mute);font-weight:700}.nws small{font-size:10.5px;color:var(--mute)}
+.nws.good>div{color:#b8f5cf}.nws.bad>div{color:#ffc2c2}.nws.load>div{color:var(--mute);font-style:italic}
+html[data-theme=light] .nws.good>div{color:#127a3d}html[data-theme=light] .nws.bad>div{color:#b42323}
+td[data-pos] .nm[data-news]{cursor:help}
+/* cross-league photo ring */
+.avw.xp{box-shadow:0 0 0 1.6px var(--xc),0 0 calc(3px + var(--xk,0)*9px) color-mix(in srgb,var(--xc) calc(30% + var(--xk,0)*45%),transparent);cursor:help}
+.avw.xp-me{--xc:#a785ff}.avw.xp-op{--xc:#3dd6e6}.avw.xp-mix{--xc:#f5c542}
+.lg.compact .avw{display:grid;width:24px;height:24px}.lg.compact .avw::before{font-size:8px}.lg.compact .tlg,.lg.compact .tla{width:12px;height:12px}
+/* X-ray highlight */
+td.xr{background-image:linear-gradient(90deg,rgba(255,255,255,.07),rgba(255,255,255,.07))!important;outline:1px solid rgba(255,255,255,.28);outline-offset:-1px}
+html[data-theme=light] td.xr{background-image:linear-gradient(90deg,rgba(20,20,40,.06),rgba(20,20,40,.06))!important;outline-color:rgba(20,20,40,.25)}
+/* bench ghost, hot & cold */
+.ghost,.hcx{display:inline-grid;place-items:center;font-size:11px;line-height:1;margin:0 2px;cursor:help;vertical-align:1px}
+.ghost{opacity:.7;filter:grayscale(.3) drop-shadow(0 0 3px rgba(185,170,255,.45))}
+.hcx.hot{filter:drop-shadow(0 0 4px rgba(255,140,40,.75));animation:hotglow 2.2s ease-in-out 3}.hcx.cold{opacity:.85;filter:drop-shadow(0 0 3px rgba(120,200,255,.6))}
+@keyframes hotglow{50%{filter:drop-shadow(0 0 7px rgba(255,140,40,.95))}}
+@media(prefers-reduced-motion:reduce){.hcx.hot{animation:none}}
+.tag.rk{display:none}.xpb{display:none!important}
+/* heartbeat on the matchup header */
+.hero{position:relative}
+.hero.hb::before{content:"";position:absolute;left:14px;right:14px;top:-1px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--hbc),transparent);box-shadow:0 0 calc(4px + var(--hbk)*10px) var(--hbc);opacity:0;transform-origin:50% 50%;animation:hbeat 1.4s ease-out 3 both;animation-delay:var(--hbd,0ms);pointer-events:none}
+@keyframes hbeat{0%{opacity:0;transform:scaleX(.25)}18%{opacity:calc(.3 + var(--hbk)*.7);transform:scaleX(1)}30%{opacity:calc(.15 + var(--hbk)*.3)}42%{opacity:calc(.25 + var(--hbk)*.6)}100%{opacity:0;transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.hero.hb::before{animation:none;opacity:calc(.2 + var(--hbk)*.5)}}
 </style>
 </head>
 <body>
@@ -1037,7 +1068,7 @@ td.fxc+td.fxc,td.fxc{border-left-color:transparent;border-right-color:transparen
     <div class="labc"><span class="seg2" data-c="motion"><button data-v="normal" class="on">Normal</button><button data-v="reduced">Reduced</button></span><span class="seg2" data-c="sound"><button data-v="on" class="on">Sound</button><button data-v="off">Mute</button></span><button id="labplay" class="labp">▶ Play all</button></div>
     <div class="labbar"><span id="labnow" class="labnow">PREVIEW</span><span id="labsc" class="labsc"></span></div>
     <div id="labev" class="labev"></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v33</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v36</span></div>
   </div>
 </header>
 <main>
@@ -1363,7 +1394,8 @@ function side(lg,m){
   const mk=(id,key)=>{const p=pinfo(id),a=pp[id]||0,x=expected(lg,p,a),b=S.base[lg.id+":"+id];return{p,a,e:x.e,r:x.r,b:b==null?null:b,key}};
   const rows=st.map(id=>{if(!id||id==="0")return null;const r=mk(id,m.roster_id+":"+id);proj+=r.e;vr+=(SD[r.p.pos]||6)**2*r.r;bs+=r.b==null?r.e:r.b;return r});
   const others=(m.players||[]).filter(id=>id&&id!=="0"&&!st.includes(id));
-  const bench=others.filter(id=>!res.has(id)).map(id=>mk(id,m.roster_id+":"+id)).sort((x,y)=>((y.e??y.a)-(x.e??x.a))||(y.a-x.a));
+  const bye=r=>S.okGames&&r.p.team&&r.p.team!=="FA"&&!S.games[r.p.team]?1:0;
+  const bench=others.filter(id=>!res.has(id)).map(id=>mk(id,m.roster_id+":"+id)).sort((x,y)=>(bye(x)-bye(y))||((y.e??y.a)-(x.e??x.a))||(y.a-x.a));
   const ir=[...new Set([...others.filter(id=>res.has(id)),...res])].map(id=>mk(id,m.roster_id+":"+id)).sort((x,y)=>y.a-x.a);
   const left=rows.filter(r=>r&&S.games[r.p.team]&&!settled(r.p)).length;
   return{rows,bench,ir,proj,vr,left,bs,total:m.points||0};
@@ -1432,6 +1464,14 @@ function progLine(p,r){
   if(!settled(p)){const bn=bonusNear(lg,p);if(bn)return bn}
   return"";
 }
+/* hot = a genuinely big game (100+ yards, 300+ passing, multiple TDs); cold = well under pace once most of his game is gone */
+function hotCold(r){const p=r.p,g=S.games[p.team];if(!g||g.state==="pre"||!/^(QB|RB|WR|TE)$/.test(p.pos))return null;const s=S.eff[p.id]||{},td=(s.rush_td||0)+(s.rec_td||0),why=[];
+  if((s.rec_yd||0)>=100)why.push(`${Math.round(s.rec_yd)} receiving yds`);if((s.rush_yd||0)>=100)why.push(`${Math.round(s.rush_yd)} rushing yds`);if((s.pass_yd||0)>=300)why.push(`${Math.round(s.pass_yd)} passing yds`);
+  if(td>=2)why.push(`${td} TDs`);if((s.pass_td||0)>=3)why.push(`${s.pass_td} passing TDs`);
+  if(why.length)return{k:"hot",tip:"On fire: "+why.join(" · ")};
+  const played=1-Math.max(0,Math.min(1,r.r==null?1:r.r)),full=r.b!=null?r.b:(r.e||0);
+  if(played>=.6&&full>=7&&r.a<full*played*.35)return{k:"cold",tip:`Ice cold: ${f2(r.a)} pts with ${Math.round(played*100)}% of his game played (projected ${f2(full)})`};
+  return null}
 function levTag(p){const lg=S.rlg,L=lg&&S.sig&&S.sig.lev[lg.id],v=L&&L[p.id];if(!v||!v.top)return"";
   const k=Math.min(1,Math.abs(v.sw)/.25);return`<span class="lev ${v.sw>=0?"me":"op"}" style="--k:${k.toFixed(2)}" title="+1 pt = ${pctPt(v.pp)} win probability · strong finish (+${v.sdPts.toFixed(1)}) = ${pctPt(v.sw)}">⚡</span>`}
 /* portrait (natural crop, never stretched) + NFL team mark bottom-right; initials when no headshot */
@@ -1443,13 +1483,15 @@ function avatarHtml(p){const t=String(p.team||"").toLowerCase(),ini=esc(String(p
   if(p.pos==="DEF")return`<span class="avw d"><img class="av d" src="${teamLogo(T,64)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='https://sleepercdn.com/images/team_logos/nfl/${t}.png'"></span>`;
   const hs=/^\d+$/.test(p.id)?headshot(p):"",espn=/espncdn/.test(hs);
   const head=hs?`<img class="av${espn?" es":""}" src="${hs}" alt="" loading="lazy" decoding="async" onerror="if(this.dataset.fb){this.remove()}else{this.dataset.fb=1;this.classList.remove('es');this.src='https://sleepercdn.com/content/nfl/players/${p.id}.jpg'}">`:"";
-  return`<span class="avw" data-i="${ini}">${head}${t&&t!=="fa"?`<img class="tlg" src="${teamLogo(T)}" alt="${esc(p.team)}" title="${esc(p.team)}" loading="lazy" decoding="async" onerror="this.outerHTML='<b class=&quot;tla&quot;>${esc(p.team)}</b>'">`:""}</span>`}
+  const xp=xpInfo(p.id),tip=[p.rook?"Rookie":"",xp?xp.tip:""].filter(Boolean).join(" · ");
+  return`<span class="avw${xp?" xp xp-"+xp.kind:""}" data-i="${ini}"${xp?` style="--xk:${xp.k.toFixed(2)}"`:""}${tip?` data-tip="${esc(tip)}"`:""}>${head}${t&&t!=="fa"?`<img class="tlg" src="${teamLogo(T)}" alt="${esc(p.team)}" title="${esc(p.team)}" loading="lazy" decoding="async" onerror="this.outerHTML='<b class=&quot;tla&quot;>${esc(p.team)}</b>'">`:""}</span>`}
 function pcell(r,right,irRow){
   if(!r)return`<td class="${right?"r":""}"><span class="pm">—</span></td>`;
   if(r.empty)return`<td class="${right?"r ":""}g-warn"><span class="pm" style="color:var(--neg)">⚠ Empty slot</span></td>`;
   const p=r.p,sp=statParts(p),st=sp.join(", "),inj0=p.inj||(irRow?"IR":""),ij=inj0?INJ[inj0]||[String(inj0).slice(0,3).toUpperCase(),"o"]:null;
   const T=(lab,cls,title)=>`<span class="tag ${cls}${String(lab).length===1?" one":""}" title="${esc(title)}">${esc(lab)}</span>`;
-  const tags=(r.warn?T("!","wn",r.warn):"")+(p.rook?T("R","rk","Rookie"):"")+(ij?T(ij[0],"inj "+ij[1],inj0):"")+(r.regret?T("↑"+r.regret.by.toFixed(1),"rg",`Outscored starter ${r.regret.who} by ${f2(r.regret.by)}`):"")+levTag(p)+expViz(p.id);
+  const hc=hotCold(r),ghost=r.regret&&r.regret.by>=5&&r.a>=8;
+  const tags=(r.warn?T("!","wn",r.warn):"")+(ij?T(ij[0],"inj "+ij[1],[inj0,S.players&&S.players[p.id]&&S.players[p.id].injury_body_part].filter(Boolean).join(" · ")):"")+(hc?`<span class="hcx ${hc.k}" title="${esc(hc.tip)}">${hc.k==="hot"?"🔥":"🧊"}</span>`:"")+(ghost?`<span class="ghost" title="${esc(`Left ${f2(r.regret.by)} pts on your bench: he outscored ${r.regret.who}`)}">👻</span>`:"")+levTag(p);
   const sn=p.pos==="DEF"?p.name:p.name.replace(/^(\S)\S*\s+/,"$1. ");
   const nm=`<span class="nm"><span class="fnm">${esc(p.name)}</span><span class="snm">${esc(sn)}</span></span>`,stt=sp.length?`<span class="ssep">|</span><span class="st">${sp.map(x=>`<span class="si">${esc(x)}</span>`).join("")}</span>`:"",stR=sp.length?`<span class="st">${sp.map(x=>`<span class="si">${esc(x)}</span>`).join("")}</span><span class="ssep">|</span>`:"";
   const inner=right?stR+tags+nm:nm+tags+stt;
@@ -1506,7 +1548,8 @@ function render(lg){
     const sw=lg.swing&&Date.now()-lg.swing.t<1600&&A.roster_id===lg.mineRid?lg.swing:null,w0=sw?Math.round(sw.from*100):null,sa=sw?` style="--w0:${w0}%;animation-delay:-${Date.now()-sw.t}ms"`:"";
     bar=`<div class="bar${sw?" swg":""}"><i class="seg fa${sw?" sw":""}" style="width:${ok?p:50}%${ok?"":";background:#2a2a33"}${sw?`;--w0:${w0}%;animation-delay:-${Date.now()-sw.t}ms`:""}"></i><i class="seg fb" style="width:${ok?100-p:50}%${ok?"":";background:#23232b"}"></i>${ok?`<span class="bpl">${p}%</span><span class="bpr">${100-p}%</span>`:""}<span class="wpl" tabindex="0" data-flt="${lg.id}">Win probability<span class="tip">${needLine(lg,A,B,a,b,ta,tb)}</span></span></div>`}
   const liveM=[...a.rows,...(b?b.rows:[])].some(r=>r&&!r.empty&&dc(r)==="l"),hs=fin?"hs-final":liveM?"hs-live":"hs-up";lg._live=liveM;
-  let h=`<!--M:hero--><div class="card hero ${hs}"><div class="hg">
+  const hbA=lg.hb&&Date.now()-lg.hb.t<4200&&A.roster_id===lg.mineRid?lg.hb:null;
+  let h=`<!--M:hero--><div class="card hero ${hs}${hbA?" hb":""}"${hbA?` style="--hbk:${Math.min(1,Math.abs(hbA.d)/.15).toFixed(2)};--hbc:${hbA.d>=0?"#a785ff":"#ff6b6b"};--hbd:-${Date.now()-hbA.t}ms"`:""}><div class="hg">
     ${nm(ta,a,0,A.roster_id)}<a class="lgn" ${lg.adapter.leagueUrl(lg)?`href="${esc(lg.adapter.leagueUrl(lg))}" target="_blank" rel="noopener"`:""} title="Open ${esc(lg.league.name)} in ${esc(lg.adapter.name)} · ${lg.fmt} scoring"><span class="lgt2">${esc(lg.league.name)}</span><span class="fmt">${lg.fmt}${lg.estScoring?"?":""}</span>${lg.provider==="manual"?`<span class="estc" role="button" tabindex="0" data-upd="${esc(lg.conn.key)}" title="Roster snapshot from your screenshots (${agoS(lg.importedAt)}). Points are Wingman estimates from live NFL stats${lg.estScoring?" with an assumed scoring format":" with your "+esc(lg.fmt)+" scoring"}, not your app's official score. Tap to update the roster.">📸 ${agoS(lg.importedAt)||"snapshot"} · est.</span>`:""}</a>${b?nm(tb,b,1,B.roster_id):""}
     <div class="pt a">${f2(a.total)}</div><div class="wk"></div>${b?`<div class="pt b">${f2(b.total)}</div>`:""}
     ${pj(a,0)}${b?pj(b,1):""}
@@ -1912,10 +1955,10 @@ function fxMarkup(k,o){
     fr:`${B}<i class="scoop"></i>`,
     safe:`<i class="ezl"></i><i class="car"></i><i class="flash"></i>`,
     blk:`${B}<i class="hd">✋</i>`,
-    rz:`<i class="rzb"><b>RED ZONE</b><i class="chev">›››</i></i>`,
+    rz:`<i class="ez"></i><i class="gl"></i><i class="chv">›</i><i class="chv c2">›</i><i class="chv c3">›</i>`,
     live:`<i class="tee"></i>${B}`,
   }[k]||"";
-  return`<span class="fx fxs fx-${k} ${side}${k==="fg50"?" long":""}" aria-hidden="true"><i class="fxst">${scene}</i><b class="fl2">${FXSTATUS.has(k)||k==="rz"?"":lab}</b></span>`;
+  return`<span class="fx fxs fx-${k} ${side}${k==="fg50"?" long":""}" aria-hidden="true"><i class="fxst">${scene}</i><b class="fl2">${FXSTATUS.has(k)?"":lab}</b></span>`;
 }
 function playEventAnimation(k,target,o={}){
   if(!target||!FXLAB[k]&&k!=="fg"&&k!=="fg50")return null;
@@ -2056,7 +2099,17 @@ function dstCliff(lg,p){
   const g=S.games[p.team];if(!lg||!g||g.state!=="in")return null;const pa=g.opp||0,cur=paPts(lg.sc,pa),nx=paPts(lg.sc,pa+7);
   if(cur==null||nx==null||Math.abs(cur-nx)<1)return null;return{pa,nx:pa+7,cur,nxp:nx}}
 /* per-player leverage + cross-league exposure, computed once per refresh */
-function buildSignals(){
+function buildExposure(){const X={};vis().forEach(lg=>{const M=lg.matchups||[],A=M.find(m=>m.roster_id===lg.mineRid);if(!A)return;const B=M.find(m=>m.matchup_id===A.matchup_id&&m.roster_id!==A.roster_id),nm=shortName(lg.league.name);
+  (A.players||[]).forEach(id=>{if(id&&id!=="0")(X[id]=X[id]||[]).push({lg:lg.id,name:nm,side:"me",start:(A.starters||[]).includes(id)})});
+  if(B)(B.players||[]).forEach(id=>{if(id&&id!=="0")(X[id]=X[id]||[]).push({lg:lg.id,name:nm,side:"op",start:(B.starters||[]).includes(id)})})});S.xexp=X}
+/* photo ring: purple = yours in 2+ leagues, cyan = you face him in 2+, gold = conflicting (yours somewhere, against you elsewhere) */
+function xpInfo(id){const arr=(S.xexp||{})[id]||[];if(new Set(arr.map(x=>x.lg)).size<2)return null;const me=arr.filter(x=>x.side==="me"),op=arr.filter(x=>x.side==="op");
+  const kind=me.length&&op.length?"mix":me.length?"me":"op",k=Math.min(1,(arr.length-1)/3);
+  const imp=(S.sig&&S.sig.exp[id]||[]),net=imp.reduce((s,x)=>s+x.dwp,0);
+  const tip=[me.length?`Yours in ${me.map(x=>x.name+(x.start?"":" (bench)")).join(", ")}`:"",op.length?`Facing him in ${op.map(x=>x.name).join(", ")}`:"",
+    kind==="mix"?"Conflict: his points help you in one league and hurt you in another":"",imp.length>1?`If he scores: ${imp.map(x=>`${x.name} ${pctPt(x.dwp)}`).join(", ")} → net ${pctPt(net)}`:""].filter(Boolean).join(" · ");
+  return{kind,k,tip}}
+function buildSignals(){buildExposure();
   const sig={lev:{},exp:{},root:[]};
   vis().forEach(lg=>{const mm=myMatch(lg);if(!mm||S.week!==S.nflWeek)return;const{a,b,wp}=mm;lg.wpNow=wp;
     const L=sig.lev[lg.id]={};
@@ -2074,7 +2127,7 @@ function expTitle(id){const arr=S.sig&&S.sig.exp[id];if(!arr||arr.length<2)retur
   return arr.map(x=>`${x.name}: ${x.side==="op"?"opponent ":""}+${f2(x.pts)} pts → ${pctPt(x.dwp)} WP`).join(" · ")+` · Net ${pctPt(net)} across visible leagues`}
 /* WP before/after each refresh (actual snapshots), attributed to the plays logged in that refresh */
 function wpSnap(now){
-  vis().forEach(lg=>{const mm=myMatch(lg);if(!mm||S.week!==S.nflWeek){lg.wpDelta=0;return}const w=mm.wp;lg.wpDelta=lg.wpLast!=null?w-lg.wpLast:0;if(Math.abs(lg.wpDelta)>=.03)lg.swing={from:lg.wpLast,t:now};lg.wpLast=w;
+  vis().forEach(lg=>{const mm=myMatch(lg);if(!mm||S.week!==S.nflWeek){lg.wpDelta=0;return}const w=mm.wp;lg.wpDelta=lg.wpLast!=null?w-lg.wpLast:0;if(Math.abs(lg.wpDelta)>=.02&&!quiet())lg.hb={t:now,d:lg.wpDelta};if(Math.abs(lg.wpDelta)>=.03)lg.swing={from:lg.wpLast,t:now};lg.wpLast=w;
     const fresh=(lg.log||[]).filter(e=>e.t===now&&(e.rid===mm.A.roster_id||e.rid===mm.B.roster_id));if(fresh.length===1&&Math.abs(lg.wpDelta)>=.02)fresh[0].wp=lg.wpDelta});
 }
 function wpTag(pid){const out=[];vis().forEach(lg=>{const mm=myMatch(lg);if(!mm||!lg.wpDelta||Math.abs(lg.wpDelta)<.03)return;
@@ -2087,14 +2140,41 @@ function needMeter(lg,a,b,A){
 }
 /* standings stakes from the same Monte Carlo (cached with the odds) */
 /* collect every note inside a player cell into ONE card (name once), instead of separate tooltips */
+/* every indicator keeps its OWN short tooltip (shown beside it); the player name shows news instead */
 function cellCards(el){
-  el.querySelectorAll("td[data-pos]").forEach(td=>{const nm=(td.querySelector(".fnm")||td.querySelector(".nm")||{}).textContent||"",notes=[];
-    const push=t=>{t=String(t||"").split(" | ").filter(x=>x.trim()&&x.trim()!==nm.trim()).join(" · ").trim();if(t&&t.length>3&&!notes.includes(t)&&!notes.some(n=>n.includes(t)))notes.push(t)};
-    const pm=td.querySelector(".pm[title]");if(pm){push(pm.getAttribute("title"));pm.removeAttribute("title")}if(td.title){push(td.title);td.removeAttribute("title")}td.querySelectorAll("[title]").forEach(x=>{push(x.getAttribute("title"));x.removeAttribute("title")});
-    td.dataset.card=JSON.stringify({nm,notes});
-    if(window.matchMedia&&matchMedia("(hover:hover)").matches){let tm=0;td.onmouseenter=()=>{tm=setTimeout(()=>{const c=JSON.parse(td.dataset.card||"{}"),pts=(td.nextElementSibling&&td.nextElementSibling.classList.contains("n")?td.nextElementSibling:td.previousElementSibling)||null;
-        fltShowHTML(`<div class="pcard2"><b>${esc(c.nm)}</b>${(c.notes||[]).map(n=>`<div>${esc(n)}</div>`).join("")}</div>`,td.getBoundingClientRect())},320)};td.onmouseleave=()=>{clearTimeout(tm);fltHide()}}});
+  el.querySelectorAll("td[data-pos]").forEach(td=>{
+    td.removeAttribute("title");td.querySelectorAll(".pn[title],.pm[title]").forEach(x=>x.removeAttribute("title"));
+    td.querySelectorAll("[title]").forEach(x=>{const t=x.getAttribute("title");x.removeAttribute("title");if(t&&t.length>1)x.dataset.tip=t});
+    const nm=td.querySelector(".nm");if(nm&&td.dataset.pid&&td.dataset.pos!=="DEF")nm.dataset.news=td.dataset.pid});
 }
+(()=>{let tm=0,cur=null;const hov=()=>window.matchMedia&&matchMedia("(hover:hover)").matches;
+  const show=t=>{cur=t;const r=t.getBoundingClientRect();if(t.dataset.news)newsTip(t.dataset.news,t);else fltShowHTML(`<div class="tip1">${esc(t.dataset.tip)}</div>`,r)};
+  document.addEventListener("mouseover",e=>{if(!hov())return;const t=e.target.closest&&e.target.closest("[data-tip],[data-news]");if(!t||t===cur)return;clearTimeout(tm);tm=setTimeout(()=>show(t),t.dataset.news?260:90)});
+  document.addEventListener("mouseout",e=>{if(!hov())return;const t=e.target.closest&&e.target.closest("[data-tip],[data-news]");if(!t)return;if(e.relatedTarget&&t.contains(e.relatedTarget))return;clearTimeout(tm);cur=null;fltHide()});
+  /* touch: tapping an indicator or a name shows just that note (and doesn't expand the row) */
+  document.addEventListener("click",e=>{if(hov())return;const t=e.target.closest&&e.target.closest("td[data-pos] [data-tip], td[data-pos] [data-news]");if(!t)return;e.stopPropagation();e.preventDefault();show(t);clearTimeout(tm);tm=setTimeout(()=>{cur=null;fltHide()},t.dataset.news?6000:3500)},true);
+})();
+(()=>{let on=null;const pidOf=t=>{const td=t.closest&&t.closest("td[data-pid]");return td&&(t.closest(".avw")||t.closest(".nm"))?td.dataset.pid:null};
+  const light=pid=>{if(on===pid)return;dark();on=pid;document.querySelectorAll(`#view td[data-pid="${CSS.escape(pid)}"]`).forEach(td=>{td.classList.add("xr");const n=td.classList.contains("r")?td.previousElementSibling:td.nextElementSibling;if(n&&n.classList.contains("n"))n.classList.add("xr")})};
+  const dark=()=>{if(!on)return;document.querySelectorAll("#view .xr").forEach(x=>x.classList.remove("xr"));on=null};
+  document.addEventListener("mouseover",e=>{const pid=pidOf(e.target);if(pid)light(pid);else if(on&&!(e.target.closest&&e.target.closest(".flt")))dark()});
+  document.addEventListener("touchstart",e=>{const pid=pidOf(e.target);if(pid){light(pid);setTimeout(dark,3500)}},{passive:true});
+})();
+/* ---------- player news with personality (ESPN news → Wingman voice, via the shared worker) ---------- */
+const NEWS={};
+function newsSince(pid){const g=S.games[pinfo(pid).team],k=g&&g.date?Date.parse(g.date):0;return g&&g.state!=="pre"&&k?k:k?k-7*864e5:Date.now()-7*864e5}
+async function playerNews(pid){
+  const p=S.players&&S.players[pid];if(!p||!p.espn_id)return{tone:"neutral",text:"No news feed for this player."};
+  const c=NEWS[pid];if(c&&Date.now()-c.at<2*36e5)return c.v;
+  let v;try{const q=new URLSearchParams({espn:p.espn_id,name:pinfo(pid).name,pos:pinfo(pid).pos,team:pinfo(pid).team,since:String(newsSince(pid))});
+    const r=await tfetch(`${workerURL()}/news/quip?${q}`,{},25000),j=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(j.error||"News unavailable right now.");
+    v=j.quip?{tone:j.tone||"neutral",text:j.quip,meta:`ESPN · ${agoS(j.published)}`}:{tone:"neutral",text:"Nothing new since his last game.",meta:j.latest?`Last update ${agoS(j.latest.published)}: ${j.latest.headline}`:""}}
+  catch(e){v={tone:"neutral",text:/abort/i.test(e.name+e.message)?"News is taking too long. Try again in a bit.":e.message||"News unavailable right now."}}
+  NEWS[pid]={at:Date.now(),v};return v;
+}
+function newsTip(pid,el){const draw=v=>fltShowHTML(`<div class="nws ${v.tone}"><b>${esc(pinfo(pid).name)}</b><div>${esc(v.text)}</div>${v.meta?`<small>${esc(v.meta)}</small>`:""}</div>`,el.getBoundingClientRect());
+  const c=NEWS[pid];if(c){draw(c.v);return}draw({tone:"load",text:"Checking the wire…"});playerNews(pid).then(v=>{if(el.isConnected&&FLT.el&&FLT.el.classList.contains("show"))draw(v)})}
 function stakeArrow(lg,rid){const s=lg.stakes,o=lg.odds&&lg.odds[rid];if(!s||rid!==lg.mineRid||o==null||Math.abs(s.pW-s.pL)<.08)return"";const mm=myMatch(lg);if(!mm)return"";const lead=mm.a.total>=mm.b.total,tgt=lead?s.pW:s.pL,d=tgt-o;return Math.abs(d)<.02?"":`<i class="stk ${d>0?"up":"dn"}">${d>0?"↗":"↘"}</i>`}
 function stakesTitle(lg,rid){const s=lg.stakes;if(!s||rid!==lg.mineRid)return"";
   return` · Win this week → ${Math.round(s.pW*100)}% · lose → ${Math.round(s.pL*100)}%${s.rk0&&s.rk1&&s.rk0!==s.rk1?` · If current results hold: standings #${s.rk0} → #${s.rk1}`:""}`}
@@ -2498,20 +2578,20 @@ function imAdd(files){
 }
 /* one screenshot at a time (friendly to the rate limit); tall phone screenshots are sliced so small names stay legible */
 async function imRead(sh,file){
-  sh.status="reading";imRender();
+  sh.status="reading";sh.t0=Date.now();imRender();const tick=setInterval(()=>{if(sh.status==="reading")imRenderSteps();else clearInterval(tick)},1000);
   try{const images=await imPrepare(file);await imEnsurePlayers();
-    const r=await tfetch(workerURL()+"/vision/roster",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({images})},90000);
+    const r=await tfetch(workerURL()+"/vision/roster",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({images})},95000);
     let j={};try{j=await r.json()}catch(e){}
     if(!r.ok)throw new Error((j.error||`Couldn't read that screenshot (${r.status}).`)+(j.hint?" "+j.hint:""));
     sh.status="done";sh.provider=j.provider||"";sh.screen=j.screen;imMergeResult(j,sh)}
-  catch(e){sh.status="error";sh.err=/Failed to fetch|NetworkError|aborted/i.test(e.message)?"Couldn't reach the screenshot reader. Check your connection and try again.":e.message}
-  imRender();
+  catch(e){sh.status="error";sh.file=file;sh.err=/abort/i.test(e.name+e.message)?"The screenshot reader took too long. Try again, or crop to just the lineup.":/Failed to fetch|NetworkError/i.test(e.message)?"Couldn't reach the screenshot reader. Check your connection and try again.":e.message}
+  clearInterval(tick);imRender();
 }
 function imPrepare(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file),im=new Image();
   im.onload=()=>{URL.revokeObjectURL(u);const W=im.naturalWidth,H=im.naturalHeight,out=[];
-    const cut=(sy,sh)=>{const k=Math.min(1080/W,1)*(W<640?1.5:1),c=document.createElement("canvas");c.width=Math.round(W*k);c.height=Math.round(sh*k);const x=c.getContext("2d");x.imageSmoothingQuality="high";x.drawImage(im,0,sy,W,sh,0,0,c.width,c.height);out.push({mediaType:"image/jpeg",data:c.toDataURL("image/jpeg",.88).split(",")[1]})};
-    if(H/W>1.9){let n=Math.min(4,Math.ceil(H/(W*1.35))),tile=Math.ceil(H/n*1.12),step=Math.floor((H-tile)/Math.max(1,n-1));for(let i=0;i<n;i++)cut(Math.min(H-tile,i*step),tile)}
-    else{const k=Math.min(1,1600/Math.max(W,H))*(Math.max(W,H)<900?1.5:1),c=document.createElement("canvas");c.width=Math.round(W*k);c.height=Math.round(H*k);const x=c.getContext("2d");x.imageSmoothingQuality="high";x.drawImage(im,0,0,c.width,c.height);out.push({mediaType:"image/jpeg",data:c.toDataURL("image/jpeg",.88).split(",")[1]})}
+    const cut=(sy,sh)=>{const k=Math.min(960/W,1)*(W<600?1.5:1),c=document.createElement("canvas");c.width=Math.round(W*k);c.height=Math.round(sh*k);const x=c.getContext("2d");x.imageSmoothingQuality="high";x.drawImage(im,0,sy,W,sh,0,0,c.width,c.height);out.push({mediaType:"image/jpeg",data:c.toDataURL("image/jpeg",.84).split(",")[1]})};
+    if(H/W>1.9){let n=Math.min(3,Math.ceil(H/(W*1.5))),tile=Math.ceil(H/n*1.12),step=Math.floor((H-tile)/Math.max(1,n-1));for(let i=0;i<n;i++)cut(Math.min(H-tile,i*step),tile)}
+    else{const k=Math.min(1,1600/Math.max(W,H))*(Math.max(W,H)<900?1.5:1),c=document.createElement("canvas");c.width=Math.round(W*k);c.height=Math.round(H*k);const x=c.getContext("2d");x.imageSmoothingQuality="high";x.drawImage(im,0,0,c.width,c.height);out.push({mediaType:"image/jpeg",data:c.toDataURL("image/jpeg",.84).split(",")[1]})}
     res(out)};im.onerror=()=>{URL.revokeObjectURL(u);rej(new Error("That file isn't a readable image."))};im.src=u})}
 /* merge a read screenshot into the working import: same-named teams merge, duplicate players collapse, nothing is guessed */
 function imMergeResult(j,sh){
@@ -2536,16 +2616,22 @@ function imAddTeam(t,role,assumed,shot){
     if(dup){if(!dup.slot&&p.slot)dup.slot=normSlot(p.slot,p.section);return}
     T.players.push({key,name:p.name,pos,team:p.nfl_team||"",slot:normSlot(p.slot,p.section)||(p.section==="bench"?"BN":""),m})});
 }
+function imStepsHtml(){
+  const cur=IMP.shots.find(s=>s.status==="reading"),sec=cur&&cur.t0?Math.round((Date.now()-cur.t0)/1000):0;
+  const st=imStage(),rd=IMP.shots.filter(s=>s.status==="done"||s.status==="error").length,errs=IMP.shots.filter(s=>s.status==="error");
+  return IMP.shots.length?["reading","matching","ready"].map((k,i)=>{const idx=["reading","matching","ready"].indexOf(st),on=k===st,done=idx>i||st==="ready"&&k==="ready";
+    return`<span class="stp ${on?"on":""} ${done?"done":""}">${k==="reading"?(st==="reading"?`<i class="spin"></i>Reading ${rd}/${IMP.shots.length}${sec>=3?` · ${sec}s`:""}`:"Reading"):k==="matching"?"Matching":"Ready"}</span>`}).join('<i class="stl"></i>')+(sec>=20?'<small class="imslow">Reading screenshots can take up to a minute.</small>':"")+(errs.length?`<div class="imerr">${errs.map(e=>esc(e.err)).join("<br>")}</div>`:""):"";
+}
+function imRenderSteps(){const el=$("imsteps");if(el)el.innerHTML=imStepsHtml()}
 function imStage(){const rd=IMP.shots.filter(s=>s.status==="reading"||s.status==="wait").length;if(rd)return"reading";if(!IMP.teams.length)return IMP.shots.length?"none":"idle";
   if(IMP.teams.some(t=>!t.role)||IMP.teams.some(t=>t.role!=="skip"&&t.players.some(p=>p.m.conf!=="confident")))return"matching";return"ready"}
 function imRender(){
   const tg=$("imtgt");if(!tg)return;const tc=IMP.target&&(S.conns||getConns()).find(x=>x.key===IMP.target);
   tg.innerHTML=tc?`<span>Updating <b>${esc(tc.name)}</b> · settings and scoring stay as they are</span><button class="link" id="imcancel">cancel</button>`:"";if(tc)$("imcancel").onclick=()=>{impReset();imRender()};
-  $("imshots").innerHTML=IMP.shots.map(s=>`<div class="shot ${s.status}" title="${esc(s.err||"")}"><img src="${s.thumb}" alt=""><i>${s.status==="done"?"✓":s.status==="error"?"!":""}</i>${s.status==="error"?`<button class="shx" data-rm="${s.id}" title="Remove">✕</button>`:""}</div>`).join("");
+  $("imshots").innerHTML=IMP.shots.map(s=>`<div class="shot ${s.status}" title="${esc(s.err||"")}"><img src="${s.thumb}" alt=""><i>${s.status==="done"?"✓":s.status==="error"?"!":""}</i>${s.status==="error"?`<button class="shx" data-rm="${s.id}" title="Remove">✕</button><button class="shr" data-retry="${s.id}" title="Try again">↻</button>`:""}</div>`).join("");
+  $("imshots").querySelectorAll("[data-retry]").forEach(b=>b.onclick=()=>{const sh=IMP.shots.find(s=>s.id===b.dataset.retry);if(sh&&sh.file){sh.status="wait";sh.err="";IMP.queue=IMP.queue.then(()=>imRead(sh,sh.file));imRender()}});
   $("imshots").querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{IMP.shots=IMP.shots.filter(s=>s.id!==b.dataset.rm);imRender()});
-  const st=imStage(),rd=IMP.shots.filter(s=>s.status==="done"||s.status==="error").length,errs=IMP.shots.filter(s=>s.status==="error");
-  $("imsteps").innerHTML=IMP.shots.length?["reading","matching","ready"].map((k,i)=>{const idx=["reading","matching","ready"].indexOf(st),on=k===st,done=idx>i||st==="ready"&&k==="ready";
-    return`<span class="stp ${on?"on":""} ${done?"done":""}">${k==="reading"?(st==="reading"?`<i class="spin"></i>Reading ${rd}/${IMP.shots.length}`:"Reading"):k==="matching"?"Matching":"Ready"}</span>`}).join('<i class="stl"></i>')+(errs.length?`<div class="imerr">${errs.map(e=>esc(e.err)).join("<br>")}</div>`:""):"";
+  $("imsteps").innerHTML=imStepsHtml();
   const P=$("imprev");if(!IMP.teams.length){P.innerHTML="";return}
   const ask=IMP.teams.filter(t=>!t.role),mine=IMP.teams.find(t=>t.role==="mine"),opp=IMP.teams.find(t=>t.role==="opp");
   const opts=p=>{const cs=(p.m.cands||[]).slice(0,8);return`<select class="imsel">${p.m.conf!=="confident"?'<option value="">— choose —</option>':""}${cs.map(id=>`<option value="${id}" ${id===p.m.id?"selected":""}>${esc(pinfo(id).name)} · ${esc(pinfo(id).pos)} · ${esc(pinfo(id).team||"FA")}</option>`).join("")}<option value="?">Search…</option></select>`};
