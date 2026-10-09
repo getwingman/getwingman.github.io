@@ -23,7 +23,8 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   pts/wk 35%, record 20% — `computePower`) and projected **Strength** (best legal lineup per projected week through the
   league's final playoff week, `finalWeek`). Lineup IQ (efficiency) ≠ Start/Sit (share of right calls); awards and IQ need
   ≥3 completed weeks. Explicit end-of-season / no-projection states (never zeros). `wpBacktest` shows a calibration check.
-  Waiver pickups are a separate discreet view (`MV.view="edge"`): the faint · in the Lab header, or `#edge`.
+  Trades are two side-by-side panels (2-way / 3-way). The secret view (`MV.view="edge"`, the faint · in the Lab header,
+  or `#edge`) holds the ideal lineup and the waiver pickups.
 - Lineups: `bestLineup(ids, slots, valueFn, prefer)` is the single EXACT optimizer (laminar greedy + branching over
   dual-position players, Hungarian for overlapping flexes; IDP slots supported). Fills every fillable slot; ties go to the
   lineup actually started. Used by strength, trades, pickups, Lineup IQ, start/sit and awards. Never replace it with a
@@ -72,6 +73,24 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
 - Wide tables scroll inside their card; the Lab board pins `#` + Manager (`position:sticky`) on phones.
 - Polling pauses while `document.hidden`; `pruneStore()` drops stale per-week caches (quota safety on iOS).
 - Before first connection (`body.nolg`) the tab bar and empty week picker are hidden; pool-only users open their pool.
+
+## Sheet layouts (v41)
+- Survivor (normalized): `Config` (key,value,type) · `Entries` (entry_id, participant, lane, is_our_entry) ·
+  `Picks` (week, entry_id, team, picked_by; several rows = multi-pick week) · `Results` (week, team, opponent, game_day, result).
+  Rules self-configure from Config (`svCfgFromSheet`: reuse, day rules incl. "pending", tie rule, missed-pick text, price,
+  members, jackpot, current week); device settings override; "↺ Use the sheet's settings" clears overrides. Sheet results
+  are authoritative for survival; ESPN adds scores/clocks/odds. Legacy "🏊 Swimlanes" sheets still parse.
+- Pick'em (normalized): `WM_Config`, `WM_Games` (team_a/team_b are NOT home/away; spread_a + spread_source),
+  `WM_Picks` (grades/points authoritative), `WM_Participants`, `WM_Tiebreakers`. Standings, cover rates, coverage
+  (MISSING vs No Pick vs Hidden) and tiebreak winners are derived in the app (`pkSyncNormalized`). Lines: Sleeper live
+  (locked at kickoff) → the sheet's verified line (`pkSheetLine`) → nothing; proxies are labeled.
+- gviz: config (key/value) tabs are read raw (`headers=0`) and merged with a header-mode read; data tabs use
+  `headers=1`; `objRows` re-infers blank labels from the schema. Unknown tab names return the FIRST tab, so validate.
+- Survivor planner: per-entry eligibility (`svCanUse`) + day rules (`svDayRule`), "value later" from team ratings
+  (`svRatings`/`svRatedP`) over the next 3 weeks (💎 save), field crowding, two plans (most lives / safest spread).
+- Secret view (`MV.view="edge"`): 🎯 Ideal lineup (`idealBuild`/`idealHtml`) rebuilt on every visit from fresh
+  projections, injury + practice status (players DB refreshed if >2h old), ESPN implied totals, season form, news and a
+  matchup tilt; started games locked; solved with `bestLineup`. Then pickups.
 
 ## Tests
 - `tests/run_all.sh index.html` (offline; mocks every API). Add a test with every fix. Fixtures must stay anonymized.

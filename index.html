@@ -1231,6 +1231,39 @@ main{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env
 @media(max-width:760px){#swp.setp{left:8px;right:8px;width:auto;min-width:0;max-width:none}}
 
 @media(max-width:760px){header{background:#000}html[data-theme=light] header{background:#fff}}
+
+.svplans{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;padding:10px 12px 2px}
+.svplan{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--s2)}
+.svph{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;font-size:12px;margin-bottom:4px}.svph span{margin-left:auto;color:var(--mute);font-size:11px}.svph span b{color:var(--ink)}
+.svpt{display:flex;align-items:center;gap:6px;font-size:12px;height:26px}.svpt em{font-style:normal;color:var(--mute);font-variant-numeric:tabular-nums}.svpt .ltks{display:flex;gap:2px;flex-wrap:wrap;margin-left:auto}
+.svpt .tl{width:18px;height:18px}
+.sav{color:#7fe3ff;font-size:11px;font-weight:700;white-space:nowrap}
+.pmx2 .pmr{grid-template-columns:minmax(150px,1.6fr) minmax(90px,1fr) 70px 46px repeat(var(--n),minmax(18px,26px))}
+.pmf{font-size:11px;text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+.ln.px{opacity:.7;font-style:italic}
+.pkwc .cov{display:block;font-size:9px;color:var(--up);font-weight:700}
+
+/* ideal lineup */
+.ilhd{display:flex;gap:10px;flex-wrap:wrap;padding:10px 12px 4px}
+.ilk{display:flex;flex-direction:column;min-width:96px;padding:6px 10px;border-radius:10px;background:var(--s2);border:1px solid var(--line)}
+.ilk b{font-family:var(--fnum);font-size:20px;line-height:24px}.ilk small{font-size:10.5px;color:var(--mute)}.ilk.bad b{color:var(--neg)}
+.ilg{display:flex;flex-direction:column;padding:4px 12px 8px}
+.ilr{display:grid;grid-template-columns:44px minmax(0,1.5fr) 52px minmax(0,2fr) 64px;align-items:center;gap:8px;min-height:36px;border-bottom:1px solid var(--line)}
+.ilr.chg{background:linear-gradient(90deg,rgba(62,207,116,.10),transparent 60%)}
+.ilsl{font-size:10px;font-weight:800;color:var(--mute);text-align:center;border:1px solid var(--line);border-radius:999px;padding:2px 0}
+.ilv{font-family:var(--fnum);font-weight:800;font-size:15px;text-align:right;font-variant-numeric:tabular-nums}
+.ilsg{display:flex;gap:4px;flex-wrap:wrap;min-width:0}
+.ils{font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--s2);color:var(--mute);white-space:nowrap;max-width:180px;overflow:hidden;text-overflow:ellipsis}
+.ils.g{color:var(--pos);background:rgba(62,207,116,.10)}.ils.w{color:var(--up);background:rgba(240,163,35,.10)}.ils.x{color:var(--neg);background:rgba(255,107,107,.10)}
+.ila{font-size:11px;font-weight:800;text-align:right}.ila.in{color:var(--pos)}.ila.ok{color:var(--mute)}.ila.lk{opacity:.8}
+.ilout{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:4px 12px 10px}.ilout small{font-weight:800;color:var(--neg);text-transform:uppercase;font-size:10px;letter-spacing:.06em}
+.ilo{display:flex;align-items:center;gap:6px;opacity:.8}.ilo em{font-style:normal;font-family:var(--fnum);font-weight:700}
+@media(max-width:760px){.ilr{grid-template-columns:38px minmax(0,1fr) 44px 52px;grid-template-areas:"s p v a" ". g g g";row-gap:2px;padding:4px 0}.ilr>.ilsl{grid-area:s}.ilr>.pch{grid-area:p}.ilr>.ilv{grid-area:v}.ilr>.ilsg{grid-area:g}.ilr>.ila{grid-area:a}}
+.svgrid>.card.svc:has(.ilg){grid-column:1/-1}
+.ila.bad{color:var(--neg)}.ilr.dead{background:linear-gradient(90deg,rgba(255,107,107,.10),transparent 60%)}
+
+@media(max-width:760px){.pmx{overflow-x:auto;-webkit-overflow-scrolling:touch}.pmx2 .pmr{grid-template-columns:118px 96px 62px 38px repeat(var(--n),24px);min-width:max-content}.pmx2 .pmt small{display:none}}
 </style>
 </head>
 <body>
@@ -1255,7 +1288,7 @@ main{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env
     <div class="labc"><span class="seg2" data-c="motion"><button data-v="normal" class="on">Normal</button><button data-v="reduced">Reduced</button></span><span class="seg2" data-c="sound"><button data-v="on" class="on">Sound</button><button data-v="off">Mute</button></span><button id="labplay" class="labp">▶ Play all</button></div>
     <div class="labbar"><span id="labnow" class="labnow">PREVIEW</span><span id="labsc" class="labsc"></span></div>
     <div id="labev" class="labev"></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v40</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v41</span></div>
   </div>
 </header>
 <main>
@@ -1360,9 +1393,9 @@ const idbGet=async k=>{const d=await idb();return new Promise(r=>{const q=d.tran
 const idbSet=async(k,v)=>{const d=await idb();return new Promise(r=>{const t=d.transaction("kv","readwrite");t.objectStore("kv").put(v,k);t.oncomplete=()=>r();t.onerror=()=>r()})};
 async function getPlayers(){
   if(S.players)return;
-  try{const c=await idbGet("players");if(c&&Date.now()-c.at<864e5){S.players=c.data;return}}catch(e){}
+  try{const c=await idbGet("players");if(c&&Date.now()-c.at<864e5){S.players=c.data;S.playersAt=c.at;return}}catch(e){}
   status("Downloading player list (once a day)…");
-  S.players=await getJ(SLP+"/players/nfl");
+  S.players=await getJ(SLP+"/players/nfl");S.playersAt=Date.now();
   try{await idbSet("players",{at:Date.now(),data:S.players})}catch(e){}
 }
 const NT=t=>({WSH:"WAS",JAC:"JAX",LA:"LAR"}[t]||t);
@@ -1590,7 +1623,7 @@ function side(lg,m){
   const rows=st.map(id=>{if(!id||id==="0")return null;const r=mk(id,m.roster_id+":"+id);proj+=r.e;vr+=(SD[r.p.pos]||6)**2*r.r;bs+=r.b==null?r.e:r.b;return r});
   const others=(m.players||[]).filter(id=>id&&id!=="0"&&!st.includes(id));
   const bye=r=>S.okGames&&r.p.team&&r.p.team!=="FA"&&!S.games[r.p.team]?1:0;
-  const bench=others.filter(id=>!res.has(id)).map(id=>mk(id,m.roster_id+":"+id)).sort((x,y)=>(bye(x)-bye(y))||((y.e??y.a)-(x.e??x.a))||(y.a-x.a));
+  const bench=others.filter(id=>!res.has(id)).map(id=>mk(id,m.roster_id+":"+id)).sort((x,y)=>(bye(x)-bye(y))||(y.a-x.a)||((y.e??0)-(x.e??0)));   /* actual points first; projection only breaks ties (e.g. before kickoff) */
   const ir=[...new Set([...others.filter(id=>res.has(id)),...res])].map(id=>mk(id,m.roster_id+":"+id)).sort((x,y)=>y.a-x.a);
   const left=rows.filter(r=>r&&S.games[r.p.team]&&!settled(r.p)).length;
   return{rows,bench,ir,proj,vr,left,bs,total:m.points||0};
@@ -2433,7 +2466,7 @@ function stakesTitle(lg,rid){const s=lg.stakes;if(!s||rid!==lg.mineRid)return"";
   return` · Win this week → ${Math.round(s.pW*100)}% · lose → ${Math.round(s.pL*100)}%${s.rk0&&s.rk1&&s.rk0!==s.rk1?` · If current results hold: standings #${s.rk0} → #${s.rk1}`:""}`}
 /* ---------- Survivor elimination leverage (actual remaining lives) ---------- */
 function svLeverage(){
-  if(!hasMode("survivor")||!SV.lanes||!SV.lanes.length)return[];const V=SV.week||Math.min(SV.maxPick||1,18),inPlay=SV.lanes.filter(l=>(!l.out||l.out>=V)&&svPick(l,V)),T={};
+  if(!hasMode("survivor")||!SV.lanes||!SV.lanes.length)return[];const V=svWeek(),inPlay=SV.lanes.filter(l=>(!l.out||l.out>=V)&&svPick(l,V)),T={};
   inPlay.forEach(l=>{const t=svPick(l,V),o=T[t]=T[t]||{our:0,oth:0,lets:[]};if(isOurs(l)){o.our++;o.lets.push(l.let)}else o.oth++});
   const field=Object.values(T).reduce((s,x)=>s+x.oth,0)||1;
   return Object.entries(T).map(([t,c])=>{const R=svRes(V,t)||{};return{t,our:c.our,oth:c.oth,lets:c.lets,field,share:c.oth/field,R,live:R.st==="in",fin:!!R.r,wp:R.wp}}).filter(x=>!x.fin).sort((x,y)=>(y.live-x.live)||(y.oth-x.oth));
@@ -3152,7 +3185,7 @@ async function connectAll(){
     S.raw=null;S.baseWeek=0;await refresh();schedule();
     S.L.forEach(lg=>loadSeason(lg));loadSeasonStats();
     if(S.tab==="t")mvTick(true);
-    if(location.hash==="#edge"){MV.view="edge";setTab("t");mvTick(true)}
+    if(location.hash==="#edge"){MV.view="edge";setTab("t");mvTick(true);idealBuild(S.L.find(l=>l.id===MV.lg)||S.L[0])}
   }catch(e){if(!S.L.length)showWelcome();const f=friendlyErr(e);status(f.txt,true);$("werr").textContent=f.txt}
 }
 /* =====================================================================
@@ -3162,7 +3195,8 @@ async function connectAll(){
 const SV={wph:{},d:{sheet:"",by:{}},cfg:null,st:"idle",err:"",lanes:null,res:{},week:null,src:"",syncAt:0,open:{sweat:true,plan:true,rivals:true,chart:true,swim:false,stand:false,rules:false},q:"",lastHtml:"",known:{},late:{}};
 /* pool settings are stored with the linked sheet on this device: nothing about any pool ships in the page */
 const POOLDEF={survivor:{name:"Survivor Pool",me:"",split:1,price:0,reuse:"once",noThu:false,missed:"out"},pickem:{name:"Pick'em",me:"",dues:0,first:0,second:0,weekly:0}};
-function poolCfg(p){const c=(S.conns||getConns()).find(x=>x.p===p);return Object.assign({},POOLDEF[p],c&&c.cfg||{})}
+function poolCfg(p){const c=(S.conns||getConns()).find(x=>x.p===p),sc=p==="survivor"?(typeof SV!=="undefined"&&SV.sheetCfg):(typeof PK!=="undefined"&&PK.sheetCfg);return Object.assign({},POOLDEF[p],sc||{},c&&c.cfg||{})}
+function clearPoolCfg(p){S.conns=(S.conns||getConns()).map(c=>c.p===p?Object.assign({},c,{cfg:{}}):c);saveConns();if(p==="survivor"){SV.cfg=poolCfg(p);SV.lastHtml=""}else{PK.cfg=poolCfg(p);PK.lastHtml=""}}
 function savePoolCfg(p,cfg){S.conns=(S.conns||getConns()).map(c=>c.p===p?Object.assign({},c,{cfg:Object.assign({},c.cfg||{},cfg)}):c);saveConns();if(p==="survivor"){SV.cfg=poolCfg(p);SV.lastHtml=""}else{PK.cfg=poolCfg(p);PK.lastHtml=""}}
 /* "Bills", "Bills/Chiefs", "Bills, Chiefs" → every team picked that week (multi-pick weeks) */
 const svSplit=c=>String(c||"").split(/\s*(?:\/|,|&|\+)\s*/).map(x=>x.trim()).filter(Boolean);
@@ -3195,6 +3229,8 @@ async function svLoadWeek(w,fresh){
         R[x.team.name]={r:post?(me>op?"W":me<op?"L":"T"):"",st:st.type.state,me,op,oppN:o.team.name,oppT:NT(o.team.abbreviation),abbr:NT(x.team.abbreviation),home:isH,
           detail:st.type.shortDetail,date:ev.date,day,wp:isH?wp.p:1-wp.p,pre:isH?wp.pre:1-wp.pre,odds:wp.det,period:st.period,clock:st.clock}})});
     R.__espn=true;R.__at=Date.now();
+    /* the pool's own graded results (sheet) are authoritative for who survived; ESPN adds scores, clocks and odds */
+    const SR=SV.sheetRes&&SV.sheetRes[w];if(SR)for(const t in SR)if(SR[t].r){R[t]=Object.assign({},R[t]||{},{r:SR[t].r,st:"post",oppN:(R[t]&&R[t].oppN)||SR[t].oppN,day:(R[t]&&R[t].day)||SR[t].day,wp:SR[t].wp})}
   }catch(e){}
 }
 /* ---------- live sync with the Google Sheet (needs "anyone with the link can view") ---------- */
@@ -3203,8 +3239,19 @@ function csvRows(t){const out=[];let row=[],f="",q=false;for(let i=0;i<t.length;
   else if(c==='"')q=true;else if(c===","){row.push(f);f=""}else if(c==="\n"){row.push(f);out.push(row);row=[];f=""}else if(c!=="\r")f+=c}
   if(f||row.length){row.push(f);out.push(row)}return out}
 /* whole tab, no row limit (headers=0 keeps gviz from merging header rows); columns found by their header names */
-const gvizCsv=async(sheet,tab)=>{const r=await tfetch(`https://docs.google.com/spreadsheets/d/${sheet}/gviz/tq?tqx=out:csv&headers=0&sheet=${encodeURIComponent(tab)}`,{cache:"no-store"},15000);
+/* gviz quirks: headers=0 keeps every value of a mixed-type column (key/value config tabs) but blanks the header label of
+   number-only columns; headers=1 returns proper labels for typed data tabs. objRows() re-infers any blank label from the
+   known schema, so either mode parses. An unknown tab name makes gviz answer with the FIRST tab, so every tab is validated. */
+const gvizCsv=async(sheet,tab,hdr)=>{const r=await tfetch(`https://docs.google.com/spreadsheets/d/${sheet}/gviz/tq?tqx=out:csv&headers=${hdr?1:0}&sheet=${encodeURIComponent(tab)}`,{cache:"no-store"},15000);
   if(!r.ok)throw new Error(r.status===404?"notfound":"http");const t=await r.text();if(/^\s*</.test(t))throw new Error("private");return csvRows(t)};
+const lc=x=>String(x==null?"":x).trim().toLowerCase();
+function objRows(R,cols){if(!R)return null;const hi=R.findIndex(r=>cols.filter(c=>r.map(lc).includes(c)).length>=Math.min(2,cols.length));if(hi<0)return null;
+  const H0=R[hi].map(lc),H=H0.map((x,i)=>x||(cols[i]&&!H0.includes(cols[i])?cols[i]:""));
+  return R.slice(hi+1).filter(r=>r.some(x=>String(x||"").trim())).map(r=>{const o={};H.forEach((k,i)=>{if(k)o[k]=String(r[i]==null?"":r[i]).trim()});return o})}
+/* key,value tabs: raw read first; a header-mode read fills anything gviz blanked */
+const isKV=R=>!!(R&&R[0]&&lc(R[0][0])==="key");
+function kvOf(...Rs){const o={};Rs.forEach(R=>(R||[]).slice(1).forEach(r=>{const k=lc(r[0]),v=String(r[1]==null?"":r[1]).trim();if(k&&(o[k]==null||o[k]===""))o[k]=v}));return o}
+const tru=v=>/^(true|yes|y|1)$/i.test(String(v||"").trim());
 function svParseLanes(R){
   const hi=R.findIndex(r=>/^participant$/i.test((r[0]||"").trim())&&/^(lane|entry|letter)$/i.test((r[1]||"").trim()));if(hi<0)return{err:"layout"};
   const H=R[hi].map(x=>(x||"").trim()),wc=[];H.forEach((x,i)=>{const m=x.match(/^W(?:eek)?\s*(\d{1,2})$/i);if(m)wc[+m[1]-1]=i});
@@ -3216,20 +3263,53 @@ function svParseLanes(R){
     lanes.push({who,let:ln,p:Array.from({length:18},(_,i)=>wc[i]!=null?(r[wc[i]]||"").trim():"")})});
   return{lanes,broken};
 }
+const SVCOLS={entries:["entry_id","participant","lane","is_our_entry"],picks:["week","entry_id","team","picked_by"],results:["week","team","opponent","game_day","result"]};
+/* pool rules come from the sheet's Config tab; a setting the user changes on this device overrides it */
+function svCfgFromSheet(C,lanes){const has=k=>C[k]!=null&&C[k]!=="",o={};
+  if(has("pool_name"))o.name=C.pool_name;if(has("entry_price_usd"))o.price=+C.entry_price_usd||0;
+  let mem=[];try{mem=JSON.parse(C.group_members||"[]")}catch(e){mem=String(C.group_members||"").split(/[,;]/).map(s=>s.trim()).filter(Boolean)}if(mem.length){o.members=mem;o.split=mem.length}
+  const ours=lanes.filter(l=>l.ours);if(ours.length)o.me=ours[0].who;else if(has("commissioner_entry_name"))o.me=C.commissioner_entry_name;
+  if(has("consecutive_repeat_allowed"))o.reuse=tru(C.consecutive_repeat_allowed)?"any":has("team_reuse_after_one_week")&&!tru(C.team_reuse_after_one_week)?"once":"gap1";
+  const days={};["monday","tuesday","wednesday","thursday","friday","saturday","sunday"].forEach(d=>{const k=d+"_pick_allowed";if(has(k))days[d]=lc(C[k])==="pending"?"pending":tru(C[k])?"yes":"no"});
+  if(Object.keys(days).length){o.days=days;o.noThu=days.thursday==="no"||days.wednesday==="no"}
+  if(has("missed_pick_rule")){o.missed=/most[- ]?picked/i.test(C.missed_pick_rule)?"default":"out";o.missedText=C.missed_pick_rule}
+  if(has("tie_eliminates"))o.tieOut=tru(C.tie_eliminates);if(has("jackpot_usd"))o.jackpot=+C.jackpot_usd||0;if(has("original_pool_entries"))o.entries0=+C.original_pool_entries||0;
+  if(has("pick_deadline_day"))o.deadline=[C.pick_deadline_day,C.pick_deadline_time_local].filter(Boolean).join(" ")+(C.pick_deadline_timezone?` (${String(C.pick_deadline_timezone).split("/").pop().replace(/_/g," ")})`:"");
+  if(has("current_week"))o.curWeek=+C.current_week||0;return o}
+async function svSyncNormalized(id){
+  const[c0,c1]=await Promise.all([gvizCsv(id,"Config").catch(e=>e),gvizCsv(id,"Config",1).catch(()=>null)]);
+  if(c0 instanceof Error){if(c0.message==="private")throw c0;return false}if(!isKV(c0))return false;
+  const C=kvOf(c0,c1),[E,Pk,Rs]=await Promise.all(["Entries","Picks","Results"].map(t=>gvizCsv(id,t,1).catch(()=>null)));
+  const ents=objRows(E,SVCOLS.entries),picks=objRows(Pk,SVCOLS.picks),res=objRows(Rs,SVCOLS.results)||[];
+  if(!ents||!ents.length||!picks)throw new Error("layout");
+  const map={};ents.forEach(e=>{if(!e.entry_id||!e.lane)return;map[e.entry_id]={who:e.participant||e.entry_id.split("|")[0],let:e.lane,ours:tru(e.is_our_entry),p:Array(18).fill("")}});
+  const by={};picks.forEach(x=>{const w=parseInt(x.week),l=map[x.entry_id];if(!l||!w||w>18||!x.team)return;l.p[w-1]=l.p[w-1]?l.p[w-1]+"/"+x.team:x.team;if(l.ours&&x.picked_by)by[`${w}|${l.let}`]=x.picked_by});
+  /* sheet results seed finished weeks; ESPN's live feed fills in / overrides with scores */
+  SV.sheetRes={};res.forEach(x=>{const w=parseInt(x.week);if(!w||!x.team)return;const r=/^w/i.test(x.result)?"W":/^l/i.test(x.result)?"L":/^t/i.test(x.result)?"T":"";(SV.sheetRes[w]=SV.sheetRes[w]||{})[x.team]={r,st:r?"post":"pre",day:x.game_day||"",oppN:x.opponent||"",wp:r?(r==="W"?1:r==="T"?.5:0):null,sheet:1}});
+  for(const w in SV.sheetRes){const R=SV.res[w]=SV.res[w]||{};for(const t in SV.sheetRes[w])if(!R[t]||!R[t].st||(R[t].sheet&&!R.__espn))R[t]=SV.sheetRes[w][t]}
+  const lanes=Object.values(map);SV.lanes=lanes;SV.flagged=lanes.some(l=>l.ours);SV.broken=0;SV.d.by=by;SV.layout="normalized";
+  SV.maxPick=Math.max(1,...lanes.map(l=>l.p.reduce((m,x,i)=>x?i+1:m,0)));SV.sheetCfg=svCfgFromSheet(C,lanes);SV.cfg=poolCfg("survivor");return true}
 async function svSync(){
   if(!SV.d.sheet||Date.now()<(SV.syncBackoff||0))return;
   if(!SV.lanes)SV.st="loading";
   try{
+    if(await svSyncNormalized(SV.d.sheet)){SV.st="ok";SV.err="";SV.src="sheet";SV.syncAt=Date.now();SV.syncBackoff=0;SV.fails=0;return}
     let R;try{R=await gvizCsv(SV.d.sheet,"🏊 Swimlanes")}catch(e){if(e.message!=="http"&&e.message!=="notfound")throw e;R=await gvizCsv(SV.d.sheet,"Swimlanes")}
     const P=svParseLanes(R);if(P.err||!P.lanes.length)throw new Error("layout");
-    SV.lanes=P.lanes;SV.broken=P.broken;SV.maxPick=Math.max(1,...P.lanes.map(l=>l.p.reduce((m,x,i)=>x?i+1:m,0)));
+    SV.lanes=P.lanes;SV.broken=P.broken;SV.flagged=false;SV.layout="legacy";SV.sheetCfg=null;SV.maxPick=Math.max(1,...P.lanes.map(l=>l.p.reduce((m,x,i)=>x?i+1:m,0)));
     try{const by={};(await gvizCsv(SV.d.sheet,"⚙️ Our Picks Data")).forEach(r=>{const w=parseInt(r[0]);if(w&&r[1]&&r[2])by[`${w}|${r[1].trim()}`]=r[2].trim()});SV.d.by=by}catch(e){SV.d.by=SV.d.by||{}}
     SV.st="ok";SV.err="";SV.src="sheet";SV.syncAt=Date.now();SV.syncBackoff=0;SV.fails=0;
   }catch(e){SV.fails=(SV.fails||0)+1;SV.syncBackoff=Date.now()+Math.min(30*60e3,30e3*2**SV.fails);
-    if(!SV.lanes){SV.st="error";SV.err=e.message==="private"?"Wingman can't read this sheet. In Google Sheets: Share → General access → Anyone with the link (Viewer).":e.message==="layout"?"This sheet doesn't have a Swimlanes tab with Participant, Lane and W1…W18 columns.":"Couldn't reach Google Sheets. Wingman will keep trying."}}
+    if(!SV.lanes){SV.st="error";SV.err=e.message==="private"?"Wingman can't read this sheet. In Google Sheets: Share → General access → Anyone with the link (Viewer).":e.message==="layout"?"This sheet needs Config, Entries (entry_id, participant, lane, is_our_entry), Picks (week, entry_id, team) and Results tabs.":"Couldn't reach Google Sheets. Wingman will keep trying."}}
 }
 /* ---------- rules engine ---------- */
 const svRes=(w,t)=>(SV.res[w]||{})[t];
+/* is a game on this day allowed? sheet day rules first (yes / no / pending), else the Wed/Thu switch */
+function svDayRule(R){if(!R||!R.day)return"yes";const d=lc(R.day),D=(SV.cfg||{}).days;if(D&&D[d])return D[d];return(SV.cfg||{}).noThu&&/wednesday|thursday/.test(d)?"no":"yes"}
+function svRatings(V){const m={},n={};for(let w=1;w<=Math.min(18,Math.max(V,1));w++){const R=SV.res[w]||{};for(const t in R){const x=R[t];if(!x||typeof x!=="object"||x.st!=="post"||x.me==null||x.op==null)continue;m[t]=(m[t]||0)+(x.me-x.op);n[t]=(n[t]||0)+1}}
+  const r={};for(const t in m)r[t]=m[t]/(n[t]+3);return r}
+function svRatedP(rate,w,t){const R=(SV.res[w]||{})[t];if(!R||!R.oppN)return null;const d=(rate[t]||0)-(rate[R.oppN]||0)+(R.home===true?1.5:R.home===false?-1.5:0);return Phi(d/13.5)}
+const svWeek=()=>SV.week||Math.min(18,Math.max(1,(SV.cfg&&SV.cfg.curWeek)||SV.maxPick||1));
 const svDone=w=>{const R=SV.res[w];const g=R?Object.values(R).filter(x=>x&&x.st):[];return g.length>0&&g.every(x=>x.st==="post")};
 const svStarted=w=>{const R=SV.res[w];return !!R&&Object.values(R).some(x=>x&&x.st&&x.st!=="pre")};
 function svMostPicked(w,l){const c={};SV.lanes.forEach(x=>svSplit(x.p[w-1]).forEach(t=>c[t]=(c[t]||0)+1));return Object.keys(c).filter(t=>!l||svCanUse(l,t,w).ok).sort((a,b)=>c[b]-c[a])[0]||""}
@@ -3250,18 +3330,19 @@ function svEval(V,live){
       if(!ps.length){if(w<V||svDone(w)){if((SV.cfg||{}).missed==="default"){const d=svMostPicked(w,l);if(d){l.def[w]=d;ps=[d]}}
           if(!ps.length){l.s[w]="L";l.alive=false;l.out=w;l.flag[w]="missed";break}}else{l.s[w]="await";break}}
       if(ps.some(t=>!svCanUse(l,t,w).ok))l.flag[w]="repeat";
-      if(ps.some(t=>{const R=svRes(w,t);return R&&R.day&&/Wednesday|Thursday/.test(R.day)}))l.flag[w]="blocked";
+      if(ps.some(t=>svDayRule(svRes(w,t))==="no"))l.flag[w]="blocked";
       /* several picks in one week: every one has to win */
       const Rs=ps.map(t=>svRes(w,t));
-      if(Rs.some(R=>R&&R.r&&R.r!=="W")){const R=Rs.find(R=>R&&R.r&&R.r!=="W");l.s[w]=R.r;l.alive=false;l.out=w;continue}
-      if(Rs.every(R=>R&&R.r==="W")){l.s[w]="W";continue}
+      const tieOK=(SV.cfg||{}).tieOut===false,lost=R=>R&&R.r&&R.r!=="W"&&!(R.r==="T"&&tieOK);
+      if(Rs.some(lost)){const R=Rs.find(lost);l.s[w]=R.r;l.alive=false;l.out=w;continue}
+      if(Rs.every(R=>R&&R.r&&!lost(R))){l.s[w]="W";continue}
       const lv=Rs.filter(R=>R&&R.st==="in");
       if(lv.length){const bad=lv.find(R=>R.me<R.op)||lv.find(R=>R.me===R.op);l.s[w]=bad?(bad.me<bad.op?"losing":"tied"):"winning";if(live&&lv.some(R=>R.me<R.op)){l.alive=false;l.out=w}}
       else l.s[w]=Rs.some(R=>!R)?"bye":"pre";
       break
     }});
 }
-const isOurs=l=>!!(SV.cfg&&SV.cfg.me)&&l.who===SV.cfg.me;
+const isOurs=l=>SV.flagged&&!(SV.cfg&&SV.cfg.meSet)?!!l.ours:!!(SV.cfg&&SV.cfg.me&&SV.cfg.me!=="__none")&&l.who===SV.cfg.me;
 function svCount(V,live){svEval(V,live);return{our:SV.lanes.filter(l=>isOurs(l)&&l.alive).length,pool:SV.lanes.filter(l=>l.alive).length}}
 const svFmtPct=x=>(x*100).toFixed(x<.1?2:1)+"%";
 const svMoney=x=>"$"+Math.round(x).toLocaleString();
@@ -3286,10 +3367,12 @@ function svStateHtml(){const shUrl=`https://docs.google.com/spreadsheets/d/${esc
 function svSetupHtml(){const who=[...new Set(SV.lanes.map(l=>l.who))].sort((a,b)=>a.localeCompare(b)),n=w=>SV.lanes.filter(l=>l.who===w).length;
   return`<div class="card hero svhero svsetup"><b class="svt">🛟 Which entries are yours?</b><span class="hu">${SV.lanes.length} entries from ${who.length} participants in this sheet. Wingman tracks yours; this stays on this device.</span>
     <div class="wrow"><select id="svme"><option value="">Choose a participant…</option>${who.map(w=>`<option value="${esc(w)}">${esc(w)} · ${n(w)} ${n(w)===1?"entry":"entries"}</option>`).join("")}<option value="__none">None, just follow the pool</option></select><button class="pcta" id="svmego">Continue</button></div></div>`}
-function svRulesHtml(){const c=SV.cfg;return[["Survive","A win keeps an entry alive; a loss or tie eliminates it. In a multi-pick week every pick has to win."],
+function svRulesHtml(){const c=SV.cfg,D=c.days||{},dl=k=>Object.keys(D).filter(d=>D[d]===k).map(d=>d[0].toUpperCase()+d.slice(1,3));return[["Survive",`A win keeps an entry alive; a loss${c.tieOut===false?"":" or tie"} eliminates it. In a multi-pick week every pick has to win.`],
+  ...(c.deadline?[["Deadline",`Picks due ${c.deadline}`]]:[]),
+  ...(Object.keys(D).length?[["Game days",`Allowed: ${dl("yes").join(", ")||"–"}${dl("no").length?` · not allowed: ${dl("no").join(", ")}`:""}${dl("pending").length?` · pending: ${dl("pending").join(", ")}`:""}`]]:[]),
   ["Team reuse",c.reuse==="once"?"Each NFL team can be used once per entry for the whole season.":c.reuse==="gap1"?"An entry can't use its previous week's team; it can reuse a team after a one-week break.":"Teams can be reused any time."],
-  ["Thursday games",c.noThu?"Wednesday/Thursday games can't be picked.":"Any game can be picked."],
-  ["Missed pick",c.missed==="default"?"Gets the most-picked eligible team.":"Eliminates the entry."],
+  ...(Object.keys(D).length?[]:[["Thursday games",c.noThu?"Wednesday/Thursday games can't be picked.":"Any game can be picked."]]),
+  ["Missed pick",c.missedText||(c.missed==="default"?"Gets the most-picked eligible team.":"Eliminates the entry.")],
   ["Lives",c.price?`${svMoney(c.price)} per entry`+(c.split>1?`, split ${c.split} ways`:""):"No buy-in entered"]]}
 function svSettingsHtml(){const c=SV.cfg,who=[...new Set(SV.lanes.map(l=>l.who))].sort((a,b)=>a.localeCompare(b)),o=(v,l,cur)=>`<option value="${esc(v)}"${String(cur)===String(v)?" selected":""}>${esc(l)}</option>`;
   return`<div class="svcfg"><label>Pool name<input id="svc_name" value="${esc(c.name)}" maxlength="40"></label>
@@ -3302,13 +3385,13 @@ function svSettingsHtml(){const c=SV.cfg,who=[...new Set(SV.lanes.map(l=>l.who))
 function svRender(){
   const el=$("surv");if(!el)return;SV.cfg=SV.cfg||poolCfg("survivor");
   if(!SV.lanes){const s=svStateHtml();if(s!==SV.lastHtml){SV.lastHtml=s;el.innerHTML=s;const b=el.querySelector("#svretry");if(b)b.onclick=()=>{SV.syncBackoff=0;SV.st="loading";svRender();svInit()}}return}
-  if(!SV.cfg.me){const s=svSetupHtml();if(s!==SV.lastHtml){SV.lastHtml=s;el.innerHTML=s;el.querySelector("#svmego").onclick=()=>{const v=el.querySelector("#svme").value;if(!v)return;savePoolCfg("survivor",{me:v==="__none"?"__none":v});svRender()}}return}
+  if(!SV.cfg.me&&!SV.flagged){const s=svSetupHtml();if(s!==SV.lastHtml){SV.lastHtml=s;el.innerHTML=s;el.querySelector("#svmego").onclick=()=>{const v=el.querySelector("#svme").value;if(!v)return;savePoolCfg("survivor",{me:v==="__none"?"__none":v,meSet:1});svRender()}}return}
   const C=SV.cfg,hasMe=C.me&&C.me!=="__none";
-  const V=SV.week||Math.min(SV.maxPick||1,18),N=V+1;
+  const V=svWeek();let N=V+1;
   /* history */
   const prog=[{w:0,our:SV.lanes.filter(isOurs).length,pool:SV.lanes.length}];for(let w=1;w<=V;w++)prog.push({w,...svCount(w,false)});
   const proj=svCount(V,true);svEval(V,false);
-  const st=prog[V],enter=prog[V-1],start=prog[0],pool0=SV.lanes.length,jackpot=pool0*(+C.price||0),F=Math.max(1,+C.split||1);
+  const st=prog[V],enter=prog[V-1],start=prog[0],pool0=SV.lanes.length,jackpot=C.jackpot||pool0*(+C.price||0),F=Math.max(1,+C.split||1);
   const ours=SV.lanes.filter(isOurs).sort((a,b)=>a.let.localeCompare(b.let));
   /* this week: lives at stake and expected survivors */
   const inPlay=SV.lanes.filter(l=>(!l.out||l.out>=V)&&svPick(l,V)),teams={};
@@ -3390,27 +3473,37 @@ function svRender(){
   const finBox=gFin.length?`<div class="gfl"><div class="gfh">✓ Final · ${gFin.length} game${gFin.length>1?"s":""} · ${gFin.reduce((s,x)=>s+(+((x[3].match(/💀(\d+)/)||[])[1]||0)),0)} field lives eliminated</div><div class="gfgrid">${gFin.map(x=>x[3]).join("")}</div></div>`:"";
   h+=svSec("sweat",`🔥 Week ${V} sweat board`,`${gLive.length} still to play · ${gFin.length} final · ${inPlay.length} lives in play`,`${gLive.length?`<div class="swgrid2">${gLive.map(x=>x[1]).join("")}</div>`:""}${finBox}${!gcards.length?'<div class="none">No picks for this week yet.</div>':""}`);
   /* ---------- planner for next week ---------- */
-  const aliveNow=ours.filter(l=>l.alive);
-  const NR=SV.res[N]||{},sched=Object.keys(NR).filter(k=>NR[k]&&NR[k].st);
+  const needV=svStarted(V)?[]:ours.filter(l=>l.alive&&!svSplit(l.p[V-1]).length);N=needV.length?V:V+1;const aliveNow=N===V?needV:ours.filter(l=>l.alive);
+  const NR=SV.res[N]||{},sched=Object.keys(NR).filter(k=>NR[k]&&NR[k].st&&(!NR[k].sheet||NR[k].oppN));
   let plan="";
   if(N>18)plan=`<div class="none">Season over.</div>`;
   else if(!hasMe)plan=`<div class="none">Choose your entries in Rules &amp; settings to plan picks.</div>`;
   else if(!aliveNow.length)plan=`<div class="none">No lives left to plan for.</div>`;
   else if(!sched.length)plan=`<div class="none">Week ${N} schedule isn't available yet.</div>`;
   else{
-    const thu=t=>C.noThu&&/Wednesday|Thursday/.test(NR[t].day||"");
-    const elig=l=>sched.filter(t=>!thu(t)&&svCanUse(l,t,N).ok).map(t=>({t,p:NR[t].pre!=null?NR[t].pre:NR[t].wp||.5})).sort((a,b)=>b.p-a.p);
+    /* every signal is per entry: the pool's day rules, the team-reuse rule over the full pick history, and eliminations */
+    const thu=t=>svDayRule(NR[t])==="no",pend=t=>svDayRule(NR[t])==="pending",rate=svRatings(V);
+    const pNow=t=>{const R=NR[t];return R.odds&&R.pre!=null?R.pre:R.wp!=null&&R.st==="in"?R.wp:svRatedP(rate,N,t)};
+    /* value later: the same team's best win chance in the next three weeks (betting line when posted, else team ratings) */
+    const later=t=>{let b=null;for(let k=N+1;k<=Math.min(18,N+3);k++){const R=(SV.res[k]||{})[t];if(!R||!R.oppN)continue;const p=R.odds&&R.pre!=null?R.pre:svRatedP(rate,k,t);if(p!=null&&(!b||p>b.p))b={w:k,p}}return b};
+    /* field crowding this week (only once picks are visible): a loss by a crowded team wipes out rivals */
+    const fieldN={};let fieldT=0;SV.lanes.forEach(l=>{if(isOurs(l)||(l.out&&l.out<N))return;const ps=svSplit(l.p[N-1]);if(ps.length){fieldT++;ps.forEach(t=>fieldN[t]=(fieldN[t]||0)+1)}});
+    const cand={};sched.filter(t=>!thu(t)).forEach(t=>{const p=pNow(t),lt=later(t),save=lt&&lt.p>=.75&&lt.p-p>=.08;cand[t]={t,p,lt,save,val:p-(save?.5*(lt.p-p):0),fld:fieldT?(fieldN[t]||0)/fieldT:null,pend:pend(t)}});
+    const elig=l=>Object.values(cand).filter(x=>svCanUse(l,x.t,N).ok).sort((a,b)=>b.val-a.val);
     const blocked=sched.filter(thu);
     const allE={};aliveNow.forEach(l=>elig(l).forEach(x=>{allE[x.t]=x}));
-    const top=Object.values(allE).sort((x,y)=>y.p-x.p).slice(0,8);
-    const rows=`<div class="pmx" style="--n:${aliveNow.length}"><div class="pmr pmh"><span>Team</span><span>Win chance</span>${aliveNow.map(l=>`<span class="pml">${l.let}</span>`).join("")}</div>${top.map(x=>`<div class="pmr"><span class="pmt">${svLogo(N,x.t)}<b>${esc(x.t)}</b><small>${esc(svGameTxt(N,x.t))}</small></span><span class="pmp"><span class="pmb"><i style="width:${Math.round(x.p*100)}%"></i></span><b>${pctS(x.p)}</b></span>${aliveNow.map(l=>{const u=svCanUse(l,x.t,N),ok=u.ok&&!thu(x.t);return`<span class="pmc ${ok?"ok":"no"}" title="Life ${l.let}: ${ok?"eligible":esc(x.t)+" "+esc(u.why||"blocked")}">${ok?"✓":"✗"}</span>`}).join("")}</div>`).join("")}</div>`;
-    /* suggested split: two strongest teams every live lane can use, split as evenly as possible */
-    const common=elig(aliveNow[0]).filter(x=>aliveNow.every(l=>elig(l).some(y=>y.t===x.t)));
-    let sug="";
-    if(common.length>=2&&aliveNow.length>=2){const[a,b]=common,na=Math.ceil(aliveNow.length/2),nb=aliveNow.length-na,k=1-(1-a.p)*(1-b.p),e=na*a.p+nb*b.p;
-      sug=`<div class="sug" title="Splitting keeps at least one life ${pctS(k)} of the time (${e.toFixed(1)} expected lives). All on ${esc(a.t)}: ${pctS(a.p)}, ${(aliveNow.length*a.p).toFixed(1)} expected.">💡 <b>${na}× ${esc(a.t)}</b> ${pctS(a.p)} + <b>${nb}× ${esc(b.t)}</b> ${pctS(b.p)} → keep ≥1: <b>${pctS(k)}</b> · ${e.toFixed(1)} lives</div>`}
-    else if(common.length){const a=common[0];sug=`<div class="sug">💡 Best available: <b>${esc(a.t)}</b> (${pctS(a.p)} to win).</div>`}
-    plan=`${sug}${rows}<div class="svnote">${blocked.length?`Blocked (Wed/Thu): ${blocked.map(esc).join(", ")}. `:""}${C.reuse==="once"?"Teams already used by an entry are excluded for it. ":C.reuse==="gap1"?"Last week's team is excluded for each entry. ":""}Byes: ${["49ers","Bears","Bengals","Bills","Broncos","Browns","Buccaneers","Cardinals","Chargers","Chiefs","Colts","Commanders","Cowboys","Dolphins","Eagles","Falcons","Giants","Jaguars","Jets","Lions","Packers","Panthers","Patriots","Raiders","Rams","Ravens","Saints","Seahawks","Steelers","Texans","Titans","Vikings"].filter(t=>!sched.includes(t)).join(", ")||"none"}. Win % from ESPN betting lines.</div>`;
+    const top=Object.values(allE).sort((x,y)=>y.val-x.val).slice(0,8);
+    /* two plans: most expected lives vs. the best chance at least one survives (spread over two teams) */
+    const score=as=>{const by={};as.forEach(([l,x])=>{(by[x.t]=by[x.t]||{x,ls:[]}).ls.push(l.let)});const T=Object.values(by);return{T,e:as.reduce((s,[,x])=>s+x.p,0),k:1-T.reduce((q,o)=>q*(1-o.x.p),1)}};
+    const best=aliveNow.map(l=>[l,elig(l)[0]]).filter(x=>x[1]),planE=best.length?score(best):null;
+    let planS=null;const pool=top.slice(0,5);
+    for(let i=0;i<pool.length;i++)for(let j=i+1;j<pool.length;j++){const A=pool[i],B=pool[j];let na=0,nb=0;const as=[];let ok=true;
+      aliveNow.forEach(l=>{const ea=svCanUse(l,A.t,N).ok,eb=svCanUse(l,B.t,N).ok;if(ea&&(!eb||na<=nb)){as.push([l,A]);na++}else if(eb){as.push([l,B]);nb++}else{const f=elig(l)[0];if(f)as.push([l,f]);else ok=false}});
+      if(!ok||!na||!nb)continue;const s=score(as);if(!planS||s.k>planS.k+1e-9||(Math.abs(s.k-planS.k)<1e-9&&s.e>planS.e))planS=s}
+    const planCard=(ico,lab,s,tip)=>s?`<div class="svplan" data-tip="${esc(tip)}"><div class="svph">${ico} <b>${lab}</b><span>${s.e.toFixed(1)} lives expected · keep ≥1 <b>${pctS(s.k)}</b></span></div>${s.T.sort((a,b)=>b.ls.length-a.ls.length).map(o=>`<div class="svpt">${svLogo(N,o.x.t)}<b>${esc(o.x.t)}</b><em>${pctS(o.x.p)}</em><span class="ltks">${o.ls.map(x=>`<i class="ltk">${x}</i>`).join("")}</span>${o.x.save?`<span class="sav" data-tip="${esc(o.x.t)} projects ${pctS(o.x.lt.p)} in W${o.x.lt.w}">💎 W${o.x.lt.w}</span>`:""}</div>`).join("")}</div>`:"";
+    const sug=`<div class="svplans">${planCard("📈","Most lives",planE,"Each entry takes its best eligible team (win chance, minus a penalty for burning a team that's much stronger in an upcoming week).")}${planS&&planE&&planS.T.length>1&&Math.abs(planS.k-planE.k)>.001?planCard("🛡","Safest spread",planS,"Lives split across two teams so one upset can't wipe out the group."):""}</div>`;
+    const rows=`<div class="pmx pmx2" style="--n:${aliveNow.length}"><div class="pmr pmh"><span>Team</span><span>Win chance</span><span>Later</span><span>Field</span>${aliveNow.map(l=>`<span class="pml">${l.let}</span>`).join("")}</div>${top.map(x=>`<div class="pmr"><span class="pmt">${svLogo(N,x.t)}<b>${esc(x.t)}</b>${x.pend?` <i data-tip="Game day pending the commissioner's ruling">⚠</i>`:""}<small>${esc(svGameTxt(N,x.t))}</small></span><span class="pmp"><span class="pmb"><i style="width:${Math.round(x.p*100)}%"></i></span><b>${pctS(x.p)}</b></span><span class="pmf">${x.lt?`<span class="${x.save?"sav":"pm"}" data-tip="Best upcoming week for ${esc(x.t)}">${x.save?"💎 ":""}W${x.lt.w} ${pctS(x.lt.p)}</span>`:"–"}</span><span class="pmf">${x.fld!=null?`<span data-tip="${Math.round(x.fld*100)}% of the field's visible picks this week">${Math.round(x.fld*100)}%</span>`:`<span class="pm" data-tip="The field's picks show once they lock">·</span>`}</span>${aliveNow.map(l=>{const u=svCanUse(l,x.t,N),ok=u.ok;return`<span class="pmc ${ok?"ok":"no"}" title="Life ${l.let}: ${ok?"eligible":esc(x.t)+" "+esc(u.why||"blocked")}">${ok?"✓":"✗"}</span>`}).join("")}</div>`).join("")}</div>`;
+    plan=`${sug}${rows}<div class="svnote">${blocked.length?`Not allowed this week (game day): ${blocked.map(esc).join(", ")}. `:""}${C.reuse==="once"?"Teams an entry already used are excluded for it. ":C.reuse==="gap1"?"Each entry's previous-week team is excluded. ":""}💎 = the team projects stronger in an upcoming week, so the plan prefers to save it. Win % from betting lines when posted, otherwise from each team's scoring margin this season.</div>`;
   }
   h+=`<div class="svgrid">`+svSec("plan",`🔮 Week ${N} planner`,aliveNow.length?`${aliveNow.length} lives to place`:"",plan);
   /* ---------- rivals ---------- */
@@ -3440,7 +3533,8 @@ function svRender(){
   h+=svSec("swim","🏊 Swimlanes",q?`${pool.length} lanes match`:`our lanes: ${al.length} alive · ${ot.length} out`,`<div class="svq"><input id="svq" placeholder="Search a participant…" value="${esc(SV.q)}"></div><div class="tw sws"><table class="svtab swt"><thead><tr><th>Participant</th><th>Lane</th><th>Status</th>${Array.from({length:WM},(_,i)=>`<th class="c">W${i+1}</th>`).join("")}</tr></thead><tbody>${swim}</tbody></table></div>`);
   const stand=parts.map(p=>`<tr class="${p.who===C.me?"me":""} ${p.left?"":"dim"}"><td class="n">${p.left?(parts.filter(x=>x.left===p.left).length>1?"T-":"")+rankOf(p.left):"—"}</td><td>${esc(p.who)}</td><td class="n">${p.orig}</td><td class="n">${p.left}</td><td><div class="wpb"><i style="width:${(p.left/Math.max(1,lead.left))*100}%"></i></div></td><td class="n">${p.left?svFmtPct(p.left/st.pool):"OUT"}</td></tr>`).join("");
   h+=svSec("stand","🏆 Pool standings",`${parts.length} participants`,`<div class="tw sws"><table class="svtab"><colgroup><col style="width:60px"><col><col style="width:64px"><col style="width:64px"><col style="width:16%"><col style="width:80px"></colgroup><thead><tr><th class="n">#</th><th>Participant</th><th class="n">Orig</th><th class="n">Left</th><th></th><th class="n">Win %</th></tr></thead><tbody>${stand}</tbody></table></div>`);
-  h+=svSec("rules","📜 Rules & settings","stored on this device",`<div class="svrules">${svRulesHtml().map(([k,v])=>`<div><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join("")}</div>${svSettingsHtml()}`);
+  const ovr=(S.conns||getConns()).find(c=>c.p==="survivor"),hasOvr=SV.sheetCfg&&ovr&&ovr.cfg&&Object.keys(ovr.cfg).length;
+  h+=svSec("rules","📜 Rules & settings",SV.sheetCfg?(hasOvr?"sheet + your changes":"from the sheet's Config tab"):"stored on this device",`<div class="svrules">${svRulesHtml().map(([k,v])=>`<div><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join("")}</div>${svSettingsHtml()}${hasOvr?`<div class="svnote"><button class="rep" id="svcfgreset">↺ Use the sheet's settings</button></div>`:""}`);
   if(h===SV.lastHtml)return;SV.lastHtml=h;
   const qf=document.activeElement&&document.activeElement.id==="svq",pos=qf?document.activeElement.selectionStart:0;
   el.innerHTML=h;
@@ -3448,7 +3542,8 @@ function svRender(){
   el.querySelectorAll(".wkb").forEach(x=>x.onclick=async()=>{SV.week=+x.dataset.w;await Promise.all([svLoadWeek(SV.week,true),svLoadWeek(SV.week+1,false)]);svRender()});
   el.querySelectorAll("tr.lgrp.tog").forEach(r=>r.onclick=()=>{SV.showOut=!SV.showOut;svRender()});
   const qi=el.querySelector("#svq");if(qi){qi.oninput=()=>{SV.q=qi.value;svRender()};if(qf){qi.focus();qi.setSelectionRange(pos,pos)}}
-  const cf=el.querySelector(".svcfg");if(cf)cf.onchange=()=>{const g=id=>cf.querySelector("#"+id);savePoolCfg("survivor",{name:g("svc_name").value.trim()||"Survivor Pool",me:g("svc_me").value,reuse:g("svc_reuse").value,missed:g("svc_missed").value,price:Math.max(0,+g("svc_price").value||0),split:Math.max(1,Math.round(+g("svc_split").value||1)),noThu:g("svc_thu").checked});svRender()};
+  const rs=el.querySelector("#svcfgreset");if(rs)rs.onclick=()=>{clearPoolCfg("survivor");svRender()};
+  const cf=el.querySelector(".svcfg");if(cf)cf.onchange=()=>{const g=id=>cf.querySelector("#"+id),sm=(SV.sheetCfg||{}).me;savePoolCfg("survivor",{name:g("svc_name").value.trim()||"Survivor Pool",me:g("svc_me").value,meSet:g("svc_me").value!==sm?1:0,reuse:g("svc_reuse").value,missed:g("svc_missed").value,price:Math.max(0,+g("svc_price").value||0),split:Math.max(1,Math.round(+g("svc_split").value||1)),noThu:g("svc_thu").checked});svRender()};
 }
 /* alerts: a team carrying our lives goes final, or trails late in the 4th */
 function svAlerts(V){
@@ -3461,7 +3556,7 @@ function svAlerts(V){
 }
 async function svTick(force){
   if(!SV.d.sheet)return;if(!SV.lanes){await svSync();if(SV.lanes)await svInit(true);else if(S.tab==="s")svRender();return}
-  const V=SV.week||Math.min(SV.maxPick||1,18);
+  const V=svWeek();
   if(force||Date.now()-SV.syncAt>600000){SV.syncAt=Date.now();await svSync()}
   await Promise.all([svLoadWeek(V,true),svLoadWeek(V+1,false)]);
   svAlerts(V);
@@ -3472,8 +3567,9 @@ async function svInit(synced){
   if(!SV.d.sheet)return;SV.cfg=poolCfg("survivor");
   if(!synced){if(S.tab==="s")svRender();await svSync()}
   if(!SV.lanes){if(S.tab==="s")svRender();return}
-  const V=Math.min(SV.maxPick||1,18);
-  await Promise.all([...Array.from({length:V},(_,i)=>svLoadWeek(i+1,i+1===V)),svLoadWeek(V+1,true)]);
+  SV.cfg=poolCfg("survivor");const V=svWeek();
+  /* past weeks (results), this and next week (picks), and three more weeks for the planner's "value later" signal */
+  await Promise.all([...Array.from({length:V},(_,i)=>svLoadWeek(i+1,i+1===V)),svLoadWeek(V+1,true),svLoadWeek(V+2),svLoadWeek(V+3),svLoadWeek(V+4)]);
   SV.lastHtml="";if(S.tab==="s")svRender();
 }
 
@@ -3513,13 +3609,46 @@ function pkParse(R,SR){
     const ids=new Set(gi.map(([,i])=>i)),bad=stand.filter(([u,ws])=>{const pi=players.indexOf(u),c=picks.filter(p=>p[0]===pi&&ids.has(p[1])&&p[3]==="C").length;return picks.some(p=>p[0]===pi&&ids.has(p[1]))&&c!==(ws[w-1]||0)});if(bad.length)mism.push(w)}
   return{stand,players,games,picks,missing,mism};
 }
+/* normalized Wingman tables (WM_Config / WM_Games / WM_Picks / WM_Participants / WM_Tiebreakers).
+   Grades and points in WM_Picks are authoritative (never recomputed from proxy spreads); standings, cover rates,
+   popularity and completeness are derived here. team_a/team_b are NOT home/away. */
+const PKCOLS={games:["season","week","game_id","team_a","team_b","spread_a","spread_source","score_a","score_b","game_status"],picks:["week","game_id","player_id","pick_team","pick_status","grade","points"],
+  parts:["player_id","display_name"],tb:["week","player_id","guess","actual","guess_status"]};
+async function pkSyncNormalized(id){
+  const[c0,c1]=await Promise.all([gvizCsv(id,"WM_Config").catch(e=>e),gvizCsv(id,"WM_Config",1).catch(()=>null)]);
+  if(c0 instanceof Error){if(c0.message==="private")throw c0;return false}if(!isKV(c0))return false;
+  const C=kvOf(c0,c1),[G,Pk,U,T]=await Promise.all(["WM_Games","WM_Picks","WM_Participants","WM_Tiebreakers"].map(t=>gvizCsv(id,t,1).catch(()=>null)));
+  const games0=objRows(G,PKCOLS.games),picks0=objRows(Pk,PKCOLS.picks),parts=objRows(U,PKCOLS.parts)||[],tbs=objRows(T,PKCOLS.tb)||[];
+  if(!games0||!games0.length||!picks0)throw new Error("layout");
+  const players=parts.map(p=>p.player_id).filter(Boolean),names={};parts.forEach(p=>{if(p.player_id&&p.display_name)names[p.player_id]=p.display_name});
+  const GI={},games=[],gx=[];games0.forEach(g=>{const w=parseInt(g.week);if(!w||!g.game_id||!g.team_a||!g.team_b)return;const n=x=>x===""||x==null||isNaN(+x)?null:+x;
+    GI[g.game_id]=games.length;games.push([w,g.team_a,g.team_b,n(g.score_a),n(g.score_b),"",""]);gx.push({id:g.game_id,spread:n(g.spread_a),src:g.spread_source||"",status:g.game_status||""})});
+  const code={correct:"C",incorrect:"I","hidden/pending":"H",hidden:"H","no pick":"N",pending:"P"},pts={},graded={},cap={},rows={};
+  const picks=[];picks0.forEach(x=>{const gi=GI[x.game_id],w=parseInt(x.week);if(gi==null||!x.player_id)return;if(!players.includes(x.player_id))players.push(x.player_id);
+    const g=games[gi],st=lc(x.pick_status),gr=lc(x.grade),c=st==="missing"?"M":st==="no pick"?"N":st==="hidden"?"H":code[gr]||(x.pick_team?"P":"M"),side=x.pick_team===g[1]?0:x.pick_team===g[2]?1:-1;
+    picks.push([players.indexOf(x.player_id),gi,side,c]);(rows[w]=rows[w]||0);rows[w]++;if(c!=="M")cap[w]=(cap[w]||0)+1;
+    if(c==="C"||c==="I"){graded[w]=1;const k=x.player_id+"|"+w;pts[k]=(pts[k]||0)+(x.points!==""&&!isNaN(+x.points)?+x.points:c==="C"?1:0);
+      /* cover winner from the authoritative grade */if(side>=0&&!g[5])g[5]=c==="C"?x.pick_team:(side===0?g[2]:g[1])}});
+  games.forEach(g=>{if(g[3]!=null&&g[4]!=null&&g[3]!==g[4])g[6]=g[3]>g[4]?g[1]:g[2]});
+  const W=Math.max(0,...Object.keys(graded).map(Number));
+  const stand=players.map(u=>[u,Array.from({length:W},(_,i)=>pts[u+"|"+(i+1)]||0)]);
+  /* completeness: every game needs one row per participant; MISSING = not captured yet (different from a forfeited "No Pick") */
+  const exp=+C.expected_participants||players.length,missing=[],cov={};for(let w=1;w<=W;w++){const ng=games.filter(g=>g[0]===w).length,need=ng*exp;cov[w]=need?Math.min(1,(cap[w]||0)/need):1;if(cov[w]<.999)missing.push(w)}
+  const tb={};tbs.forEach(t=>{const w=parseInt(t.week);if(!w||!t.player_id||t.guess===""||isNaN(+t.guess))return;(tb[w]=tb[w]||{})[t.player_id]={g:+t.guess,a:t.actual===""||isNaN(+t.actual)?null:+t.actual}});
+  PK.d=Object.assign({},PK.d,{stand,players,games,picks});PK.gx=gx;PK.names=names;PK.tb=tb;PK.cov=cov;PK.missing=missing;PK.mism=[];PK.layout="normalized";PK.tbRule=lc(C.tiebreak_rule||"absolute_error");
+  PK.sheetCfg=Object.fromEntries(Object.entries({name:C.pool_name,dues:C.entry_fee_usd!=null&&C.entry_fee_usd!==""?+C.entry_fee_usd:undefined}).filter(([,v])=>v!==undefined&&v!==""));PK.cfg=poolCfg("pickem");
+  pkIndex();return true}
+/* the sheet's line for a game, when it's a verified one (Sleeper lock / screenshot); proxies are labeled */
+function pkSheetLine(w,home,away){if(!PK.gx||!PK.d.games)return null;for(let i=0;i<PK.d.games.length;i++){const g=PK.d.games[i],x=PK.gx[i];if(g[0]!==w||x.spread==null||/not_captured/i.test(x.src))continue;
+  const ta=NT(g[1]),tb=NT(g[2]);if(ta===home&&tb===away)return{hs:x.spread,src:x.src};if(ta===away&&tb===home)return{hs:-x.spread,src:x.src}}return null}
 async function pkSync(){
   if(!PK.d.sheet||Date.now()<(PK.syncBackoff||0))return;if(!PK.rows)PK.st="loading";
-  try{const[R,SR]=await Promise.all([gvizCsv(PK.d.sheet,"Picks"),gvizCsv(PK.d.sheet,"Standings")]);const x=pkParse(R,SR);if(x.err)throw new Error(x.err);
-    PK.d=Object.assign({},PK.d,{stand:x.stand,players:x.players,games:x.games,picks:x.picks});PK.missing=x.missing;PK.mism=x.mism;pkIndex();
+  try{if(await pkSyncNormalized(PK.d.sheet)){PK.st="ok";PK.err="";PK.src="sheet";PK.syncAt=Date.now();PK.fails=0;PK.syncBackoff=0;return}
+    const[R,SR]=await Promise.all([gvizCsv(PK.d.sheet,"Picks"),gvizCsv(PK.d.sheet,"Standings")]);const x=pkParse(R,SR);if(x.err)throw new Error(x.err);
+    PK.d=Object.assign({},PK.d,{stand:x.stand,players:x.players,games:x.games,picks:x.picks});PK.missing=x.missing;PK.mism=x.mism;PK.layout="legacy";PK.gx=null;PK.tb={};PK.sheetCfg=null;pkIndex();
     PK.st="ok";PK.err="";PK.src="sheet";PK.syncAt=Date.now();PK.fails=0;PK.syncBackoff=0;
   }catch(e){PK.fails=(PK.fails||0)+1;PK.syncBackoff=Date.now()+Math.min(30*60e3,30e3*2**PK.fails);
-    if(!PK.rows){PK.st="error";PK.err=e.message==="private"?"Wingman can't read this sheet. In Google Sheets: Share → General access → Anyone with the link (Viewer).":/layout|nopicks|nostand/.test(e.message)?"This sheet needs a Picks tab (header row starting with Season) and a Standings tab (header row starting with Rank).":"Couldn't reach Google Sheets. Wingman will keep trying."}}
+    if(!PK.rows){PK.st="error";PK.err=e.message==="private"?"Wingman can't read this sheet. In Google Sheets: Share → General access → Anyone with the link (Viewer).":/layout|nopicks|nostand/.test(e.message)?"This sheet needs WM_Config, WM_Games (week, game_id, team_a, team_b, spread_a…) and WM_Picks (week, game_id, player_id, pick_team, pick_status, grade, points) tabs.":"Couldn't reach Google Sheets. Wingman will keep trying."}}
 }
 /* =====================================================================
    SLEEPER PICK'EM LINES — the only odds source for Pick'em.
@@ -3574,7 +3703,8 @@ async function pkLoadNext(w,maxAge){
       out.push({id:ev.id,date:ev.date,home,away,hn:H.team.name,an:A.team.name,hs:null,ou:null,st:ev.status.type.state,hsc:+H.score||0,asc:+A.score||0,detail:ev.status.type.shortDetail,day:new Date(ev.date).toLocaleDateString("en-US",{weekday:"short",timeZone:"America/New_York"})})});
     /* lines come ONLY from Sleeper (locked at kickoff); ESPN supplies schedule/scores/status */
     const yr=S.season||String(new Date().getFullYear()),L=await sleeperLines(yr,w,out.some(g=>g.st==="in")?120000:600000);
-    out.forEach(g=>{const k=g.away+"@"+g.home,x=L[k]||{};g.hs=sloLocked(yr,w,k,x.hs!=null?x.hs:null,g.st!=="pre");g.ou=x.total||null});
+    out.forEach(g=>{const k=g.away+"@"+g.home,x=L[k]||{};g.hs=sloLocked(yr,w,k,x.hs!=null?x.hs:null,g.st!=="pre");g.hsSrc=g.hs!=null?"sleeper":"";g.ou=x.total||null;
+      if(g.hs==null){const s=pkSheetLine(w,g.home,g.away);if(s){g.hs=s.hs;g.hsSrc=/proxy/i.test(s.src)?"proxy":"sheet"}}});
     PK.nx[w]=out.sort((a,b)=>new Date(a.date)-new Date(b.date));
     await Promise.all(out.filter(g=>g.st==="pre"&&!PK.fpi[g.id]).map(async g=>{try{const s=await getJ(ESPN.replace("scoreboard","summary")+"?event="+g.id);const p=s.predictor||{},hp=p.homeTeam&&parseFloat(p.homeTeam.gameProjection);if(!isNaN(hp))PK.fpi[g.id]=hp/100}catch(e){}}));
   }catch(e){}
@@ -3608,10 +3738,12 @@ function pkRender(){
   const sorted=PK.rows.slice().sort((a,b)=>tot(b)-tot(a)),rank=r=>1+sorted.filter(x=>tot(x)>tot(r)).length,tie=r=>sorted.filter(x=>tot(x)===tot(r)).length>1;
   const prevTot=r=>r.w.slice(0,W-1).reduce((a,b)=>a+(+b||0),0),prank=r=>1+PK.rows.filter(x=>prevTot(x)>prevTot(r)).length;
   const lead=sorted[0],second=sorted.find(r=>tot(r)<tot(lead))||sorted[1],chg=prank(me)-rank(me),pot=d.dues*d.members;
-  const nm=u=>esc(u);
+  const nm=u=>esc((PK.names&&PK.names[u])||u);
   /* week state from the sheet */
   const wkGames=w=>PK.games.filter(g=>g.w===w),wkDone=w=>w<W||(wkGames(w).length>0&&wkGames(w).every(g=>g.ats||g.su));
-  const winners=Array.from({length:W},(_,i)=>{const mx=Math.max(...PK.rows.map(r=>+r.w[i]||0));return{w:i+1,mx,who:PK.rows.filter(r=>(+r.w[i]||0)===mx),fin:wkDone(i+1)}});
+  const winners=Array.from({length:W},(_,i)=>{const mx=Math.max(...PK.rows.map(r=>+r.w[i]||0));let who=PK.rows.filter(r=>(+r.w[i]||0)===mx),tbk=null;const T=PK.tb&&PK.tb[i+1];
+    if(who.length>1&&T){const er=r=>{const x=T[r.u];return x&&x.a!=null?Math.abs(x.g-x.a):1e9},m=Math.min(...who.map(er));if(m<1e9){const w2=who.filter(r=>er(r)===m);if(w2.length<who.length){tbk={from:who.length,err:m};who=w2}}}
+    return{w:i+1,mx,who,fin:wkDone(i+1),tbk}});
   const won=winners.filter(x=>x.fin&&x.who.includes(me)).reduce((s,x)=>s+d.pay.weekly/x.who.length,0);
   const cw=W,lw=winners[cw-1]||{mx:0,who:[]},myW=+me.w[cw-1]||0,pend=wkGames(cw).filter(g=>!g.ats),myPend=pend.filter(g=>g.picks.some(p=>p.u===C.me&&p.side>=0)).length,maxP=myW+myPend;
   /* pick-level analytics */
@@ -3626,28 +3758,28 @@ function pkRender(){
   const suCover=decided.filter(g=>g.su&&g.su===g.ats).length/Math.max(1,decided.length);
   const kpi=(lab,big,sub)=>`<div class="kpi" title="${lab==="Payout odds"?"3,000 simulations of the rest of the season using each member's hit rate so far (shrunk toward 50%). 1st pays "+svMoney(d.pay.first)+", 2nd "+svMoney(d.pay.second)+".":""}"><div class="kl">${lab}</div><div class="kb">${big}</div><div class="ks">${sub}</div></div>`;
   let h=`<div class="card hero svhero"><div class="svtop"><div class="svti"><span class="svtl"><a class="svt lnk" href="https://docs.google.com/spreadsheets/d/${esc(d.sheet)}/edit" target="_blank" rel="noopener" title="Open the pick'em Google Sheet">🎯 ${esc(C.name)} <span class="ext">↗</span></a><span class="fmt">ATS</span></span><span class="hu">${[`${d.members} members`,d.dues?`${svMoney(d.dues)} buy-in · pot ${svMoney(pot)}`:"",d.pay.first?`1st ${svMoney(d.pay.first)}`:"",d.pay.second?`2nd ${svMoney(d.pay.second)}`:"",d.pay.weekly?`${svMoney(d.pay.weekly)} weekly top score`:""].filter(Boolean).join(" · ")}</span></div>
-    <span class="mt" title="Read from your Google Sheet${PK.syncAt?" at "+hm(new Date(PK.syncAt)):""}${PK.missing&&PK.missing.length?` · picks missing for W${PK.missing.join(", W")}`:""}${PK.mism&&PK.mism.length?` · Picks and Standings tabs disagree for W${PK.mism.join(", W")} (Standings shown)`:""}">${PK.fails?"⚠ sheet unreachable · retrying":"● synced "+ago(PK.syncAt)}${(PK.missing&&PK.missing.length)||(PK.mism&&PK.mism.length)?" · ⚠ check sheet":""}</span></div>
+    <span class="mt" title="Read from your Google Sheet${PK.layout==="normalized"?" (WM tables)":""}${PK.syncAt?" at "+hm(new Date(PK.syncAt)):""}${PK.missing&&PK.missing.length?` · picks not captured yet for W${PK.missing.join(", W")}`:""}${PK.mism&&PK.mism.length?` · Picks and Standings tabs disagree for W${PK.mism.join(", W")} (Standings shown)`:""}">${PK.fails?"⚠ sheet unreachable · retrying":"● synced "+ago(PK.syncAt)}${(PK.missing&&PK.missing.length)||(PK.mism&&PK.mism.length)?" · ⚠ check sheet":""}</span></div>
     <div class="kpis">
       ${kpi("Overall rank",`<b>${tie(me)?"T":""}${rank(me)}</b><small> of ${PK.rows.length}</small>`,chg?`<span class="${chg>0?"up":"dn"}">${chg>0?"▲":"▼"}${Math.abs(chg)}</span> this week`:"no change this week")}
       ${kpi("Points ATS",`<b>${tot(me)}</b>`,`${tot(lead)-tot(me)} behind ${nm(lead.u)} · ${Math.round(myAcc*100)}% hit rate (pool ${Math.round(allC.filter(x=>x.p.c==="C").length/Math.max(1,allC.length)*100)}%)`)}
       ${kpi(`Week ${cw}`,`<b>${myW}</b><small> pts</small>`,`${myPend?`${myPend} pick${myPend>1?"s":""} pending · max ${maxP}`:"all graded"} · top ${lw.mx}`)}
       ${!d.pay.weekly?"":kpi(`W${cw} ${svMoney(d.pay.weekly)}`,`<b class="${wkDone(cw)?(lw.who.includes(me)?"up":"dn"):maxP>=lw.mx?"up":"dn"}">${wkDone(cw)?(lw.who.includes(me)?"Won":"Missed"):maxP>=lw.mx?"Alive":"Out"}</b>`,wkDone(cw)?`${lw.who.map(r=>nm(r.u)).join(", ")} with ${lw.mx}`:maxP>=lw.mx?`can still reach ${lw.mx}`:`${lw.mx-maxP} short even if you sweep`)}
-      ${(()=>{const o=pkOdds();return o?kpi("Payout odds",`<b>${pctX(o.first+o.second)}</b><small> top 2</small>`,`1st ${pctX(o.first)} · 2nd ${pctX(o.second)} · +${svMoney(o.weekly)} wkly`):""})()}
+      ${(()=>{const o=pkOdds();return o?kpi("Payout odds",`<b>${pctX(o.first+o.second)}</b><small> top 2</small>`,`1st ${pctX(o.first)} · 2nd ${pctX(o.second)}${o.weekly>0?` · +${svMoney(o.weekly)} wkly`:""}`):""})()}
     </div></div>`;
   /* weekly winners */
   h+=`<div class="pkw">${Array.from({length:18},(_,i)=>{const x=winners[i];if(!x)return`<div class="pkwc fut"><b>W${i+1}</b><span>${d.pay.weekly?svMoney(d.pay.weekly):"—"}</span></div>`;
-    const mineW=x.who.includes(me);return`<div class="pkwc ${x.fin?"fin":"live"} ${mineW?"me":""}" title="Week ${x.w}${x.fin?"":" (in progress)"}: top score ${x.mx} · ${x.who.map(r=>r.u).join(", ")}${x.who.length>1?" (tie: split assumed)":""}"><b>W${x.w} ${x.fin?"👑":"⏳"}</b><span>${x.who.length>1?x.who.length+" tied":nm(x.who[0].u)}</span><em>${x.mx}</em></div>`}).join("")}</div>`;
+    const mineW=x.who.includes(me);return`<div class="pkwc ${x.fin?"fin":"live"} ${mineW?"me":""}" title="Week ${x.w}${x.fin?"":" (in progress)"}: top score ${x.mx} · ${x.who.map(r=>r.u).join(", ")}${x.who.length>1?" (tie: split assumed)":""}"><b>W${x.w} ${x.fin?"👑":"⏳"}</b><span>${x.who.length>1?x.who.length+" tied":nm(x.who[0].u)}${x.tbk?` <i data-tip="${x.tbk.from}-way tie on ${x.mx}, decided by the tiebreak guess (off by ${x.tbk.err})">🎲</i>`:""}</span><em>${x.mx}</em>${PK.cov&&PK.cov[x.w]!=null&&PK.cov[x.w]<.999?`<small class="cov" data-tip="${Math.round(PK.cov[x.w]*100)}% of this week's picks are in the sheet">${Math.round(PK.cov[x.w]*100)}%</small>`:""}</div>`}).join("")}</div>`;
   /* ---------- next week's picks helper ---------- */
   const N=wkDone(cw)?cw+1:cw+1,G=PK.nx[N]||[],myP=pkMine(N);
   const rowsN=G.map(g=>{const m=pkModel(g),k=g.away+"@"+g.home,sel=myP[k],locked=g.st!=="pre";
     const team=(t,isHome)=>{const ln=isHome?g.hs:(g.hs==null?null:-g.hs),lean=m&&m.lean===t,on=sel===t;
-      return`<button class="pat ${on?"on":""} ${lean?"lean":""}" data-k="${esc(k)}" data-t="${esc(t)}" ${locked?"disabled":""}><img class="tl" src="https://sleepercdn.com/images/team_logos/nfl/${t.toLowerCase()}.png" alt="" onerror="this.style.visibility='hidden'"><b>${esc(t)}</b><span class="ln">${ln==null?"–":lineTxt(ln)}</span>${lean?`<i class="lz" title="Model lean">★</i>`:""}</button>`};
+      return`<button class="pat ${on?"on":""} ${lean?"lean":""}" data-k="${esc(k)}" data-t="${esc(t)}" ${locked?"disabled":""}><img class="tl" src="https://sleepercdn.com/images/team_logos/nfl/${t.toLowerCase()}.png" alt="" onerror="this.style.visibility='hidden'"><b>${esc(t)}</b><span class="ln${g.hsSrc==="proxy"?" px":""}" ${g.hsSrc?`data-tip="${g.hsSrc==="sleeper"?"Sleeper line (locks at kickoff)":g.hsSrc==="sheet"?"Verified Sleeper line from the pool sheet":"Market proxy from the sheet, not a verified Sleeper line"}"`:""}>${ln==null?"–":lineTxt(ln)}</span>${lean?`<i class="lz" title="Model lean">★</i>`:""}</button>`};
     const conf=m?Math.round(m.p*100):null,tier=conf==null?"":conf>=58?"hi":conf>=54?"md":"lo";
     return`<div class="pah ${locked?"lk":""}"><span class="pad">${esc(g.day)} ${hm(new Date(g.date))}</span>${team(g.away,false)}<span class="pat2">@</span>${team(g.home,true)}
       <div class="pam">${m?`<div class="cov ${tier}" title="Estimated chance ${esc(m.lean)} covers ${lineTxt(m.line)}"><i style="width:${conf}%"></i><span>${esc(m.lean)} ${conf}%</span></div><div class="sigs">${m.sig.map(s=>`<span class="sg ${s[1]>0?"h":"a"}" title="${esc(s[2])}">${esc(s[0])}</span>`).join("")||'<span class="sg">market only</span>'}</div>`:`<span class="pm">line not posted</span>`}</div></div>`}).join("");
   const mnf=G.filter(g=>new Date(g.date).getDay()===1).slice(-1)[0]||G[G.length-1];
   const picksTxt=G.map(g=>{const k=g.away+"@"+g.home,m=pkModel(g),t=myP[k]||(m&&m.lean);if(!t)return null;const ln=t===g.home?g.hs:-g.hs;return`${t} ${lineTxt(ln)}`}).filter(Boolean).join(", ");
-  const helpBody=G.length?`<div class="paw">${rowsN}</div><div class="pafoot"><span>${mnf&&mnf.ou?`🎲 Tiebreaker: guess <b>${Math.round(mnf.ou)}</b> total points for ${esc(mnf.away)} @ ${esc(mnf.home)} (the betting total).`:""}</span><button class="rep" id="pkleans" title="Fill every game you haven't picked with the model's lean">★ Use leans</button><button class="rep" id="pkcopy" title="Copy your picks (or the model's leans where you haven't picked)">📋 Copy picks</button></div><div class="svnote" title="${esc(SLO.status||"")}">${SLO.status&&!/✓/.test(SLO.status)?`<button class="rep" id="slodbg" title="Copy Sleeper's raw game data so it can be checked">⧉ Copy line data</button> `:""}Lines: Sleeper${SLO.status&&/✓/.test(SLO.status)?" ✓":` · ${esc(SLO.status||"")}`}. ★ = model lean. Cover % blends the betting line with ESPN's FPI projection, plus home-underdog, key-number and starting-QB-injury adjustments. It's a small edge, not a lock: the spread is set to make each side close to 50%. Your taps are saved in this browser; enter them in Sleeper before each kickoff.</div>`:`<div class="none">Week ${N} lines aren't posted yet.</div>`;
+  const helpBody=G.length?`<div class="paw">${rowsN}</div><div class="pafoot"><span>${mnf&&mnf.ou?`🎲 Tiebreaker: guess <b>${Math.round(mnf.ou)}</b> total points for ${esc(mnf.away)} @ ${esc(mnf.home)} (the betting total).`:""}</span><button class="rep" id="pkleans" title="Fill every game you haven't picked with the model's lean">★ Use leans</button><button class="rep" id="pkcopy" title="Copy your picks (or the model's leans where you haven't picked)">📋 Copy picks</button></div><div class="svnote" title="${esc(SLO.status||"")}">${SLO.debug&&SLO.status&&!/✓/.test(SLO.status)?`<button class="rep" id="slodbg" title="Copy Sleeper's raw game data so it can be checked">⧉ Copy line data</button> `:""}Lines: Sleeper (locked at kickoff)${PK.layout==="normalized"?", else the sheet's verified line":""}${SLO.debug?` · ${esc(SLO.status||"")}`:""}. ★ = model lean. Cover % blends the betting line with ESPN's FPI projection, plus home-underdog, key-number and starting-QB-injury adjustments. It's a small edge, not a lock: the spread is set to make each side close to 50%. Your taps are saved in this browser; enter them in Sleeper before each kickoff.</div>`:`<div class="none">Week ${N} lines aren't posted yet.</div>`;
   const nPick=G.filter(g=>myP[g.away+"@"+g.home]).length;
   h+=`<div class="svgrid">`+pkSec("help",`🔮 Week ${N} picks helper`,G.length?`${nPick}/${G.length} picked · ${G.filter(g=>pkModel(g)&&pkModel(g).p>=.55).length} stronger leans`:"",helpBody);
   /* ---------- this week live ---------- */
@@ -3664,6 +3796,9 @@ function pkRender(){
     [pctX(contraWin),"Picks against the pool won",`You go against the pool on ${pctX(myContraRate)} of picks`,contraWin>.5?"g":""],
     [pctX(suCover),"Straight-up winner covered","Pick the team you trust to win outright",""],
     [pctX(myPop),"Your average pick's popularity","How often you side with the crowd",myPop>.6?"w":""]];
+  /* favorites vs. underdogs from the sheet's lines (normalized layout): what the pool backs, and what actually covered */
+  if(PK.gx){let fp=0,np=0,fc=0,ng=0;PK.games.forEach((g,i)=>{const x=PK.gx[i];if(!x||x.spread==null||x.spread===0||!g.ats)return;const fav=x.spread<0?g.a:g.b;ng++;if(g.ats===fav)fc++;g.picks.forEach(p=>{if(p.side<0)return;np++;if((p.side?g.b:g.a)===fav)fp++})});
+    if(ng>=8&&np)ins.push([pctX(fc/ng),"Favorites covered",`The pool backs favorites ${pctX(fp/np)} of the time${fc/ng<.5&&fp/np>.55?": underdogs are where the ground is":""}`,fc/ng<.5&&fp/np>.55?"g":""])}
   h+=pkSec("ins","💡 What the pool's data says",`${decided.length} decided games`,`<div class="pkins2">${ins.map(([v,l,sb,c])=>`<div class="pki2 ${c}"><b>${v}</b><span>${l}</span><small>${sb}</small></div>`).join("")}</div>`);
   /* ---------- standings ---------- */
   const avgW=i=>PK.rows.reduce((s,r)=>s+(+r.w[i]||0),0)/PK.rows.length,cum=(r,i)=>r.w.slice(0,i+1).reduce((a,b)=>a+(+b||0),0),nR=PK.rows.length;
@@ -3709,7 +3844,7 @@ async function pkTick(){
    Value = rest-of-season points per week: Sleeper's next 4 weekly projections (your scoring),
    blended with season scoring average. Team strength = best possible starting lineup.
    ===================================================================== */
-const MV={view:"lab",lg:null,proj:{},projAt:{},trend:null,news:null,lastHtml:"",busy:false,res:{},open:{board:true,trades:true,adds:true}};
+const MV={view:"lab",lg:null,proj:{},projAt:{},trend:null,news:null,lastHtml:"",busy:false,res:{},open:{board:true,trades:true,trades3:true,adds:true,ideal:true}};
 const ELIG2={QB:["QB"],RB:["RB"],WR:["WR"],TE:["TE"],K:["K"],DEF:["DEF"],FLEX:["RB","WR","TE"],SUPER_FLEX:["QB","RB","WR","TE"],REC_FLEX:["WR","TE"],WRRB_FLEX:["WR","RB"],DL:["DL","DE","DT"],LB:["LB","ILB","OLB"],DB:["DB","CB","S","SS","FS"],IDP_FLEX:["DL","DE","DT","LB","ILB","OLB","DB","CB","S","SS","FS"]};
 async function mvProjWeek(w){
   if(MV.proj[w]&&Date.now()-(MV.projAt[w]||0)<1800000)return MV.proj[w];
@@ -3927,19 +4062,86 @@ function mvRender(){
     const[[A,a,B],[,b,C],[,c]]=x.cyc,nr=rankAfter({[A.rid]:x.gains[0],[B.rid]:x.gains[1],[C.rid]:x.gains[2]});
     return`<div class="trd"><div class="trh"><span class="tk k3">3-way</span><span>with <b>${esc(B.name)}</b> &amp; <b>${esc(C.name)}</b></span><span class="addr">${nr<R.rk0?`#${R.rk0} → <b class="up">#${nr}</b>`:`#${R.rk0} → #${nr}`}</span></div><div class="tr3"><div><small>You → ${esc(B.name)}</small>${chip(a)}</div><div><small>${esc(B.name)} → ${esc(C.name)}</small>${chip(b)}</div><div><small>${esc(C.name)} → You</small>${chip(c)}</div></div><div class="trf"><span>You <b class="up">+${f1(x.gains[0])}</b></span><span>${esc(B.name)} <b class="up">+${f1(x.gains[1])}</b></span><span>${esc(C.name)} <b class="up">+${f1(x.gains[2])}</b></span></div></div>`};
   if(R.state){h+=`</div>`;if(h===MV.lastHtml)return;MV.lastHtml=h;el.innerHTML=h;mvBind(el);return}
-  h+=mvSec("trades",`🤝 Trades where everyone improves${tradeUrl(lg)?` <a class="trl2" href="${esc(tradeUrl(lg))}" target="_blank" rel="noopener" data-tip="Open trades in ${esc(lg.adapter.name)}">↗</a>`:""}`,`${R.two.length} two-way · ${R.three.length} three-way`,`<div class="trades">${[...R.two,...R.three].map(tcard).join("")||'<div class="none">No trade improves every team involved right now.</div>'}</div><div class="svnote">Every suggestion raises each team's best-lineup projection (pts/wk). Gains come from filling positional needs, so pitch it on what they get.</div>`);
-  if(MV.view==="edge")h=h.slice(0,h.indexOf('<div class="svgrid">'))+`<div class="svgrid">${ADDS}</div>`;
+  const tlink=tradeUrl(lg)?` <a class="trl2" href="${esc(tradeUrl(lg))}" target="_blank" rel="noopener" data-tip="Open trades in ${esc(lg.adapter.name)}">↗</a>`:"";
+  h+=mvSec("trades",`🤝 2-way trades${tlink}`,R.two.length?`${R.two.length} where both teams improve`:"",`<div class="trades">${R.two.map(tcard).join("")||'<div class="none">No 1-for-1 or 2-for-1 deal improves both teams right now.</div>'}</div>`)
+    +mvSec("trades3","🔺 3-way trades",R.three.length?`${R.three.length} where all three improve`:"",`<div class="trades">${R.three.map(tcard).join("")||'<div class="none">No three-team cycle improves everyone right now.</div>'}</div><div class="svnote">Every suggestion raises each team's best-lineup projection (pts/wk). Gains come from filling positional needs, so pitch it on what they get.</div>`)+`</div>`;
+  if(MV.view==="edge")h=h.slice(0,h.indexOf('<div class="svgrid">'))+`<div class="svgrid">${idealHtml(lg)}${ADDS}</div>`;
   if(h===MV.lastHtml)return;MV.lastHtml=h;el.innerHTML=h;mvBind(el);
 }
+
+/* =====================================================================
+   IDEAL LINEUP (secret waiver view) — this week's highest-expected-points legal lineup.
+   Rebuilt on every visit from fresh inputs: Sleeper weekly projections (your scoring), injury + practice status,
+   ESPN betting lines (team implied totals; opponent totals for D/ST), season form, news, and a matchup tilt
+   (underdog → lean ceiling, favorite → lean floor). Players whose games have started are locked where they are.
+   Solved with the exact optimizer, so following it maximizes expected Lineup IQ.
+   ===================================================================== */
+const IL={res:{},busy:{}};
+async function refreshPlayers(maxAge){if(S.playersAt&&Date.now()-S.playersAt<maxAge)return false;
+  try{const d=await getJ(SLP+"/players/nfl",true);if(d&&Object.keys(d).length>1000){S.players=d;S.playersAt=Date.now();S.pc={};try{await idbSet("players",{at:S.playersAt,data:d})}catch(e){}return true}}catch(e){}return false}
+function ilGames(j){const G={};(j&&j.events||[]).forEach(ev=>{const c=ev.competitions[0],cs=c.competitors,H=cs.find(x=>x.homeAway==="home")||cs[0],A=cs.find(x=>x!==H),o=(c.odds||[])[0]||{};
+  const home=NT(H.team.abbreviation),away=NT(A.team.abbreviation),tot=o.overUnder!=null?+o.overUnder:null;let hs=null;
+  {const m=String(o.details||"").match(/([A-Z]{2,4})\s*([+-]?\d+(\.\d+)?)/);if(m){const fav=NT(m[1]),x=Math.abs(+m[2]);hs=fav===home?-x:fav===away?x:null}else if(/EVEN|PK/i.test(o.details||""))hs=0;else if(o.spread!=null&&!isNaN(+o.spread))hs=+o.spread}   /* "KC -3.5" is unambiguous; the bare number is the fallback */
+  const st=ev.status.type.state;[[home,away,hs,true],[away,home,hs==null?null:-hs,false]].forEach(([t,op,sp,isH])=>{G[t]={opp:op,home:isH,spread:sp,total:tot,state:st,date:ev.date,implied:tot!=null&&sp!=null?tot/2-sp/2:null,oppImplied:tot!=null&&sp!=null?tot/2+sp/2:null}})});return G}
+async function idealBuild(lg){
+  if(!lg||!lg.adapter||!lg.adapter.matchups||IL.busy[lg.id])return;IL.busy[lg.id]=1;
+  try{const w=S.nflWeek;MV.projAt[w]=0;MV.news=null;
+    const[M,L,sb]=await Promise.all([lg.adapter.matchups(lg,w),mvProjWeek(w),getJ(`${ESPN}?seasontype=2&week=${w}&limit=100`,true).catch(()=>null),refreshPlayers(2*3600e3),mvSignals()]);
+    const m=(M||[]).find(x=>x.roster_id===lg.mineRid);if(!m){IL.res[lg.id]={err:"You don't have a team in this league.",at:Date.now()};return}
+    if(!L||!L.length){IL.res[lg.id]={err:`Sleeper hasn't posted Week ${w} projections yet.`,at:Date.now()};return}
+    const G=ilGames(sb),pj={};L.forEach(x=>{if(x.player_id&&(x.stats||x))pj[x.player_id]=calcPts(x.stats||x,lg.sc)});
+    const T=team(lg,lg.mineRid),R=(lg.rosters||[]).find(r=>r.roster_id===lg.mineRid)||{},res=new Set([...(T.reserve||[]),...(R.reserve||[]),...(R.taxi||[])]);
+    const ids=[...new Set([...(m.players||[]),...(m.starters||[])])].filter(id=>id&&id!=="0"&&!res.has(id));
+    const slotsAll=(lg.league.roster_positions||[]).filter(x=>!SLOTX.has(x)),st=m.starters||[];
+    const mm=myMatch(lg),wp=mm&&S.week===w?mm.wp:null,tilt=wp==null?0:wp<.4?.18:wp>.7?-.1:0;
+    const info={};ids.forEach(id=>{const p=pinfo(id),q=S.players&&S.players[id]||{},g=G[p.team]||null,base=pj[id],sig=[];let v=base==null?0:base,lock=!!(g&&g.state!=="pre");
+      if(!g){v=0;sig.push(["💤 bye","no game this week","x"])}
+      const inj=p.inj||q.injury_status||"",pr=String(q.practice_participation||q.practice_description||""),nw=MV.news&&MV.news[id],nh=nw?nw.h:"";
+      if(/ruled out|will not play|won't play|placed on (ir|injured reserve)/i.test(nh)){v=0;sig.push(["⛔ ruled out",nh,"x"])}
+      else if(/^(Out|IR|Suspended|PUP|NFI|COV)$/i.test(inj)){v=0;sig.push(["⛔ "+inj,`${inj}${q.injury_body_part?" · "+q.injury_body_part:""}`,"x"])}
+      else if(/^Doubtful$/i.test(inj)){v*=.25;sig.push(["D · doubtful",`Doubtful${q.injury_body_part?" ("+q.injury_body_part+")":""}: plays about 1 in 4 times`,"x"])}
+      else if(/^Questionable$/i.test(inj)){const k=/dnp|did not|out/i.test(pr)?.6:/limit/i.test(pr)?.85:/full/i.test(pr)?.95:/(expected|will|plans) to play|good to go/i.test(nh)?.97:.85;v*=k;
+        sig.push([`Q · ${/dnp|did not/i.test(pr)?"DNP":/limit/i.test(pr)?"limited":/full/i.test(pr)?"full":"listed"}`,`Questionable${q.injury_body_part?" ("+q.injury_body_part+")":""}${pr?" · practice: "+pr:""} → ${Math.round(k*100)}% of projection`,k<.8?"x":"w"])}
+      if(g&&v>0){if(p.pos==="DEF"&&g.oppImplied!=null){const k=Math.max(.75,Math.min(1.3,1+.8*(21-g.oppImplied)/21));v*=k;if(Math.abs(k-1)>=.05)sig.push([`${k>1?"▲":"▼"} opp ${g.oppImplied.toFixed(1)}`,`${g.opp} implied for ${g.oppImplied.toFixed(1)} pts (league-typical ~21)`,k>1?"g":"w"])}
+        else if(g.implied!=null&&/^(QB|RB|WR|TE|K)$/.test(p.pos)){const k=Math.max(.85,Math.min(1.15,1+.5*(g.implied-22.5)/22.5));v*=k;if(Math.abs(k-1)>=.04)sig.push([`${k>1?"▲":"▼"} Vegas ${g.implied.toFixed(1)}`,`${p.team} implied team total ${g.implied.toFixed(1)} (spread ${g.spread>0?"+":""}${g.spread}, O/U ${g.total})`,k>1?"g":"w"])}
+        const sa=seasonAvg(lg,id);if(sa!=null&&base>0){const f=Math.max(.8,Math.min(1.25,(.8*base+.2*sa)/base));v*=f;if(Math.abs(f-1)>=.06)sig.push([f>1?"🔥 form":"🧊 form",`Averaging ${sa.toFixed(1)} vs ${base.toFixed(1)} projected`,f>1?"g":"w"])}
+        if(nh&&!sig.some(s=>/ruled out/.test(s[0])))sig.push(["🗞",nh,""])}
+      const k0=SDK[p.pos]||[.6,4],sd=Math.max(k0[1],k0[0]*Math.max(0,v)),vt=v>0?v+tilt*sd:0;
+      info[id]={id,p,base,v:r2(v),vt,sd,sig,lock,g}});
+    /* locked starters keep their slot; locked bench players can't come in */
+    const freeSlots=[],lockedIn=[];slotsAll.forEach((sl,i)=>{const id=st[i];if(id&&id!=="0"&&info[id]&&info[id].lock)lockedIn.push([sl,id]);else freeSlots.push(sl)});
+    const pool=ids.filter(id=>!info[id].lock),opt=bestLineup(pool,freeSlots,id=>info[id].vt,new Set(st));
+    const rec=[...lockedIn.map(([sl,id])=>({sl,id,lock:1})),...opt.by.map(([sl,id])=>({sl,id}))],recSet=new Set(rec.map(x=>x.id).filter(Boolean));
+    const cur=new Set(st.filter(id=>id&&id!=="0")),ins=rec.filter(x=>x.id&&!cur.has(x.id)),outs=[...cur].filter(id=>!recSet.has(id)&&info[id]&&!info[id].lock);
+    const sum=set=>[...set].reduce((s,id)=>s+(info[id]?info[id].v:0),0),curPts=sum(cur),recPts=sum(recSet);
+    IL.res[lg.id]={w,rec,ins,outs,info,curPts,recPts,wp,tilt,at:Date.now(),empty:slotsAll.length-st.filter(id=>id&&id!=="0").length};
+  }catch(e){console.warn("Wingman ideal lineup",e);IL.res[lg.id]={err:"Couldn't build this week's lineup right now. It retries on your next visit.",at:Date.now()}}
+  finally{IL.busy[lg.id]=0;if(S.tab==="t"&&MV.view==="edge"){MV.lastHtml="";mvRender()}}
+}
+function idealHtml(lg){const R=IL.res[lg.id];
+  if(!R||IL.busy[lg.id]&&!R.rec)return mvSec("ideal","🎯 Ideal lineup","",`<div class="none">⏳ Pulling the latest projections, injury reports and lines…</div>`);
+  if(R.err)return mvSec("ideal","🎯 Ideal lineup","",`<div class="none">${esc(R.err)}</div>`);
+  const f1=x=>x.toFixed(1),chip=id=>{const p=pinfo(id);return`<span class="pch"><img class="av" src="${p.pos==="DEF"?`https://sleepercdn.com/images/team_logos/nfl/${String(p.team).toLowerCase()}.png`:`https://sleepercdn.com/content/nfl/players/thumb/${id}.jpg`}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"><span class="pos ${esc(p.pos)}">${esc(p.pos)}</span><b>${esc(p.name)}</b></span>`};
+  const sigs=x=>x.sig.map(([t,tip,c])=>`<span class="ils ${c}" data-tip="${esc(tip)}">${esc(t)}</span>`).join("");
+  const row=x=>{const I=x.id&&R.info[x.id];if(!I)return`<div class="ilr empty"><span class="ilsl">${esc(slotPillTxt(x.sl))}</span><span class="pm">nobody eligible</span></div>`;
+    const dead=!x.lock&&I.v<=0&&I.sig.some(s=>s[2]==="x");
+    const act=dead?`<span class="ila bad" data-tip="No healthy ${esc(slotPillTxt(x.sl))} on your roster: grab one from the pickups below">⚠ replace</span>`:x.lock?`<span class="ila lk" data-tip="His game has started: locked">🔒</span>`:R.ins.includes(x)?`<span class="ila in" data-tip="Not in your lineup right now">⬆ start</span>`:`<span class="ila ok">✓</span>`;
+    return`<div class="ilr ${R.ins.includes(x)?"chg":""}${dead?" dead":""}"><span class="ilsl">${esc(slotPillTxt(x.sl))}</span>${chip(x.id)}<span class="ilv" data-tip="Projection ${I.base!=null?f1(I.base):"–"} → ${f1(I.v)} after signals">${f1(I.v)}</span><span class="ilsg">${sigs(I)}</span>${act}</div>`};
+  const gain=R.recPts-R.curPts,iq=R.recPts>0?Math.min(1,R.curPts/R.recPts):1;
+  const sub=R.ins.length?`${R.ins.length} change${R.ins.length>1?"s":""} · +${f1(gain)} pts projected`:"✓ your lineup is already the best one";
+  const sits=R.outs.length?`<div class="ilout"><small>Sit</small>${R.outs.map(id=>`<span class="ilo">${chip(id)}<em>${f1(R.info[id].v)}</em><span class="ilsg">${sigs(R.info[id])}</span></span>`).join("")}</div>`:"";
+  const head=`<div class="ilhd"><div class="ilk"><b>${Math.round(iq*100)}%</b><small>projected Lineup IQ as set</small></div><div class="ilk"><b>${f1(R.recPts)}</b><small>best lineup (pts)</small></div>${R.wp!=null?`<div class="ilk" data-tip="${R.tilt>0?"You're the underdog: close calls lean to the higher ceiling":R.tilt<0?"You're favored: close calls lean to the safer floor":"Close matchup: pure expected points"}"><b>${Math.round(R.wp*100)}%</b><small>win chance · ${R.tilt>0?"ceiling":R.tilt<0?"floor":"neutral"}</small></div>`:""}${R.empty?`<div class="ilk bad"><b>${R.empty}</b><small>empty slot${R.empty>1?"s":""}</small></div>`:""}</div>`;
+  return mvSec("ideal",`🎯 Ideal lineup · W${R.w}`,sub,`${head}<div class="ilg">${R.rec.map(row).join("")}</div>${sits}<div class="svnote">Rebuilt every visit (${hm(new Date(R.at))}): Sleeper projections in your scoring, injury &amp; practice reports, Vegas implied totals, season form and news, solved with the exact lineup optimizer. Set it in ${esc(lg.adapter.name)} before kickoff.</div>`)}
+const slotPillTxt=s=>({FLEX:"FLX",SUPER_FLEX:"SFLX",REC_FLEX:"W/T",WRRB_FLEX:"W/R",IDP_FLEX:"IDP"}[s]||s);
 function tradeUrl(lg){if(lg.provider==="sleeper")return`https://sleeper.com/leagues/${lg.providerLeagueId}/trades`;return lg.adapter&&lg.adapter.leagueUrl?lg.adapter.leagueUrl(lg):""}
 function mvSec(key,title,sub,body){const o=MV.open[key]!==false;return`<div class="card svc"><div class="lh svh" data-k="${key}"><span><span class="chev">${o?"▾":"▸"}</span>${title}</span><small>${sub||""}</small></div>${o?body:""}</div>`}
 function mvBind(el){
   const bk=el.querySelector("#mvback");if(bk)bk.onclick=()=>{if(MV.view==="edge"){MV.view="lab";MV.lastHtml="";if(location.hash==="#edge")history.replaceState(null,"",location.pathname+location.search);mvRender()}else setTab("m")};
-  const ed=el.querySelector("#mvedge");if(ed)ed.onclick=()=>{MV.view="edge";MV.lastHtml="";mvRender()};
+  const ed=el.querySelector("#mvedge");if(ed)ed.onclick=()=>{MV.view="edge";MV.lastHtml="";mvRender();idealBuild(S.L.find(l=>l.id===MV.lg))};
   el.querySelectorAll(".svh").forEach(x=>x.onclick=e=>{if(e.target.closest("a"))return;MV.open[x.dataset.k]=MV.open[x.dataset.k]===false;mvRender()});
   el.querySelectorAll("th.srt").forEach(x=>x.onclick=()=>{MV.sort=x.dataset.sort;MV.lastHtml="";mvRender()});
   const ro=el.querySelector("#iqroast");if(ro)ro.onclick=async()=>{const ok=await copyText(MV.roast);ro.textContent=ok?"✓":"!";setTimeout(()=>{ro.textContent="📋"},1800)};
-  el.querySelectorAll(".mvsel .mvb").forEach(b=>b.onclick=()=>{MV.lg=b.dataset.l;MV.lastHtml="";mvRender();mvTick(true)});
+  el.querySelectorAll(".mvsel .mvb").forEach(b=>b.onclick=()=>{MV.lg=b.dataset.l;MV.lastHtml="";mvRender();mvTick(true);if(MV.view==="edge")idealBuild(S.L.find(l=>l.id===MV.lg))});
 }
 async function mvTick(force){
   if(MV.busy||!S.L.length)return;const L=vis().length?vis():S.L;if(!MV.lg||!L.find(l=>l.id===MV.lg))MV.lg=L[0].id;
@@ -4145,7 +4347,7 @@ function setTab(t){
   if(t!=="m"){$("view").style.display="none";$("welcome").style.display="none";$("status").style.display="none"}
   if(t==="s"){SV.lastHtml="";svRender();svTick()}
   else if(t==="p"){PK.lastHtml="";pkRender();pkTick()}
-  else if(t==="t"){if(MV.view==="edge"&&location.hash!=="#edge")MV.view="lab";MV.lastHtml="";mvRender();mvTick()}
+  else if(t==="t"){if(MV.view==="edge"&&location.hash!=="#edge")MV.view="lab";MV.lastHtml="";mvRender();mvTick();if(MV.view==="edge")idealBuild(S.L.find(l=>l.id===MV.lg)||S.L[0])}
   else if(t==="f"){FD.lastHtml="";fdRender();fdTick()}
   else{if(loggedIn){$("view").style.display="";$("welcome").style.display="none";applyVis()}else{$("welcome").style.display=""}}
 }
