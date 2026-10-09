@@ -11,7 +11,10 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
 ## Tabs / modules
 - **Matchups** (main): hero scoreboard, mirrored lineup table, Plays, low/high strip, mini matchup tiles, Bench.
   Modules are draggable (`<!--M:key-->` markers + `modWrap`/`bindMods`).
-- Navigation: **Matchups** | **Field** (marked BETA, `.betaf`) | **Lab** (tab `t`). Swipe order: leagues → Field → Lab → linked sheet modes.
+- Navigation: **Matchups** | **Radar** (tab `f`, marked BETA, `.betaf`) | **Lab** (tab `t`) | **Edge** (tab `e`, only after unlock) |
+  **Survivor** | **Pick'em**. Swipe order: leagues → Radar → Lab → Edge → linked sheet modes. The phone bar must fit 6 tabs at 344px.
+- **Radar** (`fdRender`): before any of the matchup's games start it shows a calm "Before kickoff" schedule (`.kfr`: kickoff
+  slots with each side's starters) and projected scores; the play-by-play fields appear only once games are live/final.
 - **Survivor** / **Pick'em** are sheet modes (`SHEETMODES`): hidden until the user links a Google Sheet from the
   connections page. NO pool data, member names or sheet IDs live in the page: everything is read from the linked sheet
   (`gvizCsv`, whole tab, `headers=0`, columns found by header name) and per-pool settings (`poolCfg`/`savePoolCfg`: whose
@@ -23,8 +26,21 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   pts/wk 35%, record 20% — `computePower`) and projected **Strength** (best legal lineup per projected week through the
   league's final playoff week, `finalWeek`). Lineup IQ (efficiency) ≠ Start/Sit (share of right calls); awards and IQ need
   ≥3 completed weeks. Explicit end-of-season / no-projection states (never zeros). `wpBacktest` shows a calibration check.
-  Trades are two side-by-side panels (2-way / 3-way). The secret view (`MV.view="edge"`, the faint · in the Lab header,
-  or `#edge`) holds the ideal lineup and the waiver pickups.
+  League Power Movement: `computePower` also builds `lg.ptrend` (Season rank after each completed week, records from that
+  week's pairings via `weekPoints` → `[rid,pts,matchup_id]`, cache `wk2_`; last point = official rank) → Trend sparkline column
+  + chips (biggest riser/faller over 3 weeks, outperforming roster = Season rank ≫ Strength rank, better than record).
+  Board numbers: tabular Barlow, right-aligned; methodology lives in `data-tip`s (Season, Trend, Strength, 🏆 odds, IQ).
+  Trades: **Trade partner matrix** (`R.prof`: each team's weakest starting position vs league average = need, best player
+  outside its best lineup = surplus; `R.byP`: up to 3 packages per partner) — tap a manager to open the packages. Every trade
+  card explains both sides (`explain()` → `whyTxt`: who enters each best lineup, who it pushes out, whether what's given was
+  only bench depth, "fills their weakest spot"). 3-way trades stay as a side panel.
+- **Edge** (tab `e`, chest icon in the Lab header, or `#edge`): locked per device. Password "edge" is checked against a
+  SHA-256 hash (`EDGE_H`); only a token (`lm_edge_ok`) is stored; 🔒 `edgeLock()` relocks. It is a privacy curtain, not
+  server security — everything is computed in the browser and nothing personal ships with the site. Edge shows every
+  visible league side by side (`edgeLeagues()`: up to 4 on desktop, the selected one on phones): ⚡ Do this now (lineup
+  swaps / dead starters / top claim, this week's numbers), ➕ Pickups that upgrade you (gain ≥0.5 pts/wk only; sortable by
+  gain / FAAB / risk), 👀 Watchlist & stashes (no lineup gain: handcuffs, trending), 🗓 Roster alerts, 🔁 Streamers,
+  🎯 Ideal lineup (collapsed by default).
 - Lineups: `bestLineup(ids, slots, valueFn, prefer)` is the single EXACT optimizer (laminar greedy + branching over
   dual-position players, Hungarian for overlapping flexes; IDP slots supported). Fills every fillable slot; ties go to the
   lineup actually started. Used by strength, trades, pickups, Lineup IQ, start/sit and awards. Never replace it with a
@@ -62,7 +78,8 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
 - Purple = me, cyan = opponent, green = live/positive, amber = pending, red = danger, gold = scoring/exceptional.
 - Show, don't say: prefer visual signals (bars, intensity, position); exact numbers on hover.
 - Typography: Inter (UI), Barlow Semi Condensed (scores/points). Light mode via `html[data-theme=light]` overrides.
-- Watch for CSS class-name collisions (they caused past bugs: `.rv`, `.sep`, `.hd`, `.fx`, `.lg`). Grep before adding a short class name.
+- Watch for CSS class-name collisions (they caused past bugs: `.rv`, `.sep`, `.hd`, `.fx`, `.lg`, `.tlg`, `.rec`, `.stk`,
+  `.up` on containers, `td.n b`). Grep before adding a short class name.
 
 ## Mobile rules
 - Phones (≤760px): bottom tab bar (icon over label via `.tbi`/`.tbl` spans; must fit 5 tabs at 344px), header two rows.
@@ -74,7 +91,7 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
 - Polling pauses while `document.hidden`; `pruneStore()` drops stale per-week caches (quota safety on iOS).
 - Before first connection (`body.nolg`) the tab bar and empty week picker are hidden; pool-only users open their pool.
 
-## Sheet layouts (v41)
+## Sheet layouts (v41+)
 - Survivor (normalized): `Config` (key,value,type) · `Entries` (entry_id, participant, lane, is_our_entry) ·
   `Picks` (week, entry_id, team, picked_by; several rows = multi-pick week) · `Results` (week, team, opponent, game_day, result).
   Rules self-configure from Config (`svCfgFromSheet`: reuse, day rules incl. "pending", tie rule, missed-pick text, price,
@@ -86,8 +103,18 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   (locked at kickoff) → the sheet's verified line (`pkSheetLine`) → nothing; proxies are labeled.
 - gviz: config (key/value) tabs are read raw (`headers=0`) and merged with a header-mode read; data tabs use
   `headers=1`; `objRows` re-infers blank labels from the schema. Unknown tab names return the FIRST tab, so validate.
-- Survivor planner: per-entry eligibility (`svCanUse`) + day rules (`svDayRule`), "value later" from team ratings
-  (`svRatings`/`svRatedP`) over the next 3 weeks (💎 save), field crowding, two plans (most lives / safest spread).
+- Survivor portfolio planner: per-entry eligibility (`svCanUse`) + day rules (`svDayRule`), "value later" from team ratings
+  (`svRatings`/`svRatedP`) over the next 3 weeks (💎 save), field crowding. Plans are scored on the exact distribution of
+  lives kept (`svDist`: enumerates game outcomes; both sides of one game can't both win): 📈 Most lives (greedy),
+  🧺 Portfolio (local search over all entries maximizing E[log(1+lives)] minus save cost — hedges single upsets), 🛡 Safest
+  spread. Each team shows 💥 lives lost if it loses; >50% of lives on one team with ≥12% upset risk = "⚠ stacked"; an
+  "If this team loses" table compares plans. Rival overlap shows "not visible yet" (never 0%) when picks are unknown.
+  Hero tokens use `.tokl` (NOT `.tlg`, which is the tiny team badge on player photos).
+- Pick'em: you're identified automatically (`autoMember`: exactly one member whose id/display name matches a connected
+  Sleeper username or your display name in a connected league; ambiguous → ask once). 🧭 You vs the pool table for the
+  latest week where most picks are visible. Leans under 55% (`EDGE`) are muted "Toss-up" (no ★, no colored bar).
+  ⬆ climb / 🛡 hold chips (top 3 games): value vs the field = P(cover) − expected pool share on that side (pool's
+  historical favorite rate).
 - Secret view (`MV.view="edge"`): 🎯 Ideal lineup (`idealBuild`/`idealHtml`) rebuilt on every visit from fresh
   projections, injury + practice status (players DB refreshed if >2h old), ESPN implied totals, season form, news and a
   matchup tilt; started games locked; solved with `bestLineup`. Then pickups.
