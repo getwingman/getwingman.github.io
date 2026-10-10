@@ -29,3 +29,5 @@ FAILED: []
 FAILED: []
 === v45: trade rows (AVG, per-manager bars, GIVE/GET, warnings)
 FAILED: []
+=== v46: trade polish + device-local nicknames
+FAILED: []

@@ -55,7 +55,17 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   material issues that concern you (`warnsOf`: you overpay, highly unequal ≥3× and ≥2 pts, no backup at a position after the
   deal, an incoming player Out/IR/Doubtful, trade deadline passed). A partner overpaying is info, not a warning. Expanded:
   player destinations, each lineup's ▲/▼ changes, warnings explained, similar packages collapsed (`MV.sim`). "Best per
-  partner" chips jump to By partner. Phone rows ~70–100px; non-Matchups tabs use a one-row phone header. Awards + movement chips sit in `.funs`: wrapped rows on
+  partner" chips FILTER the board (`MV.pfil`, "All" clears; edge-faded scroller). Phone rows ~70–100px; non-Matchups tabs
+  use a one-row phone header. v46: bars share ONE scale across the board (`MV.mxg` = largest single gain); 2-way partner bar
+  is "THEM". Asset value = value over replacement (`R.aval`: V − best free agent at the position, `R.repl`), so replaceable
+  backups count ~0 in overpay. Groups = same partners + same headline player you get ("n similar"); after two rows a partner
+  folds into "▸ N more with …" (`MV.fold`). Warnings graded (`warnsOf` → {sev,s,l}): hi = material (big overpay, critical depth
+  loss = no backup AND a starter there is hurt/has a projected bye, incoming Out/IR, deadline) → amber "⚠ overpay" tag on the
+  row; lo = caution (smaller overpay, unequal gains, Doubtful, plain thin bench) → quiet ⓘ, explained when expanded.
+  Expanded view never repeats 2-way transfers (3-way shows a one-line cycle): lineup changes (starts / to bench / steps in /
+  fills weakest spot / was bench), graded risks, similar packages.
+- Nicknames (username → real name) are personal data: stored on the device only (`NICK`, `lm_nicks`), edited in
+  Settings → Nicknames, imported from a `#wm_names=` link and carried inside the user's own setup link. Never in the page. Awards + movement chips sit in `.funs`: wrapped rows on
   desktop, one horizontally scrolling snap strip on phones (excluded from swipe-to-switch-tab).
 - **Edge** (tab `e`, chest icon in the Lab header, or `#edge`): locked per device. Password "edge" is checked against a
   SHA-256 hash (`EDGE_H`); only a token (`lm_edge_ok`) is stored; 🔒 `edgeLock()` relocks. It is a privacy curtain, not

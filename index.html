@@ -1565,6 +1565,23 @@ html[data-theme=light] .rpch,html[data-theme=light] .rpnote{background:rgba(255,
   #moves .svhero{padding:8px 10px}#moves .svhero .svtop{gap:6px}#moves .svhero .hu{font-size:11px}#moves .svhero .svt{font-size:15px}
 }
 html[data-theme=light] .tbb{background:#e6e7ee}
+
+/* v46 polish */
+.tdw0{font-size:11px;font-weight:800;border-radius:7px;padding:1px 6px;white-space:nowrap;cursor:help;line-height:16px}
+.tdw0.hi{color:#1b1206;background:var(--up)}.tdw0.lo{color:var(--mute);padding:0 2px;font-size:13px;font-weight:600}
+.tdv{white-space:nowrap;font-size:10.5px;padding:0 6px}
+.tw2.lo{color:var(--mute);border-color:var(--line)}
+.tcyc{display:flex;align-items:center;flex-wrap:wrap;gap:5px;font-size:12px}.tcyc .arr{font-style:normal;color:var(--mute)}
+.tpi em{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--mute);margin-right:3px}.tpi.up em{color:var(--pos)}.tpi.dn em{color:#ff9a9a}
+.tbestw{display:flex;align-items:center;gap:8px;padding:8px 0 0 12px;min-width:0}.tbestw>small{font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em;flex:none}
+.tbest{padding:0 28px 2px 4px;flex:1;min-width:0;-webkit-mask:linear-gradient(90deg,transparent 0,#000 8px,#000 calc(100% - 32px),transparent);mask:linear-gradient(90deg,transparent 0,#000 8px,#000 calc(100% - 32px),transparent)}
+.tbc.on{background:rgba(61,214,230,.14);border-color:var(--b);color:var(--ink)}
+.tfold{display:flex;align-items:center;gap:6px;width:100%;background:none;border:0;border-top:1px dashed var(--line);color:var(--b);font:inherit;font-size:12px;font-weight:700;padding:8px 10px 8px 36px;cursor:pointer;text-align:left;min-height:34px}
+.tfold:hover{background:rgba(255,255,255,.03)}
+@media(max-width:760px){.tbestw>small{display:none}.tbestw{padding-left:8px}.tfold{padding-left:30px}.tpos{flex-direction:column;gap:3px}.tpos>b{min-width:0}}
+
+.nkw{display:flex;flex-direction:column;gap:6px}.nkw textarea{width:100%;min-height:76px;resize:vertical;border-radius:8px;border:1px solid var(--line);background:var(--s2);color:var(--ink);font:12px/1.4 ui-monospace,Menlo,monospace;padding:6px 8px}
+@media(pointer:coarse){.nkw textarea{font-size:16px}}
 </style>
 </head>
 <body>
@@ -1589,9 +1606,11 @@ html[data-theme=light] .tbb{background:#e6e7ee}
     <div class="labc"><span class="seg2" data-c="motion"><button data-v="normal" class="on">Normal</button><button data-v="reduced">Reduced</button></span><span class="seg2" data-c="sound"><button data-v="on" class="on">Sound</button><button data-v="off">Mute</button></span><button id="labplay" class="labp">▶ Play all</button></div>
     <div class="labbar"><span id="labnow" class="labnow">PREVIEW</span><span id="labsc" class="labsc"></span></div>
     <div id="labev" class="labev"></div>
+    <div class="sph">Nicknames</div>
+    <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm">Only on this device; included in your setup link.</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v45</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v46</span></div>
   </div>
 </header>
 <main>
@@ -1877,7 +1896,7 @@ function pinfo0(id){
 function team(lg,rid){const c=lg.tc||(lg.tc={});return c[rid]||(c[rid]=team0(lg,rid))}
 function team0(lg,rid){
   const r=lg.rosters.find(x=>x.roster_id===rid)||{},u=lg.users.find(x=>x.user_id===r.owner_id)||{};
-  const own=u.display_name||u.username||"";
+  const own=nickOf(u.display_name)||nickOf(u.username)||u.display_name||u.username||"";
   return{name:(u.metadata&&u.metadata.team_name)||own||"Team "+rid,owner:own,rec:r.settings?`${r.settings.wins}-${r.settings.losses}${r.settings.ties?"-"+r.settings.ties:""}`:"",mine:rid===lg.mineRid,reserve:r.reserve||[]};
 }
 const fmtOf=sc=>{const r=sc.rec;return r===1?"PPR":r===.5?"Half-PPR":!r?"Standard":`${r} PPR`};
@@ -2624,6 +2643,9 @@ function labInit(){themeInit();
   document.querySelectorAll("#setp .seg2:not(#thm)").forEach(g=>g.querySelectorAll("button").forEach(b=>b.onclick=e=>{e.stopPropagation();LAB[g.dataset.c]=b.dataset.v;g.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b))}));
   $("labplay").onclick=e=>{e.stopPropagation();labPlayAll()};
   $("layr").onclick=e=>{e.stopPropagation();layReset(false);toast("good","↺ Layout reset for this page",2200)};
+  const nt=$("nicks");if(nt){nt.value=Object.keys(NICK).sort().map(k=>`${k} = ${NICK[k]}`).join("\n");nt.onclick=e=>e.stopPropagation()}
+  $("nicksave").onclick=e=>{e.stopPropagation();const o={};String(nt.value).split(/\n/).forEach(l=>{const m=l.match(/^\s*([^=:]+?)\s*[=:]\s*(.+?)\s*$/);if(m)o[m[1].toLowerCase()]=m[2].slice(0,40)});saveNicks(o);
+    vis().forEach(l=>{try{render(l)}catch(x){}});if(S.tab==="t"||S.tab==="e")mvRender();else if(S.tab==="p")pkRender();toast("good",`✓ ${Object.keys(o).length} nicknames saved on this device`,2400)};
   $("layra").onclick=e=>{e.stopPropagation();layReset(true);toast("good","↺ Layout reset on every page",2200)};
   const V=vis().length?vis():S.L,sigs=new Set(V.map(l=>JSON.stringify(l.sc||{})));const sc=$("labsc");
   if(sc)sc.innerHTML=sigs.size>1?`Preview scoring: <select id="labscs">${V.map(l=>`<option value="${l.id}" ${l.id===(labLg()||{}).id?"selected":""}>${esc(shortName(l.league.name))}</option>`).join("")}</select>`:V.length?`Scoring: ${esc(shortName(V[0].league.name))}`:"";
@@ -3179,10 +3201,20 @@ const validURL=u=>/^https:\/\/[a-z0-9.-]+\.[a-z]{2,}(:\d+)?(\/[^\s]*)?$/i.test(S
 const WM_CONNECT="https://connect.getwingman.workers.dev";   /* the shared Wingman Connect server (Yahoo sign-in, private ESPN, screenshot import) */
 const workerURL=()=>{const w=(load("worker")||"").trim().replace(/\/$/,"");return validURL(w)?w:WM_CONNECT};
 try{if(load("worker")&&!validURL(load("worker")))save("worker","");if(load("yworker")&&!validURL(load("yworker")))save("yworker","")}catch(e){}
+/* Nicknames (username → real name). Personal data, so they never ship in the page: they live on this device and travel only
+   inside your own setup link (or a #wm_names= link you send yourself). */
+const NICK=(()=>{try{return JSON.parse(load("nicks")||"{}")||{}}catch(e){return{}}})();
+const nickOf=s=>NICK[String(s||"").trim().toLowerCase()]||"";
+function saveNicks(o){Object.keys(NICK).forEach(k=>delete NICK[k]);Object.assign(NICK,o);save("nicks",JSON.stringify(NICK));(S.L||[]).forEach(l=>{l.tc={};l.lastHtml=""});S.dirty=true;
+  try{MV.lastHtml="";PK.lastHtml="";SV.lastHtml=""}catch(e){}}
+const b64u=s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""),unb64u=s=>decodeURIComponent(escape(atob(s.replace(/-/g,"+").replace(/_/g,"/"))));
 function setupLink(){const cs=(S.conns||getConns()).filter(c=>c.p!=="yahoo").map(c=>{const x=Object.assign({},c);delete x.session;return x});
-  return location.origin+location.pathname+"#wm_setup="+btoa(unescape(encodeURIComponent(JSON.stringify(cs)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
-(()=>{try{const m=location.hash.match(/wm_setup=([^&]+)/);if(m){const a=JSON.parse(decodeURIComponent(escape(atob(m[1].replace(/-/g,"+").replace(/_/g,"/")))));const cur=getConns(),keys=new Set(cur.map(c=>c.key));
-  save("conns",JSON.stringify(cur.concat(a.filter(c=>c&&c.key&&c.p&&!keys.has(c.key)))));history.replaceState(null,"",location.pathname+location.search)}}catch(e){}})();
+  return location.origin+location.pathname+"#wm_setup="+b64u(JSON.stringify(Object.keys(NICK).length?{c:cs,n:NICK}:cs))}
+(()=>{try{const m=location.hash.match(/wm_setup=([^&]+)/),mn=location.hash.match(/wm_names=([^&]+)/);
+  if(m){const a=JSON.parse(unb64u(m[1])),cs=Array.isArray(a)?a:(a.c||[]),cur=getConns(),keys=new Set(cur.map(c=>c.key));
+    save("conns",JSON.stringify(cur.concat(cs.filter(c=>c&&c.key&&c.p&&!keys.has(c.key)))));if(a&&a.n)saveNicks(Object.assign({},NICK,a.n))}
+  if(mn){const n=JSON.parse(unb64u(mn[1]));if(n&&typeof n==="object"){const o={};for(const k in n)if(typeof n[k]==="string")o[k.toLowerCase()]=n[k].slice(0,40);saveNicks(Object.assign({},NICK,o));S.nickToast=Object.keys(o).length}}
+  if(m||mn)history.replaceState(null,"",location.pathname+location.search)}catch(e){}})();
 function showWelcome(){document.body.classList.toggle("nolg",!getConns().length);$("welcome").style.display="";$("view").style.display="none";$("status").style.display="none";renderConns()}
 /* Yahoo sign-in came back with an error (cancelled / token exchange failed): say so plainly, keep the page usable */
 (()=>{try{const m=location.hash.match(/wm_error=([a-z_]+)/);if(m){history.replaceState(null,"",location.pathname+location.search);setTimeout(()=>toast("bad",{yahoo_denied:"Yahoo sign-in was cancelled. Nothing was connected.",yahoo_token:"Yahoo didn't finish signing you in. Try connecting again in a minute."}[m[1]]||"Sign-in didn't complete. Try again.",6000),1200)}}catch(e){}})();
@@ -4154,7 +4186,7 @@ function pkRender(){
   const sorted=PK.rows.slice().sort((a,b)=>tot(b)-tot(a)),rank=r=>1+sorted.filter(x=>tot(x)>tot(r)).length,tie=r=>sorted.filter(x=>tot(x)===tot(r)).length>1;
   const prevTot=r=>r.w.slice(0,W-1).reduce((a,b)=>a+(+b||0),0),prank=r=>1+PK.rows.filter(x=>prevTot(x)>prevTot(r)).length;
   const lead=sorted[0],second=sorted.find(r=>tot(r)<tot(lead))||sorted[1],chg=prank(me)-rank(me),pot=d.dues*d.members;
-  const nm=u=>esc((PK.names&&PK.names[u])||u);
+  const nm=u=>esc(nickOf(u)||nickOf(PK.names&&PK.names[u])||(PK.names&&PK.names[u])||u);
   /* week state from the sheet */
   const wkGames=w=>PK.games.filter(g=>g.w===w),wkDone=w=>w<W||(wkGames(w).length>0&&wkGames(w).every(g=>g.ats||g.su));
   const winners=Array.from({length:W},(_,i)=>{const mx=Math.max(...PK.rows.map(r=>+r.w[i]||0));let who=PK.rows.filter(r=>(+r.w[i]||0)===mx),tbk=null;const T=PK.tb&&PK.tb[i+1];
@@ -4238,7 +4270,7 @@ function pkRender(){
   /* ---------- standings ---------- */
   const avgW=i=>PK.rows.reduce((s,r)=>s+(+r.w[i]||0),0)/PK.rows.length,cum=(r,i)=>r.w.slice(0,i+1).reduce((a,b)=>a+(+b||0),0),nR=PK.rows.length;
   const trend=r=>{const rk=Array.from({length:W},(_,i)=>1+PK.rows.filter(x=>cum(x,i)>cum(r,i)).length);return`<svg class="rks" viewBox="0 0 60 16" preserveAspectRatio="none"><title>Rank by week: ${rk.map((v,i)=>"W"+(i+1)+" #"+v).join(", ")}</title><polyline points="${rk.map((v,i)=>((i/Math.max(1,W-1))*60).toFixed(1)+","+(1+(v-1)/Math.max(1,nR-1)*14).toFixed(1)).join(" ")}" fill="none" stroke="${r===me?"#a785ff":"#6b6b78"}" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`};
-  const board=sorted.map(r=>{const c=prank(r)-rank(r),isMe=r===me,rk=rank(r);return`<tr class="${isMe?"me":""} ${rk<=2?"paid":""}"><td class="n">${tie(r)?"T":""}${rk}</td><td class="chg">${c?`<span class="${c>0?"up":"dn"}">${c>0?"▲":"▼"}${Math.abs(c)}</span>`:"<span class='pm'>–</span>"}</td><td class="pkn">${rk<=2?(rk===1?"🥇 ":"🥈 "):""}${nm(r.u)}</td><td class="n"><b>${tot(r)}</b></td><td class="n gap">${r===lead?"—":"−"+(tot(lead)-tot(r))}</td><td>${trend(r)}</td>${Array.from({length:W},(_,i)=>{const v=+r.w[i]||0,a=avgW(i),k=v-a,x=winners[i];return`<td class="hc ${x&&x.mx===v&&x.fin?"crown":""}" style="background:${k>=0?`rgba(62,207,116,${Math.min(.55,.08+k*.09)})`:`rgba(255,107,107,${Math.min(.5,.06-k*.08)})`}" title="W${i+1}: ${v} (avg ${a.toFixed(1)})${x&&x.mx===v&&x.fin?" · weekly winner":""}">${v}</td>`}).join("")}</tr>`}).join("");
+  const board=sorted.map(r=>{const c=prank(r)-rank(r),isMe=r===me,rk=rank(r);return`<tr class="${isMe?"me":""} ${rk<=2?"paid":""}"><td class="n">${tie(r)?"T":""}${rk}</td><td class="chg">${c?`<span class="${c>0?"up":"dn"}">${c>0?"▲":"▼"}${Math.abs(c)}</span>`:"<span class='pm'>–</span>"}</td><td class="pkn">${rk<=2?(rk===1?"🥇 ":"🥈 "):""}${nm(r.u)}${nickOf(r.u)?` <small class="pm">${esc(r.u)}</small>`:""}</td><td class="n"><b>${tot(r)}</b></td><td class="n gap">${r===lead?"—":"−"+(tot(lead)-tot(r))}</td><td>${trend(r)}</td>${Array.from({length:W},(_,i)=>{const v=+r.w[i]||0,a=avgW(i),k=v-a,x=winners[i];return`<td class="hc ${x&&x.mx===v&&x.fin?"crown":""}" style="background:${k>=0?`rgba(62,207,116,${Math.min(.55,.08+k*.09)})`:`rgba(255,107,107,${Math.min(.5,.06-k*.08)})`}" title="W${i+1}: ${v} (avg ${a.toFixed(1)})${x&&x.mx===v&&x.fin?" · weekly winner":""}">${v}</td>`}).join("")}</tr>`}).join("");
   h+="<!--M:board-->"+pkSec("board","🏆 Standings",`${nR} members · 🥇🥈 paid places · gold box = weekly winner`,`<div class="tw sws stand"><table class="svtab pkt2"><colgroup><col style="width:46px"><col style="width:44px"><col><col style="width:54px"><col style="width:56px"><col style="width:76px">${Array.from({length:W},()=>`<col style="width:46px">`).join("")}</colgroup><thead><tr><th class="n">#</th><th></th><th>Member</th><th class="n">Pts</th><th class="n">Gap</th><th>Trend</th>${Array.from({length:W},(_,i)=>`<th class="c">W${i+1}</th>`).join("")}</tr></thead><tbody>${board}</tbody></table></div>`);
   /* ---------- my pick history ---------- */
   const hist=Array.from({length:W},(_,i)=>{const gs=wkGames(i+1);return`<div class="phw"><b>W${i+1}</b><div class="phc">${gs.map(g=>{const p=g.picks.find(x=>x.u===C.me),pick=p&&p.side>=0?(p.side?g.b:g.a):null,c=p?p.c:"M",pop=pick?popOf(g,p.side):null;
@@ -4350,17 +4382,24 @@ async function mvBuild(lg){
   /* ONE board for every deal, 2- or 3-way. Each participant: what they give, what they get, and their gain in best-lineup
      pts/wk over the same projected weeks (ws) for everyone. Ranked by average gain per manager; ties → least gain, then yours.
      Trade type never enters the ranking. */
-  const vsum=ids=>ids.reduce((s,i)=>s+V(i),0);
+  /* asset value = value over replacement: projected pts/wk above the best free agent at the same position. A backup you
+     could replace from waivers is worth ~0 in a trade, so overpay compares like with like across positions. */
+  const rost0=new Set();lg.rosters.forEach(r=>[...(r.players||[]),...(r.reserve||[]),...(r.taxi||[])].forEach(id=>rost0.add(id)));
+  const repl={};["QB","RB","WR","TE","K","DEF"].forEach(z=>{let b=0;for(const id in val){if(rost0.has(id))continue;const q=pinfo(id);if(q.pos!==z||!q.team||q.team==="FA"||/^(IR|Out|Suspended|PUP)$/i.test(q.inj||""))continue;if(val[id]>b)b=val[id]}repl[z]=b});
+  const aval=id=>Math.max(0,V(id)-(repl[pinfo(id).pos]||0));
+  const vsum=ids=>ids.reduce((s,i)=>s+aval(i),0);
   const mkDeal=(kind,P)=>{const gs=P.map(p=>p.g),avg=gs.reduce((a,b)=>a+b,0)/gs.length,mine=P.find(p=>p.t.mine);
     P.forEach(p=>{p.vg=vsum(p.give);p.vr=vsum(p.get)});
     const key=kind+":"+P.map(p=>p.t.rid+">"+p.give.slice().sort().join("+")).join("|");
-    const grp=kind+"|"+P.filter(p=>!p.t.mine).map(p=>p.t.rid).sort().join(",")+"|"+mine.get.slice().sort().join("+");
+    /* near-identical = same partners and the same headline player you receive (the most valuable one) */
+    const core=mine.get.slice().sort((a,b)=>V(b)-V(a))[0];
+    const grp=kind+"|"+P.filter(p=>!p.t.mine).map(p=>p.t.rid).sort().join(",")+"|"+core;
     const flags=[],hi=P.slice().sort((a,b)=>b.g-a.g)[0],lo=P.slice().sort((a,b)=>a.g-b.g)[0];
     /* highly unequal only (not every difference): the top gain is ≥3× the bottom one AND ≥2 pts/wk apart */
     if(hi.g>=3*lo.g&&hi.g-lo.g>=2)flags.push({k:"lop",who:hi.t.rid,lo:lo.t.rid});
     /* players you'd receive who can't help right now */
     P.filter(p=>p.t.mine).forEach(p=>p.get.forEach(id=>{const ij=pinfo(id).inj||"";if(/^(Out|IR|Doubtful|PUP|Suspended|NFI)$/i.test(ij))flags.push({k:"inj",who:p.t.rid,id,ij})}));
-    P.forEach(p=>{if(p.vg-p.vr>=Math.max(1.5,.25*p.vr))flags.push({k:"over",who:p.t.rid,d:p.vg-p.vr})});
+    P.forEach(p=>{const d=p.vg-p.vr;if(d>=Math.max(1.5,.2*p.vr))flags.push({k:"over",who:p.t.rid,d,sev:d>=Math.max(3,.35*p.vr)?"hi":"lo"})});
     return{kind,P,avg,min:lo.g,minWho:lo.t.rid,my:mine.g,rids:P.filter(p=>!p.t.mine).map(p=>p.t.rid),key,grp,flags}};
   const deals=[...two.map(x=>{const[[A,g,r],[B]]=x.parts;return mkDeal(2,[{t:A,give:g,get:r,g:x.gains[0]},{t:B,give:r,get:g,g:x.gains[1]}])}),
     ...three.map(x=>{const[[A,a,B],[,b,C],[,c]]=x.cyc;return mkDeal(3,[{t:A,give:[a],get:[c],g:x.gains[0]},{t:B,give:[b],get:[a],g:x.gains[1]},{t:C,give:[c],get:[b],g:x.gains[2]}])})];
@@ -4369,8 +4408,11 @@ async function mvBuild(lg){
   deals.forEach((d,i)=>d.rank=i+1);
   /* roster consequence for you: positions left with no spare player after the deal */
   /* a position where the deal leaves you nobody behind the starters (counted against the lineup you'd start AFTER the deal) */
+  /* critical when a starter at that position is hurt or has a bye in the projected weeks that nobody would cover */
   const thin=d=>{const p=d.P.find(x=>x.t.mine),after=swap(me.ids,p.give,p.get),La=bestLineup(after,slots,V).set,out=[];
-    PZ.forEach(z=>{const nb=me.ids.filter(id=>pinfo(id).pos===z).length,na=after.filter(id=>pinfo(id).pos===z).length,st=[...La].filter(id=>pinfo(id).pos===z).length;if(st>0&&na<nb&&na<=st)out.push(z)});return out};
+    PZ.forEach(z=>{const nb=me.ids.filter(id=>pinfo(id).pos===z).length,na=after.filter(id=>pinfo(id).pos===z).length,st=[...La].filter(id=>pinfo(id).pos===z);
+      if(!st.length||na>=nb||na>st.length)return;const why=st.map(id=>/^(Questionable|Doubtful|Out)$/i.test(pinfo(id).inj||"")?`${pinfo(id).name} is ${pinfo(id).inj}`:(wk[id]||[]).some(v=>!(v>0))?`${pinfo(id).name} has a bye in the projected weeks`:"").filter(Boolean);
+      out.push({z,crit:why.length>0,why})});return out};
   /* pickups */
   const rostered=new Set();lg.rosters.forEach(r=>[...(r.players||[]),...(r.reserve||[]),...(r.taxi||[])].forEach(id=>rostered.add(id)));
   const posOK=new Set(slots.flatMap(s=>ELIG2[s]||[s]));
@@ -4395,7 +4437,7 @@ async function mvBuild(lg){
   const core=[...bestLineup(me.ids,slots,V).set],alerts=ws.map((w,i)=>{const gone=core.filter(id=>!((wk[id]||[])[i]>0));return{w,pts:me.wks[i],gone,drop:me.str-me.wks[i]}}).filter(a=>a.gone.length);
   const st=lg.league.settings||{},faab=st.waiver_type===2,budget=st.waiver_budget||100,used=(me.r.settings||{}).waiver_budget_used||0,left=Math.max(0,budget-used);
   adds.forEach(x=>{const pct=x.g>=3?.22:x.g>=1.5?.12:x.g>=.6?.06:.02,boost=(x.tr&&x.tr.r<=10?.06:0)+(x.hc?.05:0);x.bid=faab?Math.max(x.g>0?1:0,Math.round(left*(pct+boost))):null});
-  return{teams,me,rk0,deals,explain,thin,prof,adds,V,strength,swap,faab,left,budget,ws,fin,streams,alerts,wk,slots};
+  return{teams,me,rk0,deals,explain,thin,prof,aval,repl,adds,V,strength,swap,faab,left,budget,ws,fin,streams,alerts,wk,slots};
 }
 /* ---------- exact lineup optimizer ----------
    bestLineup(ids, slots, valueFn, prefer) → {pts, set, filled, by}: the highest-scoring LEGAL lineup for any slot list.
@@ -4575,34 +4617,39 @@ function mvRender(){
   const pchip=id=>{const q=pinfo(id);return`<span class="tdc"><span class="pos ${esc(q.pos)}">${esc(q.pos)}</span>${esc(pnm(id))}</span>`};
   const ptag=rid=>`<span class="tdn${prf(rid)==="y"?" pf":""}">${prf(rid)==="y"?"★ ":""}${esc(nmR(rid))}</span>`;
   /* the one amber signal: only material issues that concern you */
-  const warnsOf=d=>{const w=[];d.flags.forEach(f=>{if(f.k==="over"&&f.who===me.rid)w.push(`You give ${f1(f.d)} pts/wk more projected season value than you get: the gain is lineup fit, not asset value`);
-      if(f.k==="lop")w.push(`Highly unequal: ${f.who===me.rid?"you gain":esc(nmR(f.who))+" gains"} ≥3× ${f.lo===me.rid?"you":esc(nmR(f.lo))}; the side gaining least may balk`);
-      if(f.k==="inj")w.push(`${esc(pinfo(f.id).name)} is listed ${esc(f.ij)}`)});
-    R.thin(d).forEach(z=>w.push(`No backup ${z} behind your starters after this deal`));if(DL)w.push(`League trade deadline was Week ${DL}`);return w};
+  /* risks that concern you, graded: hi = material (shown on the row), lo = caution (expanded view only) */
+  const warnsOf=d=>{const w=[];d.flags.forEach(f=>{if(f.k==="over"&&f.who===me.rid)w.push({sev:f.sev,s:"overpay",l:`You give ${f1(f.d)} pts/wk more value over replacement than you get back`});
+      if(f.k==="lop")w.push({sev:"lo",s:"unequal",l:`${f.who===me.rid?"You gain":esc(nmR(f.who))+" gains"} ≥3× what ${f.lo===me.rid?"you gain":esc(nmR(f.lo))+" gains"}: the side gaining least may balk`});
+      if(f.k==="inj")w.push({sev:/^(Out|IR|PUP|Suspended|NFI)$/i.test(f.ij)?"hi":"lo",s:"injured",l:`${esc(pinfo(f.id).name)} (you'd get) is listed ${esc(f.ij)}`})});
+    R.thin(d).forEach(x=>w.push({sev:x.crit?"hi":"lo",s:"thin "+x.z,l:x.crit?`No backup ${x.z} after this deal, and ${esc(x.why.join("; "))}`:`No ${x.z} left on your bench after this deal`}));
+    if(DL)w.push({sev:"hi",s:"deadline",l:`League trade deadline was Week ${DL}`});return w.sort((a,b)=>(a.sev==="hi"?0:1)-(b.sev==="hi"?0:1))};
+  MV.warnsOf=warnsOf;
   const avgTag=d=>`<span class="tavg" data-tip="Average gain per manager in this deal (the ranking metric): ${d.P.map(p=>`${p.t.mine?"you":esc(p.t.name)} +${f1(p.g)}`).join(" · ")}"><small>AVG</small><b>+${f1(d.avg)}</b><small>/wk</small></span>`;
   /* one bar per manager, scaled to the largest gain in THIS deal (not probability, not fairness) */
-  const bars=d=>{const mx=Math.max(...d.P.map(p=>p.g));return`<span class="tbars">${d.P.map(p=>`<span class="tbn2 ${p.t.mine?"me":""}"><span class="tbl2">${p.t.mine?"YOU":esc(p.t.name)}</span><span class="tbb"><i style="width:${Math.max(6,p.g/mx*100).toFixed(0)}%"></i></span><b>+${f1(p.g)}</b></span>`).join("")}</span>`};
+  /* one bar per manager on ONE scale shared by every trade on the board (the largest single gain = full width) */
+  const MXG=Math.max(.5,...D.map(d=>Math.max(...d.P.map(p=>p.g))));MV.mxg=MXG;
+  const bars=d=>`<span class="tbars" data-tip="Projected best-lineup gain per week. Bars share one scale across all trades.">${d.P.map(p=>`<span class="tbn2 ${p.t.mine?"me":""}"><span class="tbl2">${p.t.mine?"YOU":d.kind===2?"THEM":esc(p.t.name)}</span><span class="tbb"><i style="width:${Math.max(4,p.g/MXG*100).toFixed(1)}%"></i></span><b>+${f1(p.g)}</b></span>`).join("")}</span>`;
   const gg=(lab,cls,ids)=>`<span class="tgx ${cls}"><b>${lab}</b>${ids.map(pchip).join('<i class="tdsep">·</i>')}</span>`;
   const row=(d,nv)=>{const me0=d.P.find(p=>p.t.mine),open=MV.tx===d.key,w=warnsOf(d);
     return`<div class="tdr${open?" on":""}" data-tx="${esc(d.key)}" role="button" tabindex="0" aria-expanded="${open}">
-      <div class="tq1"><span class="tdk" data-tip="Rank among all packages (filters don't renumber)">${d.grank}</span><span class="tdps">${d.rids.map(ptag).join('<i class="tdsep">+</i>')}</span>${avgTag(d)}<span class="tq1s"></span>${w.length?`<span class="tdw0" data-tip="${esc(w.join(" · "))}" aria-label="Has a warning">⚠</span>`:""}<span class="tdt" data-tip="${d.kind}-way">${d.kind===3?"△":"⇄"}</span>${nv?`<span class="tdv" data-tip="${nv} similar package${nv>1?"s":""}">+${nv}</span>`:""}</div>
+      <div class="tq1"><span class="tdk" data-tip="Rank among all packages (filters don't renumber)">${d.grank}</span><span class="tdps">${d.rids.map(ptag).join('<i class="tdsep">+</i>')}</span>${avgTag(d)}<span class="tq1s"></span>${(()=>{const hi=w.filter(x=>x.sev==="hi");return hi.length?`<span class="tdw0 hi" data-tip="${esc(hi.map(x=>x.l).join(" · "))}">⚠ ${esc(hi[0].s)}${hi.length>1?` +${hi.length-1}`:""}</span>`:w.length?`<span class="tdw0 lo" data-tip="${esc(w.map(x=>x.l).join(" · "))}" aria-label="Minor caution">ⓘ</span>`:""})()}<span class="tdt" data-tip="${d.kind}-way">${d.kind===3?"△":"⇄"}</span>${nv?`<span class="tdv" data-tip="Similar packages with the same partner and the same headline player">${nv} similar</span>`:""}</div>
       <div class="tq2">${bars(d)}<span class="tq3">${gg("GIVE ↗","gv",me0.give)}${gg("GET ↙","gt",me0.get)}</span></div></div>${open?detail(d):""}`};
   const detail=d=>{const nr=rankAfter(Object.fromEntries(d.P.map(p=>[p.t.rid,p.g]))),who=p=>p.t.mine?`<b class="gme">You</b>`:`<b class="gop">${esc(p.t.name)}</b>`;
     /* where every player goes */
-    const flow=d.P.flatMap(p=>p.give.map(id=>({from:p,id,to:d.P.find(q=>q.get.includes(id))}))).map(x=>`<div class="tfr2">${who(x.from)}<i class="arr">→</i>${x.to?who(x.to):""}${pchip(x.id)}</div>`).join("");
+    const flow=d.kind===3?`<div class="tcyc" data-tip="Who sends what to whom">△ ${d.P.map(p=>`${who(p)}<i class="arr">↗</i>${p.give.map(pchip).join("")}`).join('<i class="arr">→</i>')}<i class="arr">→</i>${who(d.P[0])}</div>`:"";
     /* what changes in each lineup */
     const pos=d.P.map(p=>{const e=R.explain(p.t,p.give,p.get),ch=[];
-      e.ins.forEach(id=>ch.push(`<span class="tpi up" data-tip="Joins the best lineup">▲ ${pchip(id)}</span>`));
-      e.outB.forEach(id=>ch.push(`<span class="tpi dn" data-tip="Drops out of the best lineup">▼ ${pchip(id)}</span>`));
-      e.up.forEach(id=>ch.push(`<span class="tpi" data-tip="Steps into the lineup from the bench">⤴ ${pchip(id)}</span>`));
-      if(e.fills)ch.push(`<span class="tpi gd" data-tip="Their weakest starting position vs the league">🎯 fills ${e.fills}</span>`);
-      if(e.gB.length)ch.push(`<span class="tpi" data-tip="Was only bench depth">🪑 ${e.gB.map(i=>esc(pnm(i))).join(", ")}</span>`);
-      if(!ch.length)ch.push(`<span class="tpi" data-tip="Better coverage for byes and injuries over the projected weeks">🗓 bye/injury cover</span>`);
+      e.ins.forEach(id=>ch.push(`<span class="tpi up"><em>starts</em>${pchip(id)}</span>`));
+      e.outB.forEach(id=>ch.push(`<span class="tpi dn"><em>to bench</em>${pchip(id)}</span>`));
+      e.up.forEach(id=>ch.push(`<span class="tpi"><em>steps in</em>${pchip(id)}</span>`));
+      if(e.fills)ch.push(`<span class="tpi gd" data-tip="Weakest starting position vs the league average">fills weakest spot · ${e.fills}</span>`);
+      if(e.gB.length)ch.push(`<span class="tpi"><em>was bench</em>${e.gB.map(pchip).join("")}</span>`);
+      if(!ch.length)ch.push(`<span class="tpi" data-tip="Better coverage for byes and injuries over the projected weeks">covers byes / injuries</span>`);
       return`<div class="tpos">${who(p)}<span class="tpis">${ch.join("")}</span></div>`}).join("");
-    const w=warnsOf(d),info=d.flags.filter(f=>f.k==="over"&&f.who!==me.rid).map(f=>`<span class="tinfo" data-tip="Projected rest-of-season value, not a market price">ℹ ${esc(nmR(f.who))} gives ${f1(f.d)} more projected value than they get: expect pushback</span>`);
+    const w=warnsOf(d),info=d.flags.filter(f=>f.k==="over"&&f.who!==me.rid).map(f=>`<span class="tinfo" data-tip="Value over replacement from projections, not a market price">ℹ ${esc(nmR(f.who))} gives ${f1(f.d)} pts/wk more value over replacement: expect pushback</span>`);
     const sims=G[d.grp].filter(x=>x!==d&&shown(x)).slice(0,6),so=MV.sim&&MV.sim[d.key];
-    return`<div class="tdd"><div class="tdd2"><div class="tflw">${flow}</div><div class="tposs">${pos}</div></div>
-      ${w.length||info.length?`<div class="twarn">${w.map(x=>`<span class="tw2 amb">⚠ ${x}</span>`).join("")}${info.join("")}</div>`:""}
+    return`<div class="tdd">${flow}<div class="tposs">${pos}</div>
+      ${w.length||info.length?`<div class="twarn">${w.map(x=>x.sev==="hi"?`<span class="tw2 amb">⚠ ${x.l}</span>`:`<span class="tw2 lo">ⓘ ${x.l}</span>`).join("")}${info.join("")}</div>`:""}
       <div class="tdft"><span class="pm">projected rank #${R.rk0} → ${nr<R.rk0?`<b class="up">#${nr}</b>`:`#${nr}`}</span>${sims.length?`<button class="mvb tsimb" data-sim="${esc(d.key)}" aria-expanded="${!!so}">${so?"▾":"▸"} ${sims.length} similar package${sims.length>1?"s":""}</button>`:""}</div>
       ${so&&sims.length?`<div class="tsim">${sims.map(x=>{const m=x.P.find(p=>p.t.mine);return`<button class="tsr" data-tx="${esc(x.key)}"><span class="tq3">${gg("GIVE ↗","gv",m.give)}${gg("GET ↙","gt",m.get)}</span><span class="tavg sm"><small>AVG</small><b>+${f1(x.avg)}</b></span><span class="tdm">you +${f1(x.my)}</span></button>`}).join("")}</div>`:""}</div>`};
   /* every partner's best deal one tap away, even when one manager dominates the top of the list */
@@ -4614,8 +4661,16 @@ function mvRender(){
     <span class="tpf"><button class="mvb${MV.pfo?" on":""}" data-pf="1" aria-expanded="${!!MV.pfo}">Partners ${nNo||nY?`<em>${others.length-nNo} of ${others.length}${nY?` · ★${nY}`:""}</em>`:"<em>all</em>"} ▾</button>${nY?`<button class="mvb${MV.ponly?" on":""}" data-ponly="1" data-tip="Only deals where every partner is ★">★ only</button>`:""}</span></div>
     ${MV.pfo?`<div class="tpfl">${others.map(t=>`<span class="tpfc${prf(t.rid)==="n"?" no":prf(t.rid)==="y"?" y":""}">${esc(t.name)}${pfBtn(t.rid)}</span>`).join("")}<small class="pm">★ / ⛔ only filter what you see; the ranking stays the same.</small></div>`:""}`;
   let body;
-  if(tv==="b"){const L=vis2.slice(0,LIM),BP=bestPer();
-    body=`${BP.length>1?`<div class="tbest"><small>Best per partner</small>${BP.map(x=>`<button class="tbc" data-bp="${x.r}" data-tip="Their best deal: #${x.d.grank}">${esc(nmR(x.r))} <b>+${f1(x.d.avg)}</b></button>`).join("")}</div>`:""}<div class="tdl">${L.map(d=>row(d,G[d.grp].filter(x=>x!==d&&shown(x)).length)).join("")||`<div class="none">${D.length?"Every deal involves a manager you marked ⛔.":"No deal raises every manager's best lineup right now."}</div>`}</div>${vis2.length>LIM?`<button class="mvb tmore" data-tmore="1">Show ${Math.min(60,vis2.length)-LIM>0?"more":"fewer"} · ${vis2.length} packages</button>`:MV.tmore&&vis2.length>12?`<button class="mvb tmore" data-tmore="1">Show fewer</button>`:""}`;
+  if(tv==="b"){const BP=bestPer(),pf=MV.pfil!=null&&BP.some(x=>String(x.r)===String(MV.pfil))?String(MV.pfil):null;
+    const list=pf?vis2.filter(d=>d.rids.some(r=>String(r)===pf)):vis2;
+    /* one manager can fill the top of the list: after two of their packages the rest fold into one line (ranking unchanged) */
+    const tot={};list.forEach(d=>{const k=d.rids.slice().sort().join(",");tot[k]=(tot[k]||0)+1});
+    const seen={},items=[];let n=0;for(const d of list){if(n>=LIM)break;const k=d.rids.slice().sort().join(",");seen[k]=(seen[k]||0)+1;
+      if(pf||seen[k]<=2||(MV.fold&&MV.fold[k])){items.push(row(d,G[d.grp].filter(x=>x!==d&&shown(x)).length));n++}
+      else if(seen[k]===3){items.push(`<button class="tfold" data-fold="${esc(k)}">▸ ${tot[k]-2} more with ${d.rids.map(r=>esc(nmR(r))).join(" + ")} <span class="pm">· best +${f1(d.avg)}</span></button>`);n++}}
+    const foldedOpen=Object.keys(MV.fold||{}).filter(k=>MV.fold[k]&&tot[k]>2);
+    body=`${BP.length>1?`<div class="tbestw"><small>Best per partner</small><div class="tbest" role="tablist"><button class="tbc${pf?"":" on"}" data-bp="" aria-selected="${!pf}">All</button>${BP.map(x=>`<button class="tbc${pf===String(x.r)?" on":""}" data-bp="${x.r}" aria-selected="${pf===String(x.r)}" data-tip="Show only deals with ${esc(nmR(x.r))} (best is #${x.d.grank})">${esc(nmR(x.r))} <b>+${f1(x.d.avg)}</b></button>`).join("")}</div></div>`:""}
+      <div class="tdl">${items.join("")||`<div class="none">${D.length?"Every deal involves a manager you marked ⛔.":"No deal raises every manager's best lineup right now."}</div>`}${foldedOpen.map(k=>`<button class="tfold" data-fold="${esc(k)}">▾ fewer with ${esc(k.split(",").map(r=>nmR(r)).join(" + "))}</button>`).join("")}</div>${list.length>LIM?`<button class="mvb tmore" data-tmore="1">Show more · ${list.length} packages</button>`:MV.tmore&&list.length>12?`<button class="mvb tmore" data-tmore="1">Show fewer</button>`:""}`;
   }else{
     const needC=p=>p&&p.need&&p.need.d<-.5?`<span class="tpn" data-tip="${esc(`Starting ${p.need.z}s project ${f1(-p.need.d)} pts/wk below the league average`)}"><span class="pos ${p.need.z}">${p.need.z}</span><em class="dn">${f1(p.need.d)}</em></span>`:`<span class="pm" data-tip="Every starting position is at or above the league average">–</span>`;
     const surC=p=>p&&p.sur?`<span class="tpn" data-tip="${esc(`${pinfo(p.sur.id).name}: best player outside the lineup, ${f1(p.sur.v)} pts/wk`)}"><span class="pos ${esc(p.sur.z)}">${esc(p.sur.z)}</span><b>${esc(pnm(p.sur.id))}</b></span>`:`<span class="pm">–</span>`;
@@ -4748,7 +4803,8 @@ function mvBind(el){bindMods(el);
   el.querySelectorAll("[data-ponly]").forEach(x=>x.onclick=()=>{MV.ponly=!MV.ponly;rr()});
   el.querySelectorAll("[data-tmore]").forEach(x=>x.onclick=()=>{MV.tmore=!MV.tmore;rr()});
   el.querySelectorAll("[data-sim]").forEach(x=>x.onclick=e=>{e.stopPropagation();MV.sim=MV.sim||{};MV.sim[x.dataset.sim]=!MV.sim[x.dataset.sim];rr()});
-  el.querySelectorAll("[data-bp]").forEach(x=>x.onclick=()=>{MV.tv="p";MV.tp=x.dataset.bp;rr()});
+  el.querySelectorAll("[data-bp]").forEach(x=>x.onclick=()=>{MV.pfil=x.dataset.bp?(MV.pfil===x.dataset.bp?null:x.dataset.bp):null;MV.tx=null;rr()});
+  el.querySelectorAll("[data-fold]").forEach(x=>x.onclick=()=>{MV.fold=MV.fold||{};MV.fold[x.dataset.fold]=!MV.fold[x.dataset.fold];rr()});
   const ro=el.querySelector("#iqroast");if(ro)ro.onclick=async()=>{const ok=await copyText(MV.roast);ro.textContent=ok?"✓":"!";setTimeout(()=>{ro.textContent="📋"},1800)};
   el.querySelectorAll(".mvsel .mvb").forEach(b=>b.onclick=()=>{MV.lg=b.dataset.l;MV.lastHtml="";mvRender();mvTick(S.tab!=="e");if(MV.view==="edge")edgeLeagues().forEach(l=>idealBuild(l))});
 }
@@ -5071,6 +5127,7 @@ if(hasMode("survivor"))svInit().then(()=>{if(S.tab!=="m")setTab(S.tab)});else if
 /* only pools linked (no fantasy league yet): open the pool instead of an empty Matchups */
 function openApp(){const cs=S.conns||getConns();if(cs.length&&cs.every(c=>SHEETMODES[c.p])){document.body.classList.remove("nolg");updateNav();setTab(SHEETMODES[cs[0].p].tab);return}connectAll()}
 $("go").onclick=openApp;
+if(S.nickToast)setTimeout(()=>{try{toast("good",`✓ ${S.nickToast} nicknames saved on this device`,3000)}catch(e){}},2500);
 $("wshare").onclick=async()=>{const ok=await copyText(setupLink());const b=$("wshare");b.textContent=ok?"✓ Link copied":"Couldn't copy";setTimeout(()=>{b.textContent="⧉ Copy setup link"},2200)};
 
 $("week").onchange=()=>{S.L.forEach(l=>{l.rf={}});S.raw=null;S.baseWeek=0;S.stats={};S.statsHave=false;S.statsVol=0;S.desc={};S.stxt="";S.eff={};S.box={};S.fl={};S.fltxt={};S.reg={};S.effPrimed=false;S.okFast=false;S.dirty=true;S.L.forEach(l=>Object.assign(l,{mu:null,prev:{},delta:{},acc:{},off:{},offi:{},cmp:{},log:[],hist:{},focus:null,leadSign:0,lastHtml:"",primed:false}));refresh()};

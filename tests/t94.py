@@ -36,7 +36,7 @@ with sync_playwright() as p:
     chk("trades: one list ranked by avg gain, ties → least gain → yours, regardless of type",t["ok"] and t["k2"]>0 and t["k3"]>0,t)
     g=pg.evaluate("""(()=>{const rows=[...document.querySelectorAll('#moves .tdr')];return rows.map(r=>[+r.querySelector('.tdk').textContent,r.querySelector('.tdps').innerText.trim()])})()""")
     first=[x for x in g][:3]
-    chk("trades: rows show rank and partners (grouped packages, ranks 1..n)",len(g)>=3 and [x[0] for x in g[:3]]==[1,2,3],first)
+    chk("trades: rows show rank and partners (grouped packages; ranks ascend, folded runs skip numbers)",len(g)>=3 and [x[0] for x in g[:2]]==[1,2] and all(g[i][0]<g[i+1][0] for i in range(len(g)-1)),first)
     rid=pg.evaluate("(()=>{const D=MV.res[MV.lg].deals,all=D[0].rids[0];const x=D.find(d=>d.rids.some(r=>r!==all));return String(x?x.rids.find(r=>r!==all):all)})()")
     pg.click("#moves [data-pf]");pg.wait_for_timeout(200);pg.click(f"#moves [data-mk='{rid}'][data-v='n']");pg.wait_for_timeout(300)
     f=pg.evaluate(f"""(()=>{{const rows=[...document.querySelectorAll('#moves .tdr')];return{{n:rows.length,hasR:MV.res[MV.lg].deals.filter(d=>d.rids.includes({rid})).some(d=>rows.some(r=>r.dataset.tx===d.key)),ranks:rows.map(r=>+r.querySelector('.tdk').textContent).slice(0,3),saved:localStorage.getItem('lm_tpref_'+MV.lg)}}}})()""")
@@ -48,8 +48,8 @@ with sync_playwright() as p:
     sub=pg.evaluate("(()=>{const r=[...document.querySelectorAll('#moves .tdl.sub .tdr')];return{n:r.length,tri:r.some(x=>x.querySelector('.tdt').textContent.includes('△'))}})()")
     chk("By partner: one row per manager; expanding lists their 2- and 3-way deals",bp>=12 and sub["n"]>=1 and sub["tri"],{"rows":bp,**sub})
     pg.click("#moves [data-tv='b']");pg.wait_for_timeout(200);pg.locator("#moves .tdr").first.click();pg.wait_for_timeout(300)
-    dd=pg.evaluate("(()=>{const d=document.querySelector('#moves .tdd'),D=MV.res[MV.lg].deals.find(x=>x.key===MV.tx);return d?{fl:d.querySelectorAll('.tfr2').length,moved:D.P.reduce((s,p)=>s+p.give.length,0),pos:d.querySelectorAll('.tpos').length,n:D.P.length}:null})()")
-    chk("expanded deal: every player's destination and each manager's lineup change",dd and dd["fl"]==dd["moved"] and dd["pos"]==dd["n"],dd)
+    dd=pg.evaluate("(()=>{const d=document.querySelector('#moves .tdd'),D=MV.res[MV.lg].deals.find(x=>x.key===MV.tx);return d?{cyc:!!d.querySelector('.tcyc'),k:D.kind,pos:d.querySelectorAll('.tpos').length,n:D.P.length}:null})()")
+    chk("expanded deal: each manager's lineup change; transfers not repeated for 2-way (3-way cycle shown)",dd and dd["pos"]==dd["n"] and dd["cyc"]==(dd["k"]==3),dd)
     chk("no errors (trades)",not e,e[:2]);pg.close();mock.TRADES[0]=False
     # ---------- 3. Survivor ----------
     pg,e=page(b,init="localStorage.setItem('lm_conns',%r);"%CONNS)

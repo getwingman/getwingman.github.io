@@ -18,3 +18,4 @@ run "v42: trade partners, power movement, Edge pickups, Survivor portfolio, Rada
 run "v43 mobile: slot pills, full names, Lab strip, one Trades module" python3 t93.py file://$H $O
 run "v44: live results, Trades board, Survivor, movable modules, Replay" python3 t94.py file://$H $O
 run "v45: trade rows (AVG, per-manager bars, GIVE/GET, warnings)" python3 t95.py file://$H $O
+run "v46: trade polish + device-local nicknames" python3 t96.py file://$H $O
