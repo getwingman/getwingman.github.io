@@ -1191,7 +1191,18 @@ main{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env
   .lg tr.pr>td.n{padding-top:5px}
   .lg tr.pr>td.n b{display:block;line-height:17px}
   .lg tr.pr>td.n .pjc{display:block;margin-top:2px;line-height:14px}
+  /* v43: the name gets row 1 to itself; status tags (Q, 🔥, ⚡…) move to row 2 beside team/kickoff; stats on row 3 */
+  .lg td[data-pos] .nm{flex:0 0 100%;max-width:100%}
+  .lg td[data-pos] .pn>*:not(.nm):not(.st):not(.ssep),.lg td[data-pos] .pc.rv .pn>*:not(.nm):not(.st):not(.ssep){order:2;flex:none;transform:scale(.86);margin:-1px -1px}
+  .lg td[data-pos] .pm{order:3;flex:1 1 0;min-width:0;overflow:hidden}
+  .lg td[data-pos] .pc.rv .pm{order:1;justify-content:flex-end}
+  .lg td[data-pos] .pc.rv .nm{order:0}
+  .lg td[data-pos] .st{order:5}
+  /* slot pill: centred inside the narrow middle column (it used to overflow into the opponent's cell) */
+  .lg td.pos{padding:0 1px;text-align:center}
+  .lg td.pos .slot{display:block;min-width:0;width:max-content;max-width:100%;margin:0 auto;padding:2px 3px;font-size:9px;letter-spacing:.02em}
 }
+@media(max-width:370px){.lg td[data-pos] .nm{font-size:12.5px;letter-spacing:-.015em}.lg td[data-pos] .pc{gap:3px}}
 
 /* pregame header: projections lead, quietly */
 .pt .ptl{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:0 5px;vertical-align:middle;text-shadow:none}
@@ -1319,7 +1330,7 @@ main{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env
 .tpm tr.tpr{cursor:pointer}.tpm tr.tpr:hover td{background:rgba(255,255,255,.03)}.tpm tr.tpr.on td{background:rgba(167,133,255,.06)}.tpm tr.tpr:focus-visible{outline:2px solid var(--a);outline-offset:-2px}
 .tpn{display:inline-flex;align-items:center;gap:5px;min-width:0;max-width:100%}.tpn b{overflow:hidden;text-overflow:ellipsis;font-weight:600}.tpn em{font-style:normal;font-weight:800;font-family:var(--fnum);font-size:13px;color:#c9c9d4}.tpn em.dn{color:var(--neg)}
 .tpd{display:flex;align-items:center;gap:8px;min-width:0}.tpdl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.tpg{display:inline-flex;gap:5px;font-family:var(--fnum);font-size:14px;flex:none}
-.tpm tr.tpx td{height:auto;white-space:normal;padding:8px;background:rgba(167,133,255,.035)}.tpm tr.tpx .trades{padding:0;grid-template-columns:minmax(0,1fr)}
+.tpm tr.tpx td{height:auto;white-space:normal;padding:8px;background:rgba(167,133,255,.035)}.tpm tr.tpx .trades{padding:0;grid-template-columns:repeat(auto-fill,minmax(min(100%,400px),1fr))}
 .tpm td:last-child,.tpm th:last-child{padding:0 6px 0 0;text-align:center}.tpm tr.tpx td:last-child{text-align:left;padding:8px}
 .tpm tr.dim td{color:var(--mute)}
 @media(max-width:760px){.svtab.pwt{min-width:900px!important}.svtab.tpm{min-width:0}.tpm col:nth-child(3){width:0!important}.tpm tr>th:nth-child(3),.tpm tr>td:nth-child(3){padding:0;visibility:hidden}.tpm col:nth-child(2){width:76px!important}.tpm col:nth-child(4){width:48%!important}.svtab.pwt{min-width:800px}.tpm .trb{grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr)}}
@@ -1351,6 +1362,21 @@ html[data-theme=light] .trwhy,html[data-theme=light] .pmvc em,html[data-theme=li
 .kfp.me{border-color:rgba(167,133,255,.35)}.kfp.op{border-color:rgba(61,214,230,.35)}
 .kfn{display:flex;flex-direction:column;gap:3px}.kfn i{display:block;height:4px;border-radius:2px;min-width:2px}.kfn i.me{background:var(--a)}.kfn i.op{background:var(--b);margin-left:auto}
 @media(max-width:760px){.kfr{grid-template-columns:52px minmax(0,1fr) minmax(0,1fr);gap:8px}.kfn{display:none}.kfp b{max-width:76px}}
+
+.svgrid>.card.svc.wide{grid-column:1/-1}
+.funs{display:flex;flex-direction:column}
+.tseg{display:flex;gap:6px;padding:10px 12px 0}.tseg .mvb em{font-style:normal;font-variant-numeric:tabular-nums;opacity:.7;margin-left:3px}
+.trades.t3{grid-template-columns:repeat(auto-fill,minmax(420px,1fr))}
+@media(max-width:760px){
+  /* fun stats: one horizontally scrolling strip (swipe through awards and movers) */
+  .funs{flex-direction:row;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding:10px 12px 8px;scrollbar-width:none;-webkit-mask:linear-gradient(90deg,#000 88%,transparent);mask:linear-gradient(90deg,#000 88%,transparent)}
+  .funs::-webkit-scrollbar{display:none}
+  .funs>.awds,.funs>.pmv{display:contents}
+  .funs .awd,.funs .pmvc{flex:0 0 auto;width:min(64vw,240px);max-width:none;scroll-snap-align:start}
+  .funs .awds .rep{flex:0 0 auto;margin:0 24px 0 0;align-self:center}
+  .trades.t3{grid-template-columns:minmax(0,1fr)}
+  .trd .trb{grid-template-columns:minmax(0,1fr);gap:4px}.trd .trb .arr{justify-self:start;margin-left:8px;transform:rotate(90deg);line-height:1}
+}
 </style>
 </head>
 <body>
@@ -1375,7 +1401,7 @@ html[data-theme=light] .trwhy,html[data-theme=light] .pmvc em,html[data-theme=li
     <div class="labc"><span class="seg2" data-c="motion"><button data-v="normal" class="on">Normal</button><button data-v="reduced">Reduced</button></span><span class="seg2" data-c="sound"><button data-v="on" class="on">Sound</button><button data-v="off">Mute</button></span><button id="labplay" class="labp">▶ Play all</button></div>
     <div class="labbar"><span id="labnow" class="labnow">PREVIEW</span><span id="labsc" class="labsc"></span></div>
     <div id="labev" class="labev"></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v42</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v43</span></div>
   </div>
 </header>
 <main>
@@ -3212,7 +3238,7 @@ function bindMods(el){
 /* ---------- phones: swipe left/right to flip leagues (Matchups) and tabs ---------- */
 (()=>{let x0=0,y0=0,t0=0,ok=false;
   addEventListener("touchstart",e=>{if(!isPhone()||e.touches.length!==1){ok=false;return}const t=e.target;
-    ok=!(t.closest&&t.closest(".oth,.tw.sws,.svtab,.setp,.swp,input,textarea,select,.grip,.ffield,.lvf,.pkw,.ctl,.welcome,#fxlayer"));const p=e.touches[0];x0=p.clientX;y0=p.clientY;t0=Date.now()},{passive:true});
+    ok=!(t.closest&&t.closest(".oth,.tw.sws,.svtab,.funs,.setp,.swp,input,textarea,select,.grip,.ffield,.lvf,.pkw,.ctl,.welcome,#fxlayer"));const p=e.touches[0];x0=p.clientX;y0=p.clientY;t0=Date.now()},{passive:true});
   addEventListener("touchend",e=>{if(!ok)return;ok=false;const p=e.changedTouches[0],dx=p.clientX-x0,dy=p.clientY-y0;if(Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.6||Date.now()-t0>700)return;
     const dir=dx<0?1:-1,V=vis(),seq=[...V.map(l=>({t:"m",lg:l.id})),{t:"f"},{t:"t"},...(edgeOK()?[{t:"e"}]:[]),...(hasMode("survivor")?[{t:"s"}]:[]),...(hasMode("pickem")?[{t:"p"}]:[])];
     let i=seq.findIndex(x=>S.tab==="m"?x.t==="m"&&x.lg===mobId():x.t===S.tab);if(i<0)i=0;const n=seq[Math.max(0,Math.min(seq.length-1,i+dir))];if(!n||n===seq[i])return;
@@ -4233,7 +4259,7 @@ function mvRender(){
   const sub=[sr(me.rid)?`#${sr(me.rid)} season`:"",!noStr&&R.rk0?`#${R.rk0} projected`:"",iqOk&&qr(me.rid)?`${pc(qr(me.rid).eff)} IQ`:""].filter(Boolean).join(" · ");
   const CAL=MV.cal&&MV.cal[lg.id],calNote=CAL&&CAL.n>=12?`<div class="svnote calb" data-tip="${esc(`Pre-game win probability replayed on ${CAL.n} completed matchups (W${CAL.ws[0]}–W${CAL.ws[CAL.ws.length-1]}) using that week's projections and the lineups actually started. A Brier score of 0.25 is a coin flip; lower is better. These are model estimates, not guarantees.`)}">📏 Win-% check: favorites won <b>${Math.round(CAL.hit*100)}%</b> of ${CAL.n} past matchups; the model said ${Math.round(CAL.said*100)}% · Brier ${CAL.brier.toFixed(3)}</div>`:"";
   const endNote=calNote+(R.state==="ended"?`<div class="svnote">🏁 Season complete. Projected strength returns next season; the season rank and Lineup IQ above are final.</div>`:R.state==="noproj"?`<div class="svnote">Projections for ${wl} aren't available yet, so projected strength is hidden rather than shown as 0. It fills in automatically.</div>`:"");
-  h+=`<div class="svgrid">`+mvSec("board","🏆 Rankings & IQ",sub,awards+movement+`<div class="tw"><table class="svtab pwt"><colgroup><col style="width:36px"><col><col style="width:52px"><col style="width:64px"><col style="width:100px"><col style="width:19%"><col style="width:64px"><col style="width:58px"><col style="width:76px"><col style="width:76px"><col style="width:64px"></colgroup><thead><tr><th class="n">#</th><th>Manager</th><th class="n">Rec</th>
+  h+=`<div class="svgrid">`+mvSec("board","🏆 Rankings & IQ",sub,`<div class="funs">${awards}${movement}</div>`+`<div class="tw"><table class="svtab pwt"><colgroup><col style="width:36px"><col><col style="width:52px"><col style="width:64px"><col style="width:100px"><col style="width:19%"><col style="width:64px"><col style="width:58px"><col style="width:76px"><col style="width:76px"><col style="width:64px"></colgroup><thead><tr><th class="n">#</th><th>Manager</th><th class="n">Rec</th>
     ${th("season","Season ⓘ",`Season Rank: how teams have actually played. All-play record (45%: your score vs every team each week), points per week (35%) and win–loss record (20%), completed weeks only. Looks backward: ignores injuries, trades and schedule ahead. Tap to sort.`)}
     <th><span data-tip="League Power Movement: Season rank after each completed week (same formula). ▲/▼ = places moved over the last 3 weeks. Tap a line for the week-by-week ranks.">Trend</span></th>
     ${th("power","Strength ⓘ",noStr?"Projected Strength: unavailable right now (see note below).":`Projected Strength: expected points per week from each roster's best legal lineup, re-optimized for every week of ${wl}${R.ws.some(w=>w>lastWeek(lg))?" (includes playoff weeks)":""} with byes, FLEX and dual-position players. 75% Sleeper projection, 25% season average, ${lg.fmt} scoring. Looks forward: ignores opponents and future moves; projections shift daily. Tap a number for its weekly breakdown. Tap to sort.`)}
@@ -4270,8 +4296,12 @@ function mvRender(){
   const tpm=`<div class="tw"><table class="svtab tpm"><colgroup><col><col style="width:84px"><col style="width:30%"><col style="width:38%"><col style="width:26px"></colgroup><thead><tr><th>Manager</th><th><span data-tip="Position where this team's starters fall furthest below the league average (pts/wk)">Needs</span></th><th><span data-tip="Best player sitting outside this team's best lineup: what they can afford to deal">Surplus</span></th><th><span data-tip="Best deal where both teams' best-lineup projection rises. Purple = your gain, cyan = theirs (pts/wk). Tap a row for every package.">Best deal for both</span></th><th></th></tr></thead><tbody>
     <tr class="me"><td><b>You</b></td><td>${needC(PF[me.rid])}</td><td>${surC(PF[me.rid])}</td><td><span class="pm">${nDeal?`${nDeal} partner${nDeal>1?"s":""} with a deal`:"no partner right now"}</span></td><td></td></tr>
     ${partners.map(({t,b})=>{const o=MV.tp===t.rid&&b;return`<tr class="tpr${b?"":" dim"}${o?" on":""}"${b?` data-tp="${t.rid}" tabindex="0" role="button" aria-expanded="${o?"true":"false"}"`:""}><td><span class="bnm">${esc(t.name)}</span></td><td>${needC(PF[t.rid])}</td><td>${surC(PF[t.rid])}</td><td>${dealC(b)}</td><td class="n">${b?`<span class="chev">${o?"▾":"▸"}</span>`:""}</td></tr>${o?`<tr class="tpx"><td colspan="5"><div class="trades">${(BP[t.rid]||[]).map(tcard).join("")}</div></td></tr>`:""}`}).join("")}</tbody></table></div>`;
-  h+=mvSec("trades",`🤝 Trade partners${tlink}`,nDeal?`${nDeal} with a deal that helps both`:"",tpm+`<div class="svnote">Needs and surplus compare each best lineup with the league average (pts/wk). Every deal raises both best-lineup projections; tap a manager for the packages and why each side says yes.</div>`)
-    +mvSec("trades3","🔺 3-way trades",R.three.length?`${R.three.length} where all three improve`:"",`<div class="trades">${R.three.map(tcard).join("")||'<div class="none">No three-team cycle improves everyone right now.</div>'}</div><div class="svnote">Every suggestion raises each team's best-lineup projection (pts/wk). Pitch it on what they get: the reason under each team.</div>`)+`</div>`;
+  /* one Trades module, full width: 2-way partners and 3-way cycles behind a segmented switch (same card, no uneven columns) */
+  const tv=MV.tv==="3"?"3":"2",n3=R.three.length;
+  const seg=`<div class="tseg" role="tablist"><button class="mvb${tv==="2"?" on":""}" data-tv="2" role="tab" aria-selected="${tv==="2"}">🤝 Partners <em>${nDeal}</em></button><button class="mvb${tv==="3"?" on":""}" data-tv="3" role="tab" aria-selected="${tv==="3"}">🔺 3-way <em>${n3}</em></button></div>`;
+  const body2=tpm+`<div class="svnote">Needs and surplus compare each best lineup with the league average (pts/wk). Every deal raises both best-lineup projections; tap a manager for the packages and why each side says yes.</div>`;
+  const body3=`<div class="trades t3">${R.three.map(tcard).join("")||'<div class="none">No three-team cycle improves everyone right now.</div>'}</div><div class="svnote">Each cycle raises all three best-lineup projections (pts/wk). Pitch it on what they get: the reason under each team.</div>`;
+  h+=mvSec("trades",`🤝 Trades${tlink}`,[nDeal?`${nDeal} partner${nDeal>1?"s":""}`:"",n3?`${n3} three-way`:""].filter(Boolean).join(" · ")||"nothing helps both sides right now",seg+(tv==="3"?body3:body2),"wide")+`</div>`;
   if(h===MV.lastHtml)return;MV.lastHtml=h;el.innerHTML=h;mvBind(el);
 }
 
@@ -4375,7 +4405,7 @@ function edgeHtml(lg,R){
   return`<div class="svgrid edgegrid">${ACT}${PICK}${STASH}${AL}${ST}${idealHtml(lg)}</div>`;
 }
 function tradeUrl(lg){if(lg.provider==="sleeper")return`https://sleeper.com/leagues/${lg.providerLeagueId}/trades`;return lg.adapter&&lg.adapter.leagueUrl?lg.adapter.leagueUrl(lg):""}
-function mvSec(key,title,sub,body){const o=MV.open[key]!==false;return`<div class="card svc"><div class="lh svh" data-k="${key}"><span><span class="chev">${o?"▾":"▸"}</span>${title}</span><small>${sub||""}</small></div>${o?body:""}</div>`}
+function mvSec(key,title,sub,body,cls){const o=MV.open[key]!==false;return`<div class="card svc${cls?" "+cls:""}"><div class="lh svh" data-k="${key}"><span><span class="chev">${o?"▾":"▸"}</span>${title}</span><small>${sub||""}</small></div>${o?body:""}</div>`}
 function mvBind(el){
   const lk=el.querySelector("#edgelk");if(lk)lk.onclick=()=>edgeLock();
   const bk=el.querySelector("#mvback");if(bk)bk.onclick=()=>{if(MV.view==="edge"){setTab("t")}else setTab("m")};
@@ -4383,6 +4413,7 @@ function mvBind(el){
   el.querySelectorAll(".svh").forEach(x=>x.onclick=e=>{if(e.target.closest("a"))return;MV.open[x.dataset.k]=MV.open[x.dataset.k]===false;mvRender()});
   el.querySelectorAll("th.srt").forEach(x=>x.onclick=()=>{MV.sort=x.dataset.sort;MV.lastHtml="";mvRender()});
   el.querySelectorAll("[data-psort]").forEach(x=>x.onclick=()=>{MV.psort=x.dataset.psort;MV.lastHtml="";mvRender()});
+  el.querySelectorAll("[data-tv]").forEach(x=>x.onclick=()=>{MV.tv=x.dataset.tv;MV.lastHtml="";mvRender()});
   el.querySelectorAll("tr[data-tp]").forEach(x=>{const go=()=>{const k=x.dataset.tp;MV.tp=String(MV.tp)===k?null:isNaN(+k)?k:+k;MV.lastHtml="";mvRender()};x.onclick=e=>{if(e.target.closest(".trd"))return;go()};x.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});
   const ro=el.querySelector("#iqroast");if(ro)ro.onclick=async()=>{const ok=await copyText(MV.roast);ro.textContent=ok?"✓":"!";setTimeout(()=>{ro.textContent="📋"},1800)};
   el.querySelectorAll(".mvsel .mvb").forEach(b=>b.onclick=()=>{MV.lg=b.dataset.l;MV.lastHtml="";mvRender();mvTick(S.tab!=="e");if(MV.view==="edge")edgeLeagues().forEach(l=>idealBuild(l))});

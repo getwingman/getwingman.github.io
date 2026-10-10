@@ -33,7 +33,9 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   Trades: **Trade partner matrix** (`R.prof`: each team's weakest starting position vs league average = need, best player
   outside its best lineup = surplus; `R.byP`: up to 3 packages per partner) — tap a manager to open the packages. Every trade
   card explains both sides (`explain()` → `whyTxt`: who enters each best lineup, who it pushes out, whether what's given was
-  only bench depth, "fills their weakest spot"). 3-way trades stay as a side panel.
+  only bench depth, "fills their weakest spot"). 2-way partners and 3-way cycles share ONE full-width "🤝 Trades" module
+  (`mvSec(...,"wide")`) behind a segmented switch (`MV.tv` "2"/"3"). Awards + movement chips sit in `.funs`: wrapped rows on
+  desktop, one horizontally scrolling snap strip on phones (excluded from swipe-to-switch-tab).
 - **Edge** (tab `e`, chest icon in the Lab header, or `#edge`): locked per device. Password "edge" is checked against a
   SHA-256 hash (`EDGE_H`); only a token (`lm_edge_ok`) is stored; 🔒 `edgeLock()` relocks. It is a privacy curtain, not
   server security — everything is computed in the browser and nothing personal ships with the site. Edge shows every
@@ -82,7 +84,10 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   `.up` on containers, `td.n b`). Grep before adding a short class name.
 
 ## Mobile rules
-- Phones (≤760px): bottom tab bar (icon over label via `.tbi`/`.tbl` spans; must fit 5 tabs at 344px), header two rows.
+- Phones (≤760px): bottom tab bar (icon over label via `.tbi`/`.tbl` spans; must fit 6 tabs at 344px), header two rows.
+- Phone matchup cells (56px, 3 rows): row 1 = the name alone (never truncated down to 344px; ≤370px shrinks the font),
+  row 2 = status tags (Q, 🔥, ⚡…) + team/kickoff or live game line, row 3 = stat line. The middle slot pill is centred and
+  sized to the 32px column (it must never spill into the opponent's cell).
 - Touch sizing lives in `@media(pointer:coarse)` (phones, landscape phones, tablets) — never in width queries:
   inputs/selects 16px (prevents iOS focus-zoom), controls ≥34px, small links get an invisible `::after` hit area.
 - Every `data-tip` must be readable by tap (global touch-tip handler); hover-only reveals are not allowed.
