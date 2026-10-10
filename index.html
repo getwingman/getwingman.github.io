@@ -1607,10 +1607,10 @@ html[data-theme=light] .tbb{background:#e6e7ee}
     <div class="labbar"><span id="labnow" class="labnow">PREVIEW</span><span id="labsc" class="labsc"></span></div>
     <div id="labev" class="labev"></div>
     <div class="sph">Nicknames</div>
-    <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm">Only on this device; included in your setup link.</small></div></div>
+    <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v46</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v47</span></div>
   </div>
 </header>
 <main>
@@ -2644,7 +2644,7 @@ function labInit(){themeInit();
   $("labplay").onclick=e=>{e.stopPropagation();labPlayAll()};
   $("layr").onclick=e=>{e.stopPropagation();layReset(false);toast("good","↺ Layout reset for this page",2200)};
   const nt=$("nicks");if(nt){nt.value=Object.keys(NICK).sort().map(k=>`${k} = ${NICK[k]}`).join("\n");nt.onclick=e=>e.stopPropagation()}
-  $("nicksave").onclick=e=>{e.stopPropagation();const o={};String(nt.value).split(/\n/).forEach(l=>{const m=l.match(/^\s*([^=:]+?)\s*[=:]\s*(.+?)\s*$/);if(m)o[m[1].toLowerCase()]=m[2].slice(0,40)});saveNicks(o);
+  $("nicksave").onclick=e=>{e.stopPropagation();const o={};String(nt.value).split(/\n/).forEach(l=>{const m=l.match(/^\s*([^=:]+?)\s*[=:]\s*(.*?)\s*$/);if(m)o[m[1].toLowerCase()]=m[2].slice(0,40)});saveNicks(o);
     vis().forEach(l=>{try{render(l)}catch(x){}});if(S.tab==="t"||S.tab==="e")mvRender();else if(S.tab==="p")pkRender();toast("good",`✓ ${Object.keys(o).length} nicknames saved on this device`,2400)};
   $("layra").onclick=e=>{e.stopPropagation();layReset(true);toast("good","↺ Layout reset on every page",2200)};
   const V=vis().length?vis():S.L,sigs=new Set(V.map(l=>JSON.stringify(l.sc||{})));const sc=$("labsc");
@@ -3201,10 +3201,12 @@ const validURL=u=>/^https:\/\/[a-z0-9.-]+\.[a-z]{2,}(:\d+)?(\/[^\s]*)?$/i.test(S
 const WM_CONNECT="https://connect.getwingman.workers.dev";   /* the shared Wingman Connect server (Yahoo sign-in, private ESPN, screenshot import) */
 const workerURL=()=>{const w=(load("worker")||"").trim().replace(/\/$/,"");return validURL(w)?w:WM_CONNECT};
 try{if(load("worker")&&!validURL(load("worker")))save("worker","");if(load("yworker")&&!validURL(load("yworker")))save("yworker","")}catch(e){}
-/* Nicknames (username → real name). Personal data, so they never ship in the page: they live on this device and travel only
-   inside your own setup link (or a #wm_names= link you send yourself). */
+/* Nicknames (username → real name). PEOPLE = built-in names for the owner's leagues (shipped by choice). Device entries
+   (Settings → Nicknames, a #wm_names= link, or the setup link) override them on this device. */
 const NICK=(()=>{try{return JSON.parse(load("nicks")||"{}")||{}}catch(e){return{}}})();
-const nickOf=s=>NICK[String(s||"").trim().toLowerCase()]||"";
+const PEOPLE={solankit:"Ankit",solanki:"Ankit",indybobjones:"Bob",jayminpatel25:"Jaymin",rchoxi:"Ravi",ayeshajpatel:"Ayesha",aaryanbpatel:"Aaryan",aaryanpatel:"Aaryan",sammyd922:"Sammy",roythecowboy:"Roy",anjieamin:"Angie",angieamin:"Angie",sap16:"Samir",xparraidr:"Parag",rikinp22:"Rikin",kpatel:"Karan",kpatel0402:"Karan",roshanz0r:"Roshan",mykittleponys:"Kunal",sbatman63:"Shayan",suchitparikh:"Suchit",werdihego:"Phillip",vkashmoney:"Vikash",danstar88:"Daniel",rajann:"Rajan",sirrob21:"Robbie",kushal41:"Kushal",stevepatel:"Shital",rickenpatel:"Ricken",shreyp93:"Shrey",patelsah:"Sahil",primap:"Prima",visharg:"Visharg",rgandhi3:"Ronak",sampat1:"Samir",nimjpatel:"Nimesh"};
+/* built-in league names; a device entry (even blank) overrides one */
+const nickOf=s=>{const k=String(s||"").trim().toLowerCase();return(Object.prototype.hasOwnProperty.call(NICK,k)?NICK[k]:PEOPLE[k])||""};
 function saveNicks(o){Object.keys(NICK).forEach(k=>delete NICK[k]);Object.assign(NICK,o);save("nicks",JSON.stringify(NICK));(S.L||[]).forEach(l=>{l.tc={};l.lastHtml=""});S.dirty=true;
   try{MV.lastHtml="";PK.lastHtml="";SV.lastHtml=""}catch(e){}}
 const b64u=s=>btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""),unb64u=s=>decodeURIComponent(escape(atob(s.replace(/-/g,"+").replace(/_/g,"/"))));

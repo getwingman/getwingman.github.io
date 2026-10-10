@@ -64,8 +64,9 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   row; lo = caution (smaller overpay, unequal gains, Doubtful, plain thin bench) → quiet ⓘ, explained when expanded.
   Expanded view never repeats 2-way transfers (3-way shows a one-line cycle): lineup changes (starts / to bench / steps in /
   fills weakest spot / was bench), graded risks, similar packages.
-- Nicknames (username → real name) are personal data: stored on the device only (`NICK`, `lm_nicks`), edited in
-  Settings → Nicknames, imported from a `#wm_names=` link and carried inside the user's own setup link. Never in the page. Awards + movement chips sit in `.funs`: wrapped rows on
+- Nicknames (username → real name): built-in league names ship in the page (`PEOPLE`, by the owner's choice). Device
+  entries (`NICK`, `lm_nicks`: Settings → Nicknames, a `#wm_names=` link, or the user's setup link) override them; a blank
+  entry hides a built-in name. `nickOf()` is the only lookup. Pool data, member full names and sheet IDs still never ship. Awards + movement chips sit in `.funs`: wrapped rows on
   desktop, one horizontally scrolling snap strip on phones (excluded from swipe-to-switch-tab).
 - **Edge** (tab `e`, chest icon in the Lab header, or `#edge`): locked per device. Password "edge" is checked against a
   SHA-256 hash (`EDGE_H`); only a token (`lm_edge_ok`) is stored; 🔒 `edgeLock()` relocks. It is a privacy curtain, not

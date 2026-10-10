@@ -1,0 +1,329 @@
+=== optimizer vs brute force
+optimizer: 1444 passed, 0 failed
+=== worker OAuth
+worker: 12 passed, 0 failed
+=== v38 features + desktop/phone
+PASS saved Survivor tab falls back to Matchups when not linked
+PASS nav = Matchups, Replay (BETA), Lab (Edge hidden until unlocked) — 🏈 Matchups|🎬 ReplayBETA|🧠 Lab
+PASS chips: no fade when nothing overflows
+PASS no 🔥/🧊 on matchup cards while some teams are at 0
+PASS rows 36px / header 1 row
+PASS photos back to v36 crop
+PASS red zone animation sits behind the text — ['0', '1', 'relative']
+PASS bench re-sorts live without reload — Bench Wideout|Rookie Back|Hurt Guy → Rookie Back|Bench Wideout|Hurt Guy
+PASS Lab sections: Power & IQ + Trades — ▾🏆 Rankings & IQ|▾🤝 Trades ↗
+PASS blunder is real (bench pts > starter pts, same lineup family)
+PASS sort by IQ works — [97, 95, 92, 88, 87, 87, 86, 85, 85, 84, 78, 78]
+PASS copy roast for group chat — 🧠 WINGMAN LINEUP IQ · W1–W4 · League One / 🧠 Lineup genius: Parag · 97% efficient / 🎯 Start/sit king: Parag · 92% right calls / ⭐ Perfect weeks: Parag · 2 of 4 / 🪑 Bench warmer: manager2 · 61.35 pts left / 🤡 Bl
+PASS trades header links to Sleeper trades
+PASS secret Waiver edge link still there
+PASS MFL / Fleaflicker cards replaced — Sleeper|ESPN Fantasy|Yahoo Fantasy|Survivor Pool|Pick'em|Custom Import
+PASS bad link rejected
+PASS Survivor tab appears once linked
+PASS Pick'em still hidden
+PASS Survivor asks whose entries, then renders
+PASS Survivor dashboard renders
+PASS no errors desktop — []
+PASS phone: no horizontal scroll
+PASS phone: bottom bar Matchups/Field/Lab
+PASS phone: Lab board scrolls inside its card, page doesn't
+PASS no errors phone — []
+FAILED: []
+=== Lab: rankings, IQ, playoffs
+PASS Lab builds (exact optimizer) in reasonable time — 408 ms
+PASS Lineup IQ optimal = brute force on 96 completed team-weeks — []
+PASS board: Season and Strength are separate columns — #|Manager|Rec|Season ⓘ|Trend|Strength ⓘ ▾|🏆 ⓘ|IQ ⓘ|Bench pts|Start/Sit|Perfect
+PASS board title / summary — ▾🏆 Rankings & IQ #1 season · #1 projected · 98% IQ
+PASS sort by Season rank — [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+PASS awards shown with 4 completed weeks
+PASS awards locked with <3 weeks — 🔒 SEASON AWARDS Unlock after 3 completed weeks · 2 of 3
+PASS IQ ring hidden until enough history
+PASS championship week from playoff settings — [17, 17, 18, 16]
+PASS season over: clear state, no zero rankings, no trade/pickup panels — ['📏 Win-% check: favorites won 50% of 20 past matchups; the model said 55% · Brier 0.251', 0, 0]
+PASS no errors — []
+FAILED: []
+=== Survivor eligibility, pools, privacy
+PASS no personal pool data or sheet IDs in the public HTML — []
+PASS new user: no Survivor / Pick'em tabs
+PASS new user: Survivor/Pick'em state empty
+PASS survivor: asks which entries are yours (no assumption) — 🛟 Which entries are yours?
+PASS participants come from the sheet — 145
+PASS survivor dashboard renders for the chosen participant — 12
+PASS once-per-season: any earlier week blocks the team — [False, False, True]
+PASS no back-to-back: only last week's team blocked — [False, True]
+PASS no limit
+PASS multi-pick weeks: every team in the cell counts as used — [False, False, False, True]
+PASS eliminated entries are never eligible
+PASS reason shown — used W4
+PASS multi-pick week: every pick has to win — [[False, 'L'], [True, 'W']]
+PASS planner (once): no ✓ on a team the entry can't use (96 cells checked) — {'bad': [], 'n': 96}
+PASS planner (gap1): no ✓ on a team the entry can't use (96 cells checked) — {'bad': [], 'n': 96}
+PASS switching sheets resets the pool context (asks again)
+PASS #REF! rows flagged, not silently dropped — ● synced just now · ⚠ 1 #REF!
+PASS unlinking clears the pool from memory and hides the tab
+PASS no errors (survivor) — []
+PASS private sheet: clear message + Try again (no raw error) — 🛟 Survivor
+PASS pick'em: identifies you from your Sleeper username (no prompt) — xParRaidr
+PASS pick'em renders standings for all members — 23
+PASS no fixed row limit in requests — []
+PASS money hidden until the user enters payouts — 23 members
+PASS fixture is complete: no missing weeks / mismatches — [[], []]
+PASS full season: 6,624 pick rows, all 18 weeks parsed, totals agree — [6624, 288, 6624, 18, 0, 0]
+PASS partial import flagged (W2 standings but no W2 picks) — [[2], []]
+PASS no errors (pick'em) — []
+FAILED: []
+=== header states, WP history, stable odds
+PASS pregame header (d): projection leads, no 0.00 — ['card hero hs-up hs-pre', '77.00PROJ', 'first kickoff Mon 10:53a']
+PASS pregame: kickoff time shown (d) — first kickoff Mon 10:53a
+PASS pregame: no win-% history drawn (d)
+PASS no errors d — []
+PASS pregame header (m): projection leads, no 0.00 — ['card hero hs-up hs-pre', '77.00PROJ', 'first kickoff Mon 10:53a']
+PASS pregame: kickoff time shown (m) — first kickoff Mon 10:53a
+PASS pregame: no win-% history drawn (m)
+PASS no errors m — []
+PASS live header shows actual points — 39.30
+PASS WP chart: win % scale, starts at the first estimate, all points kept — {'wp': True, 'start': True, 'n': 7, 'marks': 3, 'min': 10.119999999999997, 'max': 44.8}
+PASS WP chart: only meaningful swings marked (≥10 pts) — 3
+PASS WP chart stays within 0–100% band — {'wp': True, 'start': True, 'n': 7, 'marks': 3, 'min': 10.119999999999997, 'max': 44.8}
+PASS playoff odds stable across recomputes (seeded) — {"1":0.947,"2":0.053,"3":0.6825,"4":0.3175,"5":0.4165,"6":0.5835,"7":0.887,"8":0
+PASS heartbeat requires real scoring (not projection drift)
+FAILED: []
+=== refresh cadence, backoff, errors, calibration
+PASS live: refreshes at the chosen cadence — 7
+PASS pregame: far fewer requests than live — 0
+PASS failing provider: backs off and explains in plain words — [[1, "Can't reach Sleeper right now. Retrying automatically.", True], [1, "Can't reach Sleeper right now. Retrying automatically.", True]]
+PASS connection shows Retrying + Retry button, no raw HTTP — xParRaidr 2 leagues Retrying · Can't reach Sleeper right now. Retrying automatically. Retry ✕
+PASS after retry: Connected · updated … — xParRaidr2 leaguesConnected · updated just now✕
+PASS no page errors — []
+PASS status bar translates raw HTTP errors — Can't reach the provider right now. Retrying automatically.
+PASS Lab: win-probability calibration check shown (≥12 past matchups) — 📏 Win-% check: favorites won 65% of 20 past matchups; the model said 55% · Brier 0.234
+FAILED: []
+=== scoring, exposure, import matching
+PASS scoring: std — (14.2, 14.2)
+PASS scoring: half — (16.7, 16.7)
+PASS scoring: ppr — (19.2, 19.2)
+PASS scoring: qb4 — (24, 24.0)
+PASS scoring: qb6 — (30, 30.0)
+PASS scoring: bonus — (20.4, 20.4)
+PASS scoring: fg — (14, 14.0)
+PASS scoring: pa0 — (15, 15.0)
+PASS scoring: pa17 — (1, 1.0)
+PASS scoring: neg — (-8, -8.0)
+PASS each league scored under its own settings — ['Half-PPR', 'PPR']
+PASS same player, different points per league format (Flowers: 16.70 half / 19.20 PPR) — [16.7, 19.2]
+PASS cross-league exposure detected (yours in both / facing you) — ['me', 'op', 'me']
+PASS import: exact name+team → confident — ['Lamar Jackson', '200', 'confident']
+PASS import: team defense from nickname — ['Bears D/ST', 'CHI', 'confident']
+PASS import: unknown player is never guessed — ['Nobody Atall', None, 'unresolved']
+PASS import: bad JSON rejected with a plain message — Page.evaluate: Error: Needs a "teams" array with at least one team
+PASS no errors — []
+FAILED: []
+=== mobile: desktop parity, light, storage, polling, onboarding
+PASS desktop layout identical to v38 — []
+PASS theme-color follows light mode
+PASS stale week caches pruned, settings kept
+PASS no network polling while app is in background — 0
+PASS refreshes immediately on return
+PASS no errors light phone — []
+PASS first run: welcome fits phone
+PASS connect step opens full-screen
+PASS connect inputs are 16px (no iOS zoom) — ['16px']
+PASS phone back button closes the connect step
+PASS no errors first run — []
+PASS landscape: one-row header, no overflow — [47, 844]
+FAILED: []
+=== new sheet layouts: Survivor Config/Entries/Picks/Results, Pick'em WM_*
+PASS survivor: normalized layout parsed (761 entries, 12 flagged ours, picks through W5) — ['normalized', 761, True, 12, 5]
+PASS survivor: rules self-configure from Config — ['Test Survivor Pool', 'gap1', 25, 4, 19025, 'default', 'no', 'pending', 'Our Group']
+PASS survivor: no 'which entries are yours' prompt
+PASS survivor planner: every ✓ and every plan pick is eligible — {'bad': [], 'n': 32, 'plans': 2, 'planTeams': [['Packers', ['D', 'E', 'F', 'G']], ['Ravens', ['D', 'E']], ['Packers', ['F', 'G']]]}
+PASS pick'em: no 'which member' prompt (matched to the Sleeper username) — xParRaidr
+PASS pick'em: 'You vs the pool' table once picks are visible — ['▾🔮 Week 5 picks helper', '▾🧭 You vs the pool · Week 4', '▾📡 Week 4 · my picks', "▾💡 What the pool's data says", '▾🏆 Standings', '▸🗂 My pick history', '▾⚙️ Pool settings']
+PASS pick'em: coin flips (<55%) get no star / bar, only a muted toss-up — {'n': 16, 'bad': 0, 'flips': 0}
+PASS pick'em: WM tables parsed — ['normalized', 23, 4, 272, [], "Test Pick'em", 50]
+PASS pick'em standings match the pool's own Standings tab (W1–W4) — {}
+PASS tiebreakers loaded — ['1']
+PASS sheet lines: team_a/team_b order handled, proxies labeled — [{'hs': -9.5, 'src': 'sleeper_screenshot_2026-10-06'}, {'hs': 9.5, 'src': 'sleeper_screenshot_2026-10-06'}, {'hs': 3, 'src': 'historical_proxy'}, None]
+PASS no errors d — []
+PASS phone survivor: no horizontal scroll — 390
+PASS phone pick'em: identified without asking
+PASS phone pick'em: no horizontal scroll
+PASS no errors m — []
+FAILED: []
+=== ideal lineup (secret view)
+PASS [pregame] Edge is locked: password prompt, no Edge content
+PASS [pregame] password 'edge' unlocks; Edge tab appears
+PASS [pregame] only a hash token is stored (no password)
+PASS [pregame] ideal lineup card renders
+PASS [pregame] DNP questionable player discounted (London 11.5 → ≤7) — [3.12, [['Q · DNP', 'Questionable · practice: DNP → 60% of projection', 'x'], ['▼ Vegas 18.3', 'ATL implied team total 18.3 (spread +3.5, O/U 40)', 'w']]]
+PASS [pregame] Vegas implied totals used — [True, True, True, True]
+PASS [pregame] DNP starter sat, bench WR starts — {'rec': [['QB', '200', False], ['RB', '500', False], ['WR', '202', False], ['TE', '204', False], ['K', '600', False], ['FLEX', '2005', False]], 'ins': ['2005'], 'outs': ['205'], 'cur': 31.09, 'best': 32.8, 'at': 1791655003631, 'sig205': [['Q · DNP', 'Questionable · practice: DNP → 60% of projection', 'x'], ['▼ Vegas 18.3', 'ATL implied team total 18.3 (spread +3.5, O/U 40)', 'w']], 'v205': 3.12, 'v2005': 4.83, 'g': [True, True, True, True, True, True, True, True]}
+PASS [pregame] Out player with no healthy backup is flagged to replace
+PASS [pregame] nothing locked before kickoff
+PASS [pregame] recommended lineup = brute-force optimum — [30.746111111111112, 30.746111111111112]
+PASS [pregame] rebuilt on revisit — (1791655003631, 1791655011126)
+PASS [pregame] 🔒 lock hides Edge again
+PASS [pregame] no errors — []
+PASS [live] ideal lineup card renders
+PASS [live] started games are locked in place — [['QB', '200', True], ['RB', '500', True], ['WR', '202', True], ['TE', '204', True], ['FLEX', '205', True], ['K', '600', True]]
+PASS [live] no errors — []
+PASS [pregame phone] ideal lineup card renders
+PASS [pregame phone] DNP questionable player discounted (London 11.5 → ≤7) — [3.12, [['Q · DNP', 'Questionable · practice: DNP → 60% of projection', 'x'], ['▼ Vegas 18.3', 'ATL implied team total 18.3 (spread +3.5, O/U 40)', 'w']]]
+PASS [pregame phone] Vegas implied totals used — [True, True, True, True]
+PASS [pregame phone] DNP starter sat, bench WR starts — {'rec': [['QB', '200', False], ['RB', '500', False], ['WR', '202', False], ['TE', '204', False], ['K', '600', False], ['FLEX', '2005', False]], 'ins': ['2005'], 'outs': ['205'], 'cur': 31.09, 'best': 32.8, 'at': 1791655034789, 'sig205': [['Q · DNP', 'Questionable · practice: DNP → 60% of projection', 'x'], ['▼ Vegas 18.3', 'ATL implied team total 18.3 (spread +3.5, O/U 40)', 'w']], 'v205': 3.12, 'v2005': 4.83, 'g': [True, True, True, True, True, True, True, True]}
+PASS [pregame phone] Out player with no healthy backup is flagged to replace
+PASS [pregame phone] nothing locked before kickoff
+PASS [pregame phone] recommended lineup = brute-force optimum — [30.746111111111112, 30.746111111111112]
+PASS [pregame phone] rebuilt on revisit — (1791655034789, 1791655042313)
+PASS [pregame phone] no horizontal scroll
+PASS [pregame phone] no errors — []
+FAILED: []
+=== touch interactions
+=== v42: trade partners, power movement, Edge pickups, Survivor portfolio, Radar pregame, 6 tabs
+PASS trades board: every deal improves every manager; avg = mean gain — {'n': 143, 'ok': True, 'rows': 10}
+PASS tap a deal → lineup changes for each side — ['You STARTS RB R. Player1 fills weakest spot · RB', 'manager3 STARTS WR D. London TO BENCH WR W. Player3 STEPS IN RB R. Player7 fills weakest spot · WR']
+PASS tap again collapses
+PASS power movement: trend line per manager, last point = official season rank — {'n': 12, 'last': True, 'len': 4, 'wk': 4}
+PASS risers / fallers / roster-vs-results chips — ['BIGGEST RISER', 'BIGGEST FALLER', 'OUTPERFORMING ROSTER', 'BETTER THAN RECORD']
+PASS board legibility: IQ number fits its ring, no truncated cells — {'fs': 10, 'fits': True, 'trunc': 0}
+PASS 🏆 odds have a methodology tip
+PASS no errors (Lab) — []
+PASS Edge: real upgrades (≥0.5) separate from watchlist/stashes, no +0.0 'best pickup' — {'h': ['⚡ Do this now\n1 move', '▾➕ Pickups that upgrade you\n$90 of $100 FAAB left', '▾👀 Watchlist & stashes\n1 to keep an eye on', '▾🗓 Roster alerts\nall clear', '▾🔁 Streamers\nW6', '▸🎯 Ideal lineup · W5\n1 change · +0.4 pts projected'], 'real': 0, 'cards': 0, 'stash': 1, 'wl': 1, 'zero': False}
+PASS Edge: leagues side by side
+PASS no errors (Edge) — []
+PASS portfolio planner: Most lives + Portfolio cards, 💥 upset cost on every team — {'c': [{'t': 'Most lives', 'stk': True, 'ups': 1, 'rows': 1}, {'t': 'Portfolio', 'stk': False, 'ups': 2, 'rows': 2}], 'up': 2, 'title': '▾🧺 Week 6 portfolio planner'}
+PASS stacking is obvious: all lives on one team → ⚠ stacked + upset table — {'c': [{'t': 'Most lives', 'stk': True, 'ups': 1, 'rows': 1}, {'t': 'Portfolio', 'stk': False, 'ups': 2, 'rows': 2}], 'up': 2, 'title': '▾🧺 Week 6 portfolio planner'}
+PASS portfolio keeps ≥1 life more often than the stacked plan — [70, 91]
+PASS hero tokens: logo fills the circle, centered — {'w': 36, 'pos': 'static', 'dx': 0, 'dy': 0}
+PASS rival overlap never shows 0% when picks are unknown — ['overlap — picks not visible yet', 'overlap — picks not visible yet', 'overlap — picks not visible yet']
+PASS no errors (Survivor) — []
+PASS Replay pregame: calm kickoff schedule, no empty field rectangles — {'kf': 1, 'mm': 0, 'h2': 0}
+PASS phone tab bar fits 6 tabs at 344px: Matchups, Replay, Lab, Edge, Survivor, Pick'em — {'n': 6, 'labels': ['🏈 Matchups', '🎬 Replay BETA', '🧠 Lab', 'Edge', '🛟 Survivor', "🎯 Pick'em"], 'ov': False, 'sw': 344}
+PASS no errors (Replay/phone) — []
+FAILED: []
+=== v43 mobile: slot pills, full names, Lab strip, one Trades module
+PASS [344] slot pills sit inside the middle column, centred — [[6.3, 6.3], [6.8, 6.8], [5.1, 5.1], [7, 7]]
+PASS [344] player names not truncated (tags moved to row 2) — []
+PASS [344] matchup rows keep one height — [56, 0]
+PASS [344] no horizontal page scroll
+PASS [344] no errors — []
+PASS [390] slot pills sit inside the middle column, centred — [[6.3, 6.3], [6.8, 6.8], [5.1, 5.1], [7, 7]]
+PASS [390] player names not truncated (tags moved to row 2) — []
+PASS [390] matchup rows keep one height — [56, 0]
+PASS [390] no horizontal page scroll
+PASS [390] no errors — []
+PASS [412] slot pills sit inside the middle column, centred — [[6.3, 6.3], [6.8, 6.8], [5.1, 5.1], [7, 7]]
+PASS [412] player names not truncated (tags moved to row 2) — []
+PASS [412] matchup rows keep one height — [56, 0]
+PASS [412] no horizontal page scroll
+PASS Lab fun stats: one horizontal scrolling strip on phones — {'cs': 'auto', 'sw': 2316, 'cw': 394, 'n': 9}
+PASS Lab: 2-way and 3-way trades live in one Trades module — ['🏆 Rankings & IQ', '🤝 Trades ↗']
+PASS Trades: By partner view groups deals by manager
+PASS Trades: back to Best deals
+PASS Lab phone: no horizontal page scroll
+PASS [412] no errors — []
+PASS desktop: Trades module spans the full width like the board — [1457, 1457]
+FAILED: []
+=== v44: live results, Trades board, Survivor, movable modules, Replay
+PASS survivor: a final API score beats the sheet (sheet said L, ESPN final W) — {'gb': 'W', 'gbSrc': 'api', 'det': 'W', 'detSrc': 'sheet'}
+PASS survivor: sheet still fills games the API hasn't decided — {'gb': 'W', 'gbSrc': 'api', 'det': 'W', 'detSrc': 'sheet'}
+PASS pick'em: a final score grades picks against the locked line right away — {'ats': 'BBB', 'b': 'BBB', 'c': 2, 'i': 1, 'weeks': 5, 'w': 5, 'pts': 1, 'api': 1}
+PASS pick'em: API grades vanish when there's no final (sheet stays authoritative) — {'weeks': 4, 'ws': 4}
+PASS no errors (results) — []
+PASS trades: one list ranked by avg gain, ties → least gain → yours, regardless of type — {'n': 143, 'ok': True, 'k2': 8, 'k3': 135, 'mixed': True}
+PASS trades: rows show rank and partners (grouped packages; ranks ascend, folded runs skip numbers) — [[1, 'manager3'], [2, 'manager3'], [4, 'manager10\n+\nmanager3']]
+PASS ⛔ unlikely partner hides their deals; ranks keep their numbers (math unchanged) — {'n': 8, 'hasR': False, 'ranks': [1, 2, 5], 'saved': '{"10":"n"}'}
+PASS By partner: one row per manager; expanding lists their 2- and 3-way deals — {'rows': 12, 'n': 12, 'tri': True}
+PASS expanded deal: each manager's lineup change; transfers not repeated for 2-way (3-way cycle shown) — {'cyc': False, 'k': 2, 'pos': 2, 'n': 2}
+PASS no errors (trades) — []
+PASS survivor: expected lives = Σ each entry's survival chance (exact distribution, correlated teams) — {'n': 4, 'lin': 1.8, 'eTxt': 1.8, 'bars': 5, 'rows': 3, 'sorted': True, 'plan': False, 'heads': ['watch', 'rivals', 'swim', 'stand', 'chart', 'plan', 'rules']}
+PASS survivor: Survival Watch rows sorted by expected lives lost — {'n': 4, 'lin': 1.8, 'eTxt': 1.8, 'bars': 5, 'rows': 3, 'sorted': True, 'plan': False, 'heads': ['watch', 'rivals', 'swim', 'stand', 'chart', 'plan', 'rules']}
+PASS survivor: default order Overview → Watch → Rivals → Swimlanes → Standings → Elimination → Planner → Rules; planner collapsed — ['watch', 'rivals', 'swim', 'stand', 'chart', 'plan', 'rules']
+PASS survivor: entries on the same team are grouped in one row — {'t': 'Texans', 'n': 2, 'row': True}
+PASS planner expand is remembered across refresh
+PASS no 'root' badges or duplicate win % bars in Survival Watch
+PASS modules: keyboard ↓ moves Survival Watch below Rivals and saves per pool — ['overview', 'rivals', 'watch', 'swim', 'stand', 'chart', 'plan', 'rules']
+PASS modules: order persists after reload — ['overview', 'rivals', 'watch', 'swim', 'stand', 'chart', 'plan', 'rules']
+PASS modules: a saved order missing newer modules keeps them (inserted at their default spot) — ['rules', 'overview', 'watch', 'rivals', 'swim', 'stand', 'chart', 'plan']
+PASS modules: tapping a grip offers ▲/▼
+PASS modules: ▲ moves it up — ['rules', 'overview', 'rivals', 'watch', 'swim', 'stand', 'chart', 'plan']
+PASS Settings → Reset this page restores the default order
+PASS grips on Matchups, Lab and Pick'em — {'m': 12, 't': 2, 'p': 8}
+PASS no errors (survivor/modules) — []
+PASS grips on Edge sections
+PASS replay: a TD is ONE event with QB + receiver (ESPN athlete ids) — {'pl': ['200/pass/id', '202/rec/id'], 'L': {'L1': 16.1, 'L2': 16.6}}
+PASS replay: same play, different points per league scoring (Half-PPR vs PPR) — {'pl': ['200/pass/id', '202/rec/id'], 'L': {'L1': 16.1, 'L2': 16.6}}
+PASS replay: field goal distance scored by the league's kicker rules (52 yd = 5) — {'k': 'fg', 'ok': True, 'd': 52, 'L': {'L1': 5, 'L2': 5}}
+PASS replay: interception charged to the passer, credited to the defense — {'pl': ['201/pass', '203/tgt', 'BAL/dint'], 'L': {'L1': 2, 'L2': 2}}
+PASS replay: lost fumble charged to the ball carrier — {'pl': ['200/pass', '204/rec', '204/fumbler', 'CIN/dfr']}
+PASS replay: plays from simultaneous games in true time order on the timeline — ['e2', 'e2', 'e2', 'e1', 'e1', 'e2', 'e1', 'e1', 'e1', 'e1', 'e2']
+PASS replay: reel (3) + one stage + impact per league — {'td': {'pl': ['200/pass/id', '202/rec/id'], 'L': {'L1': 16.1, 'L2': 16.6}}, 'fg': {'k': 'fg', 'ok': True, 'd': 52, 'L': {'L1': 5, 'L2': 5}}, 'int': {'pl': ['201/pass', '203/tgt', 'BAL/dint'], 'L': {'L1': 2, 'L2': 2}}, 'fum': {'pl': ['200/pass', '204/rec', '204/fumbler', 'CIN/dfr']}, 'order': [0, 3.64, 4, 36.36, 40, 45.45, 56.36, 60, 89.09, 92.73, 100], 'times': ['e2', 'e2', 'e2', 'e1', 'e1', 'e2', 'e1', 'e1', 'e1', 'e1', 'e2'], 'reel': 3, 'stage': True, 'imp': 2}
+PASS replay: win-% impact is the reproducible with/without counterfactual — {'d': 0.45650520917103155, 're': 0.45650520917103155}
+PASS replay: no win-% numbers without projections (never invented)
+PASS replay: the play you're exploring survives live refreshes
+PASS filmroom: picking a player filters the reel and shows his scoring composition — {'n': 2, 'all': True, 'seg': 6, 'plays': 2}
+PASS replay: no errors — []
+PASS replay: cross-league conflict (helps in one league, hurts in another) → gold — {'tone': 'mix', 'L': [1, -1]}
+PASS replay: conflict badge in the impact panel
+PASS replay: an ambiguous name (two Z. Flowers on BAL) is never guessed — ['200/name']
+PASS replay pregame: calm kickoff list, no fields or fake highlights
+PASS replay phone: no horizontal scroll
+PASS replay: reduced motion → static field (no draw/ball animation)
+PASS no errors (replay phone) — []
+FAILED: []
+=== v45: trade rows (AVG, per-manager bars, GIVE/GET, warnings)
+PASS [1500] AVG +x/wk labeled and equal to the deal's average — 10
+PASS [1500] one labeled bar per manager (YOU / THEM or each 3-way partner) with exact gains
+PASS [1500] bars share one scale across every trade on the board
+PASS [1500] GIVE ↗ lists what leaves your roster, GET ↙ what joins it
+PASS [1500] material risks → amber tag on the row; minor cautions → quiet ⓘ only
+PASS [1500] no old dot/progress bar
+PASS [1500] ranking still by avg → least gain → yours
+PASS [1500] trade value = value over the best free agent at the position (replaceable backups ≈ 0) — {'below': 0, 'above': 0, 'repl': 6}
+PASS [1500] a material overpay shows a short amber tag on the row — ⚠ overpay
+PASS [1500] expanded view doesn't repeat the player transfers (2-way)
+PASS [1500] similar packages collapsed by default
+PASS [1500] …and open on tap
+PASS [1500] expanded view stays inside the viewport
+PASS [1500] partner chip filters the board to that partner (chip highlighted) — {'n': 3, 'all': True, 'on': '10'}
+PASS [1500] 'All' clears the partner filter
+PASS [1500] one partner never takes more than two rows before folding — {'ok': True, 'folds': 2}
+PASS [1500] fold line expands that partner's remaining packages
+PASS [1500] grouping: same partners + same headline player; variations exist
+PASS [1500] no errors — []
+PASS [390] AVG +x/wk labeled and equal to the deal's average — 10
+PASS [390] one labeled bar per manager (YOU / THEM or each 3-way partner) with exact gains
+PASS [390] bars share one scale across every trade on the board
+PASS [390] GIVE ↗ lists what leaves your roster, GET ↙ what joins it
+PASS [390] material risks → amber tag on the row; minor cautions → quiet ⓘ only
+PASS [390] no old dot/progress bar
+PASS [390] compact rows (~70–100px) — [86, 86, 106, 106, 106, 106]
+PASS [390] one-row header on Lab (no empty second row) — 45
+PASS [390] ranking still by avg → least gain → yours
+PASS [390] expanded view doesn't repeat the player transfers (2-way)
+PASS [390] similar packages collapsed by default
+PASS [390] …and open on tap
+PASS [390] expanded view stays inside the viewport
+PASS [390] partner chip filters the board to that partner (chip highlighted) — {'n': 3, 'all': True, 'on': '10'}
+PASS [390] 'All' clears the partner filter
+PASS [390] one partner never takes more than two rows before folding — {'ok': True, 'folds': 2}
+PASS [390] fold line expands that partner's remaining packages
+PASS [390] grouping: same partners + same headline player; variations exist
+PASS [390] no errors — []
+FAILED: []
+=== v46: trade polish + device-local nicknames
+PASS built-in nickname map ships with the page
+PASS built-in names apply with no setup — Parag
+PASS lookup is case-insensitive
+PASS no errors (built-in) — []
+PASS link import stores the names on this device and strips the hash
+PASS matchups show the nickname
+PASS Lab board shows the nickname
+PASS Pick'em standings show the nickname (username kept small)
+PASS Settings list is prefilled
+PASS Settings edit replaces the names
+PASS device entry overrides the built-in name
+PASS a blank device entry hides the built-in name
+PASS setup link carries the nicknames
+PASS no errors — []
+FAILED: []
