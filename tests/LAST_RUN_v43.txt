@@ -1,0 +1,27 @@
+=== optimizer vs brute force
+optimizer: 1444 passed, 0 failed
+=== worker OAuth
+worker: 12 passed, 0 failed
+=== v38 features + desktop/phone
+FAILED: []
+=== Lab: rankings, IQ, playoffs
+FAILED: []
+=== Survivor eligibility, pools, privacy
+FAILED: []
+=== header states, WP history, stable odds
+FAILED: []
+=== refresh cadence, backoff, errors, calibration
+FAILED: []
+=== scoring, exposure, import matching
+FAILED: []
+=== mobile: desktop parity, light, storage, polling, onboarding
+FAILED: []
+=== new sheet layouts: Survivor Config/Entries/Picks/Results, Pick'em WM_*
+FAILED: []
+=== ideal lineup (secret view)
+FAILED: []
+=== touch interactions
+=== v42: trade partners, power movement, Edge pickups, Survivor portfolio, Radar pregame, 6 tabs
+FAILED: []
+=== v43 mobile: slot pills, full names, Lab strip, one Trades module
+FAILED: []

@@ -1,0 +1,21 @@
+key,value,notes
+schema_version,1,Normalized ingestion tables for Wingman; no in-sheet dashboards
+pool_name,Test Pick'em,Original Sleeper pool
+season,2026,NFL season
+platform,Sleeper,Pick'em
+scoring_mode,spread,1 point for a correct ATS pick
+expected_participants,23,Each game must have one WM_Picks row per participant
+entry_fee_usd,50,Historical source
+pick_deadline,game_kickoff,Pick changes allowed until kickoff
+spread_policy,sleeper_lock,Use Sleeper locked odds whenever captured
+pick_results_source,Sleeper_grading,Grades and points in WM_Picks are authoritative; do not recompute history from proxy odds
+historical_spreads,W1-W4_proxy,"Market proxies, not verified Sleeper lines"
+week5_spreads,Sleeper_screenshot_2026-10-06,Confirmed from provided Sleeper screenshots
+future_spreads,not_captured,Only populate with verified Sleeper lines
+team_a_b,source_order_only,Do not assume Team A is the home team
+spread_b,negative_of_spread_a,Derived; no need to store
+derived_views,Wingman_app,"Standings, cover rates, popularity, contrarian metrics and QA are computed by the app"
+missing_vs_forfeit,separate,MISSING=not captured; No Pick=confirmed forfeited pick; Hidden=not yet revealed
+compatibility,legacy_tabs_preserved,"Legacy Picks, Standings, and Pool Rules are hidden and preserved for backwards compatibility; new updates should target WM_*"
+tiebreak_rule,absolute_error,Compare weekly guess to actual; smallest error wins
+unverified_payouts,omitted,Original Pool Rules lists payouts as not provided/only partial; do not treat as final

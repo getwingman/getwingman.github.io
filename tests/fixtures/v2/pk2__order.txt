@@ -1,0 +1,8 @@
+WM_Games
+WM_Picks
+WM_Participants
+WM_Tiebreakers
+WM_Config
+Picks
+Standings
+Pool Rules

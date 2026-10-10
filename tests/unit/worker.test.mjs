@@ -1,0 +1,27 @@
+/* Worker regression tests (node tests/worker.test.mjs): Yahoo OAuth login/callback/session, CORS, error paths. No network. */
+import W from "./worker.mjs";
+let pass=0,fail=0;const ok=(n,c,i)=>{if(c)pass++;else{fail++;console.log("FAIL",n,i??"")}};
+const env={ALLOWED_ORIGIN:"https://getwingman.github.io",SESSION_KEY:"x".repeat(40),YAHOO_CLIENT_ID:"cid",YAHOO_CLIENT_SECRET:"sec"};
+const calls=[];let tokenOK=true,expiresIn=3600;
+globalThis.fetch=async(u,o={})=>{u=String(u);calls.push([u,o]);
+  if(u.includes("get_token"))return tokenOK?new Response(JSON.stringify({access_token:"AT"+calls.length,refresh_token:"RT",expires_in:expiresIn}),{status:200}):new Response("bad",{status:401});
+  if(u.includes("fantasysports.yahooapis.com"))return new Response(JSON.stringify({ok:true,auth:(o.headers||{}).Authorization||new Headers(o.headers).get("Authorization")}),{status:200,headers:{"content-type":"application/json"}});
+  return new Response("nope",{status:404})};
+const go=(path,init)=>W.fetch(new Request("https://connect.example.workers.dev"+path,init),env);
+let r=await go("/yahoo/login?return=https://evil.example/");ok("login rejects foreign return URL",r.status===400,r.status);
+r=await go("/yahoo/login?return="+encodeURIComponent(env.ALLOWED_ORIGIN+"/"));const loc=r.headers.get("location")||"";
+ok("login redirects to Yahoo with fspt-r scope",r.status===302&&loc.startsWith("https://api.login.yahoo.com/oauth2/request_auth")&&loc.includes("scope=fspt-r")&&loc.includes("client_id=cid"),loc);
+const state=new URL(loc).searchParams.get("state");
+r=await go("/yahoo/callback?state="+encodeURIComponent(state));ok("callback without code → #wm_error=yahoo_denied",(r.headers.get("location")||"").endsWith("#wm_error=yahoo_denied"),r.headers.get("location"));
+tokenOK=false;r=await go("/yahoo/callback?code=C&state="+encodeURIComponent(state));ok("token failure → #wm_error=yahoo_token (no raw 500)",r.status===302&&(r.headers.get("location")||"").endsWith("#wm_error=yahoo_token"),[r.status,r.headers.get("location")]);
+tokenOK=true;r=await go("/yahoo/callback?code=C&state="+encodeURIComponent(state));const back=r.headers.get("location")||"",blob=decodeURIComponent((back.match(/#wm_yahoo=(.+)$/)||[])[1]||"");
+ok("callback returns an encrypted session to the app",back.startsWith(env.ALLOWED_ORIGIN)&&blob.length>40&&blob.split(".").every(s=>{let d="";try{d=Buffer.from(s.replace(/-/g,"+").replace(/_/g,"/"),"base64").toString("latin1")}catch(e){}return!/"rt"|"at"|RT|AT\d/.test(d)}),back.slice(0,80));
+const state2=btoa(JSON.stringify({ret:"https://evil.example/",n:1}));r=await go("/yahoo/callback?code=C&state="+encodeURIComponent(state2));ok("callback never redirects to a foreign origin",(r.headers.get("location")||"").startsWith(env.ALLOWED_ORIGIN),r.headers.get("location"));
+r=await go("/yahoo/api/users;use_login=1/games",{headers:{"X-WM-Session":blob}});let j=await r.json();ok("API proxy works with the session (Bearer token, secret never exposed)",r.status===200&&/^Bearer AT/.test(j.auth||""),j);
+r=await go("/yahoo/api/x");ok("API without session → 401",r.status===401);
+r=await go("/yahoo/api/x",{headers:{"X-WM-Session":blob.slice(0,-4)+"AAAA"}});ok("tampered session → 401",r.status===401,r.status);
+expiresIn=0;r=await go("/yahoo/callback?code=C&state="+encodeURIComponent(state));const blob2=decodeURIComponent((r.headers.get("location").match(/#wm_yahoo=(.+)$/)||[])[1]);expiresIn=3600;
+r=await go("/yahoo/api/x",{headers:{"X-WM-Session":blob2}});ok("expired access token is refreshed and a new session returned",r.status===200&&!!r.headers.get("X-WM-Session"),[r.status,r.headers.get("X-WM-Session")&&"new"]);
+r=await go("/anything",{method:"OPTIONS"});ok("CORS preflight allows only the app origin",r.status===204&&r.headers.get("Access-Control-Allow-Origin")===env.ALLOWED_ORIGIN);
+r=await go("/nope");ok("unknown route → 404",r.status===404);
+console.log(`worker: ${pass} passed, ${fail} failed`);process.exit(fail?1:0);
