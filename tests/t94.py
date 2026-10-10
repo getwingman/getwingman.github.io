@@ -48,8 +48,8 @@ with sync_playwright() as p:
     sub=pg.evaluate("(()=>{const r=[...document.querySelectorAll('#moves .tdl.sub .tdr')];return{n:r.length,tri:r.some(x=>x.querySelector('.tdt').textContent.includes('△'))}})()")
     chk("By partner: one row per manager; expanding lists their 2- and 3-way deals",bp>=12 and sub["n"]>=1 and sub["tri"],{"rows":bp,**sub})
     pg.click("#moves [data-tv='b']");pg.wait_for_timeout(200);pg.locator("#moves .tdr").first.click();pg.wait_for_timeout(300)
-    dd=pg.evaluate("(()=>{const d=document.querySelector('#moves .tdd');return d?{fl:d.querySelectorAll('.tfr').length,why:d.querySelectorAll('.trwhy>div').length,warn:d.querySelectorAll('.tw2').length,sim:d.querySelectorAll('.tsr').length}:null})()")
-    chk("expanded deal: full flow, every manager's gain and reason, warnings, similar packages",dd and dd["fl"]>=2 and dd["why"]==dd["fl"],dd)
+    dd=pg.evaluate("(()=>{const d=document.querySelector('#moves .tdd'),D=MV.res[MV.lg].deals.find(x=>x.key===MV.tx);return d?{fl:d.querySelectorAll('.tfr2').length,moved:D.P.reduce((s,p)=>s+p.give.length,0),pos:d.querySelectorAll('.tpos').length,n:D.P.length}:null})()")
+    chk("expanded deal: every player's destination and each manager's lineup change",dd and dd["fl"]==dd["moved"] and dd["pos"]==dd["n"],dd)
     chk("no errors (trades)",not e,e[:2]);pg.close();mock.TRADES[0]=False
     # ---------- 3. Survivor ----------
     pg,e=page(b,init="localStorage.setItem('lm_conns',%r);"%CONNS)

@@ -1521,6 +1521,50 @@ html[data-theme=light] .vwb,html[data-theme=light] .sdb i{background-color:#e6e7
   .rpctl{margin-left:0}.rph{padding:10px}.rptlw{grid-template-columns:58px minmax(0,1fr)}.rpax{margin-left:76px}.rpch b{display:none}.rpch{padding:2px}
 }
 html[data-theme=light] .rpch,html[data-theme=light] .rpnote{background:rgba(255,255,255,.88)}html[data-theme=light] .rpci small,html[data-theme=light] .rpsegl,html[data-theme=light] .rpwp{color:var(--mute)}
+
+/* ===== trade rows v45: partners · AVG · per-manager bars · GIVE/GET ===== */
+.tdr{display:flex;flex-direction:column;align-items:stretch;gap:5px;min-height:0;padding:8px 10px;grid-template-columns:none}
+.tdr+.tdr{border-top:1px solid var(--line);border-radius:0}.tdr.on{border-radius:10px}
+.tq1{display:flex;align-items:center;gap:8px;min-width:0}
+.tq1 .tdk{min-width:18px}.tq1 .tdps{flex:0 1 auto;font-size:14px}.tq1 .tavg{margin-left:6px}.tq1s{flex:1}
+.tdw0{color:var(--up);font-size:13px;cursor:help;line-height:1}
+.tavg{display:inline-flex;align-items:baseline;gap:3px;margin-left:auto;flex:none;cursor:help}.tavg small{font-size:10px;font-weight:800;color:var(--mute);letter-spacing:.04em}
+.tavg b{font-family:var(--fnum);font-size:20px;font-weight:800;color:var(--pos);font-variant-numeric:tabular-nums;line-height:1}.tavg.sm b{font-size:15px}
+.tq2{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:6px 16px;align-items:center;padding-left:26px}
+.tbars{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tbn2{display:grid;grid-template-columns:minmax(40px,96px) minmax(30px,1fr) 38px;align-items:center;gap:6px;font-size:11px;min-width:0}
+.tbl2{color:var(--b);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tbn2.me .tbl2{color:var(--a)}
+.tbb{height:6px;border-radius:3px;background:#1d1d25;overflow:hidden}.tbb i{display:block;height:100%;border-radius:3px;background:var(--b)}.tbn2.me .tbb i{background:var(--a)}
+.tbn2 b{font-family:var(--fnum);font-size:13px;color:var(--pos);text-align:right;font-variant-numeric:tabular-nums}
+.tq3{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tgx{display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;white-space:nowrap;font-size:12px}.tgx>b{font-size:10px;font-weight:800;letter-spacing:.04em;flex:none;width:50px}
+.tgx.gv>b{color:#ff9a9a}.tgx.gt>b{color:var(--pos)}.tgx .tdc{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.tdd{margin:0 0 8px 0;padding:10px 12px 8px 36px;border-left:0;background:rgba(167,133,255,.035);border-radius:0 0 10px 10px;gap:8px}
+.tdd2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:8px 18px}
+.tflw{display:flex;flex-direction:column;gap:4px}.tfr2{display:flex;align-items:center;gap:6px;font-size:12px;flex-wrap:wrap}.tfr2 .arr{font-style:normal;color:var(--mute)}
+.tposs{display:flex;flex-direction:column;gap:4px}.tpos{display:flex;align-items:flex-start;gap:8px;font-size:12px}.tpos>b{flex:none;min-width:64px}
+.tpis{display:flex;flex-wrap:wrap;gap:4px}.tpi{display:inline-flex;align-items:center;gap:3px;border:1px solid var(--line);border-radius:7px;padding:1px 6px;font-size:11px;cursor:help}
+.tpi.up{border-color:rgba(62,207,116,.4)}.tpi.dn{border-color:rgba(255,107,107,.35);opacity:.85}.tpi.gd{border-color:rgba(245,197,66,.45);color:var(--gold)}
+.twarn{display:flex;flex-direction:column;gap:4px;font-size:12px}.tw2.amb{border-color:rgba(240,163,35,.45);color:var(--up);cursor:default;align-self:flex-start}
+.tinfo{color:var(--mute);font-size:11.5px;cursor:help}.tdl0{padding:8px 12px 0}
+.tdft{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11.5px}
+.tsr{grid-template-columns:minmax(0,1fr) auto auto;gap:12px}
+.tbest{display:flex;align-items:center;gap:6px;padding:8px 12px 0;overflow-x:auto;scrollbar-width:none}.tbest::-webkit-scrollbar{display:none}
+.tbest small{font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em;flex:none}
+.tbc{flex:none;background:none;border:1px solid var(--line);border-radius:12px;padding:3px 9px;color:var(--b);font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}.tbc b{color:var(--pos);font-family:var(--fnum)}
+.tbr{grid-template-columns:minmax(120px,1fr) 56px 90px minmax(0,1fr) minmax(180px,1.2fr)}.tbd .tavg{margin-left:0}
+@media(max-width:760px){
+  .tdr{padding:8px 4px;gap:4px;grid-template-areas:none}
+  .tq2{grid-template-columns:minmax(0,1fr);padding-left:26px;gap:5px}
+  .tbars{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:4px 12px}
+  .tbn2{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"l n" "b b";gap:2px 6px}.tbn2>.tbl2{grid-area:l}.tbn2>b{grid-area:n}.tbn2>.tbb{grid-area:b}
+  .tq3{flex-direction:row;flex-wrap:wrap;gap:3px 12px}.tgx>b{width:auto}
+  .tdd{padding:8px 8px 8px 12px}.tdd2{grid-template-columns:minmax(0,1fr)}
+  .tavg b{font-size:18px}
+  body.tab-x header{flex-wrap:nowrap}body.tab-x .brand{width:auto;flex:1 1 auto;min-width:0}body.tab-x .ctl{width:auto;flex:none;margin-left:auto;overflow:visible}
+  #moves .svhero{padding:8px 10px}#moves .svhero .svtop{gap:6px}#moves .svhero .hu{font-size:11px}#moves .svhero .svt{font-size:15px}
+}
+html[data-theme=light] .tbb{background:#e6e7ee}
 </style>
 </head>
 <body>
@@ -1547,7 +1591,7 @@ html[data-theme=light] .rpch,html[data-theme=light] .rpnote{background:rgba(255,
     <div id="labev" class="labev"></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v44</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v45</span></div>
   </div>
 </header>
 <main>
@@ -4312,7 +4356,10 @@ async function mvBuild(lg){
     const key=kind+":"+P.map(p=>p.t.rid+">"+p.give.slice().sort().join("+")).join("|");
     const grp=kind+"|"+P.filter(p=>!p.t.mine).map(p=>p.t.rid).sort().join(",")+"|"+mine.get.slice().sort().join("+");
     const flags=[],hi=P.slice().sort((a,b)=>b.g-a.g)[0],lo=P.slice().sort((a,b)=>a.g-b.g)[0];
-    if(hi.g>=2.5*lo.g&&hi.g-lo.g>=1.5)flags.push({k:"lop",who:hi.t.rid,lo:lo.t.rid});
+    /* highly unequal only (not every difference): the top gain is ≥3× the bottom one AND ≥2 pts/wk apart */
+    if(hi.g>=3*lo.g&&hi.g-lo.g>=2)flags.push({k:"lop",who:hi.t.rid,lo:lo.t.rid});
+    /* players you'd receive who can't help right now */
+    P.filter(p=>p.t.mine).forEach(p=>p.get.forEach(id=>{const ij=pinfo(id).inj||"";if(/^(Out|IR|Doubtful|PUP|Suspended|NFI)$/i.test(ij))flags.push({k:"inj",who:p.t.rid,id,ij})}));
     P.forEach(p=>{if(p.vg-p.vr>=Math.max(1.5,.25*p.vr))flags.push({k:"over",who:p.t.rid,d:p.vg-p.vr})});
     return{kind,P,avg,min:lo.g,minWho:lo.t.rid,my:mine.g,rids:P.filter(p=>!p.t.mine).map(p=>p.t.rid),key,grp,flags}};
   const deals=[...two.map(x=>{const[[A,g,r],[B]]=x.parts;return mkDeal(2,[{t:A,give:g,get:r,g:x.gains[0]},{t:B,give:r,get:g,g:x.gains[1]}])}),
@@ -4321,8 +4368,9 @@ async function mvBuild(lg){
   deals.sort((a,b)=>cmpE(b.avg,a.avg)||cmpE(b.min,a.min)||cmpE(b.my,a.my)||(a.key<b.key?-1:1));deals.length=Math.min(deals.length,400);
   deals.forEach((d,i)=>d.rank=i+1);
   /* roster consequence for you: positions left with no spare player after the deal */
-  const mySlots=z=>[...bestLineup(me.ids,slots,V).set].filter(id=>pinfo(id).pos===z).length;
-  const thin=d=>{const p=d.P.find(x=>x.t.mine),after=swap(me.ids,p.give,p.get),out=[];PZ.forEach(z=>{const nb=me.ids.filter(id=>pinfo(id).pos===z).length,na=after.filter(id=>pinfo(id).pos===z).length;if(na<nb&&na<=mySlots(z))out.push(z)});return out};
+  /* a position where the deal leaves you nobody behind the starters (counted against the lineup you'd start AFTER the deal) */
+  const thin=d=>{const p=d.P.find(x=>x.t.mine),after=swap(me.ids,p.give,p.get),La=bestLineup(after,slots,V).set,out=[];
+    PZ.forEach(z=>{const nb=me.ids.filter(id=>pinfo(id).pos===z).length,na=after.filter(id=>pinfo(id).pos===z).length,st=[...La].filter(id=>pinfo(id).pos===z).length;if(st>0&&na<nb&&na<=st)out.push(z)});return out};
   /* pickups */
   const rostered=new Set();lg.rosters.forEach(r=>[...(r.players||[]),...(r.reserve||[]),...(r.taxi||[])].forEach(id=>rostered.add(id)));
   const posOK=new Set(slots.flatMap(s=>ELIG2[s]||[s]));
@@ -4516,36 +4564,49 @@ function mvRender(){
     if(!P.length)P.push("covers bye and injury weeks better over the projected stretch");const s=P.join("; ");return s[0].toUpperCase()+s.slice(1)};
   if(R.state){h=modWrap(h+"<!--M:/-->"+`</div>`,"t");if(h===MV.lastHtml)return;MV.lastHtml=h;el.innerHTML=h;mvBind(el);return}
   const tlink=tradeUrl(lg)?` <a class="trl2" href="${esc(tradeUrl(lg))}" target="_blank" rel="noopener" data-tip="Open trades in ${esc(lg.adapter.name)}">↗</a>`:"";
-  const PF=R.prof||{},D=R.deals||[],nmR=rid=>{const t=teams.find(x=>x.rid===rid);return t?t.name:"Team "+rid};
+  const DL0=+((lg.league.settings||{}).trade_deadline||0),DL=DL0&&DL0<99&&S.nflWeek>DL0?DL0:0;
+  const PF=R.prof||{},D=R.deals||[],nmR=rid=>{const t=teams.find(x=>String(x.rid)===String(rid));return t?t.name:"Team "+rid};
   /* personal partner marks (★ preferred / ⛔ unlikely): a filter on this device, never a change to the math */
   let PR={};try{PR=JSON.parse(load("tpref_"+lg.id)||"{}")||{}}catch(e){}MV.pr=PR;
   const prf=rid=>PR[rid]||"",shown=d=>!d.rids.some(r=>prf(r)==="n")&&(!MV.ponly||d.rids.every(r=>prf(r)==="y"));
   const heads=[],G={};D.forEach(d=>{(G[d.grp]=G[d.grp]||[]).push(d)});
   Object.values(G).forEach(g=>{heads.push(g[0])});heads.sort((a,b)=>a.rank-b.rank);heads.forEach((hd,i)=>G[hd.grp].forEach(x=>x.grank=i+1));
-  const vis2=heads.map(hd=>G[hd.grp].find(shown)).filter(Boolean),mxA=Math.max(.5,...D.map(d=>Math.max(...d.P.map(p=>p.g))));
+  const vis2=heads.map(hd=>G[hd.grp].find(shown)).filter(Boolean);
   const pchip=id=>{const q=pinfo(id);return`<span class="tdc"><span class="pos ${esc(q.pos)}">${esc(q.pos)}</span>${esc(pnm(id))}</span>`};
   const ptag=rid=>`<span class="tdn${prf(rid)==="y"?" pf":""}">${prf(rid)==="y"?"★ ":""}${esc(nmR(rid))}</span>`;
-  const gbar=d=>`<span class="tdb" aria-hidden="true"><i style="width:${(d.avg/mxA*100).toFixed(1)}%"></i>${d.P.map(p=>`<b class="${p.t.mine?"m":p.t.rid===d.minWho?"lo":""}" style="left:${Math.min(100,p.g/mxA*100).toFixed(1)}%"></b>`).join("")}</span>`;
-  const row=(d,nv)=>{const me0=d.P.find(p=>p.t.mine),open=MV.tx===d.key;
+  /* the one amber signal: only material issues that concern you */
+  const warnsOf=d=>{const w=[];d.flags.forEach(f=>{if(f.k==="over"&&f.who===me.rid)w.push(`You give ${f1(f.d)} pts/wk more projected season value than you get: the gain is lineup fit, not asset value`);
+      if(f.k==="lop")w.push(`Highly unequal: ${f.who===me.rid?"you gain":esc(nmR(f.who))+" gains"} ≥3× ${f.lo===me.rid?"you":esc(nmR(f.lo))}; the side gaining least may balk`);
+      if(f.k==="inj")w.push(`${esc(pinfo(f.id).name)} is listed ${esc(f.ij)}`)});
+    R.thin(d).forEach(z=>w.push(`No backup ${z} behind your starters after this deal`));if(DL)w.push(`League trade deadline was Week ${DL}`);return w};
+  const avgTag=d=>`<span class="tavg" data-tip="Average gain per manager in this deal (the ranking metric): ${d.P.map(p=>`${p.t.mine?"you":esc(p.t.name)} +${f1(p.g)}`).join(" · ")}"><small>AVG</small><b>+${f1(d.avg)}</b><small>/wk</small></span>`;
+  /* one bar per manager, scaled to the largest gain in THIS deal (not probability, not fairness) */
+  const bars=d=>{const mx=Math.max(...d.P.map(p=>p.g));return`<span class="tbars">${d.P.map(p=>`<span class="tbn2 ${p.t.mine?"me":""}"><span class="tbl2">${p.t.mine?"YOU":esc(p.t.name)}</span><span class="tbb"><i style="width:${Math.max(6,p.g/mx*100).toFixed(0)}%"></i></span><b>+${f1(p.g)}</b></span>`).join("")}</span>`};
+  const gg=(lab,cls,ids)=>`<span class="tgx ${cls}"><b>${lab}</b>${ids.map(pchip).join('<i class="tdsep">·</i>')}</span>`;
+  const row=(d,nv)=>{const me0=d.P.find(p=>p.t.mine),open=MV.tx===d.key,w=warnsOf(d);
     return`<div class="tdr${open?" on":""}" data-tx="${esc(d.key)}" role="button" tabindex="0" aria-expanded="${open}">
-      <span class="tdk" data-tip="Rank among all packages (filters don't renumber)">${d.grank}</span><span class="tdps">${d.rids.map(ptag).join('<i class="tdsep">+</i>')}</span>
-      <span class="tdg" data-tip="${esc(`Average gain per manager: +${f1(d.avg)} pts/wk (${d.P.map(p=>`${p.t.mine?"you":p.t.name} +${f1(p.g)}`).join(", ")}). Dots: each manager's gain; purple = you, red ring = gains least.`)}"><b>+${f1(d.avg)}</b>${gbar(d)}</span>
-      <span class="tdm" data-tip="Your gain (pts/wk)">+${f1(d.my)}</span>
-      <span class="tdx">${me0.give.map(pchip).join("")}<i class="arr">→</i>${me0.get.map(pchip).join("")}</span>
-      <span class="tdt" data-tip="${d.kind}-way">${d.kind===3?"△":"⇄"}</span>${nv?`<span class="tdv" data-tip="${nv} similar package${nv>1?"s":""}">+${nv}</span>`:"<span></span>"}</div>${open?detail(d):""}`};
-  const detail=d=>{const nr=rankAfter(Object.fromEntries(d.P.map(p=>[p.t.rid,p.g])));
-    const why=d.P.map(p=>({p,e:R.explain(p.t,p.give,p.get)}));
-    const rcv=rid=>{const p=d.P.find(x=>x.t.rid===rid);return p};
-    const warn=[];d.flags.forEach(f=>{if(f.k==="lop")warn.push(`<span class="tw2 lop" data-tip="${esc(`${nmR(f.who)} gains much more than ${nmR(f.lo)}; expect pushback from the side gaining least`)}">⚖ lopsided: ${esc(f.who===me.rid?"you":nmR(f.who))} gain most</span>`);
-      if(f.k==="over")warn.push(`<span class="tw2 ovr" data-tip="${esc(`${f.who===me.rid?"You give":nmR(f.who)+" gives"} ${f1(f.d)} pts/wk more rest-of-season value than ${f.who===me.rid?"you get":"they get"}: the gain comes from lineup fit, not asset value`)}">💸 ${esc(f.who===me.rid?"you overpay":nmR(f.who)+" overpays")} ${f1(f.d)}</span>`)});
-    R.thin(d).forEach(z=>warn.push(`<span class="tw2 thn" data-tip="After this deal you have no spare ${z} behind your starters">🩹 no spare ${z}</span>`));
-    const sims=G[d.grp].filter(x=>x!==d&&shown(x)).slice(0,6);
-    return`<div class="tdd"><div class="tfl">${d.P.map(p=>`<div class="tfr ${p.t.mine?"me":""}"><b class="${p.t.mine?"gme":"gop"}">${p.t.mine?"You":esc(p.t.name)}</b>
-        <span class="tfg"><i>gets</i>${p.get.map(pchip).join("")}</span><span class="tfg dim"><i>gives</i>${p.give.map(pchip).join("")}</span>
-        <span class="tfb"><i style="width:${Math.min(100,p.g/mxA*100).toFixed(1)}%"></i></span><em class="up">+${f1(p.g)}</em></div>`).join("")}</div>
-      <div class="trwhy">${why.map(({p,e})=>`<div><b class="${p.t.mine?"gme":"gop"}">${p.t.mine?"You":esc(p.t.name)}</b><span>${esc(whyTxt(e,p.t.mine))}</span></div>`).join("")}</div>
-      <div class="tdw">${warn.join("")}<span class="pm">${nr<R.rk0?`projected #${R.rk0} → <b class="up">#${nr}</b>`:`projected #${R.rk0} → #${nr}`}</span></div>
-      ${sims.length?`<div class="tsim"><small>Similar packages</small>${sims.map(x=>{const m=x.P.find(p=>p.t.mine);return`<button class="tsr" data-tx="${esc(x.key)}"><span class="tdk">·</span><span class="tdx">${m.give.map(pchip).join("")}<i class="arr">→</i>${m.get.map(pchip).join("")}</span><b>+${f1(x.avg)}</b><span class="tdm">+${f1(x.my)}</span></button>`}).join("")}</div>`:""}</div>`};
+      <div class="tq1"><span class="tdk" data-tip="Rank among all packages (filters don't renumber)">${d.grank}</span><span class="tdps">${d.rids.map(ptag).join('<i class="tdsep">+</i>')}</span>${avgTag(d)}<span class="tq1s"></span>${w.length?`<span class="tdw0" data-tip="${esc(w.join(" · "))}" aria-label="Has a warning">⚠</span>`:""}<span class="tdt" data-tip="${d.kind}-way">${d.kind===3?"△":"⇄"}</span>${nv?`<span class="tdv" data-tip="${nv} similar package${nv>1?"s":""}">+${nv}</span>`:""}</div>
+      <div class="tq2">${bars(d)}<span class="tq3">${gg("GIVE ↗","gv",me0.give)}${gg("GET ↙","gt",me0.get)}</span></div></div>${open?detail(d):""}`};
+  const detail=d=>{const nr=rankAfter(Object.fromEntries(d.P.map(p=>[p.t.rid,p.g]))),who=p=>p.t.mine?`<b class="gme">You</b>`:`<b class="gop">${esc(p.t.name)}</b>`;
+    /* where every player goes */
+    const flow=d.P.flatMap(p=>p.give.map(id=>({from:p,id,to:d.P.find(q=>q.get.includes(id))}))).map(x=>`<div class="tfr2">${who(x.from)}<i class="arr">→</i>${x.to?who(x.to):""}${pchip(x.id)}</div>`).join("");
+    /* what changes in each lineup */
+    const pos=d.P.map(p=>{const e=R.explain(p.t,p.give,p.get),ch=[];
+      e.ins.forEach(id=>ch.push(`<span class="tpi up" data-tip="Joins the best lineup">▲ ${pchip(id)}</span>`));
+      e.outB.forEach(id=>ch.push(`<span class="tpi dn" data-tip="Drops out of the best lineup">▼ ${pchip(id)}</span>`));
+      e.up.forEach(id=>ch.push(`<span class="tpi" data-tip="Steps into the lineup from the bench">⤴ ${pchip(id)}</span>`));
+      if(e.fills)ch.push(`<span class="tpi gd" data-tip="Their weakest starting position vs the league">🎯 fills ${e.fills}</span>`);
+      if(e.gB.length)ch.push(`<span class="tpi" data-tip="Was only bench depth">🪑 ${e.gB.map(i=>esc(pnm(i))).join(", ")}</span>`);
+      if(!ch.length)ch.push(`<span class="tpi" data-tip="Better coverage for byes and injuries over the projected weeks">🗓 bye/injury cover</span>`);
+      return`<div class="tpos">${who(p)}<span class="tpis">${ch.join("")}</span></div>`}).join("");
+    const w=warnsOf(d),info=d.flags.filter(f=>f.k==="over"&&f.who!==me.rid).map(f=>`<span class="tinfo" data-tip="Projected rest-of-season value, not a market price">ℹ ${esc(nmR(f.who))} gives ${f1(f.d)} more projected value than they get: expect pushback</span>`);
+    const sims=G[d.grp].filter(x=>x!==d&&shown(x)).slice(0,6),so=MV.sim&&MV.sim[d.key];
+    return`<div class="tdd"><div class="tdd2"><div class="tflw">${flow}</div><div class="tposs">${pos}</div></div>
+      ${w.length||info.length?`<div class="twarn">${w.map(x=>`<span class="tw2 amb">⚠ ${x}</span>`).join("")}${info.join("")}</div>`:""}
+      <div class="tdft"><span class="pm">projected rank #${R.rk0} → ${nr<R.rk0?`<b class="up">#${nr}</b>`:`#${nr}`}</span>${sims.length?`<button class="mvb tsimb" data-sim="${esc(d.key)}" aria-expanded="${!!so}">${so?"▾":"▸"} ${sims.length} similar package${sims.length>1?"s":""}</button>`:""}</div>
+      ${so&&sims.length?`<div class="tsim">${sims.map(x=>{const m=x.P.find(p=>p.t.mine);return`<button class="tsr" data-tx="${esc(x.key)}"><span class="tq3">${gg("GIVE ↗","gv",m.give)}${gg("GET ↙","gt",m.get)}</span><span class="tavg sm"><small>AVG</small><b>+${f1(x.avg)}</b></span><span class="tdm">you +${f1(x.my)}</span></button>`}).join("")}</div>`:""}</div>`};
+  /* every partner's best deal one tap away, even when one manager dominates the top of the list */
+  const bestPer=()=>{const seen=new Set(),out=[];vis2.forEach(d=>d.rids.forEach(r=>{if(!seen.has(r)){seen.add(r);out.push({r,d})}}));return out};
   const pfBtn=rid=>`<span class="tmk" role="group" aria-label="Mark ${esc(nmR(rid))}"><button class="${prf(rid)==="y"?"on":""}" data-mk="${rid}" data-v="y" data-tip="Preferred partner">★</button><button class="${prf(rid)==="n"?"on no":""}" data-mk="${rid}" data-v="n" data-tip="Unlikely to trade: hide their deals">⛔</button></span>`;
   const others=teams.filter(t=>!t.mine),nNo=others.filter(t=>prf(t.rid)==="n").length,nY=others.filter(t=>prf(t.rid)==="y").length;
   const tv=MV.tv==="p"?"p":"b",LIM=MV.tmore?60:12;
@@ -4553,8 +4614,8 @@ function mvRender(){
     <span class="tpf"><button class="mvb${MV.pfo?" on":""}" data-pf="1" aria-expanded="${!!MV.pfo}">Partners ${nNo||nY?`<em>${others.length-nNo} of ${others.length}${nY?` · ★${nY}`:""}</em>`:"<em>all</em>"} ▾</button>${nY?`<button class="mvb${MV.ponly?" on":""}" data-ponly="1" data-tip="Only deals where every partner is ★">★ only</button>`:""}</span></div>
     ${MV.pfo?`<div class="tpfl">${others.map(t=>`<span class="tpfc${prf(t.rid)==="n"?" no":prf(t.rid)==="y"?" y":""}">${esc(t.name)}${pfBtn(t.rid)}</span>`).join("")}<small class="pm">★ / ⛔ only filter what you see; the ranking stays the same.</small></div>`:""}`;
   let body;
-  if(tv==="b"){const L=vis2.slice(0,LIM);
-    body=`<div class="tdl">${L.map(d=>row(d,G[d.grp].filter(x=>x!==d&&shown(x)).length)).join("")||`<div class="none">${D.length?"Every deal involves a manager you marked ⛔.":"No deal raises every manager's best lineup right now."}</div>`}</div>${vis2.length>LIM?`<button class="mvb tmore" data-tmore="1">Show ${Math.min(60,vis2.length)-LIM>0?"more":"fewer"} · ${vis2.length} packages</button>`:MV.tmore&&vis2.length>12?`<button class="mvb tmore" data-tmore="1">Show fewer</button>`:""}`;
+  if(tv==="b"){const L=vis2.slice(0,LIM),BP=bestPer();
+    body=`${BP.length>1?`<div class="tbest"><small>Best per partner</small>${BP.map(x=>`<button class="tbc" data-bp="${x.r}" data-tip="Their best deal: #${x.d.grank}">${esc(nmR(x.r))} <b>+${f1(x.d.avg)}</b></button>`).join("")}</div>`:""}<div class="tdl">${L.map(d=>row(d,G[d.grp].filter(x=>x!==d&&shown(x)).length)).join("")||`<div class="none">${D.length?"Every deal involves a manager you marked ⛔.":"No deal raises every manager's best lineup right now."}</div>`}</div>${vis2.length>LIM?`<button class="mvb tmore" data-tmore="1">Show ${Math.min(60,vis2.length)-LIM>0?"more":"fewer"} · ${vis2.length} packages</button>`:MV.tmore&&vis2.length>12?`<button class="mvb tmore" data-tmore="1">Show fewer</button>`:""}`;
   }else{
     const needC=p=>p&&p.need&&p.need.d<-.5?`<span class="tpn" data-tip="${esc(`Starting ${p.need.z}s project ${f1(-p.need.d)} pts/wk below the league average`)}"><span class="pos ${p.need.z}">${p.need.z}</span><em class="dn">${f1(p.need.d)}</em></span>`:`<span class="pm" data-tip="Every starting position is at or above the league average">–</span>`;
     const surC=p=>p&&p.sur?`<span class="tpn" data-tip="${esc(`${pinfo(p.sur.id).name}: best player outside the lineup, ${f1(p.sur.v)} pts/wk`)}"><span class="pos ${esc(p.sur.z)}">${esc(p.sur.z)}</span><b>${esc(pnm(p.sur.id))}</b></span>`:`<span class="pm">–</span>`;
@@ -4563,10 +4624,10 @@ function mvRender(){
     body=`<div class="tbp"><div class="tbr me"><b>You</b><span class="tbn" data-tip="Your weakest starting position">${needC(PF[me.rid])}</span><span class="tbs">${surC(PF[me.rid])}</span><span></span><span></span></div>
       ${byP.map(({t,ds})=>{const b=ds[0],o=String(MV.tp)===String(t.rid);return`<div class="tbr${prf(t.rid)==="n"?" no":""}${o?" on":""}"><span class="tbh"${b?` data-tp="${t.rid}" role="button" tabindex="0" aria-expanded="${o}"`:""}>${b?`<span class="chev">${o?"▾":"▸"}</span>`:""}<b>${esc(t.name)}</b></span>${pfBtn(t.rid)}
         <span class="tbn">${needC(PF[t.rid])}</span><span class="tbs">${surC(PF[t.rid])}</span>
-        <span class="tbd">${b?`<span class="tdg"><b>+${f1(b.avg)}</b>${gbar(b)}</span><span class="pm">${ds.length} deal${ds.length>1?"s":""}${ds.some(x=>x.kind===3)?" · incl. △":""}</span>`:`<span class="pm">nothing helps both</span>`}</span></div>
+        <span class="tbd">${b?`${avgTag(b)}<span class="pm">${ds.length} deal${ds.length>1?"s":""}${ds.some(x=>x.kind===3)?" · incl. △":""}</span>`:`<span class="pm">nothing helps both</span>`}</span></div>
         ${o?`<div class="tdl sub">${ds.slice(0,12).map(d=>row(d,0)).join("")}</div>`:""}`}).join("")}</div>`}
   const nAll=heads.length;
-  h+="<!--M:trades-->"+mvSec("trades",`🤝 Trades${tlink}`,nAll?`${nAll} package${nAll>1?"s":""} · best +${f1(heads[0].avg)}/mgr`:"nothing helps everyone right now",seg+body+`<div class="svnote">Ranked by average gain per manager: each manager's best-lineup gain (pts/wk, same projected weeks for everyone), summed and divided by the managers in the deal. Ties go to the deal whose least-helped manager gains most, then to your gain. ⇄ 2-way · △ 3-way.</div>`,"wide")+"<!--M:/-->"+`</div>`;h=modWrap(h,"t");
+  h+="<!--M:trades-->"+mvSec("trades",`🤝 Trades${tlink}`,nAll?`${nAll} package${nAll>1?"s":""} · best +${f1(heads[0].avg)}/mgr`:"nothing helps everyone right now",seg+(DL?`<div class="twarn tdl0"><span class="tw2 amb">⚠ This league's trade deadline was Week ${DL}: these deals can't be proposed in-app anymore.</span></div>`:"")+body+`<div class="svnote">Ranked by average gain per manager: each manager's best-lineup gain (pts/wk, same projected weeks for everyone), summed and divided by the managers in the deal. Ties go to the deal whose least-helped manager gains most, then to your gain. ⇄ 2-way · △ 3-way.</div>`,"wide")+"<!--M:/-->"+`</div>`;h=modWrap(h,"t");
   if(h===MV.lastHtml)return;MV.lastHtml=h;el.innerHTML=h;mvBind(el);
 }
 
@@ -4686,6 +4747,8 @@ function mvBind(el){bindMods(el);
   el.querySelectorAll("[data-pf]").forEach(x=>x.onclick=()=>{MV.pfo=!MV.pfo;rr()});
   el.querySelectorAll("[data-ponly]").forEach(x=>x.onclick=()=>{MV.ponly=!MV.ponly;rr()});
   el.querySelectorAll("[data-tmore]").forEach(x=>x.onclick=()=>{MV.tmore=!MV.tmore;rr()});
+  el.querySelectorAll("[data-sim]").forEach(x=>x.onclick=e=>{e.stopPropagation();MV.sim=MV.sim||{};MV.sim[x.dataset.sim]=!MV.sim[x.dataset.sim];rr()});
+  el.querySelectorAll("[data-bp]").forEach(x=>x.onclick=()=>{MV.tv="p";MV.tp=x.dataset.bp;rr()});
   const ro=el.querySelector("#iqroast");if(ro)ro.onclick=async()=>{const ok=await copyText(MV.roast);ro.textContent=ok?"✓":"!";setTimeout(()=>{ro.textContent="📋"},1800)};
   el.querySelectorAll(".mvsel .mvb").forEach(b=>b.onclick=()=>{MV.lg=b.dataset.l;MV.lastHtml="";mvRender();mvTick(S.tab!=="e");if(MV.view==="edge")edgeLeagues().forEach(l=>idealBuild(l))});
 }

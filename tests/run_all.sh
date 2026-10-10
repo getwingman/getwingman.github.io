@@ -17,3 +17,4 @@ run "touch interactions" python3 t70.py file://$H
 run "v42: trade partners, power movement, Edge pickups, Survivor portfolio, Radar pregame, 6 tabs" python3 t92.py file://$H $O
 run "v43 mobile: slot pills, full names, Lab strip, one Trades module" python3 t93.py file://$H $O
 run "v44: live results, Trades board, Survivor, movable modules, Replay" python3 t94.py file://$H $O
+run "v45: trade rows (AVG, per-manager bars, GIVE/GET, warnings)" python3 t95.py file://$H $O

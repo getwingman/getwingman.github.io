@@ -27,3 +27,5 @@ FAILED: []
 FAILED: []
 === v44: live results, Trades board, Survivor, movable modules, Replay
 FAILED: []
+=== v45: trade rows (AVG, per-manager bars, GIVE/GET, warnings)
+FAILED: []

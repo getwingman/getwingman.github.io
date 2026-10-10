@@ -49,7 +49,13 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   packages (same partners, same players you get) group under the best one (`grp`, "+n similar"). Views (`MV.tv`): Best deals /
   By partner (need, surplus, best deal; expand → all their deals incl. 3-way). ★ preferred / ⛔ unlikely marks are a personal
   filter stored per league (`tpref_<lg>`), never part of the math; ranks don't renumber. Flags: ⚖ lopsided, 💸 overpay
-  (rest-of-season value given ≫ received), 🩹 no spare at a position after the deal. Awards + movement chips sit in `.funs`: wrapped rows on
+  (rest-of-season value given ≫ received), 🩹 no spare at a position after the deal.
+  Row (v45): partners → "AVG +x/wk" → one labeled bar per manager (YOU purple, partners cyan, scaled to the largest gain in
+  that deal, exact gain beside it) → "GIVE ↗" / "GET ↙" with position badges. ONE amber ⚠ on the collapsed row only for
+  material issues that concern you (`warnsOf`: you overpay, highly unequal ≥3× and ≥2 pts, no backup at a position after the
+  deal, an incoming player Out/IR/Doubtful, trade deadline passed). A partner overpaying is info, not a warning. Expanded:
+  player destinations, each lineup's ▲/▼ changes, warnings explained, similar packages collapsed (`MV.sim`). "Best per
+  partner" chips jump to By partner. Phone rows ~70–100px; non-Matchups tabs use a one-row phone header. Awards + movement chips sit in `.funs`: wrapped rows on
   desktop, one horizontally scrolling snap strip on phones (excluded from swipe-to-switch-tab).
 - **Edge** (tab `e`, chest icon in the Lab header, or `#edge`): locked per device. Password "edge" is checked against a
   SHA-256 hash (`EDGE_H`); only a token (`lm_edge_ok`) is stored; 🔒 `edgeLock()` relocks. It is a privacy curtain, not
