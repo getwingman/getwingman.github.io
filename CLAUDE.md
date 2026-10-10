@@ -11,10 +11,21 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
 ## Tabs / modules
 - **Matchups** (main): hero scoreboard, mirrored lineup table, Plays, low/high strip, mini matchup tiles, Bench.
   Modules are draggable (`<!--M:key-->` markers + `modWrap`/`bindMods`).
-- Navigation: **Matchups** | **Radar** (tab `f`, marked BETA, `.betaf`) | **Lab** (tab `t`) | **Edge** (tab `e`, only after unlock) |
-  **Survivor** | **Pick'em**. Swipe order: leagues → Radar → Lab → Edge → linked sheet modes. The phone bar must fit 6 tabs at 344px.
-- **Radar** (`fdRender`): before any of the matchup's games start it shows a calm "Before kickoff" schedule (`.kfr`: kickoff
-  slots with each side's starters) and projected scores; the play-by-play fields appear only once games are live/final.
+- Navigation: **Matchups** | **Replay** (tab `f`, marked BETA, `.betaf`) | **Lab** (tab `t`) | **Edge** (tab `e`, only after unlock) |
+  **Survivor** | **Pick'em**. Swipe order: leagues → Replay → Lab → Edge → linked sheet modes. The phone bar must fit 6 tabs at 344px.
+- **Replay** ("See the plays behind your fantasy points.", `rpRender`/`rpTick`, state `RP`): ONE event per NFL play
+  (`rpParse`: ESPN summary drives + `wallclock`; athlete ids from ESPN's core plays feed `rpCore` → `S.e2s`; name matching only
+  as fallback, offense-team only, never when two players on a team share the name — `rpAmb`). Every component reads the same
+  events (`rpEvents`): per-league points via `rpPts` → `calcPts` (FG distance via `fgStats`, XP, 2-pt, fumbles lost, D/ST
+  sack/INT/fumble rec/safety/def TD). Win-% impact = `wpPair(a,b) − wpPair(a,b,−myPts,−opPts)` (counterfactual, labeled
+  modeled; null without projections). Modules: Highlight Reel (Biggest impact / Latest / All plays, league + side filters,
+  "N new since" from `rp_seen`), Stage (one play, schematic SVG from start/end yard lines; reduced motion = static) + Fantasy
+  Impact (per league, purple/cyan, gold conflict), Timeline (one lane per NFL game, real timestamps; estimated ones flagged),
+  Filmroom (player filter + scoring composition incl. "Unattributed" = official − plays). Live refresh patches only changed
+  `[data-rp]` parts (selection + animation survive). Pregame = calm kickoff list (`.kfr`).
+- Results: the live API decides. Survivor: an ESPN final beats the sheet's Results; the sheet only fills games ESPN can't
+  resolve (`src:"sheet"`). Pick'em: `pkApiGrade()` grades a finished game ATS from the final score + locked line the moment
+  ESPN marks it final (pushes = not covered), adds the points to standings, extends `PK.weeks`; sheet grades replace it.
 - **Survivor** / **Pick'em** are sheet modes (`SHEETMODES`): hidden until the user links a Google Sheet from the
   connections page. NO pool data, member names or sheet IDs live in the page: everything is read from the linked sheet
   (`gvizCsv`, whole tab, `headers=0`, columns found by header name) and per-pool settings (`poolCfg`/`savePoolCfg`: whose
@@ -33,8 +44,12 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   Trades: **Trade partner matrix** (`R.prof`: each team's weakest starting position vs league average = need, best player
   outside its best lineup = surplus; `R.byP`: up to 3 packages per partner) — tap a manager to open the packages. Every trade
   card explains both sides (`explain()` → `whyTxt`: who enters each best lineup, who it pushes out, whether what's given was
-  only bench depth, "fills their weakest spot"). 2-way partners and 3-way cycles share ONE full-width "🤝 Trades" module
-  (`mvSec(...,"wide")`) behind a segmented switch (`MV.tv` "2"/"3"). Awards + movement chips sit in `.funs`: wrapped rows on
+  only bench depth, "fills their weakest spot"). ONE "🤝 Trades" board (`R.deals`): every 2- and 3-way deal ranked by
+  average gain per manager (Σ gains ÷ managers), ties → least-helped manager's gain → yours; type never ranks. Near-identical
+  packages (same partners, same players you get) group under the best one (`grp`, "+n similar"). Views (`MV.tv`): Best deals /
+  By partner (need, surplus, best deal; expand → all their deals incl. 3-way). ★ preferred / ⛔ unlikely marks are a personal
+  filter stored per league (`tpref_<lg>`), never part of the math; ranks don't renumber. Flags: ⚖ lopsided, 💸 overpay
+  (rest-of-season value given ≫ received), 🩹 no spare at a position after the deal. Awards + movement chips sit in `.funs`: wrapped rows on
   desktop, one horizontally scrolling snap strip on phones (excluded from swipe-to-switch-tab).
 - **Edge** (tab `e`, chest icon in the Lab header, or `#edge`): locked per device. Password "edge" is checked against a
   SHA-256 hash (`EDGE_H`); only a token (`lm_edge_ok`) is stored; 🔒 `edgeLock()` relocks. It is a privacy curtain, not
@@ -83,6 +98,12 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
 - Watch for CSS class-name collisions (they caused past bugs: `.rv`, `.sep`, `.hd`, `.fx`, `.lg`, `.tlg`, `.rec`, `.stk`,
   `.up` on containers, `td.n b`). Grep before adding a short class name.
 
+## Movable modules (every tab)
+- Pages mark sections with `<!--M:id-->` (prefix kept, `<!--M:/-->` ends the movable run) and pass through `modWrap(html, scope)`;
+  `bindMods` binds grips. Scopes: `m`, `f`, `t`, `e`, `s:<hash(sheet)>`, `p:<hash(sheet)>` (`MODDEF` defaults, `MODWIDE` spans).
+  Saved order `lay_<scope>` (Matchups keeps `order`); new ids slot in after their default predecessor. Grip: drag, tap → ▲/▼
+  menu, focus + ↑/↓. `S.dragging` pauses repaints. Settings → Layout: reset this page / all pages. Order ≠ open/closed state.
+
 ## Mobile rules
 - Phones (≤760px): bottom tab bar (icon over label via `.tbi`/`.tbl` spans; must fit 6 tabs at 344px), header two rows.
 - Phone matchup cells (56px, 3 rows): row 1 = the name alone (never truncated down to 344px; ≤370px shrinks the font),
@@ -108,6 +129,11 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   (locked at kickoff) → the sheet's verified line (`pkSheetLine`) → nothing; proxies are labeled.
 - gviz: config (key/value) tabs are read raw (`headers=0`) and merged with a header-mode read; data tabs use
   `headers=1`; `objRows` re-infers blank labels from the schema. Unknown tab names return the FIRST tab, so validate.
+- Survivor page: Overview (lives, expected after the week from the exact correlated distribution + histogram, pool entries,
+  "Share of remaining entries" — never called equity —, rank) → 🛟 Survival Watch (`.vwr` rows per game carrying your lives,
+  sorted by expected lives lost = entries × (1 − win %), live critical first, finals dimmed; tap for scoreboard, both sides, rival
+  eliminations, share if each side wins; field-only upsets listed below) → Rivals → Swimlanes → Standings → Elimination →
+  Planner (collapsed by default; open state in `svopen2`) → Rules.
 - Survivor portfolio planner: per-entry eligibility (`svCanUse`) + day rules (`svDayRule`), "value later" from team ratings
   (`svRatings`/`svRatedP`) over the next 3 weeks (💎 save), field crowding. Plans are scored on the exact distribution of
   lives kept (`svDist`: enumerates game outcomes; both sides of one game can't both win): 📈 Most lives (greedy),

@@ -1,4 +1,4 @@
-"""v42: trade partner matrix + reasons, power movement, legible board, Edge pickups vs stashes, Survivor portfolio, Radar pregame, 6-tab phone bar"""
+"""v42: trade partner matrix + reasons, power movement, legible board, Edge pickups vs stashes, Survivor portfolio, Replay pregame, 6-tab phone bar"""
 import sys,json;sys.path.insert(0,'.');import mock
 from playwright.sync_api import sync_playwright
 F,OUT=sys.argv[1],sys.argv[2];fails=[]
@@ -13,14 +13,12 @@ with sync_playwright() as p:
     b=p.chromium.launch();mock.TRADES[0]=True
     # ---------- Lab ----------
     pg,e=page(b,1500);pg.evaluate("setTab('t')");pg.wait_for_timeout(9000)
-    m=pg.evaluate("""(()=>{const R=MV.res[MV.lg];const rows=[...document.querySelectorAll('#moves .tpm tbody tr')];return{rows:rows.length,deal:rows.filter(r=>r.dataset.tp).length,
-      byP:Object.values(R.byP).flat().every(x=>x.gains[0]>.4&&x.gains[1]>.4&&x.why&&x.why.length===2),need:Object.keys(R.prof).length}})()""")
-    chk("matrix: one row per manager (+ you), needs/surplus for every team",m["rows"]==12 and m["need"]==12,m)
-    chk("matrix: every package improves both teams and carries both reasons",m["deal"]>=1 and m["byP"],m)
-    pg.click("#moves tr[data-tp]");pg.wait_for_timeout(300)
-    w=pg.evaluate("[...document.querySelectorAll('#moves .tpx .trwhy')].map(x=>x.innerText.replace(/\\s+/g,' '))")
-    chk("tap a manager → packages with why each side says yes",len(w)>=1 and all(s.startswith("You ") and len(s)>30 for s in w),w[:2])
-    pg.click("#moves tr[data-tp]");pg.wait_for_timeout(300);chk("tap again collapses",pg.evaluate("document.querySelectorAll('#moves .tpx').length")==0)
+    d=pg.evaluate("""(()=>{const R=MV.res[MV.lg];return{n:R.deals.length,ok:R.deals.every(x=>x.P.every(p=>p.g>.4)&&Math.abs(x.avg-x.P.reduce((s,p)=>s+p.g,0)/x.P.length)<1e-9),rows:document.querySelectorAll('#moves .tdr').length}})()""")
+    chk("trades board: every deal improves every manager; avg = mean gain",d["n"]>=1 and d["ok"] and d["rows"]>=1,d)
+    pg.locator("#moves .tdr").first.click();pg.wait_for_timeout(300)
+    w=pg.evaluate("[...document.querySelectorAll('#moves .tdd .trwhy')].map(x=>x.innerText.replace(/\\s+/g,' '))")
+    chk("tap a deal → flow + why each side says yes",len(w)>=1 and all(s.startswith("You ") and len(s)>30 for s in w),w[:2])
+    pg.locator("#moves .tdr").first.click();pg.wait_for_timeout(300);chk("tap again collapses",pg.evaluate("document.querySelectorAll('#moves .tdd').length")==0)
     t=pg.evaluate("(()=>{const lg=S.L.find(l=>l.id===MV.lg);return{n:document.querySelectorAll('#moves .pwt .ptr svg').length,last:Object.keys(lg.ptrend).every(k=>lg.ptrend[k][lg.ptrend[k].length-1]===lg.power[k].rank),len:Object.values(lg.ptrend)[0].length,wk:lg.pweeks.length}})()")
     chk("power movement: trend line per manager, last point = official season rank",t["n"]==12 and t["last"] and t["len"]==t["wk"]>=2,t)
     mv=pg.evaluate("[...document.querySelectorAll('#moves .pmvc small')].map(x=>x.innerText)")
@@ -38,7 +36,7 @@ with sync_playwright() as p:
     chk("no errors (Edge)",not e,e[:2]);pg.close()
     # ---------- Survivor portfolio ----------
     conns=json.dumps([{"key":"sleeper:x","p":"sleeper","username":"xParRaidr"},{"key":"survivor:"+SV2,"p":"survivor","sheet":SV2},{"key":"pickem:"+PK2,"p":"pickem","sheet":PK2}])
-    pg,e=page(b,1500,"localStorage.setItem('lm_conns',%r);"%conns+EDGE,pre=False);pg.evaluate("setTab('s')");pg.wait_for_timeout(5000)
+    pg,e=page(b,1500,"localStorage.setItem('lm_conns',%r);"%conns+EDGE,pre=False);pg.evaluate("SV.open.plan=true;setTab('s')");pg.wait_for_timeout(5000)
     sv=pg.evaluate("""(()=>{const c=[...document.querySelectorAll('#surv .svplan')].map(x=>({t:x.querySelector('.svph b').textContent,stk:x.classList.contains("stkd"),ups:x.querySelectorAll('.ups').length,rows:x.querySelectorAll('.svpt').length}));
       return{c,up:document.querySelectorAll('#surv .upt tbody tr').length,title:[...document.querySelectorAll('#surv .svh')].map(x=>x.innerText.split('\\n')[0]).find(x=>/planner/.test(x))}})()""")
     chk("portfolio planner: Most lives + Portfolio cards, 💥 upset cost on every team",any(c["t"]=="Portfolio" for c in sv["c"]) and all(c["ups"]==c["rows"] for c in sv["c"]),sv)
@@ -50,13 +48,13 @@ with sync_playwright() as p:
     ov=pg.evaluate("[...document.querySelectorAll('#surv .rvo')].map(x=>x.innerText)")
     chk("rival overlap never shows 0% when picks are unknown",all(("not visible" in x) or ("%" in x and not x.startswith("0%")) or x.startswith("0%")==False for x in ov) and not any(x.startswith("0% same") for x in ov if "not visible" in x),ov[:3])
     chk("no errors (Survivor)",not e,e[:2]);pg.close()
-    # ---------- Radar pregame + phone tab bar ----------
+    # ---------- Replay pregame + phone tab bar ----------
     pg,e=page(b,390,"localStorage.setItem('lm_conns',%r);"%conns+EDGE);pg.evaluate("updateNav();setTab('f')");pg.wait_for_timeout(3000)
     rd=pg.evaluate("({kf:document.querySelectorAll('#field .kfr').length,mm:document.querySelectorAll('#field .mm').length,h2:document.querySelectorAll('#field .h2c').length})")
-    chk("Radar pregame: calm kickoff schedule, no empty field rectangles",rd["kf"]>=1 and rd["mm"]==0 and rd["h2"]==0,rd)
+    chk("Replay pregame: calm kickoff schedule, no empty field rectangles",rd["kf"]>=1 and rd["mm"]==0 and rd["h2"]==0,rd)
     pg.set_viewport_size({"width":344,"height":800});pg.wait_for_timeout(400)
     tb=pg.evaluate("""(()=>{const bs=[...document.querySelectorAll('header .tabs > .tb')].filter(b=>getComputedStyle(b).display!=='none');return{n:bs.length,labels:bs.map(b=>b.innerText.replace(/\\s+/g,' ').trim()),ov:bs.some(b=>{const l=b.querySelector('.tbl');return l.scrollWidth>l.clientWidth||b.getBoundingClientRect().right>344}),sw:document.documentElement.scrollWidth}})()""")
-    chk("phone tab bar fits 6 tabs at 344px: Matchups, Radar, Lab, Edge, Survivor, Pick'em",tb["n"]==6 and not tb["ov"] and tb["sw"]<=344,tb)
-    chk("no errors (Radar/phone)",not e,e[:2]);pg.close()
+    chk("phone tab bar fits 6 tabs at 344px: Matchups, Replay, Lab, Edge, Survivor, Pick'em",tb["n"]==6 and not tb["ov"] and tb["sw"]<=344,tb)
+    chk("no errors (Replay/phone)",not e,e[:2]);pg.close()
     mock.TRADES[0]=False;mock.PREGAME[0]=False;b.close()
 print("FAILED:",fails)

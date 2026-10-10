@@ -25,3 +25,5 @@ FAILED: []
 FAILED: []
 === v43 mobile: slot pills, full names, Lab strip, one Trades module
 FAILED: []
+=== v44: live results, Trades board, Survivor, movable modules, Replay
+FAILED: []

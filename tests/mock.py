@@ -37,6 +37,8 @@ for r in range(3,13):
 for i,(n,pos,tm) in enumerate([("Zonovan Knight","RB","ARI"),("Waiver Wire","WR","SEA"),("Streamer TE","TE","DET")]):
     add(str(2000+i),n,pos,tm)
 add("2005","Bench Wideout","WR","DAL")
+def amb_on():
+    add("2101","Zion Flowers","WR","BAL")
 ROST={1:dict(players=["200","500","202","204","205","600","800","2005","700"],starters=["200","500","202","204","205","600"],reserve=["700"]),
       2:dict(players=["201","300","203","900","901","902"],starters=["201","300","203","900","0","0"],reserve=[])}
 for r,ids in fill.items(): ROST[r]=dict(players=ids,starters=[ids[0],ids[1],ids[3],ids[5],ids[2],ids[8]],reserve=[])
@@ -44,7 +46,9 @@ USERS=[dict(user_id="U%d"%r,display_name=n,metadata={"team_name":"Team "+n}) for
 def rosters(lg):
     out=[]
     for r in range(1,13):
-        R=ROST[r]; out.append(dict(roster_id=r,owner_id="U%d"%r,players=R["players"],starters=R["starters"],reserve=R["reserve"],taxi=[],settings=dict(wins=r%4,losses=3-r%4,ties=0,fpts=400+r*7,fpts_decimal=50,waiver_budget_used=10)))
+        R=ROST[r]; own="U%d"%r
+        if CONFLICT[0] and lg=="L2" and r in (1,2): own="U2" if r==1 else "U1"
+        out.append(dict(roster_id=r,owner_id=own,players=R["players"],starters=R["starters"],reserve=R["reserve"],taxi=[],settings=dict(wins=r%4,losses=3-r%4,ties=0,fpts=400+r*7,fpts_decimal=50,waiver_budget_used=10)))
     return out
 HALF=dict(pass_yd=.04,pass_td=4,pass_int=-2,rush_yd=.1,rush_td=6,rec=.5,rec_yd=.1,rec_td=6,fum_lost=-2,xpm=1,fgm_0_19=3,fgm_20_29=3,fgm_30_39=3,fgm_40_49=4,fgm_50p=5,sack=1,int=2,fum_rec=2,def_td=6,safe=2,pts_allow_0=10,pts_allow_1_6=7,pts_allow_7_13=4,pts_allow_14_20=1,pts_allow_21_27=0,pts_allow_28_34=-1,pts_allow_35p=-4,bonus_rec_yd_100=3)
 PPR=dict(HALF,rec=1)
@@ -87,6 +91,40 @@ def ev(eid,home,away,hid,aid,state,hs=0,as_=0,period=0,clock=0,detail="",poss=No
                 competitions=[dict(competitors=[dict(homeAway="home",team=dict(id=str(hid),abbreviation=home,name=NICK.get(home,home)),score=str(hs)),
                                                dict(homeAway="away",team=dict(id=str(aid),abbreviation=away,name=NICK.get(away,away)),score=str(as_))],situation=sit,odds=[])])
 FUT=time.strftime("%Y-%m-%dT%H:%MZ",time.gmtime(NOW/1000+86400*2))
+
+# ---------- Replay fixtures: ESPN summary drives + core play participants ----------
+CONFLICT=[False]   # L2: you own roster 2 (Burrow/Chase) instead of roster 1 → a Jackson→Flowers TD helps you in L1 and hurts you in L2
+AMB=[False]        # a second "Z. Flowers" on BAL: name matching must refuse to guess
+T0=NOW/1000-3*3600
+def wc(m):return time.strftime("%Y-%m-%dT%H:%M:%SZ",time.gmtime(T0+m*60))
+def play(pid,text,s,e,yd,per,clk,mins,team,typ="",sc=False,dd="1st & 10"):
+    return dict(id=pid,text=text,type=dict(text=typ),period=dict(number=per),clock=dict(displayValue=clk),statYardage=yd,scoringPlay=sc,
+                start=dict(yardsToEndzone=s,shortDownDistanceText=dd,team=dict(id=team)),end=dict(yardsToEndzone=e),wallclock=wc(mins))
+SUMM={"e1":dict(header=dict(competitions=[dict(competitors=[dict(team=dict(id="33",abbreviation="BAL")),dict(team=dict(id="4",abbreviation="CIN"))])]),
+   drives=dict(previous=[
+     dict(id="d1",team=dict(id="33",abbreviation="BAL"),displayResult="Touchdown",plays=[
+        play("101","L.Jackson pass short right to Z.Flowers to CIN 40 for 32 yards (L.Taylor).",72,40,32,1,"12:10",25,"33","Pass Reception"),
+        play("102","L.Jackson pass deep middle to Z.Flowers for 40 yards, TOUCHDOWN.",40,0,40,1,"11:02",27,"33","Passing Touchdown",True),
+        play("103","J.Tucker extra point is GOOD, Center-N.Moore, Holder-J.Stout.",15,0,0,1,"10:58",27.5,"33","Extra Point Good",True)]),
+     dict(id="d2",team=dict(id="4",abbreviation="CIN"),displayResult="Interception",plays=[
+        play("201","J.Burrow pass deep left to J.Chase to BAL 20 for 45 yards (M.Humphrey).",65,20,45,1,"8:40",36,"4","Pass Reception"),
+        play("202","J.Burrow pass short right intended for T.Higgins INTERCEPTED by M.Humphrey at BAL 5. M.Humphrey to BAL 30 for 25 yards.",20,70,0,1,"8:01",38,"4","Pass Interception Return")]),
+     dict(id="d3",team=dict(id="33",abbreviation="BAL"),displayResult="Fumble",plays=[
+        play("301","L.Jackson sacked at BAL 22 for -8 yards (T.Hendrickson).",70,78,-8,2,"14:20",52,"33","Sack"),
+        play("302","L.Jackson scrambles right end to BAL 45 for 23 yards (G.Pratt).",78,55,23,2,"13:40",54,"33","Rush"),
+        play("303","L.Jackson pass short left to M.Andrews to CIN 40 for 15 yards. FUMBLES (M.Andrews), RECOVERED by CIN-L.Wilson at CIN 38.",55,40,15,2,"13:02",56,"33","Fumble Recovery (Opponent)")])])),
+ "e2":dict(header=dict(competitions=[dict(competitors=[dict(team=dict(id="1",abbreviation="ATL")),dict(team=dict(id="9",abbreviation="GB"))])]),
+   drives=dict(previous=[
+     dict(id="g1",team=dict(id="9",abbreviation="GB"),displayResult="Touchdown",plays=[
+        play("901","E.Wilson up the middle to ATL 3 for 12 yards (K.Elliss).",15,3,12,1,"9:12",5,"9","Rush"),
+        play("902","E.Wilson left tackle for 3 yards, TOUCHDOWN.",3,0,3,1,"8:30",7,"9","Rushing Touchdown",True),
+        play("903","B.McManus extra point is GOOD, Center-M.Orzech, Holder-D.Whelan.",15,0,0,1,"8:26",7.2,"9","Extra Point Good",True)]),
+     dict(id="g2",team=dict(id="1",abbreviation="ATL"),displayResult="Punt",plays=[
+        play("911","M.Penix pass short right to D.London to GB 30 for 18 yards (X.McKinney).",48,30,18,2,"6:00",30,"1","Pass Reception")]),
+     dict(id="g3",team=dict(id="9",abbreviation="GB"),displayResult="Field Goal",plays=[
+        play("921","B.McManus 52 yard field goal is GOOD, Center-M.Orzech, Holder-D.Whelan.",35,0,0,3,"2:10",60,"9","Field Goal Good",True)])]))}
+CORE={"e1":{"items":[{"id":"102","wallclock":wc(27),"participants":[{"athlete":{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/3916387"},"type":"passer"},{"athlete":{"$ref":"http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2026/athletes/4429205"},"type":"receiver"}]},
+                      {"id":"101","wallclock":wc(25),"participants":[{"athlete":{"$ref":".../athletes/3916387"},"type":"passer"},{"athlete":{"$ref":".../athletes/4429205"},"type":"receiver"}]}]}}
 NYG_LIVE=[False]
 PREGAME=[False]
 FAIL={"sleeper":0}
@@ -135,7 +173,12 @@ def handle(route):
     if "api.sleeper.app/scores" in u: return J(route,[])
     if "site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard" in u:
         w=int((re.search(r"week=(\d+)",u) or [0,"5"])[1]); return J(route,scoreboard(w))
-    if "summary?event=" in u: return J(route,dict(drives=dict(previous=[]),boxscore=dict(players=[]),scoringPlays=[]))
+    if "summary?event=" in u:
+        eid=re.search(r"event=([^&]+)",u).group(1)
+        return J(route,SUMM.get(eid,dict(drives=dict(previous=[]),boxscore=dict(players=[]),scoringPlays=[])) if not PREGAME[0] else dict(drives=dict(previous=[])))
+    if "sports.core.api.espn.com" in u:
+        eid=(re.search(r"events/([^/]+)/",u) or [0,""])[1]
+        return J(route,CORE[eid]) if eid in CORE and not PREGAME[0] else J(route,{},404)
     if "nfl/news" in u: return J(route,dict(articles=[]))
     if "docs.google.com" in u: return sheet(route,u)
     if "workers.dev" in u: return J(route,{"error":"mock"},503)

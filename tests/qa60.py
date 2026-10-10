@@ -12,7 +12,7 @@ with sync_playwright() as p:
     pg.add_init_script("localStorage.setItem('lm_user','xParRaidr');localStorage.setItem('lm_tab','s')")
     pg.goto(F);pg.wait_for_timeout(5000)
     chk("saved Survivor tab falls back to Matchups when not linked",pg.evaluate("S.tab")=="m")
-    chk("nav = Matchups, Radar (BETA), Lab (Edge hidden until unlocked)",pg.evaluate("[...document.querySelectorAll('header .tabs > .tb')].filter(b=>b.style.display!=='none').map(b=>b.innerText.replace(/\\s+/g,' ')).join('|')")=="🏈 Matchups|📡 RadarBETA|🧠 Lab",pg.evaluate("[...document.querySelectorAll('header .tabs > .tb')].filter(b=>b.style.display!=='none').map(b=>b.innerText).join('|')"))
+    chk("nav = Matchups, Replay (BETA), Lab (Edge hidden until unlocked)",pg.evaluate("[...document.querySelectorAll('header .tabs > .tb')].filter(b=>b.style.display!=='none').map(b=>b.innerText.replace(/\\s+/g,' ')).join('|')")=="🏈 Matchups|🎬 ReplayBETA|🧠 Lab",pg.evaluate("[...document.querySelectorAll('header .tabs > .tb')].filter(b=>b.style.display!=='none').map(b=>b.innerText).join('|')"))
     chk("chips: no fade when nothing overflows",not pg.evaluate("document.getElementById('lgs').classList.contains('ovf')"))
     chk("no 🔥/🧊 on matchup cards while some teams are at 0",pg.evaluate("document.querySelectorAll('.lg .mini .tbg').length")==0)
     chk("rows 36px / header 1 row",set(pg.evaluate("[...document.querySelectorAll('.lg .card.tw:not(.benchcard) tr.pr')].map(r=>Math.round(r.getBoundingClientRect().height))"))=={36} and pg.evaluate("Math.round(document.querySelector('header').getBoundingClientRect().height)")<=48)

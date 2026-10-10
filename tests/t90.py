@@ -9,7 +9,7 @@ with sync_playwright() as p:
         pg=b.new_page(viewport={"width":W,"height":1000},is_mobile=W<800,has_touch=W<800);e=[];pg.on("pageerror",lambda x:e.append(str(x)))
         pg.route("**/*",lambda r:r.continue_() if r.request.url.startswith(("file:","data:")) else mock.handle(r))
         pg.add_init_script("localStorage.setItem('lm_user','xParRaidr');localStorage.setItem('lm_conns',%r)"%json.dumps([{"key":"sleeper:x","p":"sleeper","username":"xParRaidr"},{"key":"survivor:"+SV2,"p":"survivor","sheet":SV2},{"key":"pickem:"+PK2,"p":"pickem","sheet":PK2}]))
-        pg.goto(F);pg.wait_for_timeout(5000);pg.evaluate("setTab('s')");pg.wait_for_timeout(4000)
+        pg.goto(F);pg.wait_for_timeout(5000);pg.evaluate("SV.open.plan=true;setTab('s')");pg.wait_for_timeout(4000)
         if tag=="d":
             st=pg.evaluate("[SV.layout,SV.lanes&&SV.lanes.length,SV.flagged,SV.lanes&&SV.lanes.filter(isOurs).length,SV.maxPick]")
             chk("survivor: normalized layout parsed (761 entries, 12 flagged ours, picks through W5)",st==["normalized",761,True,12,5],st)

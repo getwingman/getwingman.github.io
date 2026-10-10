@@ -24,9 +24,9 @@ with sync_playwright() as p:
             chk("Lab fun stats: one horizontal scrolling strip on phones",f and f["cs"]=="auto" and f["sw"]>f["cw"] and f["n"]>=5,f)
             hs=pg.evaluate("[...document.querySelectorAll('#moves .svh')].map(x=>x.innerText.split('\\n')[0].replace(/^[▾▸]/,'').trim())")
             chk("Lab: 2-way and 3-way trades live in one Trades module",sum(1 for x in hs if "Trades" in x or "3-way" in x)==1,hs)
-            pg.click("#moves [data-tv='3']");pg.wait_for_timeout(300)
-            chk("Trades: 3-way switch shows the cycles",pg.evaluate("document.querySelectorAll('#moves .trades.t3 .trd').length")>=1 and pg.evaluate("!document.querySelector('#moves .tpm')"))
-            pg.click("#moves [data-tv='2']");pg.wait_for_timeout(300);chk("Trades: back to partners",pg.evaluate("!!document.querySelector('#moves .tpm')"))
+            pg.click("#moves [data-tv='p']");pg.wait_for_timeout(300)
+            chk("Trades: By partner view groups deals by manager",pg.evaluate("document.querySelectorAll('#moves .tbr').length")>=11)
+            pg.click("#moves [data-tv='b']");pg.wait_for_timeout(300);chk("Trades: back to Best deals",pg.evaluate("document.querySelectorAll('#moves .tdr').length")>=1)
             chk("Lab phone: no horizontal page scroll",pg.evaluate("document.documentElement.scrollWidth")<=W)
             mock.TRADES[0]=False
         chk(f"[{W}] no errors",not e,e[:2]);pg.close()

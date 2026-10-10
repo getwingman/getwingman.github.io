@@ -47,7 +47,7 @@ with sync_playwright() as p:
     chk("multi-pick week: every pick has to win",ms==[[False,"L"],[True,"W"]],ms)
     # planner never recommends an ineligible team: check every ✓ against full history, for each rule
     for rule in ["once","gap1"]:
-        pg.evaluate(f"savePoolCfg('survivor',{{reuse:'{rule}'}});svRender()");pg.wait_for_timeout(300)
+        pg.evaluate(f"SV.open.plan=true;savePoolCfg('survivor',{{reuse:'{rule}'}});svRender()");pg.wait_for_timeout(300)
         bad=pg.evaluate("""(()=>{const V=SV.week||Math.min(SV.maxPick||1,18),N=V+1;svEval(V,false);const ours=SV.lanes.filter(isOurs),bad=[];let n=0;
           document.querySelectorAll('#surv .pmx .pmr:not(.pmh)').forEach(row=>{const t=row.querySelector('.pmt b').textContent;row.querySelectorAll('.pmc').forEach(c=>{const L=c.title.match(/Life (\\w+)/)[1],l=ours.find(x=>x.let===L);n++;
             const used=svUsed(l,N);const okRule=SV.cfg.reuse==='once'?!used.has(t):SV.cfg.reuse==='gap1'?used.get(t)!==N-1:true;if(c.classList.contains('ok')&&!okRule)bad.push(L+':'+t)})});return{bad,n}})()""")
