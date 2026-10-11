@@ -3,6 +3,7 @@
 H=$(cd "$(dirname "$1")" && pwd)/$(basename "$1"); D=$(cd "$(dirname "$0")" && pwd); O=$(mktemp -d); cd "$D"
 run(){ echo "=== $1"; shift; "$@" 2>&1 | grep -E "^(PASS|FAIL)|passed|FAILED" ; }
 run "optimizer vs brute force" node unit/optimizer.test.js "$H"
+run "Edge trade analyzer: search, scoring, roster cuts" node unit/trade_analyzer.test.js "$H"
 cp "${WORKER:-$(dirname "$H")/wingman-connect-worker.js}" unit/worker.mjs 2>/dev/null; run "worker OAuth" node unit/worker.test.mjs
 run "v38 features + desktop/phone" python3 qa60.py file://$H . $O
 run "Lab: rankings, IQ, playoffs" python3 t80.py file://$H $O
