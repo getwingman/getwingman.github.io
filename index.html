@@ -4,6 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Wingman | Never fantasy alone.</title>
+<meta name="description" content="Wingman brings your fantasy football leagues together for live game-day matchups, plays, rankings and smarter decisions. Designed for desktop, iPad and mobile.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Wingman">
+<meta property="og:title" content="Wingman | Never fantasy alone.">
+<meta property="og:description" content="One live fantasy football companion for all your leagues. Follow game day on desktop, iPad or mobile.">
+<meta property="og:url" content="https://getwingman.github.io/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Wingman | Never fantasy alone.">
+<meta name="twitter:description" content="A live fantasy football companion for your leagues, built for game day.">
+<meta name="wingman-release" content="1.0">
+<link rel="canonical" href="https://getwingman.github.io/">
 <link rel="icon" type="image/svg+xml" href="wingman-icon-transparent.svg?v=3">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png?v=3">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png?v=3">
@@ -1593,6 +1604,59 @@ html[data-theme=light] .tbb{background:#e6e7ee}
 .pks-error{padding:8px;color:var(--neg);background:rgba(255,107,107,.08);border-radius:8px;font-size:12px}.pks-empty{padding:8px;font-size:12px;color:var(--mute)}.pks-end{margin-top:2px}
 @media(max-width:760px){.pks-root{padding:10px}.pks-auth input{flex:1;min-width:0;width:100%}.pks-grid{grid-template-columns:minmax(0,1fr)}}
 
+
+/* ===== Wingman v1.0 · mobile launch experience =====
+   Desktop/iPad rules are intentionally unchanged. These phone-only overrides
+   optimize the WhatsApp first-open and live Sunday navigation. */
+.wm-intro{display:none}
+#go:disabled{opacity:.48;box-shadow:none;cursor:not-allowed}
+@media (max-width:760px){
+  /* Keep first-time connection choices visible sooner, including 320–360px phones. */
+  .welcome{min-height:auto;display:block;padding:4px 0 16px}
+  .welcome .wc{max-width:520px;margin:0 auto;padding:14px 12px 16px}
+  .wlogo{margin:0 auto 2px}
+  .wlock{width:min(185px,55vw);max-height:115px;height:auto;object-fit:contain}
+  .wh{font-size:19px;margin:0 0 4px;line-height:1.18}
+  .wm-intro{display:block!important;color:var(--mute);font-size:11.5px;line-height:1.4;margin:0 0 12px!important;text-align:center}
+  .pcards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:10px}
+  .pcard{min-height:124px;padding:10px 9px;gap:3px;border-radius:12px;min-width:0}
+  .pch{height:32px;gap:4px}.plogo{width:32px;height:32px;border-radius:9px}
+  .plogo img{max-width:24px;max-height:24px}.plogo.ci svg{width:32px;height:32px}
+  .pname{font-size:12.5px;margin-top:2px;line-height:1.2;overflow-wrap:anywhere}
+  .pmeta{font-size:10px;min-height:12px}
+  .pcard .pcta{height:38px;min-height:38px;font-size:11.5px;padding:0 5px;border-radius:9px;box-shadow:none}
+  .wgo{gap:7px;margin-top:2px}
+  .wgo .pcta{height:42px;min-height:42px;font-size:12px;min-width:min(145px,46%)}
+  #wshare{font-size:11.5px;min-width:0}
+  /* Header and tabs: predictable thumb-sized controls without stealing scrolling space. */
+  .ctl button,.ctl select{min-height:38px}
+  .ctl button#who{min-width:40px;max-width:54px}
+  .tabs .tb{min-height:52px;touch-action:manipulation}
+  .tbmenu .tbm{min-height:42px}
+  .lgt{min-height:36px;touch-action:manipulation}
+  .svwk,.pkw,.tbest,.lgs,.ctl{-webkit-overflow-scrolling:touch}
+  /* Always allow wide statistical tables to scroll in their own panel. */
+  #surv .tw,#pick .tw,#moves .tw{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+  .svtab,.pkt2{max-width:none}
+  .swgrid2,.rvgrid,.swgrid,.adds,.trades,.pks-grid{grid-template-columns:minmax(0,1fr)}
+  .setp{max-height:min(70dvh,620px);overscroll-behavior:contain}
+  /* Avoid mobile GPU compositing on every sticky/header backdrop; tabs remain legible. */
+  .tabs{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(9,9,14,.98)}
+  html[data-theme=light] .tabs{background:rgba(255,255,255,.98)}
+  /* Give the virtual keyboard and Android gesture bar breathing room. */
+  .pvform,.setp{scroll-padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+}
+@media(max-width:360px){
+  .welcome .wc{padding-left:10px;padding-right:10px}
+  .pcards{gap:7px}.pcard{padding:9px 7px}
+  .pcard .pcta{font-size:11px;padding:0 3px}
+  .tabs .tb{font-size:9.5px;gap:2px}
+  .tabs .tb .tbl{letter-spacing:-.02em}
+}
+@media(max-width:760px) and (prefers-reduced-motion:reduce){
+  .toast,.fx,.fxm,.swb,.skn,.hero.hb::before{animation:none!important;transition:none!important}
+}
+
 </style>
 </head>
 <body>
@@ -1621,13 +1685,14 @@ html[data-theme=light] .tbb{background:#e6e7ee}
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v47</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.0</span></div>
   </div>
 </header>
 <main>
   <section id="welcome" class="welcome"><div class="card wc">
     <div class="wlogo"><img class="wlock hl-d" src="wingman-primary-lockup.svg?v=3" alt="Wingman — Never fantasy alone." width="300" height="191"><img class="wlock hl-l" src="wingman-primary-lockup-for-light-bg.svg?v=3" alt="Wingman — Never fantasy alone." width="300" height="191"></div>
     <h1 class="wh">Connect where you play.</h1>
+<p class="wm-intro">Your leagues. Live game day. One Wingman.</p>
     <div id="pcards" class="pcards"></div>
     <div id="pvform" class="pvform"></div>
     <div id="conlist" class="conlist"></div>
@@ -1643,6 +1708,9 @@ html[data-theme=light] .tbb{background:#e6e7ee}
 </main>
 <div id="toasts"></div>
 <script>
+/* Public versioning: v1.0 launch → v1.1, v1.2 feature releases; v2.0 for major overhauls. */
+const WM_VERSION="1.0";
+try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
 const $=id=>document.getElementById(id);
@@ -1679,7 +1747,7 @@ function confetti(){
   if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
   const ctx=cv.getContext("2d");cv.width=innerWidth;cv.height=innerHeight;
   const cols=["#3ecf74","#f5c542","#a785ff","#3dd6e6","#ffffff","#ff6b6b"];
-  const ps=Array.from({length:170},()=>({x:innerWidth/2+(Math.random()-.5)*240,y:innerHeight*.35,vx:(Math.random()-.5)*15,vy:-Math.random()*15-4,w:6+Math.random()*6,h:4+Math.random()*5,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[Math.random()*cols.length|0]}));
+  const ps=Array.from({length:innerWidth<=760?65:170},()=>({x:innerWidth/2+(Math.random()-.5)*240,y:innerHeight*.35,vx:(Math.random()-.5)*15,vy:-Math.random()*15-4,w:6+Math.random()*6,h:4+Math.random()*5,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[Math.random()*cols.length|0]}));
   let f=0;(function step(){ctx.clearRect(0,0,cv.width,cv.height);
     ps.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.vx*=.99;p.r+=p.vr;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore()});
     if(++f<190)requestAnimationFrame(step);else ctx.clearRect(0,0,cv.width,cv.height)})();
@@ -3131,6 +3199,7 @@ function connState(c){const st=(S.connStat||{})[c.key]||{};
   return["off","Disconnected"]}
 function renderConns(){
   const box=$("pcards");if(!box)return;const cs=S.conns||getConns();
+  const enter=$("go");if(enter){enter.disabled=!cs.length;enter.title=cs.length?"Open your connected dashboards":"Connect a provider above to get started";}
   box.innerHTML=PCARDS.map(c=>{const mine=cs.filter(x=>x.p===c.p),st=mine.map(x=>(S.connStat||{})[x.key]||{}),n=st.reduce((s,x)=>s+(x.n||0),0),err=st.find(x=>x.st==="err"),ok=mine.length&&!err;
     const acct=c.p==="manual"&&mine.length?"Snapshot · doesn't auto-sync":c.p==='pickem'&&mine.some(x=>x.source==='sleeper')?(mine.some(x=>x.sheet)?'Sleeper reader + sheet linked':'Sleeper reader linked'):c.sheet&&mine.length?"Sheet linked":mine.map(x=>x.username||x.name||(x.leagueId?"League "+x.leagueId:"")).filter(Boolean).slice(0,2).join(", ");
     return`<div class="pcard ${mine.length?"on":""}" data-p="${c.p}"><div class="pch">${provLogo(c)}<span class="psig" title="${esc(c.sig[1])}">${c.sig[0]}</span>${mine.length?`<i class="pdot ${err?"err":ok?"ok":"sync"}" title="${esc(err?err.err:ok?"Connected":"Connecting")}"></i>`:""}</div>
@@ -5214,7 +5283,7 @@ function setTab(t){
 }
 document.querySelectorAll("header .tb[data-t]").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
 
-SV.lastTick=0;setInterval(async()=>{if(document.hidden)return;const n=Date.now(),every=(+$("every").value||3)*1000;if(n-SV.lastTick>=(S.tab==="s"||S.tab==="p"?every:60000)){SV.lastTick=n;if(hasMode("survivor"))await svTick();if(hasMode("pickem")){if(S.tab==="p")await pkTick();else if(PK.weeks){await pkLoadNext(PK.wSheet||PK.weeks,15000);await pkLoadNext((PK.wSheet||PK.weeks)+1,30000)}}try{renderSweat()}catch(e){}}},1000);
+SV.lastTick=0;setInterval(async()=>{if(document.hidden)return;const n=Date.now(),secs=+$("every").value;if(!secs)return;const every=secs*1000;if(n-SV.lastTick>=(S.tab==="s"||S.tab==="p"?every:60000)){SV.lastTick=n;if(hasMode("survivor"))await svTick();if(hasMode("pickem")){if(S.tab==="p")await pkTick();else if(PK.weeks){await pkLoadNext(PK.wSheet||PK.weeks,15000);await pkLoadNext((PK.wSheet||PK.weeks)+1,30000)}}try{renderSweat()}catch(e){}}},1000);
 setInterval(()=>{if((S.tab==="t"||S.tab==="e")&&!document.hidden)mvTick()},30000);
 pkLoad();applySheetModes(false);updateNav();
 if(hasMode("survivor"))svInit().then(()=>{if(S.tab!=="m")setTab(S.tab)});else if(S.tab!=="m"&&S.tab!=="s"&&S.tab!=="p")setTab(S.tab);
@@ -5225,7 +5294,13 @@ if(S.nickToast)setTimeout(()=>{try{toast("good",`✓ ${S.nickToast} nicknames sa
 $("wshare").onclick=async()=>{const ok=await copyText(setupLink());const b=$("wshare");b.textContent=ok?"✓ Link copied":"Couldn't copy";setTimeout(()=>{b.textContent="⧉ Copy setup link"},2200)};
 
 $("week").onchange=()=>{S.L.forEach(l=>{l.rf={}});S.raw=null;S.baseWeek=0;S.stats={};S.statsHave=false;S.statsVol=0;S.desc={};S.stxt="";S.eff={};S.box={};S.fl={};S.fltxt={};S.reg={};S.effPrimed=false;S.okFast=false;S.dirty=true;S.L.forEach(l=>Object.assign(l,{mu:null,prev:{},delta:{},acc:{},off:{},offi:{},cmp:{},log:[],hist:{},focus:null,leadSign:0,lastHtml:"",primed:false}));refresh()};
-$("every").onchange=schedule;
+/* A mobile Sunday defaults to 10s instead of the desktop's 3s.
+   Saved user preference always wins, including Refresh = off. */
+(()=>{const saved=load("refresh"),sel=$("every");
+  if(saved!==null&&[...sel.options].some(o=>o.value===saved))sel.value=saved;
+  else if(isPhone())sel.value="10";
+})();
+$("every").onchange=()=>{save("refresh",$("every").value);schedule()};
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh()});
 addEventListener("online",()=>refresh());addEventListener("offline",()=>document.body.classList.add("offline"));
 if(window.matchMedia)matchMedia("(max-width:760px)").addEventListener("change",()=>{if(S.L.length)applyVis()});
