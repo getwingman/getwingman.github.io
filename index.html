@@ -1719,12 +1719,88 @@ html[data-theme=light] .tbb{background:#e6e7ee}
 }
 @media(max-width:345px){.trade-team{padding:6px 4px}}
 @media(prefers-reduced-motion:reduce){#view.league-carousel{scroll-behavior:auto}}
+
+/* ===== Wingman v1.3 · shared semantic component system ===== */
+:root{
+ --wm-bg:var(--bg);--wm-surface-1:var(--s1);--wm-surface-2:var(--s2);
+ --wm-text:var(--ink);--wm-text-secondary:var(--mute);--wm-border:var(--line);
+ --wm-side-you:var(--a);--wm-side-opponent:var(--b);
+ --wm-positive:var(--pos);--wm-caution:var(--up);--wm-accent-gold:var(--gold);
+ --wm-space-1:4px;--wm-space-2:8px;--wm-space-3:12px;--wm-space-4:16px;
+ --wm-space-5:24px;--wm-space-6:32px;
+ --wm-icon-inline:16px;--wm-icon-nav:20px;--wm-icon-major:24px;
+ --wm-me:var(--a);--wm-opponent:var(--b);--wm-success:var(--pos);
+ --wm-danger:var(--neg);--wm-warning:var(--up);--wm-award:var(--gold);
+ --wm-qb:#ef5b7b;--wm-rb:#35c98b;--wm-wr:#4aa3ff;
+ --wm-te:#f0a323;--wm-k:#b48cff;--wm-def:#8d99ae;
+ --wm-badge-radius:6px;--wm-card-radius:12px;
+}
+/* Position tokens are shared by player, trade and compact labels. */
+.pos.QB{background:var(--wm-qb)}.pos.RB{background:var(--wm-rb)}
+.pos.WR{background:var(--wm-wr)}.pos.TE{background:var(--wm-te)}
+.pos.K{background:var(--wm-k)}.pos.DEF{background:var(--wm-def)}
+.sl-QB,.sp-QB{--sc:var(--wm-qb)}.sl-RB,.sp-RB{--sc:var(--wm-rb)}
+.sl-WR,.sp-WR{--sc:var(--wm-wr)}.sl-TE,.sp-TE{--sc:var(--wm-te)}
+.sl-K,.sp-K{--sc:var(--wm-k)}.sl-DEF,.sp-DEF{--sc:var(--wm-def)}
+/* Event labels keep meaning apart from good/bad fantasy outcomes. */
+.k.INT{color:#9acfff;background:rgba(74,163,255,.13)}
+.k.FG{color:#d5bbff;background:rgba(180,140,255,.14)}
+/* Status tokens: danger/warning keep legible text even in light mode. */
+.tag,.pill,.root,.sg,.gfo,.stamp,.fmt{border-radius:var(--wm-badge-radius);font-variant-numeric:tabular-nums}
+.tag.inj,.tag.wn{color:#111!important;background:var(--wm-warning)}
+.tag.inj.o,.tag.wn{color:#fff!important;background:#bd3544!important}
+.tag.inj.d{color:#101014!important;background:#ff9142!important}
+.tag.rg{color:#ffe1a0!important;background:#33240e!important;border-color:#a97721}
+/* Live possession: the ball is the only pulsing indicator inside a player cell. */
+.gi .ld{display:none!important}
+.posball{display:inline-flex;align-items:center;justify-content:center;flex:none;
+ font-size:12px;line-height:14px;min-width:15px;height:14px;margin-left:2px;
+ transform-origin:center;animation:wmPossession 1.6s ease-in-out infinite;
+ filter:drop-shadow(0 0 2px rgba(245,197,66,.4));cursor:help}
+@keyframes wmPossession{0%,100%{transform:scale(.93);opacity:.78}50%{transform:scale(1.18);opacity:1;filter:drop-shadow(0 0 5px rgba(245,197,66,.7))}}
+/* Replace ambiguous lightning bolt with explicit win probability context. */
+.lev,.lev.op{display:inline-flex;align-items:center;gap:2px;opacity:1!important;transform:none!important;
+ border:1px solid rgba(167,133,255,.52);border-radius:5px;padding:0 4px;
+ color:#dbc9ff;background:rgba(167,133,255,.13);font-size:9px;font-weight:850;
+ white-space:nowrap;line-height:15px;filter:none!important}
+.lev.op{border-color:rgba(61,214,230,.5);color:#abf3ff;background:rgba(61,214,230,.11)}
+.lev b{font-size:10px}.boost{display:inline-flex;align-items:center;border:1px solid rgba(61,214,230,.35);
+ color:var(--b);font-size:10px;font-weight:800;padding:1px 5px;border-radius:5px;text-decoration:none}
+html[data-theme=light] .lev{color:#5d38ae;background:#f0eaff}
+html[data-theme=light] .lev.op{color:#096e80;background:#e2f8fa}
+/* All in-cell action labels must remain readable over bright flashing effects.
+   Their dark opaque surface, high-contrast white type, and tinted border
+   deliberately do NOT inherit the cell/animation color as text. */
+#fxlayer{pointer-events:none;z-index:180}
+.fxtag,.fxm .fxp{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;
+ max-width:min(250px,calc(100vw - 12px));min-height:23px;padding:3px 8px!important;
+ border:1.5px solid var(--fc,#f5c542)!important;border-radius:7px!important;
+ color:#fff!important;background:#090d16!important;
+ font-family:var(--fui);font-weight:900!important;font-size:11px!important;
+ line-height:1.2!important;letter-spacing:.04em!important;text-align:center!important;
+ white-space:normal!important;overflow-wrap:normal!important;
+ text-shadow:0 1px 1px #000!important;
+ box-shadow:0 0 0 1px rgba(0,0,0,.5),0 3px 16px rgba(0,0,0,.55)!important;
+ isolation:isolate}
+.fx .fl2{display:none!important} /* the readable label is rendered in #fxlayer instead */
+.fxm .fxp span{color:var(--fc,#f5c542)!important}
+.fxtag::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--fc,#f5c542);border-radius:6px 0 0 6px}
+html[data-theme=light] .fxtag,html[data-theme=light] .fxm .fxp{color:#fff!important;background:#0b1020!important}
+/* The settings action previews are legible in either theme and never flash their text away. */
+#labev .lbe{color:var(--ink)!important;background:var(--s2)!important;opacity:1!important;
+ border:1px solid var(--line)!important;font-weight:750!important;line-height:1.4!important;min-height:29px}
+#labev .lbe.on{color:var(--ink)!important;background:rgba(167,133,255,.18)!important;
+ border-color:var(--a)!important}
+html[data-theme=light] #labev .lbe.on{background:#e9e1ff!important;color:#281455!important}
+@media(max-width:760px){.lev{font-size:8px;padding:0 3px}.posball{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.posball{animation:none!important;transform:none!important;opacity:1;filter:none}}
+
 </style>
 </head>
 <body>
 <header>
   <div class="brand"><b class="appn" title="Wingman | Never fantasy alone."><img class="hlogo hl-d" src="wingman-header-lockup.svg?v=3" alt="Wingman" width="136" height="24"><img class="hlogo hl-l" src="wingman-header-lockup-for-light-bg.svg?v=3" alt="Wingman" width="136" height="24"></b>
-    <div class="tabs" role="tablist"><button class="tb on" data-t="m" role="tab"><span class="tbi">🏈</span> <span class="tbl">Matchups</span></button><button class="tb" data-t="f" role="tab" title="Replay is in beta: the plays behind your fantasy points"><span class="tbi">🎬</span> <span class="tbl">Replay</span><i class="betaf">BETA</i></button><button class="tb" data-t="t" role="tab"><span class="tbi">🧠</span> <span class="tbl">Lab</span></button><button class="tb" data-t="e" role="tab" style="display:none"><span class="tbi"><svg class="chest" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5c0-3.6 2.9-6.5 6.5-6.5h5c3.6 0 6.5 2.9 6.5 6.5V11H3z" fill="#8a5a2b"/><rect x="3" y="11" width="18" height="9" rx="1.6" fill="#6d4420"/><rect x="3" y="10" width="18" height="2.4" fill="#f5c542"/><rect x="10" y="9.2" width="4" height="5.6" rx="1" fill="#f5c542"/><circle cx="12" cy="12.4" r="1" fill="#6d4420"/><path d="M5.5 4.8 7 6.9M18.5 4.8 17 6.9" stroke="#f5c542" stroke-width="1.2" stroke-linecap="round" opacity=".7"/></svg></span> <span class="tbl">Edge</span></button><button class="tb" data-t="s" role="tab" style="display:none"><span class="tbi">🛟</span> <span class="tbl">Survivor</span></button><button class="tb" data-t="p" role="tab" style="display:none"><span class="tbi">🎯</span> <span class="tbl">Pick'em</span></button></div>
+    <div class="tabs" role="tablist"><button class="tb on" data-t="m" role="tab"><span class="tbi">🏈</span> <span class="tbl">Matchups</span></button><button class="tb" data-t="f" role="tab" title="Replay is in beta: the plays behind your fantasy points"><span class="tbi">🎬</span> <span class="tbl">Replay</span><i class="betaf">BETA</i></button><button class="tb" data-t="t" role="tab"><span class="tbi">🧪</span> <span class="tbl">Lab</span></button><button class="tb" data-t="e" role="tab" style="display:none"><span class="tbi"><svg class="chest" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5c0-3.6 2.9-6.5 6.5-6.5h5c3.6 0 6.5 2.9 6.5 6.5V11H3z" fill="#8a5a2b"/><rect x="3" y="11" width="18" height="9" rx="1.6" fill="#6d4420"/><rect x="3" y="10" width="18" height="2.4" fill="#f5c542"/><rect x="10" y="9.2" width="4" height="5.6" rx="1" fill="#f5c542"/><circle cx="12" cy="12.4" r="1" fill="#6d4420"/><path d="M5.5 4.8 7 6.9M18.5 4.8 17 6.9" stroke="#f5c542" stroke-width="1.2" stroke-linecap="round" opacity=".7"/></svg></span> <span class="tbl">Edge</span></button><button class="tb" data-t="s" role="tab" style="display:none"><span class="tbi">🛟</span> <span class="tbl">Survivor</span></button><button class="tb" data-t="p" role="tab" style="display:none"><span class="tbi">🎯</span> <span class="tbl">Pick'em</span></button></div>
     <span class="upd" id="upd"></span></div>
   <div class="ctl">
     <span class="lgs mctl" id="lgs"></span>
@@ -1748,7 +1824,7 @@ html[data-theme=light] .tbb{background:#e6e7ee}
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.2</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.3</span></div>
   </div>
 </header>
 <main>
@@ -1771,7 +1847,7 @@ html[data-theme=light] .tbb{background:#e6e7ee}
 </main>
 <div id="toasts"></div>
 <script>
-/* v1.0 launch → v1.1 audio fixes → v1.2 game-day presentation. */
+/* v1.0 launch → v1.1 audio → v1.2 game day → v1.3 unified design. */
 const WM_VERSION="1.2";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
@@ -2108,7 +2184,7 @@ function gtext(p){
   if(!p.team||p.team==="FA")return"";const g=S.games[p.team];if(!g)return S.okGames?"💤":"";
   const l=(g.home?"vs ":"@")+g.oppT,sc=`${g.me}–${g.opp}`;
   if(g.state==="in"&&settled(p))return`⊘ ${sc} ${l}`;
-  if(g.state==="in")return`<span class="gi"><i class="ld"></i>${esc(g.detail.replace(/\s*-\s*/," · "))}</span>${g.rz?`<span class="rz" title="In the red zone">RZ</span>`:""} ${sc} ${l}${g.poss?` <span class="dd" title="Has the ball${g.spot?" at "+esc(g.spot):""}">🏈${g.dd?" "+esc(g.dd):""}</span>`:""}`;
+  if(g.state==="in")return`<span class="gi">${esc(g.detail.replace(/\s*\-\s*/," · "))}</span>${isRZ(p)?`<span class="rz" title="${p.pos==="DEF"?"Opposing offense in red zone · D/ST points at risk":"Offense in the red zone"}">${p.pos==="DEF"?"RZ RISK":"RZ"}</span>`:""} ${sc} ${l}${g.poss&&g.dd?` <span class="dd" title="${esc(g.dd)}">${esc(g.dd)}</span>`:""}`;
   if(g.state==="post")return`✓ ${sc} ${l}`;
   const d=new Date(g.date),today=d.toDateString()===new Date().toDateString();
   return`<span class="gi">🕒 ${today?"":d.toLocaleDateString([],{weekday:"short"})+" "}${hm(d)}</span> ${l}`;
@@ -2190,12 +2266,13 @@ function fieldBar(p,right){
   return{style:`background-image:linear-gradient(${dir},${col} 0,${col} ${x}%,#fff ${x}%,#fff calc(${x}% + 3px),rgba(255,255,255,.07) calc(${x}% + 3px));background-size:100% 2px;background-repeat:no-repeat;background-position:0 100%`,
     tip:`${p.team} ball at ${sp}${g.dd?" · "+g.dd:""} · ${togo} yds to a TD`};
 }
+const ballOnOffense=p=>{const g=S.games[p.team];return !!(p.pos!=="DEF"&&g&&g.state==="in"&&!settled(p)&&g.possT===p.team)};
 const slotPill=pos=>{const k=/^(QB|RB|WR|TE|K|DEF|BN|IR)$/.test(pos)?pos:"FLX";return`<span class="slot sl-${k}">${pos}</span>`};
 /* progressive live info: what matters right now replaces the normal team/clock line */
 function progLine(p,r){
   const fx=S.fx[p.id],g=S.games[p.team],lg=S.rlg;
   if(fx&&/^(td|otd|dtd)$/.test(fx.k)&&Date.now()-fx.t<20000)return`<span class="pg td">🏈 TD${fx.pts!=null?" "+(fx.pts>=0?"+":"")+(+fx.pts).toFixed(1):""}</span>`;
-  if(fx&&/^(int|fr|sack|safe|blk)$/.test(fx.k)&&Date.now()-fx.t<15000)return`<span class="pg big">${{int:"🛑 INT",fr:"🔁 Fumble recovery",sack:"💥 Sack",safe:"🛡 Safety",blk:"✋ Blocked kick"}[fx.k]}</span>`;
+  if(fx&&/^(int|fr|sack|safe|blk)$/.test(fx.k)&&Date.now()-fx.t<15000)return`<span class="pg big">${{int:"🙌 INT",fr:"🔁 Fumble recovery",sack:"💥 Sack",safe:"🛡 Safety",blk:"✋ Blocked kick"}[fx.k]}</span>`;
   if(r&&r.need)return miniTrack(r.a,r.need,"nd",`Needs about ${f2(r.need)} to reach the opponent's projected final (has ${f2(r.a)})`,[f2(r.a).replace(/\.00$/,""),f2(r.need)]);
   if(isRZ(p)&&p.pos==="DEF")return`<span class="pgv rz" title="${esc(g.oppT)} offense is in your D/ST red zone · defensive points allowed at risk"><i class="rzd"></i>⚠ ${esc(g.oppT)} inside 20</span>`;
   if(isRZ(p)&&p.pos!=="K")return`<span class="pgv rz" title="${esc(p.team)} ball in the red zone${g&&g.spot?" · "+esc(g.spot):""}"><i class="rzd"></i>${g&&g.dd?esc(g.dd):"RZ"}</span>`;
@@ -2218,7 +2295,7 @@ function hotCold(r){const p=r.p,g=S.games[p.team];if(!g||g.state==="pre"||!/^(QB
   if(r.a<full*f*.35)return{k:"cold",tip:`Ice cold: ${f2(r.a)} pts on ${opp} ${p.pos==="QB"?"dropbacks + carries":"touches + targets"} with ${g.state==="post"?"his game over":Math.round(f*100)+"% of his game played"} (projected ${f2(full)})`};
   return null}
 function levTag(p){const lg=S.rlg,L=lg&&S.sig&&S.sig.lev[lg.id],v=L&&L[p.id];if(!v||!v.top)return"";
-  const k=Math.min(1,Math.abs(v.sw)/.25);return`<span class="lev ${v.sw>=0?"me":"op"}" style="--k:${k.toFixed(2)}" title="+1 pt = ${pctPt(v.pp)} win probability · strong finish (+${v.sdPts.toFixed(1)}) = ${pctPt(v.sw)}">⚡</span>`}
+  const k=Math.min(1,Math.abs(v.sw)/.25);return`<span class="lev ${v.sw>=0?"me":"op"}" style="--k:${k.toFixed(2)}" title="WIN% impact · each additional fantasy point changes win probability by ${pctPt(v.pp)}; strong finish (+${v.sdPts.toFixed(1)} pts) shifts it ${pctPt(v.sw)}" aria-label="High win probability impact">WIN% <b>${v.sw>=0?"↑":"↓"}</b></span>`}
 /* portrait (natural crop, never stretched) + NFL team mark bottom-right; initials when no headshot */
 const NFLCODE={LAR:"LA",WAS:"WAS"};
 const teamLogo=(t,px=40)=>`https://static.www.nfl.com/f_auto,h_${px},dpr_2.0,q_auto,w_${px}/league/api/clubs/logos/${NFLCODE[t]||t}`;
@@ -2242,7 +2319,7 @@ function pcell(r,right,irRow){
   const inner=right?stR+tags+nm:nm+tags+stt;
   const img=avatarHtml(p);
   const fb=fieldBar(p,right),fx=S.fx[p.id],fxOn=fx&&Date.now()-fx.t<FX_DELAY+(FXDUR[fx.k]||2310);
-  return`<td class="${right?"r ":""}${gcls(p)}${isRZ(p)?" g-rz":""}${r.warn?" g-warn":""}${fxOn?" fxc":""}" data-pos="${esc(p.pos)}" data-pid="${esc(p.id)}"${fxOn?` data-fx="${p.id}"`:""}${fb?` style="${fb.style}" title="${esc(fb.tip)}"`:""}><div class="pc ${right?"rv":""}">${img}<div class="px"><div class="pn" title="${esc((r.warn?"⚠ "+r.warn+" | ":"")+(right?(st?st+" | ":"")+p.name:p.name+(st?" | "+st:"")))}">${inner}</div><div class="pm" title="${esc(gtextPlain(p))}"><span class="pos ${esc(p.pos)}">${esc(p.pos)}</span>${progLine(p,r)||`<span>${esc(p.team)}</span><span>${gtext(p)}</span>`}</div></div></div></td>`;
+  return`<td class="${right?"r ":""}${gcls(p)}${isRZ(p)?" g-rz":""}${r.warn?" g-warn":""}${fxOn?" fxc":""}" data-pos="${esc(p.pos)}" data-pid="${esc(p.id)}"${fxOn?` data-fx="${p.id}"`:""}${fb?` style="${fb.style}" title="${esc(fb.tip)}"`:""}><div class="pc ${right?"rv":""}">${img}<div class="px"><div class="pn" title="${esc((r.warn?"⚠ "+r.warn+" | ":"")+(right?(st?st+" | ":"")+p.name:p.name+(st?" | "+st:"")))}">${inner}</div><div class="pm" title="${esc(gtextPlain(p))}"><span class="pos ${esc(p.pos)}">${esc(p.pos)}</span>${ballOnOffense(p)?`<span class="posball" role="img" aria-label="${esc(p.team)} has possession" title="${esc(p.team)} on offense">🏈</span>`:""}${progLine(p,r)||`<span>${esc(p.team)}</span><span>${gtext(p)}</span>`}</div></div></div></td>`;
 }
 function ncell(lg,r,right){
   const c0=right?"n nl":"n";
@@ -2257,7 +2334,7 @@ function ncell(lg,r,right){
   const g=S.games[r.p.team],unpl=S.okGames&&(!g||g.state==="pre")&&!r.a,pts=unpl?`<b class="np" title="${g?"Game hasn't started":"No game this week"}">${g?"◌":"💤"}</b>`:`<b>${f2(r.a)}</b>`;
   return`<td class="${c0} ${gcls(r.p)}${isRZ(r.p)?" g-rz":""}${r.warn?" g-warn":""}">${pts}${pj}</td>`;
 }
-const KCHIP={PASS:"🎯 PASS",RUN:"🏃 RUN",SACK:"💥 SACK",INT:"🛑 INT",FUM:"🔻 FUM",FG:"🥅 FG",XP:"✔ XP",TD:"🏈 TD",DEF:"🛡 D/ST",ADJ:"⚖ ADJ"};
+const KCHIP={PASS:"🎯 PASS",RUN:"🏃 RUN",SACK:"💥 SACK",INT:"🙌 INT",FUM:"🔻 FUM",FG:"ⵖ FG",XP:"✔ XP",TD:"🏈 TD",DEF:"🛡 D/ST",ADJ:"⚖ ADJ"};
 
 function render(lg){
   const M=lg.matchups,el=lg.el;if(!el||S.dragging)return;S.rlg=lg;
@@ -2523,7 +2600,7 @@ function alerts(now){
     if(f.safe)toast("good",`🛡️ Safety! · ${nm}`);
     if(f.dsack&&!f.dint&&!f.dfr)toast("info",`💥 Sack · ${nm}`,3000);
     if(f.boom)toast("boom",`🦵 Boomer! ${esc(String(f.boom))}${/\+$/.test(String(f.boom))?" yd":"-yd"} field goal · ${nm}${best[id]!=null?" "+sg(best[id]):""}`);
-    else if(f.fg)toast("good",`🥅 ${esc(ds.txt)} · ${nm}${best[id]!=null?" "+sg(best[id]):""}`);
+    else if(f.fg)toast("good",`ⵖ ${esc(ds.txt)} · ${nm}${best[id]!=null?" "+sg(best[id]):""}`);
     if(f.big&&once("big"+p.team+f.big.y,8000)){const L={run:["💨 Breakaway!","run"],catch:["🎯 Deep shot!","catch"],pass:["🚀 Bomb!","completion"]}[f.big.k];toast("big",`${L[0]} ${nm} · ${f.big.y}-yd ${L[1]}${best[id]!=null?" "+sg(best[id]):""}`)}
     else if(!f.fg&&!f.big&&best[id]>=5)toast("good",`⚡ Big play · ${nm} ${sg(best[id])} · ${esc(ds.txt)}`);
     else if(!f.fg&&!f.big&&["PASS","RUN","XP"].includes(ds.kind)&&best[id]>=1&&
@@ -2614,7 +2691,7 @@ function tickStatus(){
   if(!S.updated)return;
   const sec=Math.round((Date.now()-S.updated)/1000);
   const started=Object.values(S.games||{}).some(g=>g.state!=="pre"),bad=[!S.okGames&&"game feed",!S.okProj&&"projections",(S.statsAt&&!S.okStats&&started)&&"live stats"].filter(Boolean);
-  $("upd").innerHTML=`${S.okFast?` <span class="boost" title="ESPN boost: live ESPN box scores fill in plays before Sleeper's stat feed catches up">⚡</span>`:""}`+(bad.length?` <span class="warn" title="These feeds did not load, so some details are hidden">⚠ ${bad.join(", ")} unavailable</span>`:"");
+  $("upd").innerHTML=`${S.okFast?` <span class="boost" title="ESPN live boost: ESPN box scores supplement Sleeper stats when ahead">ESPN+</span>`:""}`+(bad.length?` <span class="warn" title="These feeds did not load, so some details are hidden">⚠ ${bad.join(", ")} unavailable</span>`:"");
   if(!S.err)$("status").style.display="none";
 }
 /* live games: the chosen cadence. Otherwise: every 15s in the last 15 min before a kickoff, once a minute before kickoff / after games end */
@@ -2753,7 +2830,7 @@ const FXDUR={fg:1500,fg50:1750,td:1500,otd:1500,dtd:1600,sack:1300,int:1500,fr:1
   lead:1500,comeback:1600,hi:1500,lo:1500,upset:1600,win:1700,loss:1500,upwin:1800};
 Object.keys(FXDUR).forEach(k=>FXDUR[k]=Math.round(FXDUR[k]*1.65));
 const MODFX=new Set(["lead","comeback","hi","lo","upset","win","loss","upwin"]);
-const FXLAB={sack:["💥","SACK"],int:["🛑","INT"],fr:["🏈","FUMBLE"],dtd:["🏈","D/ST TD"],safe:["🛡","SAFETY"],blk:["✋","BLOCKED"],td:["🏈","TD"],otd:["🏈","TD"],
+const FXLAB={fg:["ⵖ","FIELD GOAL"],fg50:["ⵖ","50+ YARD FG"],sack:["💥","SACK"],int:["🙌","INTERCEPTION"],fr:["🏈","FUMBLE"],dtd:["🏈","DEFENSIVE TD"],safe:["🛡","SAFETY"],blk:["✋","BLOCKED"],td:["🏈","TOUCHDOWN"],otd:["🏈","OPPONENT TD"],
   live:["●","LIVE"],rz:["🔴","RED ZONE"],regret:["↑","BENCH"],q:["Q","QUESTIONABLE"],out:["O","OUT"],inj:["✚","STATUS"],
   lead:["🔄","OPPONENT TAKES LEAD"],comeback:["⚡","YOU TAKE THE LEAD"],hi:["🔥","LEAGUE HIGH"],lo:["🧊","LEAGUE LOW"],upset:["⚠","UPSET ALERT"],win:["🏆","WIN"],loss:["","FINAL · LOSS"],upwin:["🎉","UPSET WIN"]};
 const prefersRM=()=>!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -2763,7 +2840,7 @@ const FXSTATUS=new Set(["q","out","inj"]);
 function fxMarkup(k,o){
   const side=o.side==="L"?"fxL":"fxR",L=FXLAB[k]||["✦",""];
   if(MODFX.has(k))return`<span class="fxm fxm-${k}" aria-hidden="true"><i class="sw"></i><b class="fxp"><span>${L[0]}</span>${L[1]}</b></span>`;
-  const B='<i class="bl">🏈</i>',lab=k==="fg"?"GOOD":k==="fg50"?"GOOD · 50+":L[1];
+  const B='<i class="bl">🏈</i>',lab=L[1];
   const scene={
     fg:`<i class="fp"></i>${B}`,fg50:`<i class="fp"></i>${B}`,
     td:`<i class="ez"></i><i class="gl"></i>${B}<i class="bst"></i>`,otd:`<i class="ez"></i><i class="gl"></i>${B}<i class="bst"></i>`,dtd:`<i class="ez"></i><i class="gl"></i>${B}<i class="bst"></i>`,
@@ -2842,8 +2919,8 @@ function labTargets(k){
   return st().filter(td=>/^(QB|RB|WR|TE)$/.test(td.dataset.pos));
 }
 function labMsg(k){const lg=labLg(),sc=lg?lg.sc:{},P=x=>{const v=calcPts(x,sc);return v?`${v>0?"+":"−"}${f2(Math.abs(v))}`:"—"};
-  return({td:["td",`🏈 TD · QB ${P({pass_td:1})} · RB ${P({rush_td:1})} · WR/TE ${P({rec_td:1})}`],otd:["warn",`😬 Opponent TD ${P({rec_td:1})}`],fg:["good",`🥅 42-yd FG ${P(fgStats(42,sc))}`],fg50:["boom",`🦵 54-yd FG ${P(fgStats(54,sc))}`],
-    dtd:["td",`🏈 D/ST TD ${P({def_td:1})}`],sack:["good",`💥 Sack ${P({sack:1})}`],int:["good",`🛑 INT ${P({int:1})}`],fr:["good",`🔁 Fumble recovery ${P({fum_rec:1})}`],safe:["good",`🛡 Safety ${P({safe:1})}`],blk:["good",`✋ Blocked kick ${P({blk_kick:1})}`],
+  return({td:["td",`🏈 TD · QB ${P({pass_td:1})} · RB ${P({rush_td:1})} · WR/TE ${P({rec_td:1})}`],otd:["warn",`😬 Opponent TD ${P({rec_td:1})}`],fg:["good",`ⵖ 42-yd FG ${P(fgStats(42,sc))}`],fg50:["boom",`ⵖ 54-yd FG ${P(fgStats(54,sc))}`],
+    dtd:["td",`🏈 D/ST TD ${P({def_td:1})}`],sack:["good",`💥 Sack ${P({sack:1})}`],int:["good",`🙌 INT ${P({int:1})}`],fr:["good",`🔁 Fumble recovery ${P({fum_rec:1})}`],safe:["good",`🛡 Safety ${P({safe:1})}`],blk:["good",`✋ Blocked kick ${P({blk_kick:1})}`],
     rz:["rz","🚨 Red zone"],live:["info","🟢 Kickoff"],lead:["bad","🔄 Opponent takes lead"],comeback:["good","🔄 You take the lead"],hi:["td","🔥 League high"],lo:["warn","🧊 League low"],regret:["warn","↑ Bench regret"],upset:["warn","⚠️ Upset alert"],
     q:["status","🩺 Questionable"],out:["bad","⛔ Out"],inj:["status","🩺 Injury update"],win:["win","🏆 Win"],loss:["loss","Final · loss"],upwin:["win","🎉 Upset win"]})[k]}
 function labRun(k,withSound){
@@ -3347,6 +3424,22 @@ function connState(c){const st=(S.connStat||{})[c.key]||{};
   if(st.st==="err")return[st.kind==="pending"?"pending":st.kind==="retry"?"retry":"attn",(st.kind==="pending"?"Access pending · ":st.kind==="retry"?"Retrying · ":"Needs attention · ")+st.err];
   if(st.st==="ok"){const ls=(S.L||[]).filter(l=>l.conn&&l.conn.key===c.key),t=Math.max(0,...ls.map(l=>l.muAt||0)),bad=ls.find(l=>l.syncErr);return bad?["retry","Retrying · "+bad.syncErr]:["ok","Connected"+(t?" · updated "+ago(t):"")]}
   return["off","Disconnected"]}
+function totalConnectedDashboards(){
+  const conns=S.conns||getConns()||[];
+  const activeKeys=new Set(conns.filter(c=>!SHEETMODES[c.p]).map(c=>c.key));
+  const fantasy=new Set((S.L||[]).filter(l=>l&&l.id&&(!l.conn||activeKeys.has(l.conn.key))).map(l=>String(l.id)));
+  // Until the league load completes, adapter-reported league counts are the best known count.
+  if(!fantasy.size)conns.filter(c=>!SHEETMODES[c.p]).forEach(c=>{
+    const n=((S.connStat||{})[c.key]||{}).n||0;
+    for(let i=0;i<n;i++)fantasy.add(c.key+":"+i);
+  });
+  return fantasy.size+Number(conns.some(c=>c.p==="survivor"))+Number(conns.some(c=>c.p==="pickem"));
+}
+function updateConnectionBadge(){
+  const b=$("who");if(!b)return;const n=totalConnectedDashboards();
+  b.innerHTML=`🔗 <b>${n}</b>`;b.title=`${n} connected dashboard${n===1?"":"s"} · imported fantasy leagues + Survivor + Pick'em`;
+  b.setAttribute("aria-label",b.title);
+}
 function renderConns(){
   const box=$("pcards");if(!box)return;const cs=S.conns||getConns();
   const enter=$("go");if(enter){enter.disabled=!cs.length;enter.title=cs.length?"Open your connected dashboards":"Connect a provider above to get started";}
@@ -3356,6 +3449,7 @@ function renderConns(){
       <b class="pname">${esc(c.name)}</b><span class="pmeta">${mine.length?`${esc(acct)}${n?` · ${n} league${n>1?"s":""}`:""}`:"&nbsp;"}</span><button class="pcta ${mine.length?"ghost":""}" data-p="${c.p}">${mine.length?"Manage":c.cta}</button></div>`}).join("");
   box.querySelectorAll(".pcta").forEach(b=>b.onclick=()=>pvForm(b.dataset.p));
   const ls=$("conlist");if(ls)ls.innerHTML="";
+  updateConnectionBadge();
 }
 /* phones: a provider opens a focused full-screen step (Back, one input, one action) instead of a form further down the page */
 /* Survivor & Pick'em are optional dashboards backed by a Google Sheet (shared "anyone with the link can view") */
@@ -3827,7 +3921,7 @@ async function connectAll(){
     const ro=window.ResizeObserver?new ResizeObserver(es=>es.forEach(e=>{const w=e.contentRect.width;if(w<700)e.target.classList.add("compact");else if(w>740)e.target.classList.remove("compact")})):null;
     S.L.forEach(lg=>{lg.el=document.createElement("section");lg.el.className="lg"+(lg.provider==="manual"?" imp":"");$("view").appendChild(lg.el);if(ro)ro.observe(lg.el)});
     applyVis();
-    document.body.classList.remove("nolg");$("welcome").style.display="none";$("view").style.display=S.tab!=="m"?"none":"";$("who").innerHTML=`🔗 <b>${S.L.length}</b>`;$("who").title="Connections";$("wback").style.display="";
+    document.body.classList.remove("nolg");$("welcome").style.display="none";$("view").style.display=S.tab!=="m"?"none":"";updateConnectionBadge();$("wback").style.display="";
     S.raw=null;S.baseWeek=0;await refresh();schedule();
     S.L.forEach(lg=>loadSeason(lg));loadSeasonStats();
     if(S.tab==="t")mvTick(true);
@@ -4858,7 +4952,7 @@ function mvRender(){
   if(!MV.lg||!L.find(l=>l.id===MV.lg))MV.lg=L[0].id;const lg=S.L.find(l=>l.id===MV.lg),R=MV.res[lg.id];
   const sel=`<div class="mvsel">${S.L.map(l=>`<button class="mvb ${l.id===MV.lg?"on":""}" data-l="${l.id}">${esc(shortName(l.league.name))}</button>`).join("")}</div>`;
   const EV=MV.view==="edge",multi=EV&&edgeLeagues().length>1;
-  let h=`<div class="card hero svhero"><div class="svtop"><button class="mvb" id="mvback" title="Back to matchups">←</button><div class="svti"><b class="svt">${EV?CHEST_SVG+" Edge":"🧠 Roster Lab"}</b><span class="hu">${multi?`${edgeLeagues().length} leagues`:`${esc(lg.league.name)} · ${lg.fmt}`}${EV?" · computed on this device":""}</span></div>${multi?"":sel}${MV.view==="edge"?`<button class="mvb" id="edgelk" type="button" data-tip="Lock Edge on this device">🔒</button>`:`<button class="mvedge" id="mvedge" type="button" aria-label="Edge">${CHEST_SVG}</button>`}</div></div>`;
+  let h=`<div class="card hero svhero"><div class="svtop"><button class="mvb" id="mvback" title="Back to matchups">←</button><div class="svti"><b class="svt">${EV?CHEST_SVG+" Edge":"🧪 Roster Lab"}</b><span class="hu">${multi?`${edgeLeagues().length} leagues`:`${esc(lg.league.name)} · ${lg.fmt}`}${EV?" · computed on this device":""}</span></div>${multi?"":sel}${MV.view==="edge"?`<button class="mvb" id="edgelk" type="button" data-tip="Lock Edge on this device">🔒</button>`:`<button class="mvedge" id="mvedge" type="button" aria-label="Edge">${CHEST_SVG}</button>`}</div></div>`;
   if(EV){const LS=edgeLeagues();h+=`<div class="edcols" style="--n:${LS.length}">${LS.map(l=>{const r=MV.res[l.id];return`<section class="edcol">${LS.length>1?`<div class="edlh"><b>${esc(l.league.name)}</b><span class="fmt">${l.fmt}</span></div>`:""}${!r?`<div class="card none">⏳ Crunching rosters, projections and lineups…</div>`:r.err?`<div class="card none">${esc(r.err)}</div>`:r.state?`<div class="svgrid edgegrid">${idealHtml(l)}</div>`:edgeHtml(l,r)}</section>`}).join("")}</div>`;
     if(h!==MV.lastHtml){MV.lastHtml=h;el.innerHTML=h;mvBind(el)}return}
   if(!R){h+=`<div class="card none">${MV.busy?"⏳ Crunching rosters, projections and trade combinations…":"Loading…"}</div>`;if(h!==MV.lastHtml){MV.lastHtml=h;el.innerHTML=h;mvBind(el)}return}
@@ -5279,7 +5373,7 @@ function rpEvents(ctx){const rel=new Set();ctx.forEach(c=>{[...c.my,...c.op,...c
     const sg=e.L.map(x=>Math.sign(x.net)).filter(Boolean);e.tone=!sg.length?"n":sg.every(s=>s>0)?"me":sg.every(s=>s<0)?"op":"mix";
     e.rel=e.L.length>0;e.big=e.td||e.int||e.fumLost||(e.kind==="fg"&&e.dist>=50)||Math.abs(e.yd)>=20});
   return all}
-const RPI={pass:"🎯",rec:"🎯",run:"🏃",td:"🏈",int:"🛑",fum:"🔻",sack:"💥",fg:"🥅",xp:"✔",two:"✌",inc:"·"};
+const RPI={pass:"🎯",rec:"🎯",run:"🏃",td:"🏈",int:"🙌",fum:"🔻",sack:"💥",fg:"ⵖ",xp:"✔",two:"✌",inc:"·"};
 function rpPrimary(e){let best=null;(e.L||[]).forEach(x=>x.con.forEach(y=>{if(y.sd==="bn")return;if(!best||Math.abs(y.pts)>Math.abs(best.pts))best=y}));return best?best.pl:e.players[0]}
 function rpLabel(e,pl){const y=Math.abs(e.yd||0),r=pl&&pl.role;
   if(e.kind==="fg")return`${e.dist}-yd FG${e.fgOk?"":" missed"}`;if(e.kind==="xp")return e.xpOk?"Extra point":"XP missed";if(e.kind==="two")return e.two?"2-pt conversion":"2-pt failed";
