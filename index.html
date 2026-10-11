@@ -1818,6 +1818,43 @@ html[data-theme=light] #labev .lbe.on{background:#e9e1ff!important;color:#281455
 html[data-theme=light] .toast.toast-touchdown{background:#111827!important}
 /* The replay field goal is a U-shaped set of uprights, not a T glyph. */
 @media(max-width:760px){.lev.swing,.lev.swing.op{width:21px;height:21px;min-width:21px;font-size:18px}}
+
+/* ===== Wingman v1.5 · replay, Plays, player + trade polish ===== */
+/* Fixed three-row rhythm on every desktop matchup, including empty play slots. */
+@media(min-width:761px){
+  .play-side .lr.lr5{height:32px;min-height:32px;max-height:32px;box-sizing:border-box}
+  .play-side .play-placeholder{display:flex;align-items:center;color:var(--mute);opacity:.42;font-size:11px}
+  .play-side .play-cols{height:24px;min-height:24px;max-height:24px}
+}
+/* Exposure rings only reflect starters, including D/ST. */
+/* Swing-factor is an inline action/status glyph like all the other player indicators. */
+.lev.swing,.lev.swing.op{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;
+ width:19px;height:19px;min-width:19px;padding:0;line-height:1;font-size:13px;
+ border:1px solid rgba(167,133,255,.62)!important;border-radius:6px;
+ color:#d5c4ff;background:rgba(167,133,255,.16)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 0 calc(2px + var(--k)*5px) rgba(167,133,255,.14);
+ text-shadow:none;filter:none!important;vertical-align:middle}
+.lev.swing.op{color:#bbf5ff;border-color:rgba(61,214,230,.55)!important;
+ background:rgba(61,214,230,.12)!important;box-shadow:0 0 calc(2px + var(--k)*5px) rgba(61,214,230,.17)}
+html[data-theme=light] .lev.swing{color:#5830ad;background:#f0eaff!important}
+html[data-theme=light] .lev.swing.op{color:#006d82;background:#e7faff!important}
+/* Player projection changes start tinting immediately, no one-point threshold. */
+.pjc.o{color:#68dea2!important;opacity:1}.pjc.u{color:#ff898e!important;opacity:1}
+html[data-theme=light] .pjc.o{color:#128347!important}.pjc.u{color:#d43939!important}
+/* No vertical highlight divider when a player is hovered, including live-effect overlay edges. */
+tr.pr:hover>td[data-pos],tr.pr:hover>td.n{border-right:0!important;border-left:0!important}
+tr.pr:hover td.fxc>.fx::after,tr.pr:hover td.fxc>.fx.fxR::after,tr.pr:hover td.fxc>.fx.fxL::after{box-shadow:none!important}
+/* Trade status belongs directly to the asset identity, never floating in a header. */
+.tdc-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.tinj{display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:9px;font-weight:900;
+ padding:1px 4px;line-height:14px;min-width:16px;border-radius:5px;background:#f0a323;color:#171009;cursor:help}
+.tinj.doubt{background:#ff9142}.tinj.out{background:#bd3544;color:#fff}
+.tasset .tdc{white-space:nowrap;min-width:0}.tassetp{overflow:visible;min-width:0}
+/* Clear automatic latest highlight vs intentionally pinned play. */
+.rpfollow{white-space:nowrap;font-size:10.5px!important;padding:4px 7px!important}
+.rpfollow.on{color:var(--pos)!important;border-color:rgba(62,207,116,.4)!important}
+.rp-fg-flight{stroke-linecap:round;stroke-dasharray:8 5;filter:drop-shadow(0 0 3px rgba(245,197,66,.35))}
+@media(max-width:760px){.rpfollow{font-size:10px!important;padding:4px 6px!important}}
 </style>
 </head>
 <body>
@@ -1847,7 +1884,7 @@ html[data-theme=light] .toast.toast-touchdown{background:#111827!important}
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.4</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.5</span></div>
   </div>
 </header>
 <main>
@@ -1870,8 +1907,8 @@ html[data-theme=light] .toast.toast-touchdown{background:#111827!important}
 </main>
 <div id="toasts"></div>
 <script>
-/* v1.0 launch → v1.1 audio → v1.2 game day → v1.3 design system → v1.4 UI fixes. */
-const WM_VERSION="1.4";
+/* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
+const WM_VERSION="1.5";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -2328,8 +2365,8 @@ function hotCold(r){const p=r.p,g=S.games[p.team];if(!g||g.state==="pre"||!/^(QB
   return null}
 function levTag(p){const lg=S.rlg,L=lg&&S.sig&&S.sig.lev[lg.id],v=L&&L[p.id];if(!v||!v.top)return"";
   const k=Math.min(1,Math.abs(v.sw)/.25);
-  const detail=`Matchup swing factor: a strong finish (+${v.sdPts.toFixed(1)} fantasy pts) moves your chance of winning by ${pctPt(v.sw)}; each additional point moves it by ${pctPt(v.pp)}. This is modeled sensitivity, not ESPN Boost.`;
-  return`<span class="lev swing ${v.sw>=0?"me":"op"}" style="--k:${k.toFixed(2)}" data-tip="${esc(detail)}" title="${esc(detail)}" role="img" aria-label="${esc(detail)}">⚖️</span>`}
+  const detail=`Swing factor: A big performance from ${p.name} could change who wins this matchup.`;
+  return`<span class="lev swing ${v.sw>=0?"me":"op"}" style="--k:${k.toFixed(2)}" data-tip="${esc(detail)}" title="${esc(detail)}" role="img" aria-label="${esc(detail)}">⚖</span>`}
 /* portrait (natural crop, never stretched) + NFL team mark bottom-right; initials when no headshot */
 const NFLCODE={LAR:"LA",WAS:"WAS"};
 const teamLogo=(t,px=40)=>`https://static.www.nfl.com/f_auto,h_${px},dpr_2.0,q_auto,w_${px}/league/api/clubs/logos/${NFLCODE[t]||t}`;
@@ -2363,7 +2400,7 @@ function ncell(lg,r,right){
   if(!r||r.empty)return`<td class="${c0}">–</td>`;
   const d=lg.delta[r.key],age=d?Date.now()-d.t:1e9;
   const dl=age<30000?`<i class="dlv ${d.d<0?"m":"p"}">${sg(d.d)}</i> `:"",hd=dl?" hasd":"";
-  const fin=settled(r.p),c=ou(r.e,r.b),gm=S.games[r.p.team],hurt=fin&&gm&&gm.state==="in";
+  const fin=settled(r.p),c=ou(r.e,r.b,.01),gm=S.games[r.p.team],hurt=fin&&gm&&gm.state==="in";
   /* original projection: pre-game baseline, else current projection, else his season average */
   const pr0=lg.proj&&lg.proj[r.p.id],sa=seasonAvg(lg,r.p.id),ref=r.b>0?r.b:pr0>0?pr0:sa!=null?sa:(r.b!=null?r.b:pr0),refSrc=r.b>0||pr0>0?"pre-game projection":sa!=null?"season average (no pre-game projection was available)":"projection";
   const hasP=ref!=null;
@@ -2402,7 +2439,7 @@ function render(lg){
   const kick=x=>{const ds=x.rows.filter(r=>r&&!r.empty).map(r=>S.games[r.p.team]).filter(g=>g&&g.date&&g.state==="pre").map(g=>new Date(g.date)).sort((p,q)=>p-q)[0];return ds?`first kickoff ${ds.toLocaleDateString([],{weekday:"short"})} ${hm(ds)}`:""};
   /* pregame: the projection is the headline; no oversized 0.00 */
   const ptx=(x,r)=>pre&&S.okProj?(r?`<small class="ptl">proj</small><span class="ptp" title="Projected final · no points yet">${f2(x.proj)}</span>`:`<span class="ptp" title="Projected final · no points yet">${f2(x.proj)}</span><small class="ptl">proj</small>`):f2(x.total);
-  const pj=(x,r)=>pre?`<div class="hp ${r?"r pjB":"pjA"}"><span title="Kickoff">${kick(x)}</span>${dots(x)}</div>`:fin?`<div class="hp ${r?"r pjB":"pjA"}"><span class="pjf" title="Final score vs the pre-game projection">${x.total-x.bs>=0?"+":"−"}${f2(Math.abs(x.total-x.bs))} vs proj ${f2(x.bs)}</span>${dots(x)}</div>`:`<div class="hp ${r?"r pjB":"pjA"}">${S.okProj?`<span class="pjh ${ou(x.proj,x.bs,3)}" title="Projected final">${ar(ou(x.proj,x.bs,3))} ${f2(x.proj)}</span><span title="Projection at the start of the week">was ${f2(x.bs)}</span>`:""}${dots(x)}</div>`;
+  const pj=(x,r)=>pre?`<div class="hp ${r?"r pjB":"pjA"}"><span title="Kickoff">${kick(x)}</span>${dots(x)}</div>`:fin?`<div class="hp ${r?"r pjB":"pjA"}"><span class="pjf" title="Final score vs the pre-game projection">${x.total-x.bs>=0?"+":"−"}${f2(Math.abs(x.total-x.bs))} vs proj ${f2(x.bs)}</span>${dots(x)}</div>`:`<div class="hp ${r?"r pjB":"pjA"}">${S.okProj?`<span class="pjh ${ou(x.proj,x.bs,.01)}" title="Projected final">${ar(ou(x.proj,x.bs,.01))} ${f2(x.proj)}</span><span title="Projection at the start of the week">was ${f2(x.bs)}</span>`:""}${dots(x)}</div>`;
   let bar="";
   if(b&&fin){const d=a.total-b.total,w=d>0?100:d<0?0:50,me=A.roster_id===lg.mineRid;
     const lab=d===0?"Final · Tied":me?(d>0?`✓ Final · You won by ${f2(d)}`:`Final · You lost by ${f2(-d)}`):`Final · ${esc(d>0?ta.name:tb.name)} won by ${f2(Math.abs(d))}`;
@@ -2433,8 +2470,10 @@ function render(lg){
   const play5=(e,mirror)=>`<div class="lr lr5 ${tier(e)} ${mirror?"opp":"me"}">${mirror?`${pdesc(e)}${ppts(e)}${ptype(e)}${pname(e)}<span class="t">${ptime(e)}</span>`:`<span class="t">${ptime(e)}</span>${pname(e)}${ptype(e)}${ppts(e)}${pdesc(e)}`}</div>`;
   const left=rows.filter(e=>String(e.rid)===String(A.roster_id)).slice(0,3),right=rows.filter(e=>B&&String(e.rid)===String(B.roster_id)).slice(0,3);
   const phonePlays=rows.slice(0,6).map(e=>`<div class="lr ${e.mine?"me":""} ${tier(e)}"><span class="t">${ptime(e)}</span>${ptype(e)}${ppts(e)}${pname(e)}${pdesc(e)}</div>`).join("");
-  const playsDesktop=`<div class="plays-dual"><section class="play-side"><div class="play-cols"><span>Time</span><span>Player</span><span>Type</span><span>Pts</span><span>Play</span></div>${left.map(e=>play5(e,false)).join("")||'<div class="play-none">No plays yet</div>'}</section>${b?`<section class="play-side op"><div class="play-cols mirror"><span>Play</span><span>Pts</span><span>Type</span><span>Player</span><span>Time</span></div>${right.map(e=>play5(e,true)).join("")||'<div class="play-none">No plays yet</div>'}</section>`:""}</div>`;
-  h+=`<!--M:plays--><div class="card${rows.length?"":" plays-empty"}"><div class="lh ph" title="${po?"Collapse":"Expand"} plays"><span><span class="chev">${po?"▾":"▸"}</span>📡 Plays</span><small>${rows.length?rows.length+" this matchup":fin?"final":"none yet"}</small></div>`+(!po||!rows.length?"</div>":`${playsDesktop}<div class="plays-mobile lb">${phonePlays}</div></div>`);
+  /* Always render three aligned slots, including across independently refreshed leagues. */
+  const threeRows=(items,mirror)=>Array.from({length:3},(_,i)=>items[i]?play5(items[i],mirror):`<div class="lr lr5 play-placeholder" aria-hidden="true"><span>${i===0?"No plays yet":""}</span></div>`).join("");
+  const playsDesktop=`<div class="plays-dual"><section class="play-side"><div class="play-cols"><span>Time</span><span>Player</span><span>Type</span><span>Pts</span><span>Play</span></div>${threeRows(left,false)}</section>${b?`<section class="play-side op"><div class="play-cols mirror"><span>Play</span><span>Pts</span><span>Type</span><span>Player</span><span>Time</span></div>${threeRows(right,true)}</section>`:""}</div>`;
+  h+=`<!--M:plays--><div class="card${rows.length?"":" plays-empty"}"><div class="lh ph" title="${po?"Collapse":"Expand"} plays"><span><span class="chev">${po?"▾":"▸"}</span>📡 Plays</span><small>${rows.length?rows.length+" this matchup":fin?"final":"none yet"}</small></div>`+(!po?"</div>":`${playsDesktop}<div class="plays-mobile lb">${phonePlays||'<div class="play-none">No plays yet</div>'}</div></div>`);
   h+=`<!--M:hook-->`;
   /* low/high strip: projected low (left), projected high (right), who's lowest/highest right now (center), and how tight it is */
   {const all=M.map(m=>({m,x:sideOf(m),t:team(lg,m.roster_id)}));
@@ -3053,13 +3092,13 @@ function dstCliff(lg,p){
    NFL D/ST identity is its franchise, regardless of the provider's player ID. */
 function exposureId(id){const p=pinfo(id);return p.pos==="DEF"&&p.team&&p.team!=="FA"?"DST:"+p.team:id}
 function buildExposure(){const X={};vis().forEach(lg=>{const M=lg.matchups||[],A=M.find(m=>m.roster_id===lg.mineRid);if(!A)return;const B=M.find(m=>m.matchup_id===A.matchup_id&&m.roster_id!==A.roster_id),nm=shortName(lg.league.name);
-  (A.players||[]).forEach(id=>{if(id&&id!=="0")(X[exposureId(id)]=X[exposureId(id)]||[]).push({lg:lg.id,name:nm,side:"me",start:(A.starters||[]).includes(id)})});
-  if(B)(B.players||[]).forEach(id=>{if(id&&id!=="0")(X[exposureId(id)]=X[exposureId(id)]||[]).push({lg:lg.id,name:nm,side:"op",start:(B.starters||[]).includes(id)})})});S.xexp=X}
+  (A.starters||[]).forEach(id=>{if(id&&id!=="0")(X[exposureId(id)]=X[exposureId(id)]||[]).push({lg:lg.id,name:nm,side:"me",start:true})});
+  if(B)(B.starters||[]).forEach(id=>{if(id&&id!=="0")(X[exposureId(id)]=X[exposureId(id)]||[]).push({lg:lg.id,name:nm,side:"op",start:true})})});S.xexp=X}
 /* photo ring: purple = yours in 2+ leagues, cyan = you face him in 2+, gold = conflicting (yours somewhere, against you elsewhere) */
 function xpInfo(id){const arr=(S.xexp||{})[exposureId(id)]||[];if(new Set(arr.map(x=>x.lg)).size<2)return null;const me=arr.filter(x=>x.side==="me"),op=arr.filter(x=>x.side==="op");
   const kind=me.length&&op.length?"mix":me.length?"me":"op",k=Math.min(1,(arr.length-1)/3);
   const imp=pinfo(id).pos==="DEF"?Object.values(S.sig&&S.sig.exp||{}).flat().filter(x=>x.p&&exposureId(x.p.id)===exposureId(id)):(S.sig&&S.sig.exp[id]||[]),net=imp.reduce((s,x)=>s+x.dwp,0);
-  const tip=[me.length?`Yours in ${me.map(x=>x.name+(x.start?"":" (bench)")).join(", ")}`:"",op.length?`Facing him in ${op.map(x=>x.name).join(", ")}`:"",
+  const tip=[me.length?`Starting for you in ${me.map(x=>x.name).join(", ")}`:"",op.length?`Starting against you in ${op.map(x=>x.name).join(", ")}`:"",
     kind==="mix"?"Conflict: his points help you in one league and hurt you in another":"",imp.length>1?`If he scores: ${imp.map(x=>`${x.name} ${pctPt(x.dwp)}`).join(", ")} → net ${pctPt(net)}`:""].filter(Boolean).join(" · ");
   return{kind,k,tip}}
 function buildSignals(){buildExposure();
@@ -5078,7 +5117,8 @@ function mvRender(){
   const heads=[],G={};D.forEach(d=>{(G[d.grp]=G[d.grp]||[]).push(d)});
   Object.values(G).forEach(g=>{heads.push(g[0])});heads.sort((a,b)=>a.rank-b.rank);heads.forEach((hd,i)=>G[hd.grp].forEach(x=>x.grank=i+1));
   const vis2=heads.map(hd=>G[hd.grp].find(shown)).filter(Boolean);
-  const pchip=id=>{const q=pinfo(id);return`<span class="tdc"><span class="pos ${esc(q.pos)}">${esc(q.pos)}</span>${esc(pnm(id))}</span>`};
+  const pchip=id=>{const q=pinfo(id),st=(q.inj||"").trim(),lab=/^Questionable$/i.test(st)?"Q":/^Doubtful$/i.test(st)?"D":/^Out$/i.test(st)?"O":/^Injured Reserve$|^IR$/i.test(st)?"IR":/^Suspended$/i.test(st)?"SUS":st?st.slice(0,3).toUpperCase():"";
+    return`<span class="tdc"><span class="pos ${esc(q.pos)}">${esc(q.pos)}</span><span class="tdc-name">${esc(pnm(id))}</span>${lab?`<span class="tinj ${/^(O|IR|SUS)$/.test(lab)?"out":lab==="D"?"doubt":"question"}" title="${esc(st)}" data-tip="${esc(q.name+": "+st)}">${esc(lab)}</span>`:""}</span>`};
   const ptag=rid=>`<span class="tdn${prf(rid)==="y"?" pf":""}">${prf(rid)==="y"?"★ ":""}${esc(nmR(rid))}</span>`;
   /* the one amber signal: only material issues that concern you */
   /* risks that concern you, graded: hi = material (shown on the row), lo = caution (expanded view only) */
@@ -5102,7 +5142,7 @@ function mvRender(){
     return`<div class="trade-journey cols-${d.kind}" aria-label="Trade exchange and individual manager benefits">${d.P.map(p=>`<div class="trade-team ${p.t.mine?"mine":""}"><div class="trade-team-h"><b>${name(p)}</b><strong>+${f1(p.g)} <small>/wk</small></strong></div><div class="trade-meter"><i style="width:${Math.max(4,p.g/MXG*100).toFixed(1)}%"></i></div><div class="trade-label received">↓ RECEIVES</div>${assets(p,"get")}<div class="trade-label sent">↑ SENDS</div>${assets(p,"give")}</div>`).join("")}</div>`};
   const row=(d,nv)=>{const open=MV.tx===d.key,w=warnsOf(d);
     return`<div class="tdr${open?" on":""}" data-tx="${esc(d.key)}" role="button" tabindex="0" aria-expanded="${open}">
-      <div class="tq1"><span class="tdk" data-tip="Rank among all packages (filters don't renumber)">${d.grank}</span><span class="tdps">${d.rids.map(ptag).join('<i class="tdsep">+</i>')}</span>${avgTag(d)}<span class="tq1s"></span>${(()=>{const hi=w.filter(x=>x.sev==="hi");return hi.length?`<span class="tdw0 hi" data-tip="${esc(hi.map(x=>x.l).join(" · "))}">⚠ ${esc(hi[0].s)}${hi.length>1?` +${hi.length-1}`:""}</span>`:w.length?`<span class="tdw0 lo" data-tip="${esc(w.map(x=>x.l).join(" · "))}" aria-label="Minor caution">ⓘ</span>`:""})()}<span class="tdt" data-tip="${d.kind}-way">${d.kind===3?"△":"⇄"}</span>${nv?`<span class="tdv" data-tip="Similar packages with the same partner and the same headline player">${nv} similar</span>`:""}</div>
+      <div class="tq1"><span class="tdk" data-tip="Rank among all packages (filters don't renumber)">${d.grank}</span><span class="tdps">${d.rids.map(ptag).join('<i class="tdsep">+</i>')}</span>${avgTag(d)}<span class="tq1s"></span>${(()=>{const hi=w.filter(x=>x.sev==="hi"&&x.s!=="injured"),others=w.filter(x=>x.s!=="injured");return hi.length?`<span class="tdw0 hi" data-tip="${esc(hi.map(x=>x.l).join(" · "))}">⚠ ${esc(hi[0].s)}${hi.length>1?` +${hi.length-1}`:""}</span>`:others.length?`<span class="tdw0 lo" data-tip="${esc(others.map(x=>x.l).join(" · "))}" aria-label="Minor caution">ⓘ</span>`:""})()}<span class="tdt" data-tip="${d.kind}-way">${d.kind===3?"△":"⇄"}</span>${nv?`<span class="tdv" data-tip="Similar packages with the same partner and the same headline player">${nv} similar</span>`:""}</div>
       ${tradeGrid(d)}</div>${open?detail(d):""}`};
   const detail=d=>{const nr=rankAfter(Object.fromEntries(d.P.map(p=>[p.t.rid,p.g]))),who=p=>p.t.mine?`<b class="gme">You</b>`:`<b class="gop">${esc(p.t.name)}</b>`;
     /* where every player goes */
@@ -5342,7 +5382,7 @@ function playKind(pl){const t=(pl.type+" "+pl.text).toLowerCase();
    Win-% impact is a deterministic counterfactual: the current matchup model with vs without this play's points, everything
    else held constant. It is labeled as modeled, never as an observed change.
    ===================================================================== */
-const RP={lg:"all",side:"all",fp:null,mode:"impact",sel:null,more:false,list:false,since:false,nonce:0,ev:{},core:{},coreAt:{},parts:{},seen:{},lastSeen:null,lastHtml:""};
+const RP={lg:"all",side:"all",fp:null,mode:"impact",sel:null,manual:false,more:false,list:false,since:false,nonce:0,ev:{},core:{},coreAt:{},parts:{},seen:{},lastSeen:null,lastHtml:""};
 try{RP.lastSeen=+load("rp_seen")||null}catch(e){}
 const RPCORE="https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/";
 const rpRM=()=>matchMedia("(prefers-reduced-motion:reduce)").matches||LAB.motion==="reduced";
@@ -5429,8 +5469,11 @@ function rpStage(e){
   let ov="",lab="";
   if(xs==null&&e.kind!=="fg"&&e.kind!=="xp"){g+=`<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="18" fill="#fff" fill-opacity=".45">Field position not in the feed for this play</text>`}
   else if(e.kind==="fg"||e.kind==="xp"){const dist=e.kind==="xp"?(e.dist||33):e.dist||Math.max(18,(e.s||15)+17),spot=T.X(100-Math.max(0,dist-17)),gp=W-T.ez*.5,ok=e.kind==="xp"?e.xpOk:e.fgOk;
-    const d=`M${spot},${y0} Q${(spot+gp)/2},${y0-130} ${gp},${y0-40}`;g+=`<path d="M${gp-25} ${y0-109} V${y0-57} H${gp+25} V${y0-109} M${gp} ${y0-57} V${y0+31}" fill="none" stroke="#f5c542" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-label="Field goal uprights"/>`;
-    g+=`<path d="${d}" fill="none" stroke="${ok?"#f5c542":"#ff6b6b"}" stroke-width="3" stroke-dasharray="7 7" ${anim?'pathLength="1" class="rpdr"':""}/>`+mv(d);
+    /* Ball clears the crossbar and exits BETWEEN the uprights; FG is distinct from a TD run/pass. */
+    const crossbarY=y0-57,topY=y0-109,finishX=Math.min(W-5,gp+17),finishY=y0-87;
+    const d=`M${spot},${y0} Q${Math.max(spot+40,gp-85)},${y0-172} ${finishX},${finishY}`;
+    g+=`<path d="M${gp-25} ${topY} V${crossbarY} H${gp+25} V${topY} M${gp} ${crossbarY} V${y0+31}" fill="none" stroke="#f5c542" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-label="Field goal uprights"/>`;
+    g+=`<path d="${d}" fill="none" stroke="${ok?"#f5c542":"#ff6b6b"}" stroke-width="3.5" stroke-dasharray="8 5" class="rp-fg-flight"/>`+mv(d);
     lab=`<text x="${Math.max(120,Math.min(W-120,(spot+gp)/2))}" y="32" text-anchor="middle" font-size="22" font-weight="850" fill="${ok?"#f5c542":"#ff6b6b"}">${ok?"✓":"✗"} ${dist}-yd ${e.kind==="xp"?"XP":"FG"}</text>`}
   else if(e.kind==="sack"){const xe=xe0??xs-30;g+=`<line x1="${xs}" y1="${y0}" x2="${xe}" y2="${y0}" stroke="#ff6b6b" stroke-width="10" stroke-linecap="round" ${anim?'pathLength="1" class="rpdr"':""}/>`;lab=`<text x="${xe}" y="${y0-22}" text-anchor="middle" font-size="22" font-weight="900" fill="#ff6b6b">💥 ${e.yd||""}</text>`;g+=endBall(xe,y0)}
   else if(e.kind==="int"){const xt=Math.min(W-T.ez,xs+Math.max(80,Math.abs((e.yd||0))*8)),d=`M${xs},${y0} Q${(xs+xt)/2},${y0-110} ${xt},${y0}`;
@@ -5439,7 +5482,7 @@ function rpStage(e){
     ov=`<span class="rpnote">Turnover spot is approximate: the feed gives the line of scrimmage, not where the ball was caught.</span>`}
   else{const xe=e.td?W-T.ez/2:(xe0??xs),pass=e.kind==="pass"||e.kind==="inc"||(e.players.some(p=>p.role==="rec"||p.role==="tgt")),air=Math.abs(xe-xs),hgt=Math.min(150,30+air*.35);
     const d=pass?`M${xs},${y0} Q${(xs+xe)/2},${y0-hgt} ${xe},${y0}`:`M${xs},${y0} L${xe},${y0}`;
-    if(e.td)g+=`<rect x="${W-T.ez}" y="0" width="${T.ez}" height="${H}" rx="10" fill="#f5c542" fill-opacity=".28" class="${anim?"rptd":""}"/>`;
+    if(e.td)g+=`<rect x="${W-T.ez}" y="0" width="${T.ez}" height="${H}" rx="10" fill="#f5c542" fill-opacity=".28" class="${anim?"rptd":""}"/><text x="${W-T.ez/2}" y="32" text-anchor="middle" font-size="14" font-weight="900" fill="#f5c542">TOUCHDOWN</text>`;
     g+=pass?`<path d="${d}" fill="none" stroke="${col}" stroke-width="${e.inc?2:3.2}" stroke-dasharray="${e.inc?"6 6":"none"}" ${anim?'pathLength="1" class="rpdr"':""}/>`:`<path d="${d}" fill="none" stroke="${col}" stroke-width="12" stroke-linecap="round" stroke-opacity=".85" ${anim?'pathLength="1" class="rpdr"':""}/>`;
     g+=(anim?mv(d):"")+(e.inc?`<text x="${xe}" y="${y0+8}" text-anchor="middle" font-size="22" font-weight="900" fill="${col}">✕</text>`:endBall(xe,y0));
     if(e.fumLost)lab+=`<text x="${xe}" y="${y0-24}" text-anchor="middle" font-size="18" font-weight="900" fill="#ff6b6b">🔻 fumble</text>`;
@@ -5461,7 +5504,13 @@ function rpRender(){
   let ev=all.filter(e=>e.rel&&inL(e)&&sideOk(e)&&plOk(e)&&sinceOk(e));
   const score=e=>e.wpAbs!=null?e.wpAbs*100+e.ptsAbs*.001:e.ptsAbs;
   const ranked=RP.mode==="impact"?ev.slice().sort((a,b)=>score(b)-score(a)||(b.t||0)-(a.t||0)):RP.mode==="latest"?ev.filter(e=>e.big||e.ptsAbs>=1).sort((a,b)=>(b.t||0)-(a.t||0)):ev.slice().sort((a,b)=>(b.t||0)-(a.t||0));
-  if(!RP.sel||!all.some(e=>e.key===RP.sel))RP.sel=ranked[0]?ranked[0].key:null;
+  /* Auto-follow fresh, consequential plays; respect manual selections until Follow live is pressed. */
+  const chronological=ev.filter(e=>(e.big||e.ptsAbs>=2)&&e.t).sort((a,b)=>(b.t||0)-(a.t||0));
+  const candidate=chronological[0]||ranked[0]||null;
+  if(!RP.manual&&candidate&&candidate.key!==RP.sel){
+    if(candidate.key!==RP.sel){RP.sel=candidate.key;RP.nonce++}
+  }
+  if(RP.manual&&!all.some(e=>e.key===RP.sel)){RP.manual=false;RP.sel=candidate?candidate.key:null}
   const sel=all.find(e=>e.key===RP.sel);
   const lgSel=`<select id="rplg" aria-label="League">${["all",...ctx0.map(c=>c.lg.id)].map(id=>`<option value="${id}"${RP.lg===id?" selected":""}>${id==="all"?"All leagues":esc(shortName(ctx0.find(c=>c.lg.id===id).lg.league.name))}</option>`).join("")}</select>`;
   const sdSel=`<select id="rpsd" aria-label="Whose plays"><option value="all"${RP.side==="all"?" selected":""}>Everyone</option><option value="me"${RP.side==="me"?" selected":""}>My players</option><option value="op"${RP.side==="op"?" selected":""}>Opponents</option></select>`;
@@ -5489,7 +5538,7 @@ function rpRender(){
   let stage="",impact="";
   if(sel){const g=Object.values(S.games).find(x=>x.eid===sel.eid)||{};
     stage=`<div class="card rpstg" data-rp="stage"><div class="rpsh"><b>${rpIco(sel)} ${esc(rpLabel(sel,rpPrimary(sel)))}</b><span class="pm">${esc(rpGameLine(sel))}</span><span class="pm">Q${sel.per||"?"} ${esc(sel.clk||"")}${sel.dd?" · "+esc(sel.dd):""}</span>
-      <button class="mvb rprp" id="rpreplay" aria-label="Replay the animation">↻</button><span class="rpinfo" data-tip="Schematic reconstruction from the play-by-play feed: start and end yard lines, direction and result. Not player tracking or video; ${sel.players.some(p=>p.prov==="name")?"players matched by name and team":"players identified by ESPN athlete id"}.">ⓘ</span></div>
+      <button class="mvb rpfollow${RP.manual?"":" on"}" id="rpfollow" title="${RP.manual?"Resume automatic latest-play updates":"Following new highlights"}" aria-pressed="${!RP.manual}">${RP.manual?"▶ Follow live":"● Following live"}</button><button class="mvb rprp" id="rpreplay" aria-label="Replay the animation">↻</button><span class="rpinfo" data-tip="Schematic reconstruction from the play-by-play feed: start and end yard lines, direction and result. Not player tracking or video; ${sel.players.some(p=>p.prov==="name")?"players matched by name and team":"players identified by ESPN athlete id"}.">ⓘ</span></div>
       ${rpStage(sel)}<div class="rptx">${esc(sel.text)}</div></div>`;
     const xs=sel.L.filter(x=>RP.lg==="all"||x.c.lg.id===RP.lg);
     impact=`<div class="card rpimp" data-rp="impact"><div class="rpih">Fantasy impact</div>${xs.map(x=>{const tone=x.net>0?"me":x.net<0?"op":"n";
@@ -5537,13 +5586,14 @@ function rpRender(){
   RP.sig=sig;RP.parts={head,reel,stage,impact,timeline,film};el.innerHTML=modWrap(html,"f");rpBind(el)}
 function rpBind(el){bindMods(el);
   const rr=()=>rpRender();
-  el.querySelectorAll("[data-ev]").forEach(b=>b.onclick=()=>{RP.sel=b.dataset.ev;RP.nonce++;rr()});
-  el.querySelectorAll("[data-rpm]").forEach(b=>b.onclick=()=>{RP.mode=b.dataset.rpm;RP.sel=null;rr()});
+  el.querySelectorAll("[data-ev]").forEach(b=>b.onclick=()=>{RP.manual=true;RP.sel=b.dataset.ev;RP.nonce++;rr()});
+  el.querySelectorAll("[data-rpm]").forEach(b=>b.onclick=()=>{RP.mode=b.dataset.rpm;RP.manual=false;RP.sel=null;rr()});
   el.querySelectorAll("[data-fp]").forEach(b=>b.onclick=()=>{RP.fp=RP.fp===b.dataset.fp?null:b.dataset.fp;RP.sel=null;rr()});
   const q=(id,f)=>{const x=el.querySelector("#"+id);if(x)f(x)};
-  q("rplg",x=>x.onchange=()=>{RP.lg=x.value;RP.sel=null;rr()});q("rpsd",x=>x.onchange=()=>{RP.side=x.value;RP.sel=null;rr()});
-  q("rpfpx",x=>x.onclick=()=>{RP.fp=null;rr()});q("rpsince",x=>x.onclick=()=>{RP.since=!RP.since;RP.sel=null;rr()});
+  q("rplg",x=>x.onchange=()=>{RP.manual=false;RP.lg=x.value;RP.sel=null;rr()});q("rpsd",x=>x.onchange=()=>{RP.manual=false;RP.side=x.value;RP.sel=null;rr()});
+  q("rpfpx",x=>x.onclick=()=>{RP.manual=false;RP.fp=null;rr()});q("rpsince",x=>x.onclick=()=>{RP.manual=false;RP.since=!RP.since;RP.sel=null;rr()});
   q("rpmore",x=>x.onclick=()=>{RP.more=!RP.more;rr()});q("rplist",x=>x.onclick=()=>{RP.list=!RP.list;rr()});
+  q("rpfollow",x=>x.onclick=()=>{RP.manual=false;RP.sel=null;RP.nonce++;rr()});
   q("rpreplay",x=>x.onclick=()=>{RP.nonce++;RP.parts.stage="";rr()})}
 /* play-by-play for every game with a relevant player (all connected leagues); live games refresh when something happens */
 async function rpTick(){
@@ -5585,7 +5635,7 @@ function setTab(t){
   else if(t==="p"){PK.lastHtml="";pkRender();pkTick()}
   else if(t==="t"){MV.view="lab";MV.lastHtml="";mvRender();mvTick()}
   else if(t==="e"){MV.view="edge";MV.lastHtml="";mvRender();mvTick();edgeLeagues().forEach(l=>idealBuild(l))}
-  else if(t==="f"){RP.sig=null;rpRender();rpTick()}
+  else if(t==="f"){RP.sig=null;RP.manual=false;RP.sel=null;rpRender();rpTick()}
   else{if(loggedIn){$("view").style.display="";$("welcome").style.display="none";applyVis()}else{$("welcome").style.display=""}}
 }
 document.querySelectorAll("header .tb[data-t]").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
