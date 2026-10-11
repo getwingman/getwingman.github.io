@@ -1051,8 +1051,9 @@ td[data-pos] .nm[data-news]{cursor:help}
 .avw.xp-me{--xc:#a785ff}.avw.xp-op{--xc:#3dd6e6}.avw.xp-mix{--xc:#f5c542}
 .lg.compact .avw{display:grid;width:24px;height:24px}.lg.compact .avw::before{font-size:8px}.lg.compact .tlg,.lg.compact .tla{width:12px;height:12px}
 /* X-ray highlight */
-td.xr{background-image:linear-gradient(90deg,rgba(255,255,255,.07),rgba(255,255,255,.07))!important;outline:1px solid rgba(255,255,255,.28);outline-offset:-1px}
-html[data-theme=light] td.xr{background-image:linear-gradient(90deg,rgba(20,20,40,.06),rgba(20,20,40,.06))!important;outline-color:rgba(20,20,40,.25)}
+/* X-ray hover: keep the subtle shared highlight but no per-cell outline or seam. */
+td.xr{background-image:linear-gradient(90deg,rgba(255,255,255,.07),rgba(255,255,255,.07))!important;outline:none!important}
+html[data-theme=light] td.xr{background-image:linear-gradient(90deg,rgba(20,20,40,.06),rgba(20,20,40,.06))!important;outline:none!important}
 /* bench ghost, hot & cold */
 .ghost,.hcx{display:inline-grid;place-items:center;font-size:11px;line-height:1;margin:0 2px;cursor:help;vertical-align:1px}
 .ghost{opacity:.7;filter:grayscale(.3) drop-shadow(0 0 3px rgba(185,170,255,.45))}
@@ -1605,6 +1606,8 @@ html[data-theme=light] .tbb{background:#e6e7ee}
 @media(max-width:760px){.pks-root{padding:10px}.pks-auth input{flex:1;min-width:0;width:100%}.pks-grid{grid-template-columns:minmax(0,1fr)}}
 
 
+/* v1.11 · Mini matchup hot/cold badges use projected finishes, not actual points. */
+.mini .mr.hi .w,.mini .mr.lo .w{color:var(--ink)}
 /* ===== Wingman v1.0 · mobile launch experience =====
    Desktop/iPad rules are intentionally unchanged. These phone-only overrides
    optimize the WhatsApp first-open and live Sunday navigation. */
@@ -1868,7 +1871,19 @@ tr.pr:hover td.fxc>.fx::after,tr.pr:hover td.fxc>.fx.fxR::after,tr.pr:hover td.f
 .sv16-choices{display:flex;align-items:center;gap:12px;min-width:0;flex-wrap:wrap}.sv16-label{font-size:10px;font-weight:800;letter-spacing:.07em;color:var(--mute)}.sv16-picks{display:flex;gap:7px;flex-wrap:wrap}.sv16-pick{display:flex;align-items:center;gap:5px;border:1px solid var(--line);padding:5px 9px;border-radius:999px;font-size:11px;min-width:0}.sv16-pick .tl{width:17px;height:17px;margin:0}.sv16-pick b{color:var(--ink)}.sv16-pick i{font-style:normal;color:var(--mute)}.sv16-pick strong{font-size:13px;color:var(--mute)}.sv16-pick.won{border-color:rgba(62,207,116,.4);background:rgba(62,207,116,.07)}.sv16-pick.won strong{color:var(--pos)}.sv16-pick.lost{border-color:rgba(255,107,107,.45)}.sv16-pick.lost strong{color:var(--neg)}.sv16-pick.live strong{color:var(--up)}
 .sv16-foot{display:flex;justify-content:space-between;gap:12px;font-size:10px;color:var(--mute);border-top:1px solid var(--line);padding-top:9px}.sv16-foot b{color:var(--ink)}
 .sv16-rootgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:9px;padding:10px}.sv16-rootcard{display:flex;flex-direction:column;gap:8px;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:11px;padding:12px;box-shadow:inset 3px 0 0 var(--b)}.sv16-rootcard.own{box-shadow:inset 3px 0 0 var(--a)}.sv16-roothead,.sv16-rootstatus{display:flex;justify-content:space-between;align-items:center;gap:10px}.sv16-roothead strong{font-size:11px;color:var(--b)}.sv16-rootflag{font-size:9px;font-weight:900;letter-spacing:.06em;color:var(--mute)}.sv16-rootflag.live{color:var(--pos)}
-.sv16-rootaction{display:flex;align-items:center;justify-content:space-between;gap:12px}.sv16-rootaction>span{font-size:10px;color:var(--mute);font-weight:800;letter-spacing:.06em}.sv16-rootaction>b{display:flex;align-items:center;gap:7px;font-size:17px;color:var(--ink)}.sv16-rootaction .tl{width:24px;height:24px;margin:0}.sv16-rootwhy{font-size:12px;line-height:1.45;color:var(--ink)}.sv16-rootstatus{padding-top:7px;border-top:1px solid rgba(255,255,255,.05);font-size:10px;color:var(--mute)}
+.sv16-rootaction{display:flex;align-items:center;justify-content:space-between;gap:12px}.sv16-rootaction>span{font-size:10px;color:var(--mute);font-weight:800;letter-spacing:.06em}.sv16-rootaction>b{display:flex;align-items:center;gap:7px;font-size:17px;color:var(--ink)}.sv16-rootaction .tl{width:24px;height:24px;margin:0}.sv16-rootwhy{font-size:12px;line-height:1.45;color:var(--ink)}
+/* v1.10: aligned, team-labelled rooting scoreboard; favorite side in cyan. */
+.sv16-rootscore{display:flex;align-items:center;justify-content:space-between;gap:5px;padding:9px 0 0;border-top:1px solid rgba(255,255,255,.07);min-width:0}
+.sv16-scoreteam{display:flex;align-items:center;gap:6px;min-width:0;flex:1 1 0;font-variant-numeric:tabular-nums}
+.sv16-scoreteam .tl{width:19px;height:19px;flex:none;margin:0}
+.sv16-scoreteam b{font-size:12px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.sv16-scoreteam strong{font:800 21px/1 var(--fnum);color:var(--ink)}
+.sv16-scoreteam.opp strong{margin-left:auto}
+.sv16-scoreteam.pick{justify-content:flex-end}
+.sv16-scoreteam.pick strong{color:var(--b)}
+.sv16-vs{flex:none;color:var(--mute);font-size:11px;margin:0 2px}
+.sv16-rootstatus{padding-top:1px;border-top:0;font-size:10px;color:var(--mute)}
+@media(max-width:360px){.sv16-scoreteam{gap:4px}.sv16-scoreteam b{font-size:11px}.sv16-scoreteam strong{font-size:19px}}
 .sv16-teamsdone{display:flex;align-items:center;gap:12px;padding:10px 12px;flex-wrap:wrap}.sv16-teamsdone>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));flex:1;gap:8px;min-width:0}.sv16-teamcard{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.025);font-size:12px;min-width:0}.sv16-teamcard>div{display:flex;align-items:center;gap:4px;min-width:0}.sv16-teamcard .tl{width:20px;height:20px;margin:0}.sv16-teamcard>span{color:var(--mute)}.sv16-teamcard>strong{margin-left:auto;white-space:nowrap;font-size:11px;color:var(--pos)}.sv16-teamcard.lost>strong{color:var(--neg)}.sv16-teamletters{font-weight:700;color:var(--a)!important}
 .sv16-finished{padding:14px;display:flex;flex-direction:column;gap:10px}.sv16-finished>b{font-size:12px}.sv16-finished>div{display:flex;flex-wrap:wrap;gap:8px}.sv16-finished span{display:inline-flex;align-items:center;gap:4px;background:var(--s2);padding:8px 10px;border-radius:8px;font-size:11px}.sv16-finished .tl{width:18px;height:18px;margin:0}
 .sv16-race{padding:6px 10px 0}.sv16-rival{display:grid;grid-template-columns:42px minmax(140px,1.25fr) 50px minmax(100px,.7fr) 96px minmax(190px,1.65fr);gap:10px;align-items:center;padding:6px 8px;min-height:55px;border-radius:8px;border-bottom:1px solid rgba(255,255,255,.04)}.sv16-rival.hdr{font-size:10px;text-transform:uppercase;font-weight:800;color:var(--mute);min-height:22px;border:0;padding:0 8px}.sv16-rival.me{background:rgba(167,133,255,.1);box-shadow:inset 3px 0 0 var(--a)}.sv16-rrank{font-size:11px;color:var(--mute);font-weight:800}.sv16-rival.me .sv16-rrank{color:var(--a)}.sv16-rname{display:flex;flex-direction:column;gap:3px;min-width:0}.sv16-rname b{font-size:12px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.sv16-rname small{font-size:10px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sv16-rnum{display:flex;gap:3px;align-items:baseline}.sv16-rnum b{font:800 22px/1 var(--fnum)}.sv16-rnum small{color:var(--mute);font-size:9px}.sv16-rprogress{height:6px;border-radius:3px;background:var(--line);overflow:hidden}.sv16-rprogress i{display:block;height:100%;border-radius:3px;background:var(--b)}.sv16-rival.me .sv16-rprogress i{background:var(--a)}.sv16-rstate{font-size:10px}.sv16-rstate .w{color:var(--up)}.sv16-rstate .s{color:var(--pos)}.sv16-rchips{display:flex;gap:4px;flex-wrap:wrap;min-width:0}.sv16-rchips .chip{padding:3px 6px 3px 3px}.sv16-rchips .tl{margin:0;width:15px;height:15px}
@@ -1937,7 +1952,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.9</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.11</span></div>
   </div>
 </header>
 <main>
@@ -1961,7 +1976,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.9";
+const WM_VERSION="1.11";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -2403,19 +2418,22 @@ function progLine(p,r){
   if(!settled(p)){const bn=bonusNear(lg,p);if(bn)return bn}
   return"";
 }
-/* hot = a genuinely big game (100+ yards, 300+ passing, multiple TDs); cold = well under pace once most of his game is gone */
-function hotCold(r){const p=r.p,g=S.games[p.team];if(!g||g.state==="pre"||!/^(QB|RB|WR|TE)$/.test(p.pos))return null;const s=S.eff[p.id]||{},td=(s.rush_td||0)+(s.rec_td||0),why=[];
-  if((s.rec_yd||0)>=100)why.push(`${Math.round(s.rec_yd)} receiving yds`);if((s.rush_yd||0)>=100)why.push(`${Math.round(s.rush_yd)} rushing yds`);if((s.pass_yd||0)>=300)why.push(`${Math.round(s.pass_yd)} passing yds`);
-  if(td>=2)why.push(`${td} TDs`);if((s.pass_td||0)>=3)why.push(`${s.pass_td} passing TDs`);
-  if(why.length)return{k:"hot",tip:"On fire: "+why.join(" · ")};
-  /* cold: his game is genuinely underway (60%+ of the clock gone or final), live stats are loaded, he has had real opportunities,
-     and he is under 35% of the pace his pre-game projection implied. Pre-kickoff, byes, inactives and stat-feed gaps never qualify. */
-  if(g.state!=="in"&&g.state!=="post")return null;if(g.date&&Date.parse(g.date)>Date.now())return null;if(!S.statsHave||!S.eff[p.id])return null;
-  const f=g.state==="post"?1:frac(g);if(f<.6)return null;
-  const lg=S.rlg,full=r.b!=null?r.b:lg&&lg.proj&&lg.proj[p.id]!=null?lg.proj[p.id]:null;if(!(full>=7))return null;
-  const opp=(s.pass_att||0)+(s.rush_att||0)+(s.rec_tgt||0);if(opp<(p.pos==="QB"?8:2))return null;
-  if(r.a<full*f*.35)return{k:"cold",tip:`Ice cold: ${f2(r.a)} pts on ${opp} ${p.pos==="QB"?"dropbacks + carries":"touches + targets"} with ${g.state==="post"?"his game over":Math.round(f*100)+"% of his game played"} (projected ${f2(full)})`};
-  return null}
+/* Hot/cold player form is projection-based, not a snapshot of points scored so far.
+   Show only a material swing against the player's original pregame forecast, after kickoff.
+   A low early actual score is not a cold game when the player's projected finish is healthy. */
+function hotCold(r){
+  const p=r.p,g=S.games[p.team];
+  if(!g||(g.state!=="in"&&g.state!=="post")||!/^(QB|RB|WR|TE)$/.test(p.pos)||!S.okProj)return null;
+  const base=r.b,finish=r.e;
+  if(!Number.isFinite(base)||base<5||!Number.isFinite(finish))return null;
+  // Require actual live data before applying a label midgame. Pregame and feed gaps stay neutral.
+  if(g.state==="in"&&(!S.statsHave||!S.eff[p.id]))return null;
+  const f=g.state==="post"?1:frac(g),diff=finish-base;
+  const tip=`${p.name}: projected ${f2(finish)} vs ${f2(base)} at kickoff`;
+  if(diff>=Math.max(4,base*.30)&&(g.state==="post"||f>=.18))return{k:"hot",tip:`🔥 Trending hot · ${tip}`};
+  if(diff<=-Math.max(5,base*.35)&&(g.state==="post"||f>=.55))return{k:"cold",tip:`🧊 Trending cold · ${tip}`};
+  return null;
+}
 function levTag(p){const lg=S.rlg,L=lg&&S.sig&&S.sig.lev[lg.id],v=L&&L[p.id];if(!v||!v.top)return"";
   const k=Math.min(1,Math.abs(v.sw)/.25);
   const detail=`Swing factor: A big performance from ${p.name} could change who wins this matchup.`;
@@ -2481,15 +2499,23 @@ function render(lg){
   markRegret(a,slots);if(b)markRegret(b,slots);
   needMeter(lg,a,b,A);if(b&&B.roster_id===lg.mineRid)needMeter(lg,b,a,B);
   S.regSeen=S.regSeen||{};[...(A.roster_id===lg.mineRid?a.bench:[]),...(b&&B.roster_id===lg.mineRid?b.bench:[])].forEach(r=>{if(r&&r.regret&&r.regret.by>=5&&r.a>=8){const k=lg.id+r.p.id;if(!S.regSeen[k]){S.regSeen[k]=1;}}});lg.primedReg=true;
-  const pts=M.map(m=>m.points||0),hi=Math.max(...pts),lo=Math.min(...pts),hl=hi>0&&hi!==lo&&pts.every(x=>x>=.1);
-  const ico=p=>hl?(p===hi?'<span class="hl" title="League high">🔥</span>':p===lo?'<span class="hl" title="League low">🧊</span>':""):"";
+  /* Projected league high/low: never infer form from partial actual scores. The
+     53-point manager projected to finish at 130 must not display an ice badge. */
+  const projected=M.map(m=>({rid:String(m.roster_id),finish:sideOf(m).proj}));
+  const rankReady=S.okProj&&projected.length>1&&projected.every(x=>Number.isFinite(x.finish)&&x.finish>=0);
+  const pHigh=rankReady?Math.max(...projected.map(x=>x.finish)):0;
+  const pLow=rankReady?Math.min(...projected.map(x=>x.finish)):0;
+  const hl=rankReady&&pHigh-pLow>.01;
+  const hotRids=new Set(hl?projected.filter(x=>Math.abs(x.finish-pHigh)<.01).map(x=>x.rid):[]);
+  const coldRids=new Set(hl?projected.filter(x=>Math.abs(x.finish-pLow)<.01).map(x=>x.rid):[]);
+  const ico=rid=>hotRids.has(String(rid))?`<span class="hl" title="Highest projected finish · ${f2(pHigh)} pts">🔥</span>`:coldRids.has(String(rid))?`<span class="hl" title="Lowest projected finish · ${f2(pLow)} pts">🧊</span>`:"";
   const cg=b?'<colgroup><col><col class="cn"><col class="cp"><col class="cn"><col></colgroup>':'<colgroup><col><col class="cn"><col class="cp"></colgroup>';
   const fin=!!b&&S.okGames&&a.left===0&&b.left===0;
   const dc=r=>{const c=gcls(r.p);return c==="g-live"?"l":c==="g-up"?"u":"f"};
   let wa=null;if(b)wa=wpPair(a,b);
   const nT=lg.rosters.length,PT=(lg.league.settings||{}).playoff_teams||6;
   const meta=rid=>{const pw=lg.power&&lg.power[rid],od=lg.odds&&lg.odds[rid];return(pw?`<span class="mt" title="Season rank #${pw.rank} of ${nT}: all-play ${pw.ap}, ${pw.avg.toFixed(1)} pts/wk, record (completed weeks)">#${pw.rank}</span>`:"")+(od!=null?`<span class="mt" title="Playoff odds: ${Math.round(od*100)}% (top ${PT} make it; 2,000 simulations of the rest of the regular season)${stakesTitle(lg,+rid)}">🏆${od>0&&od<.01?"<1":Math.round(od*100)}%${stakeArrow(lg,+rid)}</span>`:"")};
-  const nm=(t,x,r,rid)=>`<div class="hn ${r?"r hnB":"hnA"}"><b title="${esc(t.name)}"><span class="tnm">${esc(t.name)}</span><span class="onm">${esc(t.owner||t.name)}</span></b><span class="hu"><span><span class="tnm">${esc(t.owner)} · </span>${esc(t.rec)}</span>${meta(rid)}${ico(x.total)}${x.issues&&x.issues.length?`<span class="iss" title="Lineup issues: ${esc(x.issues.join(" · "))}">⚠ ${x.issues.length}</span>`:""}</span></div>`;
+  const nm=(t,x,r,rid)=>`<div class="hn ${r?"r hnB":"hnA"}"><b title="${esc(t.name)}"><span class="tnm">${esc(t.name)}</span><span class="onm">${esc(t.owner||t.name)}</span></b><span class="hu"><span><span class="tnm">${esc(t.owner)} · </span>${esc(t.rec)}</span>${meta(rid)}${ico(rid)}${x.issues&&x.issues.length?`<span class="iss" title="Lineup issues: ${esc(x.issues.join(" · "))}">⚠ ${x.issues.length}</span>`:""}</span></div>`;
   const dots=x=>{const rr=x.rows.filter(r=>r&&!r.empty),c=k=>rr.filter(r=>dc(r)===k).length;return`<span class="dots" title="🟢 ${c("l")} playing now · 🟡 ${c("u")} yet to play · ⚪ ${c("f")} done">${rr.map(r=>`<i class="${dc(r)}"></i>`).join("")}</span>`};
   const startedAny=[...a.rows,...(b?b.rows:[])].some(r=>r&&!r.empty&&dc(r)!=="u"),pre=!fin&&!startedAny&&a.total===0&&(!b||b.total===0)&&S.okGames;
   const kick=x=>{const ds=x.rows.filter(r=>r&&!r.empty).map(r=>S.games[r.p.team]).filter(g=>g&&g.date&&g.state==="pre").map(g=>new Date(g.date)).sort((p,q)=>p-q)[0];return ds?`first kickoff ${ds.toLocaleDateString([],{weekday:"short"})} ${hm(ds)}`:""};
@@ -2563,7 +2589,7 @@ function render(lg){
     if(done){const d=xs[0].total-xs[1].total,wn=team(lg,(d>=0?pr[0]:pr[1]).roster_id);ml=d===0?"✓ Tied":`✓ ${esc(wn.owner||wn.name)} +${f2(Math.abs(d))}`}
     else if(last)ml=`${(KCHIP[last.kind]||"·").split(" ")[0]} ${esc(lastName(last.name))} <b style="color:var(${last.d<0?"--neg":"--pos"})">${sg(last.d)}</b> · ${esc(last.ptext||"")}`;
     const myT=rids.includes(lg.mineRid);h+=`<button class="mini ${rids.includes(A.roster_id)?"on":""} ${myT?"mine":""} ${done?"done":""}" data-r="${pr[0].roster_id}" data-rids="${rids.join(" ")}" title="${done?"Final":`Win probability ${w}% – ${100-w}%`}">`+pr.map(m=>{const tm=team(lg,m.roster_id),q=m.points||0;
-      return`<div class="mr ${q===top&&top>0?"ld2":""} ${tm.mine?"me":""} ${hl&&q===hi?"hi":hl&&q===lo?"lo":""}"><span class="mn" title="${esc(tm.owner||tm.name)}${lg.power&&lg.power[m.roster_id]?" · power rank #"+lg.power[m.roster_id].rank:""}">${tm.mine?`<span class="you">YOU</span>`:esc(tm.owner||tm.name)}</span><span class="w">${f2(q)}</span></div>`}).join("")+((hl&&pr.some(m=>(m.points||0)===hi))||(hl&&pr.some(m=>(m.points||0)===lo))?`<span class="tbgs">${hl&&pr.some(m=>(m.points||0)===hi)?`<span class="tbg" title="League high this week">🔥</span>`:""}${hl&&pr.some(m=>(m.points||0)===lo)?`<span class="tbg" title="League low this week">🧊</span>`:""}</span>`:"")+
+      return`<div class="mr ${q===top&&top>0?"ld2":""} ${tm.mine?"me":""} ${hotRids.has(String(m.roster_id))?"hi":coldRids.has(String(m.roster_id))?"lo":""}"><span class="mn" title="${esc(tm.owner||tm.name)}${lg.power&&lg.power[m.roster_id]?" · power rank #"+lg.power[m.roster_id].rank:""}">${tm.mine?`<span class="you">YOU</span>`:esc(tm.owner||tm.name)}</span><span class="w">${f2(q)}</span></div>`}).join("")+((hl&&pr.some(m=>hotRids.has(String(m.roster_id))))||(hl&&pr.some(m=>coldRids.has(String(m.roster_id))))?`<span class="tbgs">${pr.some(m=>hotRids.has(String(m.roster_id)))?`<span class="tbg" title="Highest projected finish this week: ${f2(pHigh)} pts">🔥</span>`:""}${pr.some(m=>coldRids.has(String(m.roster_id)))?`<span class="tbg" title="Lowest projected finish this week: ${f2(pLow)} pts">🧊</span>`:""}</span>`:"")+
       `<div class="sb"><i style="width:${w}%"></i></div>${ml?`<div class="ml">${ml}</div>`:""}</button>`});
   h+=`</div>`;
   h+=`<!--M:bench-->`;
@@ -4388,11 +4414,20 @@ function svRender(){
   rooting.sort((a,b)=>b.score-a.score);
   const finishedRoot=Object.entries(fieldOn).map(([t,n])=>({t,n,R:svRes(V,t)})).filter(x=>x.n&&x.R&&x.R.r==="L"&&!(myOn[x.t]||[]).length).sort((a,b)=>b.n-a.n);
   const rootCard=x=>{const live=x.m==="live",count=x.doomed,xR=svRes(V,x.forTeam)||{};
-    const status=live?`${x.R.me??"–"}–${x.R.op??"–"} · ${esc((x.R.detail||"Live").replace(/\s*-\s*/," · "))}`:
+    // ESPN results are keyed by NFL team: R.me is the *target* team score,
+    // xR.me is the score of the team we're rooting for. Never show an unlabelled "14–7".
+    const pts=v=>v!=null&&v!==""&&Number.isFinite(Number(v))?String(Number(v)):"–";
+    const leftPts=live?pts(x.R.me):"–",rightPts=live?pts(xR.me??(x.R.oppN===x.forTeam?x.R.op:null)):"–";
+    const status=live?esc((x.R.detail||"Live").replace(/\s*-\s*/," · ")):
       x.R.date?new Date(x.R.date).toLocaleDateString([],{weekday:"short"})+" · "+hm(new Date(x.R.date)):(x.R.day||"Upcoming");
     return`<div class="sv16-rootcard ${x.personal?"own":""}"><div class="sv16-roothead"><span class="sv16-rootflag ${live?"live":"up"}">${live?"● LIVE":"UPCOMING"}</span><strong>${count} rival ${count===1?"entry":"entries"} at stake</strong></div>
       <div class="sv16-rootaction"><span>ROOT FOR</span><b>${svLogo(V,x.forTeam)}${esc(x.forTeam)}</b></div>
       <div class="sv16-rootwhy">${x.personal?`${x.personal} of your ${x.personal===1?"entries needs":"entries need"} ${esc(x.forTeam)} to win. `:""}${esc(x.target)} losing would eliminate ${count} rival ${count===1?"entry":"entries"}.</div>
+      <div class="sv16-rootscore" aria-label="${esc(nick(x.target))} ${leftPts}, ${esc(nick(x.forTeam))} ${rightPts}">
+        <span class="sv16-scoreteam opp">${svLogo(V,x.target)}<b>${esc(nick(x.target))}</b><strong>${leftPts}</strong></span>
+        <span class="sv16-vs">${live?"–":"vs"}</span>
+        <span class="sv16-scoreteam pick"><strong>${rightPts}</strong><b>${esc(nick(x.forTeam))}</b>${svLogo(V,x.forTeam)}</span>
+      </div>
       <div class="sv16-rootstatus"><span>${status}</span><span>Other side: ${x.saved} rival ${x.saved===1?"entry":"entries"}</span></div></div>`};
   const rootBody=rooting.length?`<div class="sv16-rootgrid">${rooting.slice(0,6).map(rootCard).join("")}</div>${rooting.length>6?`<div class="svnote">Showing 6 of ${rooting.length} games with rival elimination potential.</div>`:""}`:
     finishedRoot.length?`<div class="sv16-finished"><b>Rival eliminations already confirmed</b><div>${finishedRoot.slice(0,5).map(x=>`<span>${svLogo(V,x.t)} <b>${esc(x.t)}</b> lost · ${x.n} rival ${x.n===1?"entry":"entries"} out</span>`).join("")}</div></div>`:
