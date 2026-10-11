@@ -1606,7 +1606,7 @@ html[data-theme=light] .tbb{background:#e6e7ee}
 @media(max-width:760px){.pks-root{padding:10px}.pks-auth input{flex:1;min-width:0;width:100%}.pks-grid{grid-template-columns:minmax(0,1fr)}}
 
 
-/* v1.11 · Mini matchup hot/cold badges use projected finishes, not actual points. */
+/* v1.12 · Mini matchup hot/cold badges use projected finishes, not actual points. */
 .mini .mr.hi .w,.mini .mr.lo .w{color:var(--ink)}
 /* ===== Wingman v1.0 · mobile launch experience =====
    Desktop/iPad rules are intentionally unchanged. These phone-only overrides
@@ -1886,9 +1886,9 @@ tr.pr:hover td.fxc>.fx::after,tr.pr:hover td.fxc>.fx.fxR::after,tr.pr:hover td.f
 @media(max-width:360px){.sv16-scoreteam{gap:4px}.sv16-scoreteam b{font-size:11px}.sv16-scoreteam strong{font-size:19px}}
 .sv16-teamsdone{display:flex;align-items:center;gap:12px;padding:10px 12px;flex-wrap:wrap}.sv16-teamsdone>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));flex:1;gap:8px;min-width:0}.sv16-teamcard{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.025);font-size:12px;min-width:0}.sv16-teamcard>div{display:flex;align-items:center;gap:4px;min-width:0}.sv16-teamcard .tl{width:20px;height:20px;margin:0}.sv16-teamcard>span{color:var(--mute)}.sv16-teamcard>strong{margin-left:auto;white-space:nowrap;font-size:11px;color:var(--pos)}.sv16-teamcard.lost>strong{color:var(--neg)}.sv16-teamletters{font-weight:700;color:var(--a)!important}
 .sv16-finished{padding:14px;display:flex;flex-direction:column;gap:10px}.sv16-finished>b{font-size:12px}.sv16-finished>div{display:flex;flex-wrap:wrap;gap:8px}.sv16-finished span{display:inline-flex;align-items:center;gap:4px;background:var(--s2);padding:8px 10px;border-radius:8px;font-size:11px}.sv16-finished .tl{width:18px;height:18px;margin:0}
-.sv16-race{padding:6px 10px 0}.sv16-rival{display:grid;grid-template-columns:42px minmax(140px,1.25fr) 50px minmax(100px,.7fr) 96px minmax(190px,1.65fr);gap:10px;align-items:center;padding:6px 8px;min-height:55px;border-radius:8px;border-bottom:1px solid rgba(255,255,255,.04)}.sv16-rival.hdr{font-size:10px;text-transform:uppercase;font-weight:800;color:var(--mute);min-height:22px;border:0;padding:0 8px}.sv16-rival.me{background:rgba(167,133,255,.1);box-shadow:inset 3px 0 0 var(--a)}.sv16-rrank{font-size:11px;color:var(--mute);font-weight:800}.sv16-rival.me .sv16-rrank{color:var(--a)}.sv16-rname{display:flex;flex-direction:column;gap:3px;min-width:0}.sv16-rname b{font-size:12px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.sv16-rname small{font-size:10px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sv16-rnum{display:flex;gap:3px;align-items:baseline}.sv16-rnum b{font:800 22px/1 var(--fnum)}.sv16-rnum small{color:var(--mute);font-size:9px}.sv16-rprogress{height:6px;border-radius:3px;background:var(--line);overflow:hidden}.sv16-rprogress i{display:block;height:100%;border-radius:3px;background:var(--b)}.sv16-rival.me .sv16-rprogress i{background:var(--a)}.sv16-rstate{font-size:10px}.sv16-rstate .w{color:var(--up)}.sv16-rstate .s{color:var(--pos)}.sv16-rchips{display:flex;gap:4px;flex-wrap:wrap;min-width:0}.sv16-rchips .chip{padding:3px 6px 3px 3px}.sv16-rchips .tl{margin:0;width:15px;height:15px}
-@media(max-width:1250px){.sv16-main{grid-template-columns:1fr}.sv16-rival{grid-template-columns:42px minmax(120px,1.25fr) 50px minmax(90px,.65fr) 82px minmax(150px,1.4fr);gap:7px}}
-@media(max-width:760px){.sv16-hero{padding:12px;gap:10px}.sv16-head{align-items:flex-start;gap:8px}.sv16-brand .svt{font-size:15px}.sv16-meta{font-size:10px;max-width:230px}.sv16-sync{display:none}.sv16-weekpick[open]>.svwk{right:0;width:min(288px,85vw)}.sv16-signal{padding:10px 12px}.sv16-signal b{font-size:15px}.sv16-nums{grid-template-columns:repeat(2,minmax(0,1fr))}.sv16-nums>div{padding:10px}.sv16-nums strong{font-size:25px}.sv16-foot{flex-wrap:wrap}.sv16-rootgrid{grid-template-columns:minmax(0,1fr);padding:8px}.sv16-race{padding:6px}.sv16-rival,.sv16-rival.hdr{grid-template-columns:34px minmax(0,1fr) 50px 80px;gap:7px}.sv16-rival.hdr>span:nth-child(4),.sv16-rival.hdr>span:nth-child(6){display:none}.sv16-rival .sv16-rprogress,.sv16-rival .sv16-rchips{display:none}.sv16-teamsdone{align-items:stretch}.sv16-teamsdone>div{grid-template-columns:minmax(0,1fr)}.sv16-teamcard{padding:8px 9px}.sv16-rname small{font-size:9px}.sv16-rnum b{font-size:19px}.sv16-rstate{text-align:right}.sv16-rival{min-height:50px}.sv16-rival.hdr{min-height:20px}.sv16-choices{gap:8px}.sv16-picks{gap:5px}}
+.sv16-race{padding:6px 10px 0}.sv16-rival{display:grid;grid-template-columns:42px minmax(140px,1.25fr) 60px minmax(160px,.95fr) minmax(175px,1.5fr);gap:10px;align-items:center;padding:8px;min-height:60px;border-radius:8px;border-bottom:1px solid rgba(255,255,255,.04)}.sv16-rival.hdr{font-size:10px;text-transform:uppercase;font-weight:800;color:var(--mute);min-height:22px;border:0;padding:0 8px}.sv16-rival.me{background:rgba(167,133,255,.1);box-shadow:inset 3px 0 0 var(--a)}.sv16-rrank{font-size:11px;color:var(--mute);font-weight:800}.sv16-rival.me .sv16-rrank{color:var(--a)}.sv16-rname{display:flex;flex-direction:column;gap:3px;min-width:0}.sv16-rname b{font-size:12px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.sv16-rname small{font-size:10px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sv16-rnum{display:flex;gap:3px;align-items:baseline}.sv16-rnum b{font:800 22px/1 var(--fnum)}.sv16-rnum small{color:var(--mute);font-size:9px}.sv16-rprogress{height:6px;border-radius:3px;background:var(--line);overflow:hidden}.sv16-rprogress i{display:block;height:100%;border-radius:3px;background:var(--b)}.sv16-rival.me .sv16-rprogress i{background:var(--a)}.sv16-rstate{font-size:10px}.sv16-rstate .w{color:var(--up)}.sv16-rstate .s{color:var(--pos)}.sv16-rstate .l{color:var(--neg)}.sv16-rweek{display:flex;flex-direction:column;gap:5px;min-width:0}.sv16-rweekbar{display:flex;height:7px;overflow:hidden;background:var(--line);border-radius:5px}.sv16-rweekbar i{display:block;height:100%}.sv16-rweekbar .s{background:var(--pos)}.sv16-rweekbar .w{background:var(--up)}.sv16-rweekbar .l{background:var(--neg)}.sv16-rstate{display:flex;gap:6px;flex-wrap:wrap}.sv16-rstate b{font-weight:750;white-space:nowrap}.sv16-rchips .chip.more{color:var(--mute);font-size:10px;white-space:nowrap;border:1px solid var(--line);background:var(--panel)}.sv16-rchips{display:flex;gap:4px;flex-wrap:wrap;min-width:0}.sv16-rchips .chip{padding:3px 6px 3px 3px}.sv16-rchips .tl{margin:0;width:15px;height:15px}
+@media(max-width:1250px){.sv16-main{grid-template-columns:1fr}.sv16-rival{grid-template-columns:38px minmax(110px,1.25fr) 55px minmax(140px,1fr) minmax(150px,1.4fr);gap:7px}}
+@media(max-width:760px){.sv16-hero{padding:12px;gap:10px}.sv16-head{align-items:flex-start;gap:8px}.sv16-brand .svt{font-size:15px}.sv16-meta{font-size:10px;max-width:230px}.sv16-sync{display:none}.sv16-weekpick[open]>.svwk{right:0;width:min(288px,85vw)}.sv16-signal{padding:10px 12px}.sv16-signal b{font-size:15px}.sv16-nums{grid-template-columns:repeat(2,minmax(0,1fr))}.sv16-nums>div{padding:10px}.sv16-nums strong{font-size:25px}.sv16-foot{flex-wrap:wrap}.sv16-rootgrid{grid-template-columns:minmax(0,1fr);padding:8px}.sv16-race{padding:6px}.sv16-rival,.sv16-rival.hdr{grid-template-columns:34px minmax(0,1fr) 45px minmax(98px,.8fr);gap:7px}.sv16-rival.hdr>span:nth-child(5){display:none}.sv16-rival .sv16-rchips{display:none}.sv16-rweekbar{height:6px}.sv16-rstate{gap:2px 6px}.sv16-teamsdone{align-items:stretch}.sv16-teamsdone>div{grid-template-columns:minmax(0,1fr)}.sv16-teamcard{padding:8px 9px}.sv16-rname small{font-size:9px}.sv16-rnum b{font-size:19px}.sv16-rstate{font-size:9px}.sv16-rival{min-height:54px}.sv16-rival.hdr{min-height:20px}.sv16-choices{gap:8px}.sv16-picks{gap:5px}}
 @media(min-width:761px) and (max-width:1100px){.sv16-rootgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 html[data-theme=light] .sv16-signal{background:rgba(22,146,74,.07)}html[data-theme=light] .sv16-nums>div,html[data-theme=light] .sv16-rootcard{background:#f6f7fa}
 
@@ -1952,7 +1952,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.11</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.12</span></div>
   </div>
 </header>
 <main>
@@ -4129,9 +4129,11 @@ async function svLoadWeek(w,fresh){
         R[x.team.name]={r:post?(me>op?"W":me<op?"L":"T"):"",st:st.type.state,me,op,oppN:o.team.name,oppT:NT(o.team.abbreviation),abbr:NT(x.team.abbreviation),home:isH,
           detail:st.type.shortDetail,date:ev.date,day,wp:isH?wp.p:1-wp.p,pre:isH?wp.pre:1-wp.pre,odds:wp.det,period:st.period,clock:st.clock}})});
     R.__espn=true;R.__at=Date.now();
-    /* live API first: a final score from ESPN decides survival the moment the game ends. The pool's sheet only fills
-       games the API couldn't resolve (feed gap, a team name it doesn't recognise), never overrides a final API result. */
-    const SR=SV.sheetRes&&SV.sheetRes[w];if(SR)for(const t in SR)if(SR[t].r&&!(R[t]&&R[t].st==="post"&&R[t].r)){R[t]=Object.assign({},R[t]||{},{r:SR[t].r,st:"post",oppN:(R[t]&&R[t].oppN)||SR[t].oppN,day:(R[t]&&R[t].day)||SR[t].day,wp:SR[t].wp,src:"sheet"})}
+    /* ESPN provides fast provisional results and the scoreboard. When the commissioner has graded
+       a result in the connected pool sheet, that official ruling takes precedence. */
+    const SR=SV.sheetRes&&SV.sheetRes[w];if(SR)for(const t in SR)if(SR[t].r){const api=R[t]||{};
+      R[t]=Object.assign({},api,{r:SR[t].r,st:"post",oppN:api.oppN||SR[t].oppN,day:api.day||SR[t].day,
+        wp:SR[t].wp,src:"sheet",sheet:1,discrepancy:!!(api.r&&api.r!==SR[t].r)})}
   }catch(e){}
 }
 /* ---------- live sync with the Google Sheet (needs "anyone with the link can view") ---------- */
@@ -4187,7 +4189,9 @@ async function svSyncNormalized(id){
   const by={};picks.forEach(x=>{const w=parseInt(x.week),l=map[x.entry_id];if(!l||!w||w>18||!x.team)return;l.p[w-1]=l.p[w-1]?l.p[w-1]+"/"+x.team:x.team;if(l.ours&&x.picked_by)by[`${w}|${l.let}`]=x.picked_by});
   /* sheet results seed finished weeks; ESPN's live feed fills in / overrides with scores */
   SV.sheetRes={};res.forEach(x=>{const w=parseInt(x.week);if(!w||!x.team)return;const r=/^w/i.test(x.result)?"W":/^l/i.test(x.result)?"L":/^t/i.test(x.result)?"T":"";(SV.sheetRes[w]=SV.sheetRes[w]||{})[x.team]={r,st:r?"post":"pre",day:x.game_day||"",oppN:x.opponent||"",wp:r?(r==="W"?1:r==="T"?.5:0):null,sheet:1}});
-  for(const w in SV.sheetRes){const R=SV.res[w]=SV.res[w]||{};for(const t in SV.sheetRes[w])if(!R[t]||!R[t].st||(R[t].sheet&&!R.__espn))R[t]=SV.sheetRes[w][t]}
+  for(const w in SV.sheetRes){const R=SV.res[w]=SV.res[w]||{};for(const t in SV.sheetRes[w]){const official=SV.sheetRes[w][t];if(!official.r){if(!R[t])R[t]=official;continue}
+    const api=R[t]||{};R[t]=Object.assign({},api,{r:official.r,st:"post",wp:official.wp,oppN:api.oppN||official.oppN,
+      src:"sheet",sheet:1,discrepancy:!!(api.r&&api.r!==official.r)})}}
   const lanes=Object.values(map);SV.lanes=lanes;SV.flagged=lanes.some(l=>l.ours);SV.broken=0;SV.d.by=by;SV.layout="normalized";
   SV.maxPick=Math.max(1,...lanes.map(l=>l.p.reduce((m,x,i)=>x?i+1:m,0)));SV.sheetCfg=svCfgFromSheet(C,lanes);SV.cfg=poolCfg("survivor");return true}
 async function svSync(){
@@ -4295,11 +4299,14 @@ function svRender(){
   const st=prog[V],enter=prog[V-1],start=prog[0],pool0=SV.lanes.length,jackpot=C.jackpot||pool0*(+C.price||0),F=Math.max(1,+C.split||1);
   const ours=SV.lanes.filter(isOurs).sort((a,b)=>a.let.localeCompare(b.let));
   /* this week: lives at stake and expected survivors */
-  const inPlay=SV.lanes.filter(l=>(!l.out||l.out>=V)&&svPick(l,V)),teams={};
-  inPlay.forEach(l=>{const t=svPick(l,V),c=teams[t]||(teams[t]={t,our:0,oth:0,lets:[]});if(isOurs(l)){c.our++;c.lets.push(l.let)}else c.oth++});
-  const wpOf=t=>{const R=svRes(V,t);return R?(R.r?(R.r==="W"?1:0):R.wp!=null?R.wp:.5):0};
-  let eOur=0,ePool=0,pAllLost=1;Object.values(teams).forEach(c=>{const p=wpOf(c.t);eOur+=c.our*p;ePool+=(c.our+c.oth)*p;if(c.our)pAllLost*=1-p});
-  const ourIn=inPlay.filter(isOurs).length,keep=ourIn?1-pAllLost:0,eShare=ePool?eOur/ePool:0,share=st.pool?st.our/st.pool:0;
+  const inPlay=SV.lanes.filter(l=>(!l.out||l.out>=V)&&svPicks(l,V).length),teams={};
+  inPlay.forEach(l=>svPicks(l,V).forEach(t=>{const c=teams[t]||(teams[t]={t,our:0,oth:0,lets:[]});if(isOurs(l)){c.our++;c.lets.push(l.let)}else c.oth++}));
+  const wpOf=t=>{const R=svRes(V,t);if(!R)return .5;if(R.r)return R.r==="W"?1:R.r==="T"&&(SV.cfg||{}).tieOut===false?1:0;return R.wp!=null?R.wp:.5};
+  // An entry may have multiple picks: all must survive, and opposite sides of one game cannot both win.
+  const laneProbability=l=>{let pr=1;const games=new Map();for(const t of svPicks(l,V)){const R=svRes(V,t),opp=R&&R.oppN||"",game=opp?[t,opp].sort().join("|"):t;
+    if(games.has(game)){if(games.get(game)!==t)return 0;continue}games.set(game,t);pr*=wpOf(t)}return pr};
+  const ePool=inPlay.reduce((n,l)=>n+laneProbability(l),0),eOur=inPlay.filter(isOurs).reduce((n,l)=>n+laneProbability(l),0);
+  const ourIn=inPlay.filter(isOurs).length,share=st.pool?st.our/st.pool:0;
   /* participants */
   const rankTable=w=>{svEval(w,false);const by={};SV.lanes.forEach(l=>{const b=by[l.who]||(by[l.who]={who:l.who,orig:0,left:0});b.orig++;if(l.alive)b.left++});return Object.values(by).sort((a,b)=>b.left-a.left||a.who.localeCompare(b.who))};
   const rankHist=[];for(let w=1;w<=V;w++){const t=rankTable(w),m=t.find(p=>p.who===C.me);rankHist.push(1+t.filter(p=>p.left>(m?m.left:0)).length)}
@@ -4505,21 +4512,26 @@ function svRender(){
   [...parts.slice(0,3),...parts.slice(Math.max(0,meIdx-2),meIdx+3),...parts.filter(p=>p.left===me.left).slice(0,2)].filter(Boolean)
     .forEach(p=>{if(p.left>0||p.who===C.me)rmap.set(p.who,p)});
   const nearby=[...rmap.values()].sort((a,b)=>b.left-a.left||a.who.localeCompare(b.who)).slice(0,9);
-  const riv=nearby.map(p=>{const ls=SV.lanes.filter(l=>l.who===p.who&&(!l.out||l.out>=V));
-    const dist={};ls.forEach(l=>svPicks(l,V).forEach(t=>dist[t]=(dist[t]||0)+1));
-    const safe=ls.filter(l=>{const rs=svPicks(l,V).map(t=>svRes(V,t));return rs.length&&rs.every(R=>R&&R.r==="W")}).length;
-    const pending=ls.filter(l=>svPicks(l,V).some(t=>{const R=svRes(V,t);return!R||!R.r})).length;
-    const ourT=new Set(myIn.flatMap(l=>svPicks(l,V)));const seen=ls.filter(l=>svPicks(l,V).length);
+  const riv=nearby.map(p=>{const started=SV.lanes.filter(l=>l.who===p.who&&(!l.out||l.out>=V));
+    const alive=started.filter(l=>l.alive);
+    const dist={};started.forEach(l=>svPicks(l,V).forEach(t=>dist[t]=(dist[t]||0)+1));
+    const secured=alive.filter(l=>{const rs=svPicks(l,V).map(t=>svRes(V,t));return rs.length&&rs.every(R=>R&&R.r==="W")}).length;
+    const waiting=alive.length-secured,eliminated=started.length-alive.length;
+    const ourT=new Set(myIn.flatMap(l=>svPicks(l,V)));const seen=started.filter(l=>svPicks(l,V).length);
     const aligned=seen.filter(l=>svPicks(l,V).some(t=>ourT.has(t))).length;
-    const isMe=p.who===C.me;
-    const chips=Object.entries(dist).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([t,n])=>{const R=svRes(V,t)||{};return`<span class="chip ${R.r==="W"?"w":R.r?"l":R.st==="in"?(R.me>=R.op?"lv":"rk"):""}">${svLogo(V,t)}<b>${n}</b></span>`}).join("");
+    const isMe=p.who===C.me,den=Math.max(1,started.length);
+    const allChips=Object.entries(dist).sort((a,b)=>b[1]-a[1]),shown=allChips.slice(0,5),hidden=allChips.slice(5),hiddenN=hidden.reduce((n,[,v])=>n+v,0);
+    const chips=shown.map(([t,n])=>{const R=svRes(V,t)||{};const state=R.r==="W"?"Won":R.r?"Eliminated":R.st==="in"?R.me>=R.op?"Live · leading":"Live · trailing":"Upcoming";
+      return`<span class="chip ${R.r==="W"?"w":R.r?"l":R.st==="in"?(R.me>=R.op?"lv":"rk"):""}" title="${esc(t)}: ${n} Week ${V} pick${n===1?"":"s"} · ${state}">${svLogo(V,t)}<b>${n}</b></span>`}).join("")+
+      (hidden.length?`<span class="chip more" title="${esc(hidden.map(([t,n])=>t+" "+n).join(" · "))}">+${hiddenN} picks · ${hidden.length} team${hidden.length===1?"":"s"}</span>`:"");
+    const weekly=`<div class="sv16-rweek"><div class="sv16-rweekbar" title="Week ${V}: ${secured} secured, ${waiting} unresolved, ${eliminated} eliminated of ${started.length} entries">
+      <i class="s" style="width:${secured/den*100}%"></i><i class="w" style="width:${waiting/den*100}%"></i><i class="l" style="width:${eliminated/den*100}%"></i></div>
+      <span class="sv16-rstate"><b class="s">✓${secured}</b><b class="w">◷${waiting}</b><b class="l">✕${eliminated}</b><span class="pm">/ ${started.length}</span></span></div>`;
     return`<div class="sv16-rival ${isMe?"me":""}"><span class="sv16-rrank">${isMe?"YOU":`#${rankOf(p.left)}`}</span>
-      <span class="sv16-rname" title="${esc(p.who)}"><b>${esc(p.who)}</b><small>${isMe?"Your entries":seen.length?`${aligned} of ${seen.length} entries on teams you also picked`:"Picks not available"}</small></span>
+      <span class="sv16-rname" title="${esc(p.who)}"><b>${esc(p.who)}</b><small>${isMe?"Your entries":seen.length?`${aligned} of ${seen.length} Week ${V} entries shared picks with you`:"Picks not available"}</small></span>
       <span class="sv16-rnum"><b>${p.left}</b><small>${p.left===1?"life":"lives"}</small></span>
-      <span class="sv16-rprogress"><i style="width:${Math.round(p.left/Math.max(1,lead.left)*100)}%"></i></span>
-      <span class="sv16-rstate">${pending?`<b class="w">${pending} pending</b>`:`<b class="s">${safe} secured</b>`}</span>
-      <span class="sv16-rchips">${chips}</span></div>`}).join("");
-  h+="<!--M:rivals-->"+svSec("rivals","🏁 The rival race",`${aliveParts} managers with lives · leader has ${lead?lead.left:0}`,`<div class="sv16-race"><div class="sv16-rival hdr"><span>Rank</span><span>Manager</span><span>Lives</span><span>Share of leader</span><span>Week status</span><span>W${V} teams</span></div>${riv}</div><div class="svnote">Ranked by lives still in. Showing the leaders and managers closest to you. Picks come from the connected pool sheet.</div>`);
+      ${weekly}<span class="sv16-rchips">${chips}</span></div>`}).join("");
+  h+="<!--M:rivals-->"+svSec("rivals","🏁 The rival race",`${aliveParts} managers with lives · leader has ${lead?lead.left:0}`,`<div class="sv16-race"><div class="sv16-rival hdr"><span>Rank</span><span>Manager</span><span>Lives</span><span>Week ${V}: ✓ safe · ◷ pending · ✕ out</span><span>W${V} teams (entry picks)</span></div>${riv}</div><div class="svnote">Lives = surviving entries. Weekly breakdown and team chips include entries that started Week ${V}, even if eliminated. An entry with multiple required picks appears under each team.</div>`);
   /* ---------- elimination chart ---------- */
   const CW=Math.max(1,prog.length),mx=pool0,bw=100/CW;
   const bars=prog.map((x,i)=>{const hh=x.pool/mx*100,s=x.pool?x.our/x.pool:0;return`<g><rect x="${(i*bw+bw*.18).toFixed(2)}" y="${(100-hh).toFixed(2)}" width="${(bw*.64).toFixed(2)}" height="${hh.toFixed(2)}" rx="1.2" fill="url(#svbar)"><title>${i?"After W"+x.w:"Start"}: ${x.pool} pool lives · ${x.our} ours · share ${svFmtPct(s)}</title></rect></g>`}).join("");
@@ -4528,7 +4540,8 @@ function svRender(){
   const labels=prog.map((x,i)=>`<div style="left:${(i*bw+bw/2).toFixed(2)}%"><b>${x.pool}</b><span>${i?"W"+x.w:"Start"}</span><em>${x.our} · ${svFmtPct(sh[i])}</em></div>`).join("");
   h+="<!--M:chart-->"+svSec("chart","📉 Pool elimination",`teal bars = pool lives · purple line = our share`,`<div class="elim"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="svbar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3dd6e6" stop-opacity=".85"/><stop offset="1" stop-color="#3dd6e6" stop-opacity=".15"/></linearGradient></defs>${bars}<polyline points="${line}" fill="none" stroke="#a785ff" stroke-width="2.4" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg><div class="elab">${labels}</div></div>`);
   /* ---------- swimlanes: alive lanes first and bright, out lanes dimmed with the week they fell ---------- */
-  const q=SV.q.trim().toLowerCase(),pool=(q?SV.lanes.filter(l=>l.who.toLowerCase().includes(q)):ours).slice(0,150),WM=Math.max(V,SV.maxPick);
+  const q=SV.q.trim().toLowerCase(),allSwim=q?SV.lanes.filter(l=>l.who.toLowerCase().includes(q)):ours;
+  const pool=allSwim.slice(0,150),WM=Math.max(V,SV.maxPick);
   svEval(WM,false);
   const cell=(l,w)=>{const p=svPick(l,w);if(!p)return`<td class="sw e">${l.out&&w>l.out?"":""}</td>`;const s=l.s[w],c=s==="W"?"w":s==="L"||s==="T"?"l":s==="winning"?"lv":s==="losing"||s==="tied"?"rk":"p";
     return`<td class="sw ${c}" title="W${w}: ${esc(p)}${l.def[w]?" (default)":""}${c==="l"?" · eliminated":""}">${svLogo(w,p,"tls")}${c==="l"?'<span class="xo">✗</span>':""}</td>`};
@@ -4537,7 +4550,7 @@ function svRender(){
   const grp=(lab,arr,c)=>arr.length?`<tr class="lgrp ${c}"><td colspan="${3+WM}">${lab} · ${arr.length}</td></tr>${arr.map(row).join("")}`:"";
   const swim=grp("🟢 Alive",al,"al")+(ot.length?`<tr class="lgrp ot tog" title="${SV.showOut?"Hide":"Show"} eliminated lanes"><td colspan="${3+WM}">⚫ Out · ${ot.length} ${SV.showOut?"▾":"▸"}</td></tr>${SV.showOut?ot.map(row).join(""):""}`:"");
   svEval(V,false);
-  h+="<!--M:swim-->"+svSec("swim","🏊 Swimlanes",q?`${pool.length} lanes match`:`our lanes: ${al.length} alive · ${ot.length} out`,`<div class="svq"><input id="svq" placeholder="Search a participant…" value="${esc(SV.q)}"></div><div class="tw sws"><table class="svtab swt"><thead><tr><th>Participant</th><th>Lane</th><th>Status</th>${Array.from({length:WM},(_,i)=>`<th class="c">W${i+1}</th>`).join("")}</tr></thead><tbody>${swim}</tbody></table></div>`);
+  h+="<!--M:swim-->"+svSec("swim","🏊 Swimlanes",q?`${allSwim.length} matching entries${allSwim.length>pool.length?` · showing first ${pool.length}`:""}`:`our lanes: ${al.length} alive · ${ot.length} out`,`<div class="svq"><input id="svq" placeholder="Search a participant…" value="${esc(SV.q)}"></div><div class="tw sws"><table class="svtab swt"><thead><tr><th>Participant</th><th>Lane</th><th>Status</th>${Array.from({length:WM},(_,i)=>`<th class="c">W${i+1}</th>`).join("")}</tr></thead><tbody>${swim}</tbody></table></div>`);
   const stand=parts.map(p=>`<tr class="${p.who===C.me?"me":""} ${p.left?"":"dim"}"><td class="n">${p.left?(parts.filter(x=>x.left===p.left).length>1?"T-":"")+rankOf(p.left):"—"}</td><td>${esc(p.who)}</td><td class="n">${p.orig}</td><td class="n">${p.left}</td><td><div class="wpb"><i style="width:${(p.left/Math.max(1,lead.left))*100}%"></i></div></td><td class="n">${p.left?svFmtPct(p.left/st.pool):"OUT"}</td></tr>`).join("");
   h+="<!--M:stand-->"+svSec("stand","🏆 Pool standings",`${parts.length} participants`,`<div class="tw sws"><table class="svtab"><colgroup><col style="width:60px"><col><col style="width:64px"><col style="width:64px"><col style="width:16%"><col style="width:80px"></colgroup><thead><tr><th class="n">#</th><th>Participant</th><th class="n">Orig</th><th class="n">Left</th><th></th><th class="n">Win %</th></tr></thead><tbody>${stand}</tbody></table></div>`);
   const ovr=(S.conns||getConns()).find(c=>c.p==="survivor"),hasOvr=SV.sheetCfg&&ovr&&ovr.cfg&&Object.keys(ovr.cfg).length;
@@ -4678,9 +4691,10 @@ function pkApiGrade(){
   PK.weeks=PK.wSheet;PK.rows.forEach((r,i)=>{r.w=B.rows[i].slice()});PK.games.forEach((g,i)=>{const b=B.games[i];g.ats=b.ats;g.su=b.su;g.api=0;g.picks.forEach((p,k)=>{p.c=b.c[k];p.api=0})});
   let n=0;const add={};
   PK.games.forEach(g=>{if(g.ats)return;const L=PK.nx[g.w];if(!L)return;const x=L.find(y=>(y.home===g.a&&y.away===g.b)||(y.home===g.b&&y.away===g.a));
-    if(!x||x.st!=="post"||x.hs==null)return;const cov=(x.hsc-x.asc)+x.hs,winT=cov>0?x.home:cov<0?x.away:null;
+    if(!x||x.st!=="post"||x.hs==null||x.hsVerified!==true||!Number.isFinite(x.hsc)||!Number.isFinite(x.asc))return;
+    const cov=(x.hsc-x.asc)+x.hs,winT=cov>0?x.home:cov<0?x.away:null;
     g.ats=winT||"PUSH";g.su=x.hsc>x.asc?x.home:x.asc>x.hsc?x.away:"";g.api=1;n++;
-    g.picks.forEach(p=>{if(p.side<0||!/^[PH]$/.test(p.c))return;const t=p.side?g.b:g.a;p.c=t===winT?"C":"I";p.api=1;if(p.c==="C"){const k=p.u+"|"+g.w;add[k]=(add[k]||0)+1}})});
+    g.picks.forEach(p=>{if(p.side<0||p.c!=="P")return;const t=p.side?g.b:g.a;p.c=t===winT?"C":"I";p.api=1;if(p.c==="C"){const k=p.u+"|"+g.w;add[k]=(add[k]||0)+1}})});
   if(!n){PK.apiN=0;return}
   const wmax=Math.max(PK.wSheet,...PK.games.filter(g=>g.api).map(g=>g.w));
   PK.rows.forEach(r=>{for(let k=r.w.length;k<wmax;k++)r.w[k]=0;for(let w=1;w<=wmax;w++){const a=add[r.u+"|"+w];if(a)r.w[w-1]=(+r.w[w-1]||0)+a}});
@@ -4726,7 +4740,9 @@ async function pkSyncNormalized(id){
     const g=games[gi],st=lc(x.pick_status),gr=lc(x.grade),c=st==="missing"?"M":st==="no pick"?"N":st==="hidden"?"H":code[gr]||(x.pick_team?"P":"M"),side=x.pick_team===g[1]?0:x.pick_team===g[2]?1:-1;
     picks.push([players.indexOf(x.player_id),gi,side,c]);(rows[w]=rows[w]||0);rows[w]++;if(c!=="M")cap[w]=(cap[w]||0)+1;
     if(c==="C"||c==="I"){graded[w]=1;const k=x.player_id+"|"+w;pts[k]=(pts[k]||0)+(x.points!==""&&!isNaN(+x.points)?+x.points:c==="C"?1:0);
-      /* cover winner from the authoritative grade */if(side>=0&&!g[5])g[5]=c==="C"?x.pick_team:(side===0?g[2]:g[1])}});
+      // Never infer the ATS winning side from an incorrect pick: a push could make both sides incorrect.
+      if(side>=0&&!g[5]&&gr==="push")g[5]="PUSH";
+      else if(side>=0&&!g[5]&&c==="C")g[5]=x.pick_team}});
   games.forEach(g=>{if(g[3]!=null&&g[4]!=null&&g[3]!==g[4])g[6]=g[3]>g[4]?g[1]:g[2]});
   const W=Math.max(0,...Object.keys(graded).map(Number));
   const stand=players.map(u=>[u,Array.from({length:W},(_,i)=>pts[u+"|"+(i+1)]||0)]);
@@ -4788,7 +4804,10 @@ async function sleeperLines(season,week,maxAge=600000){
 }
 /* lock the line at kickoff: Pick'em displays and grades against the locked Sleeper line */
 function sloLocked(season,week,k,hs,started){const LK="pklk_"+season+"_"+week;let m={};try{m=JSON.parse(load(LK)||"{}")}catch(e){}
-  if(started&&m[k]==null&&hs!=null){m[k]=hs;save(LK,JSON.stringify(m))}return m[k]!=null?m[k]:hs}
+  // Legacy numeric entries have no observation timestamp and cannot be treated as verified locks.
+  if(!started&&m[k]==null&&hs!=null){m[k]={v:hs,seen:Date.now(),source:"pregame_snapshot"};save(LK,JSON.stringify(m))}
+  const v=m[k];return v&&typeof v==="object"&&Number.isFinite(+v.v)?+v.v:hs}
+const sloHasPregameLock=(season,week,k)=>{try{const m=JSON.parse(load("pklk_"+season+"_"+week)||"{}");return!!(m[k]&&typeof m[k]==="object"&&m[k].source==="pregame_snapshot"&&Number.isFinite(+m[k].v))}catch(e){return false}};
 
 /* ---------- next-week model: market line + ESPN FPI + situational signals → cover probability ---------- */
 const lineOf=(det,home,away)=>{const m=String(det||"").match(/([A-Z]{2,4})\s*([+-]?\d+(\.\d+)?)/);if(/EVEN|PK|PICK/i.test(det||""))return 0;if(!m)return null;const fav=NT(m[1]),x=Math.abs(+m[2]);return fav===home?-x:fav===away?x:null};
@@ -4801,8 +4820,14 @@ async function pkLoadNext(w,maxAge){
       out.push({id:ev.id,date:ev.date,home,away,hn:H.team.name,an:A.team.name,hs:null,ou:null,st:ev.status.type.state,hsc:+H.score||0,asc:+A.score||0,detail:ev.status.type.shortDetail,day:new Date(ev.date).toLocaleDateString("en-US",{weekday:"short",timeZone:"America/New_York"})})});
     /* lines come ONLY from Sleeper (locked at kickoff); ESPN supplies schedule/scores/status */
     const yr=S.season||String(new Date().getFullYear()),L=await sleeperLines(yr,w,out.some(g=>g.st==="in")?120000:600000);
-    out.forEach(g=>{const k=g.away+"@"+g.home,x=L[k]||{};g.hs=sloLocked(yr,w,k,x.hs!=null?x.hs:null,g.st!=="pre");g.hsSrc=g.hs!=null?"sleeper":"";g.ou=x.total||null;
-      if(g.hs==null){const s=pkSheetLine(w,g.home,g.away);if(s){g.hs=s.hs;g.hsSrc=/proxy/i.test(s.src)?"proxy":"sheet"}}});
+    out.forEach(g=>{const k=g.away+"@"+g.home,x=L[k]||{},started=g.st!=="pre";
+      g.hs=sloLocked(yr,w,k,x.hs!=null?x.hs:null,started);g.hsVerified=false; // a pregame observation is not proof of the pool's official locked ATS spread
+      g.hsSrc=g.hs!=null?(g.hsVerified?"sleeper":"proxy"):"";g.ou=x.total||null;
+      // Prefer pool-specific documented locked lines over unverified or late-observed market prices.
+      const sheet=pkSheetLine(w,g.home,g.away);
+      if(sheet&&/(locked|verified|screenshot)/i.test(sheet.src)&&!/(proxy|unverified|not_captured)/i.test(sheet.src)){g.hs=sheet.hs;g.hsSrc="sheet";g.hsVerified=true}
+      else if(g.hs==null&&sheet){g.hs=sheet.hs;g.hsSrc="proxy";g.hsVerified=false}
+    });
     PK.nx[w]=out.sort((a,b)=>new Date(a.date)-new Date(b.date));
     await Promise.all(out.filter(g=>g.st==="pre"&&!PK.fpi[g.id]).map(async g=>{try{const s=await getJ(ESPN.replace("scoreboard","summary")+"?event="+g.id);const p=s.predictor||{},hp=p.homeTeam&&parseFloat(p.homeTeam.gameProjection);if(!isNaN(hp))PK.fpi[g.id]=hp/100}catch(e){}}));
   }catch(e){}
@@ -4822,7 +4847,7 @@ function pkModel(g){
 }
 const lineTxt=x=>x===0?"PK":(x>0?"+":"")+x;
 function pkLiveCover(g){ /* ATS status for a game in progress: + means pick side covering */
-  if(g.hs==null)return null;const m=g.hsc-g.asc;return m+g.hs;
+  if(g.hs==null||g.hsVerified!==true)return null;const m=g.hsc-g.asc;return m+g.hs;
 }
 function pkSettingsHtml(){const c=PK.cfg,o=(v,l,cur)=>`<option value="${esc(v)}"${String(cur)===String(v)?" selected":""}>${esc(l)}</option>`,num=(id,lab,v)=>`<label>${lab}<input id="${id}" type="number" min="0" step="1" inputmode="decimal" value="${+v||0}"></label>`;
   return`<div class="svcfg"><label>Pool name<input id="pkc_name" value="${esc(c.name)}" maxlength="40"></label><label>You are${c.meAuto?' <small class="pm" data-tip="Matched to your Sleeper name on this device">· auto</small>':""}<select id="pkc_me">${o("__none","Nobody (just follow)",c.me||"__none")}${PK.rows.map(r=>o(r.u,r.u,c.me)).join("")}</select></label>${num("pkc_dues","Buy-in ($)",c.dues)}${num("pkc_first","1st place ($)",c.first)}${num("pkc_second","2nd place ($)",c.second)}${num("pkc_weekly","Weekly top score ($)",c.weekly)}</div>`}
@@ -4849,7 +4874,8 @@ function pkRender(){
   const lead=sorted[0],second=sorted.find(r=>tot(r)<tot(lead))||sorted[1],chg=prank(me)-rank(me),pot=d.dues*d.members;
   const nm=u=>esc(nickOf(u)||nickOf(PK.names&&PK.names[u])||(PK.names&&PK.names[u])||u);
   /* week state from the sheet */
-  const wkGames=w=>PK.games.filter(g=>g.w===w),wkDone=w=>w<W||(wkGames(w).length>0&&wkGames(w).every(g=>g.ats||g.su));
+  const wkGames=w=>PK.games.filter(g=>g.w===w),wkDone=w=>{const games=wkGames(w);
+    return games.length>0&&games.every(g=>!!g.ats&&g.picks.every(p=>!/[HMP]/.test(p.c)))&&!(PK.mism||[]).includes(w)&&!(PK.missing||[]).includes(w)&&(!PK.cov||PK.cov[w]==null||PK.cov[w]>=.999)};
   const winners=Array.from({length:W},(_,i)=>{const mx=Math.max(...PK.rows.map(r=>+r.w[i]||0));let who=PK.rows.filter(r=>(+r.w[i]||0)===mx),tbk=null;const T=PK.tb&&PK.tb[i+1];
     if(who.length>1&&T){const er=r=>{const x=T[r.u];return x&&x.a!=null?Math.abs(x.g-x.a):1e9},m=Math.min(...who.map(er));if(m<1e9){const w2=who.filter(r=>er(r)===m);if(w2.length<who.length){tbk={from:who.length,err:m};who=w2}}}
     return{w:i+1,mx,who,fin:wkDone(i+1),tbk}});
@@ -4861,7 +4887,7 @@ function pkRender(){
   const myAcc=mine.length?mine.filter(x=>x.p.c==="C").length/mine.length:0,myPop=mine.length?mine.reduce((s,x)=>s+(popOf(x.g,x.p.side)||0),0)/mine.length:0;
   const allC=PK.games.flatMap(g=>g.picks.filter(p=>p.c==="C"||p.c==="I").map(p=>({g,p,pop:popOf(g,p.side)})));
   const contra=allC.filter(x=>x.pop!=null&&x.pop<.5),contraWin=contra.length?contra.filter(x=>x.p.c==="C").length/contra.length:0;
-  const myContra=mine.filter(x=>(popOf(x.g,x.p.side)||0)<.5),myContraRate=mine.length?myContra.length/mine.length:0;
+  const myContra=mine.filter(x=>{const p=popOf(x.g,x.p.side);return p!=null&&p<.5}),myContraRate=mine.length?myContra.length/mine.length:0;
   const decided=PK.games.filter(g=>g.ats&&g.picks.some(p=>p.side>=0));
   const majCover=decided.filter(g=>{const a=popOf(g,0)||0;return(a>=.5?g.a:g.b)===g.ats}).length/Math.max(1,decided.length);
   const suCover=decided.filter(g=>g.su&&g.su===g.ats).length/Math.max(1,decided.length);
@@ -4891,7 +4917,7 @@ function pkRender(){
   const rowsN=G.map(g=>{const m=pkModel(g),k=g.away+"@"+g.home,sel=myP[k],locked=g.st!=="pre";
     const strong=m&&m.p>=EDGE,cl=CL[g.id];
     const team=(t,isHome)=>{const ln=isHome?g.hs:(g.hs==null?null:-g.hs),lean=strong&&m.lean===t,on=sel===t;
-      return`<button class="pat ${on?"on":""} ${lean?"lean":""}" data-k="${esc(k)}" data-t="${esc(t)}" ${locked?"disabled":""}><img class="tl" src="https://sleepercdn.com/images/team_logos/nfl/${t.toLowerCase()}.png" alt="" onerror="this.style.visibility='hidden'"><b>${esc(t)}</b><span class="ln${g.hsSrc==="proxy"?" px":""}" ${g.hsSrc?`data-tip="${g.hsSrc==="sleeper"?"Sleeper line (locks at kickoff)":g.hsSrc==="sheet"?"Verified Sleeper line from the pool sheet":"Market proxy from the sheet, not a verified Sleeper line"}"`:""}>${ln==null?"–":lineTxt(ln)}</span>${lean?`<i class="lz" title="Model lean">★</i>`:""}</button>`};
+      return`<button class="pat ${on?"on":""} ${lean?"lean":""}" data-k="${esc(k)}" data-t="${esc(t)}" ${locked?"disabled":""}><img class="tl" src="https://sleepercdn.com/images/team_logos/nfl/${t.toLowerCase()}.png" alt="" onerror="this.style.visibility='hidden'"><b>${esc(t)}</b><span class="ln${g.hsSrc==="proxy"?" px":""}" ${g.hsSrc?`data-tip="${g.hsSrc==="sleeper"?"Observed Sleeper line, not confirmed pool-locked":g.hsSrc==="sheet"?"Verified locked pool line from the sheet":"Unverified market spread: not used for ATS grading"}"`:""}>${ln==null?"–":lineTxt(ln)}</span>${lean?`<i class="lz" title="Model lean">★</i>`:""}</button>`};
     const conf=m?Math.round(m.p*100):null,tier=conf==null?"":conf>=58?"hi":conf>=EDGE*100?"md":"lo";
     const clC=cl?`<span class="sg clm ${cl.k}" data-tip="${esc(cl.k==="climb"?`${cl.t} covers about ${Math.round(cl.p*100)}% of the time, but only ~${Math.round(cl.q*100)}% of this pool usually lands on that side: when it hits you pass most of the members above you`:`~${Math.round(cl.q*100)}% of the pool usually sides with ${cl.t}; matching them protects your lead at little cost (${Math.round(cl.p*100)}% to cover)`)}">${cl.k==="climb"?"⬆ climb":"🛡 hold"} ${esc(cl.t)}</span>`:"";
     return`<div class="pah ${locked?"lk":""}${m&&!strong?" flip":""}"><span class="pad">${esc(g.day)} ${hm(new Date(g.date))}</span>${team(g.away,false)}<span class="pat2">@</span>${team(g.home,true)}
@@ -4899,7 +4925,7 @@ function pkRender(){
         :`<div class="tossup" data-tip="${esc(`Model: ${m.lean} ${conf}% to cover. Anything under ${Math.round(EDGE*100)}% is inside the noise, so it's treated as a coin flip.`)}">Toss-up <em>${esc(m.lean)} ${conf}%</em></div><div class="sigs">${clC}</div>`:`<span class="pm">line not posted</span>`}</div></div>`}).join("");
   const mnf=G.filter(g=>new Date(g.date).getDay()===1).slice(-1)[0]||G[G.length-1];
   const picksTxt=G.map(g=>{const k=g.away+"@"+g.home,m=pkModel(g),t=myP[k]||(m&&m.lean);if(!t)return null;const ln=t===g.home?g.hs:-g.hs;return`${t} ${lineTxt(ln)}`}).filter(Boolean).join(", ");
-  const helpBody=G.length?`<div class="paw">${rowsN}</div><div class="pafoot"><span>${mnf&&mnf.ou?`🎲 Tiebreaker: guess <b>${Math.round(mnf.ou)}</b> total points for ${esc(mnf.away)} @ ${esc(mnf.home)} (the betting total).`:""}</span><button class="rep" id="pkleans" title="Fill every game you haven't picked with the model's lean">★ Use leans</button><button class="rep" id="pkcopy" title="Copy your picks (or the model's leans where you haven't picked)">📋 Copy picks</button></div><div class="svnote" title="${esc(SLO.status||"")}">${SLO.debug&&SLO.status&&!/✓/.test(SLO.status)?`<button class="rep" id="slodbg" title="Copy Sleeper's raw game data so it can be checked">⧉ Copy line data</button> `:""}Lines: Sleeper (locked at kickoff)${PK.layout==="normalized"?", else the sheet's verified line":""}${SLO.debug?` · ${esc(SLO.status||"")}`:""}. ★ = model lean. ★ and a colored bar only appear at ${Math.round(EDGE*100)}%+; anything closer is a toss-up. ${favQ!=null?`⬆ climb = the side most of this pool skips (it backs favorites ${Math.round(favQ*100)}% of the time) when it still covers often enough to gain ground; 🛡 hold = side with the pool to protect a lead. `:""}Cover % blends the betting line with ESPN's FPI projection, plus home-underdog, key-number and starting-QB-injury adjustments. It's a small edge, not a lock: the spread is set to make each side close to 50%. Your taps are saved in this browser; enter them in Sleeper before each kickoff.</div>`:`<div class="none">Week ${N} lines aren't posted yet.</div>`;
+  const helpBody=G.length?`<div class="paw">${rowsN}</div><div class="pafoot"><span>${mnf&&mnf.ou?`🎲 Tiebreaker: guess <b>${Math.round(mnf.ou)}</b> total points for ${esc(mnf.away)} @ ${esc(mnf.home)} (the betting total).`:""}</span><button class="rep" id="pkleans" title="Fill every game you haven't picked with the model's lean">★ Use leans</button><button class="rep" id="pkcopy" title="Copy your picks (or the model's leans where you haven't picked)">📋 Copy picks</button></div><div class="svnote" title="${esc(SLO.status||"")}">${SLO.debug&&SLO.status&&!/✓/.test(SLO.status)?`<button class="rep" id="slodbg" title="Copy Sleeper's raw game data so it can be checked">⧉ Copy line data</button> `:""}Lines: Sleeper market data (not necessarily the pool's locked spread)${PK.layout==="normalized"?" · verified pool lines when available":""}${SLO.debug?` · ${esc(SLO.status||"")}`:""}. ★ = model lean. ★ and a colored bar only appear at ${Math.round(EDGE*100)}%+; anything closer is a toss-up. ${favQ!=null?`⬆ climb = the side most of this pool skips (it backs favorites ${Math.round(favQ*100)}% of the time) when it still covers often enough to gain ground; 🛡 hold = side with the pool to protect a lead. `:""}Cover % blends the betting line with ESPN's FPI projection, plus home-underdog, key-number and starting-QB-injury adjustments. It's a small edge, not a lock: the spread is set to make each side close to 50%. Your taps are saved in this browser; enter them in Sleeper before each kickoff.</div>`:`<div class="none">Week ${N} lines aren't posted yet.</div>`;
   const nPick=G.filter(g=>myP[g.away+"@"+g.home]).length;
   h+="<!--M:help-->"+pkSec("help",`🔮 Week ${N} picks helper`,G.length?`${nPick}/${G.length} picked · ${G.filter(g=>pkModel(g)&&pkModel(g).p>=EDGE).length} real edges · ${G.filter(g=>pkModel(g)&&pkModel(g).p<EDGE).length} toss-ups`:"",helpBody);
   /* ---------- this week live ---------- */
