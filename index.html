@@ -1924,6 +1924,40 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 @media(prefers-reduced-motion:reduce) {
   .fx-td .tdrush,.fx-otd .tdrush,.fx-dtd .tdrush{animation:none;opacity:0}
 }
+
+/* Edge live trade workbench */
+.tw-workbench{padding:15px;margin:9px 0 13px;min-width:0}
+.tw-head,.tw-actions,.tw-side-head,.tw-partner{display:flex;gap:12px;justify-content:space-between;align-items:center}
+.tw-head{align-items:flex-start}.tw-head h2{margin:0;font-size:17px;color:var(--ink)}.tw-head h2 span{font-size:9px;color:var(--b);border:1px solid var(--b);border-radius:4px;padding:2px 5px}
+.tw-head p{margin:3px 0;color:var(--mute);font-size:11px}.tw-actions{flex-wrap:wrap}
+.tw-workbench select,.tw-workbench input{font:inherit;font-size:12px;border:1px solid var(--line);color:var(--ink);background:var(--s2);border-radius:7px;padding:9px;min-width:0;max-width:100%}
+.tw-workbench label{font-size:10px;color:var(--mute);font-weight:800;display:flex;align-items:center;gap:8px}
+.tw-workbench button{cursor:pointer}.tw-workbench button:disabled{opacity:.5;cursor:default}
+.tw-sides,.tw-results,.tw-insightgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.tw-sides{margin:13px 0}.tw-side{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--s2);min-width:0}
+.tw-side.give{border-top:3px solid var(--a)}.tw-side.get{border-top:3px solid var(--b)}
+.tw-side-head b{font-size:12px}.tw-side-head span,.tw-side>small{font-size:10px;color:var(--mute)}
+.tw-side>small{display:block;margin-top:2px}.tw-players{min-height:46px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.tw-player{display:inline-flex;align-items:center;min-width:0;max-width:100%;gap:6px;padding:5px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+.tw-player small{font-size:9px;color:var(--b);font-weight:800}.tw-player b{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.tw-player em{font-size:9px;color:var(--mute);font-style:normal;white-space:nowrap}
+.tw-player button{color:var(--mute);background:none;border:0;font-size:17px;line-height:1}.tw-player button:hover{color:var(--neg)}
+.tw-autocomplete{position:relative}.tw-autocomplete input{width:100%;min-height:36px}.tw-suggest{position:absolute;z-index:90;top:100%;left:0;right:0;max-height:300px;overflow:auto;border:1px solid var(--line);background:var(--panel);border-radius:7px;box-shadow:0 14px 28px rgba(0,0,0,.32)}
+.tw-suggest[hidden]{display:none}.tw-suggest button{display:flex;flex-direction:column;gap:4px;text-align:left;width:100%;padding:9px 11px;font:inherit;color:var(--ink);background:none;border:0;border-bottom:1px solid var(--line)}
+.tw-suggest button:hover,.tw-suggest button.on{background:rgba(61,214,230,.12)}.tw-suggest b{font-size:12px}.tw-suggest small{color:var(--mute);font-size:10px}.tw-muted{font-size:11px;color:var(--mute);padding:8px}
+.tw-partner{flex-wrap:wrap}.tw-partner>small{color:var(--mute);font-size:10px}
+.tw-pending{min-height:80px;border:1px dashed var(--line);border-radius:8px;margin-top:13px;display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center;padding:14px;text-align:center;font-size:12px;color:var(--mute)}
+.tw-pending b{color:var(--ink)}.tw-summary{font-size:12px;font-weight:800;margin:13px 0 9px}
+.tw-grade,.tw-insight{padding:12px;border:1px solid var(--line);border-radius:10px;min-width:0;background:var(--s2)}
+.tw-grade-title{display:flex;justify-content:space-between;gap:8px;font-size:11px}.tw-grade-title span{color:var(--mute)}
+.tw-grade-body{display:flex;align-items:center;gap:15px;margin:9px 0}
+.tw-grade-body>strong{font:850 38px/1 var(--fnum);color:var(--ink)}.tw-grade-body>strong small{font-size:12px;color:var(--mute)}
+.tw-grade-body>div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;flex:1;font-size:10px}.tw-grade-body>div span{color:var(--mute)}.tw-grade-body>div b{text-align:right;font-size:11px;white-space:nowrap}
+.tw-grade .up,.tw-week .up{color:var(--pos)}.tw-grade .dn,.tw-week .dn{color:var(--neg)}
+.tw-progress{height:5px;background:var(--line);border-radius:5px;overflow:hidden}.tw-progress i{display:block;height:100%;background:var(--up)}.tw-grade.positive .tw-progress i{background:var(--pos)}.tw-grade.negative .tw-progress i{background:var(--neg)}
+.tw-insightgrid{margin-top:10px}.tw-insight>b{font-size:12px}.tw-week{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0}.tw-week span{border:1px solid var(--line);border-radius:6px;padding:4px 7px;font-size:10px;white-space:nowrap}
+.tw-signals{display:flex;flex-direction:column;gap:7px;color:var(--mute);font-size:11px;line-height:1.4}.tw-signals .tw-risk{color:var(--up)}.tw-note{color:var(--mute);font-size:10px;line-height:1.5;margin:8px 0 0}
+@media(max-width:760px){.tw-workbench{padding:12px}.tw-head{flex-wrap:wrap}.tw-actions{width:100%}.tw-sides,.tw-results,.tw-insightgrid{grid-template-columns:minmax(0,1fr)}.tw-workbench select,.tw-workbench input{font-size:16px}.tw-suggest{min-width:0}.tw-grade-body>strong{font-size:36px}}
+
 </style>
 </head>
 <body>
@@ -1953,7 +1987,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.13</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.14</span></div>
   </div>
 </header>
 <main>
@@ -1977,7 +2011,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.13";
+const WM_VERSION="1.14";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -5220,7 +5254,7 @@ function mvRender(){
   const sel=`<div class="mvsel">${S.L.map(l=>`<button class="mvb ${l.id===MV.lg?"on":""}" data-l="${l.id}">${esc(shortName(l.league.name))}</button>`).join("")}</div>`;
   const EV=MV.view==="edge",multi=EV&&edgeLeagues().length>1;
   let h=`<div class="card hero svhero"><div class="svtop"><button class="mvb" id="mvback" title="Back to matchups">←</button><div class="svti"><b class="svt">${EV?CHEST_SVG+" Edge":"🧪 Roster Lab"}</b><span class="hu">${multi?`${edgeLeagues().length} leagues`:`${esc(lg.league.name)} · ${lg.fmt}`}${EV?" · computed on this device":""}</span></div>${multi?"":sel}${MV.view==="edge"?`<button class="mvb" id="edgelk" type="button" data-tip="Lock Edge on this device">🔒</button>`:`<button class="mvedge" id="mvedge" type="button" aria-label="Edge">${CHEST_SVG}</button>`}</div></div>`;
-  if(EV){const LS=edgeLeagues();h+=`<div class="edcols" style="--n:${LS.length}">${LS.map(l=>{const r=MV.res[l.id];return`<section class="edcol">${LS.length>1?`<div class="edlh"><b>${esc(l.league.name)}</b><span class="fmt">${l.fmt}</span></div>`:""}${!r?`<div class="card none">⏳ Crunching rosters, projections and lineups…</div>`:r.err?`<div class="card none">${esc(r.err)}</div>`:r.state?`<div class="svgrid edgegrid">${idealHtml(l)}</div>`:edgeHtml(l,r)}</section>`}).join("")}</div>`;
+  if(EV){const LS=edgeLeagues();h+=twHTML(lg,R);h+=`<div class="edcols" style="--n:${LS.length}">${LS.map(l=>{const r=MV.res[l.id];return`<section class="edcol">${LS.length>1?`<div class="edlh"><b>${esc(l.league.name)}</b><span class="fmt">${l.fmt}</span></div>`:""}${!r?`<div class="card none">⏳ Crunching rosters, projections and lineups…</div>`:r.err?`<div class="card none">${esc(r.err)}</div>`:r.state?`<div class="svgrid edgegrid">${idealHtml(l)}</div>`:edgeHtml(l,r)}</section>`}).join("")}</div>`;
     if(h!==MV.lastHtml){MV.lastHtml=h;el.innerHTML=h;mvBind(el)}return}
   if(!R){h+=`<div class="card none">${MV.busy?"⏳ Crunching rosters, projections and trade combinations…":"Loading…"}</div>`;if(h!==MV.lastHtml){MV.lastHtml=h;el.innerHTML=h;mvBind(el)}return}
   if(R.err){h+=`<div class="card none">${esc(R.err)}</div>`;if(h!==MV.lastHtml){MV.lastHtml=h;el.innerHTML=h;mvBind(el)}return}
@@ -5455,6 +5489,131 @@ const CHEST_SVG='<svg class="chest" viewBox="0 0 24 24" aria-hidden="true"><path
 function ilPairs(R){if(!R||!R.rec)return[];const outs=R.outs.slice(),fx=id=>eligOf(id).some(z=>["RB","WR","TE"].includes(z)),pairs=[];
   R.ins.slice().sort((a,b)=>R.info[b.id].v-R.info[a.id].v).forEach(x=>{const ei=eligOf(x.id);let k=outs.findIndex(o=>eligOf(o).some(z=>ei.includes(z)));if(k<0)k=outs.findIndex(o=>fx(o)&&fx(x.id));if(k<0&&outs.length)k=0;
     const o=k>=0?outs.splice(k,1)[0]:null;pairs.push({inn:x.id,out:o,sl:x.sl,gain:R.info[x.id].v-(o?R.info[o].v:0)})});return pairs}
+function twState(lg){
+  MV.tw=MV.tw||{};const k=String(lg.id);
+  if(!MV.tw[k]){let d={};try{d=JSON.parse(load("tw_"+k)||"{}")||{}}catch(e){}
+    const clean=x=>Array.isArray(x)?[...new Set(x.filter(v=>typeof v==="string"&&v))].slice(0,4):[];
+    MV.tw[k]={give:clean(d.give),get:clean(d.get),partner:String(d.partner||"")}}
+  return MV.tw[k];
+}
+function twOwner(lg,id){
+  const r=(lg.rosters||[]).find(r=>[...(r.players||[]),...(r.reserve||[]),...(r.taxi||[])].includes(id));return r?r.roster_id:null;
+}
+function twEvaluate(lg,R,T){
+  const result={ok:false,issues:[],notes:[],sides:[]};
+  if(!R||R.err){result.info="Waiting for league projections.";return result}
+  if(R.state||!R.wk||!R.ws||!R.ws.length){result.info=R.state==="ended"?"Season is over. No future projections available.":"Reliable rest-of-season projections are unavailable.";return result}
+  if(!T.give.length||!T.get.length){result.info="Select at least one player per side to evaluate.";return result}
+  if(T.give.length>4||T.get.length>4)result.issues.push("Four players maximum per side.");
+  if(new Set([...T.give,...T.get]).size!==T.give.length+T.get.length)result.issues.push("A player cannot be on both sides.");
+  const owners=[...new Set(T.get.map(id=>twOwner(lg,id)).filter(x=>x!=null).map(String))];
+  const pr=T.partner|| (owners.length===1?owners[0]:"");
+  const other=R.teams&&R.teams.find(t=>String(t.rid)===String(pr)&&!t.mine);
+  if(!other)result.issues.push("Choose a trade partner, or receive players owned by one manager.");
+  const wrongGive=T.give.filter(id=>!R.me.ids.includes(id)||String(twOwner(lg,id))!==String(R.me.rid));
+  if(wrongGive.length)result.issues.push("Not on your active roster: "+wrongGive.map(id=>pinfo(id).name).join(", "));
+  const wrongGet=T.get.filter(id=>!other||!other.ids.includes(id)||String(twOwner(lg,id))!==String(other.rid));
+  if(other&&wrongGet.length)result.issues.push("Not on "+other.name+"'s active roster: "+wrongGet.map(id=>pinfo(id).name).join(", "));
+  const unknown=[...T.give,...T.get].filter(id=>!Array.isArray(R.wk[id])||R.wk[id].length!==R.ws.length);
+  if(unknown.length)result.issues.push("Projection missing (can't score fairly): "+unknown.map(id=>pinfo(id).name).join(", "));
+  if(result.issues.length)return result;
+  function side(team,give,get){
+    const after=R.swap(team.ids,give,get);
+    const before=team.wks,projected=R.ws.map((w,i)=>bestLineup(after,R.slots,id=>(R.wk[id]||[])[i]||0).pts);
+    const changes=projected.map((v,i)=>v-before[i]),gain=changes.reduce((a,b)=>a+b,0)/changes.length;
+    const prevStart=bestLineup(team.ids,R.slots,R.V).set,newStart=bestLineup(after,R.slots,R.V).set;
+    const starters=get.filter(id=>newStart.has(id)),bench=get.filter(id=>!newStart.has(id));
+    const stepping=[...newStart].filter(id=>!prevStart.has(id)&&!get.includes(id)),displaced=[...prevStart].filter(id=>!newStart.has(id)&&!give.includes(id));
+    const value=ids=>ids.reduce((s,id)=>s+(R.aval?R.aval(id):R.V(id)),0);
+    const asset=value(get)-value(give),warn=[],sig=[],min=Math.min(...changes);
+    let penalty=0;
+    get.forEach(id=>{const p=pinfo(id),inj=p.inj||"",raw=S.players[id]||{},active=(R.wk[id]||[]).filter(v=>v>0).length;
+      if(/^(Out|IR|PUP|NFI|Suspended|COV)$/i.test(inj)){warn.push(p.name+": "+inj);penalty+=12}
+      else if(/^Doubtful$/i.test(inj)){warn.push(p.name+": Doubtful");penalty+=8}
+      else if(/^Questionable$/i.test(inj)){warn.push(p.name+": Questionable");penalty+=3}
+      if(active<Math.min(2,R.ws.length)){warn.push(p.name+": thin projection coverage");penalty+=3}
+      if(raw.years_exp===0)sig.push(p.name+": rookie uncertainty");
+      const tr=MV.trend&&MV.trend[id];if(tr&&tr.r<=25)sig.push(p.name+" trending #"+tr.r+" in Sleeper adds");
+      const nw=MV.news&&MV.news[id];if(nw&&nw.h)sig.push(p.name+" news: "+nw.h.slice(0,90))
+    });
+    ["QB","RB","WR","TE"].forEach(pos=>{
+      if(!R.slots.some(s=>(ELIG2[s]||[s]).includes(pos)))return;
+      const c=ids=>ids.filter(id=>pinfo(id).pos===pos).length;
+      const orig=c(team.ids),next=c(after),needed=[...newStart].filter(id=>pinfo(id).pos===pos).length;
+      if(orig>needed&&next<=needed&&next<orig){warn.push("No spare "+pos+" after trade");penalty+=5}
+    });
+    const need=R.prof&&R.prof[team.rid]&&R.prof[team.rid].need;
+    if(need&&need.d<-.5&&starters.some(id=>pinfo(id).pos===need.z))sig.unshift("Fills weak "+need.z+" position");
+    if(starters.length)sig.unshift("Incoming starters: "+starters.map(id=>pinfo(id).name).join(", "));
+    if(bench.length)sig.push("Incoming bench only: "+bench.map(id=>pinfo(id).name).join(", "));
+    if(stepping.length)sig.push("Steps up: "+stepping.map(id=>pinfo(id).name).join(", "));
+    if(displaced.length)sig.push("To bench: "+displaced.map(id=>pinfo(id).name).join(", "));
+    if(asset< -1.5)warn.push("You surrender "+(-asset).toFixed(1)+" more points/week above waiver replacement");
+    if(min< -1)warn.push("Projected lineup declines in W"+R.ws[changes.indexOf(min)]);
+    const score=Math.max(0,Math.min(100,Math.round(50+28*Math.tanh(gain/3)+9*Math.tanh(asset/4)+8*Math.tanh(min/3)-Math.min(22,penalty))));
+    return{team,score,gain,asset,changes,before,projected,starters,bench,warn,sig};
+  }
+  result.sides=[side(R.me,T.give,T.get),side(other,T.get,T.give)];
+  result.ok=true;result.other=other;
+  const [a,b]=result.sides;
+  result.info=a.gain>0.5&&b.gain>0.5?"Both lineups project to improve.":a.gain<-.5?"Your lineup projects worse after this trade.":b.gain<-.5?"You benefit, but the other manager loses projected lineup strength.":"This is close on projected lineup value; consider risk and depth.";
+  const DL=Number((lg.league.settings||{}).trade_deadline||0);
+  if(DL&&S.nflWeek>DL)result.notes.push("The league's Week "+DL+" trade deadline appears to have passed.");
+  result.notes.push("0–100 is a decision score, not a probability. It combines best-lineup gain, replacement-adjusted asset value, worst upcoming week and roster risks. Weeks modeled: "+R.ws.map(w=>"W"+w).join(", ")+".");
+  return result;
+}
+function twSuggestions(lg,R,T,side,term){
+  const q=String(term||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").trim().replace(/\s+/g," ");
+  if(!q||!S.players)return[];
+  const activePos=new Set((R&&R.slots||[]).flatMap(s=>ELIG2[s]||[s])),chosen=new Set([...T.give,...T.get]),found=[];
+  for(const id in S.players){if(chosen.has(id))continue;const p=S.players[id];
+    if(!p||!p.full_name||!p.team||p.team==="FA"||p.team==="")continue;
+    const name=p.full_name.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"");if(!name.includes(q))continue;
+    if(activePos.size&&!(p.fantasy_positions||[p.position]).some(pos=>activePos.has(pos)))continue;
+    const rid=twOwner(lg,id),mine=String(rid)===String(lg.mineRid),relevant=side==="give"?mine:rid!=null&&!mine;
+    const weight=(relevant?2000:0)+(name.startsWith(q)?1000:name.split(/\s+/).some(w=>w.startsWith(q))?500:0)+(R&&R.wk&&R.wk[id]?Math.min(150,Math.max(0,R.V(id))*5):0);
+    found.push({id,p,rid,weight,relevant})}
+  return found.sort((a,b)=>b.weight-a.weight||a.p.full_name.localeCompare(b.p.full_name)).slice(0,10);
+}
+function twHTML(lg,R){
+  const T=twState(lg),Q=twEvaluate(lg,R,T),visible=edgeLeagues(),f=n=>(n>=0?"+":"")+n.toFixed(1);
+  const player=id=>{const p=pinfo(id);return`<span class="tw-player"><small>${esc(p.pos)}</small><b>${esc(p.name)}</b><em>${R&&R.wk&&R.wk[id]?R.V(id).toFixed(1)+"/wk":"—"}</em><button type="button" data-tw-rm="${esc(id)}" aria-label="Remove ${esc(p.name)}">×</button></span>`};
+  const side=(k,lab,hint)=>`<div class="tw-side ${k}"><div class="tw-side-head"><b>${lab}</b><span>${T[k].length}/4 players</span></div><small>${hint}</small><div class="tw-players">${T[k].map(player).join("")||'<span class="tw-muted">No players selected</span>'}</div><div class="tw-autocomplete"><input type="search" data-tw-search="${k}" autocomplete="off" aria-label="Search ${lab}" placeholder="${T[k].length===4?"4 player limit":"Search any part of a player's name"}" ${T[k].length>=4?"disabled":""}><div class="tw-suggest" role="listbox" hidden></div></div></div>`;
+  const managers=R&&R.teams?R.teams.filter(t=>!t.mine):[];
+  const opts=managers.map(m=>`<option value="${esc(String(m.rid))}"${String(T.partner)===String(m.rid)?" selected":""}>${esc(m.name)}</option>`).join("");
+  const sc=(x,title)=>{const label=x.score>=70?"Strong yes":x.score>=60?"Lean yes":x.score>=45?"Close call":x.score>=35?"Lean no":"Avoid";
+    return`<div class="tw-grade ${x.score>=60?"positive":x.score<45?"negative":"even"}"><div class="tw-grade-title"><b>${title}</b><span>${label}</span></div><div class="tw-grade-body"><strong>${x.score}<small>/100</small></strong><div><span>Lineup change</span><b class="${x.gain>=0?"up":"dn"}">${f(x.gain)} pts/wk</b><span>Asset value vs waivers</span><b class="${x.asset>=0?"up":"dn"}">${f(x.asset)} pts/wk</b></div></div><div class="tw-progress"><i style="width:${x.score}%"></i></div></div>`};
+  const insight=(x,title)=>`<div class="tw-insight"><b>${title}</b><div class="tw-week">${x.changes.map((v,i)=>`<span class="${v>=0?"up":"dn"}" data-tip="W${R.ws[i]} best lineup: ${x.before[i].toFixed(1)} → ${x.projected[i].toFixed(1)}">W${R.ws[i]} <strong>${f(v)}</strong></span>`).join("")}</div><div class="tw-signals">${x.sig.slice(0,7).map(y=>`<span>✦ ${esc(y)}</span>`).join("")}${x.warn.map(y=>`<span class="tw-risk">⚠ ${esc(y)}</span>`).join("")||'<span>✓ No material risk flags from available data</span>'}</div></div>`;
+  const body=!Q.ok?`<div class="tw-pending">${Q.issues.length?`<b>Resolve before scoring</b>${Q.issues.map(i=>`<span>⚠ ${esc(i)}</span>`).join("")}`:esc(Q.info)}</div>`:
+    `<div class="tw-summary">${esc(Q.info)}</div><div class="tw-results">${sc(Q.sides[0],"YOUR SIDE")}${sc(Q.sides[1],"THEIR SIDE")}</div><div class="tw-insightgrid">${insight(Q.sides[0],"Why it helps or hurts you")}${insight(Q.sides[1],"Why the other manager might accept")}</div>${Q.notes.map(n=>`<p class="tw-note">${esc(n)}</p>`).join("")}`;
+  return`<section class="card tw-workbench" id="tw-workbench" data-lg="${esc(String(lg.id))}">
+    <div class="tw-head"><div><h2>⚖ Trade Analyzer <span>EDGE</span></h2><p>Build your trade. Scores and recommendations update with every change.</p></div><div class="tw-actions">${visible.length>1?`<label>LEAGUE <select id="tw-lg">${visible.map(l=>`<option value="${esc(String(l.id))}"${String(l.id)===String(lg.id)?" selected":""}>${esc(l.league.name)}</option>`).join("")}</select></label>`:""}<button class="mvb" id="tw-clear" type="button" ${!T.give.length&&!T.get.length?"disabled":""}>↺ Clear</button></div></div>
+    <div class="tw-sides">${side("give","YOU GIVE","Your current roster")}${side("get","YOU RECEIVE","From one opposing manager")}</div>
+    <div class="tw-partner"><label>TRADE WITH <select id="tw-partner"><option value="">Detect from received players</option>${opts}</select></label><small>Rest-of-season lineup projections · max 4 per side</small></div>
+    <div id="tw-out" aria-live="polite">${body}</div></section>`;
+}
+function twWire(el){
+  const root=el.querySelector("#tw-workbench");if(!root)return;
+  const lg=S.L.find(l=>String(l.id)===root.dataset.lg),R=MV.res[lg.id],T=twState(lg);
+  const redraw=side=>{save("tw_"+lg.id,JSON.stringify(T));MV.lastHtml="";mvRender();const n=side&&document.querySelector('#tw-workbench [data-tw-search="'+side+'"]');if(n&&!n.disabled)n.focus()};
+  const clear=root.querySelector("#tw-clear");if(clear)clear.onclick=()=>{T.give=[];T.get=[];T.partner="";redraw()};
+  const manager=root.querySelector("#tw-partner");if(manager)manager.onchange=()=>{T.partner=manager.value;redraw()};
+  const league=root.querySelector("#tw-lg");if(league)league.onchange=()=>{MV.lg=league.value;MV.lastHtml="";mvRender();if(!MV.res[MV.lg])mvTick(true)};
+  root.querySelectorAll("[data-tw-rm]").forEach(b=>b.onclick=()=>{T.give=T.give.filter(x=>x!==b.dataset.twRm);T.get=T.get.filter(x=>x!==b.dataset.twRm);redraw()});
+  root.querySelectorAll("[data-tw-search]").forEach(input=>{
+    const k=input.dataset.twSearch,list=input.parentElement.querySelector(".tw-suggest");let options=[],active=-1;
+    const add=id=>{if(T[k].length>=4||T.give.includes(id)||T.get.includes(id))return;T[k].push(id);redraw(k)};
+    const update=()=>{options=twSuggestions(lg,R,T,k,input.value);active=-1;list.hidden=!input.value.trim();
+      list.innerHTML=options.map(a=>{const mgr=R&&R.teams&&R.teams.find(t=>String(t.rid)===String(a.rid));
+        return`<button type="button" role="option" data-tw-add="${esc(a.id)}" aria-selected="false"><b>${esc(a.p.full_name)}</b><small>${esc(a.p.position||"")} · ${esc(a.p.team)} · ${mgr?esc(mgr.name):"Free agent"}${a.relevant?"":" · ⚠ other roster"}</small></button>`}).join("")||'<span class="tw-muted">No matches</span>';
+      list.querySelectorAll("[data-tw-add]").forEach(b=>{b.onmousedown=e=>e.preventDefault();b.onclick=()=>add(b.dataset.twAdd)})};
+    input.oninput=update;input.onfocus=()=>{if(input.value.trim())update()};
+    input.onkeydown=e=>{if(e.key==="Escape"){list.hidden=true;return}
+      if(e.key==="ArrowDown"||e.key==="ArrowUp"){if(!options.length)return;e.preventDefault();active=(active+(e.key==="ArrowDown"?1:-1)+options.length)%options.length;list.querySelectorAll("button").forEach((b,i)=>{b.classList.toggle("on",i===active);b.setAttribute("aria-selected",i===active?"true":"false")})}
+      if(e.key==="Enter"&&options.length){e.preventDefault();add(options[Math.max(0,active)].id)}};
+    input.onblur=()=>setTimeout(()=>{list.hidden=true},120)
+  });
+}
 function edgeHtml(lg,R){
   const f1=x=>x.toFixed(1),IR=IL.res[lg.id],V=R.V||(()=>0);
   const pic=id=>{const p=pinfo(id);return p.pos==="DEF"?`https://sleepercdn.com/images/team_logos/nfl/${String(p.team).toLowerCase()}.png`:`https://sleepercdn.com/content/nfl/players/thumb/${id}.jpg`};
@@ -5486,7 +5645,7 @@ function edgeHtml(lg,R){
 }
 function tradeUrl(lg){if(lg.provider==="sleeper")return`https://sleeper.com/leagues/${lg.providerLeagueId}/trades`;return lg.adapter&&lg.adapter.leagueUrl?lg.adapter.leagueUrl(lg):""}
 function mvSec(key,title,sub,body,cls){const o=MV.open[key]!==false;return`<div class="card svc${cls?" "+cls:""}"><div class="lh svh" data-k="${key}"><span><span class="chev">${o?"▾":"▸"}</span>${title}</span><small>${sub||""}</small></div>${o?body:""}</div>`}
-function mvBind(el){bindMods(el);
+function mvBind(el){bindMods(el);twWire(el);
   const lk=el.querySelector("#edgelk");if(lk)lk.onclick=()=>edgeLock();
   const bk=el.querySelector("#mvback");if(bk)bk.onclick=()=>{if(MV.view==="edge"){setTab("t")}else setTab("m")};
   const ed=el.querySelector("#mvedge");if(ed)ed.onclick=()=>setTab("e");
