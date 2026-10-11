@@ -1797,13 +1797,6 @@ html[data-theme=light] #labev .lbe.on{background:#e9e1ff!important;color:#281455
 
 
 /* Wingman v1.4 · component fixes (desktop and mobile) */
-/* Distinct swing-factor icon, not a text pill and not ESPN Boost. */
-.lev.swing,.lev.swing.op{display:inline-flex;align-items:center;justify-content:center;
-  width:23px;height:23px;min-width:23px;padding:0;border:0!important;background:none!important;
-  color:var(--a);font-size:19px;line-height:1;vertical-align:middle;filter:none!important;
-  text-shadow:0 0 calc(2px + var(--k,0)*6px) rgba(167,133,255,.25);cursor:help}
-.lev.swing.op{color:var(--b);text-shadow:0 0 calc(2px + var(--k,0)*6px) rgba(61,214,230,.25)}
-.lev.swing:hover,.lev.swing:focus-visible{background:rgba(167,133,255,.12)!important;border-radius:6px}
 /* Toast text must never disappear or compete with the trailing score. */
 .toast .tb{flex:1 1 auto;min-width:0;padding:0!important;background:transparent!important;border:0!important;cursor:default!important}
 .toast .tt{display:flex;align-items:center;min-width:0;gap:8px;max-width:100%}
@@ -1817,7 +1810,6 @@ html[data-theme=light] #labev .lbe.on{background:#e9e1ff!important;color:#281455
 .toast.toast-touchdown .ts{color:#f6f5fa!important;font-size:12px}
 html[data-theme=light] .toast.toast-touchdown{background:#111827!important}
 /* The replay field goal is a U-shaped set of uprights, not a T glyph. */
-@media(max-width:760px){.lev.swing,.lev.swing.op{width:21px;height:21px;min-width:21px;font-size:18px}}
 
 /* ===== Wingman v1.5 · replay, Plays, player + trade polish ===== */
 /* Fixed three-row rhythm on every desktop matchup, including empty play slots. */
@@ -1827,17 +1819,22 @@ html[data-theme=light] .toast.toast-touchdown{background:#111827!important}
   .play-side .play-cols{height:24px;min-height:24px;max-height:24px}
 }
 /* Exposure rings only reflect starters, including D/ST. */
-/* Swing-factor is an inline action/status glyph like all the other player indicators. */
-.lev.swing,.lev.swing.op{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;
- width:19px;height:19px;min-width:19px;padding:0;line-height:1;font-size:13px;
- border:1px solid rgba(167,133,255,.62)!important;border-radius:6px;
- color:#d5c4ff;background:rgba(167,133,255,.16)!important;
- box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 0 calc(2px + var(--k)*5px) rgba(167,133,255,.14);
- text-shadow:none;filter:none!important;vertical-align:middle}
-.lev.swing.op{color:#bbf5ff;border-color:rgba(61,214,230,.55)!important;
- background:rgba(61,214,230,.12)!important;box-shadow:0 0 calc(2px + var(--k)*5px) rgba(61,214,230,.17)}
-html[data-theme=light] .lev.swing{color:#5830ad;background:#f0eaff!important}
-html[data-theme=light] .lev.swing.op{color:#006d82;background:#e7faff!important}
+/* v1.7 · Swing Factor: same standalone emoji size and soft glow as hot/cold.
+   ⚖️ is intentionally distinct from ESPN+; no chip, box, or text pill. */
+.lev.swing,.lev.swing.op{
+ display:inline-grid;place-items:center;width:auto;height:auto;min-width:0;min-height:0;
+ margin:0 2px;padding:0;line-height:1;font-size:12px;font-weight:400;
+ vertical-align:1px;border:0!important;border-radius:0;
+ background:transparent!important;box-shadow:none!important;text-shadow:none!important;
+ opacity:1!important;transform:none!important;white-space:nowrap;cursor:help;
+ filter:drop-shadow(0 0 calc(2px + var(--k,0)*4px) rgba(167,133,255,.75))!important;
+}
+.lev.swing.op{
+ filter:drop-shadow(0 0 calc(2px + var(--k,0)*4px) rgba(61,214,230,.75))!important;
+}
+.lev.swing:hover,.lev.swing:focus-visible{background:transparent!important;border-radius:0;}
+@media(max-width:760px){.lev.swing,.lev.swing.op{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.lev.swing,.lev.swing.op{transition:none!important;animation:none!important}}
 /* Player projection changes start tinting immediately, no one-point threshold. */
 .pjc.o{color:#68dea2!important;opacity:1}.pjc.u{color:#ff898e!important;opacity:1}
 html[data-theme=light] .pjc.o{color:#128347!important}.pjc.u{color:#d43939!important}
@@ -1855,6 +1852,62 @@ tr.pr:hover td.fxc>.fx::after,tr.pr:hover td.fxc>.fx.fxR::after,tr.pr:hover td.f
 .rpfollow.on{color:var(--pos)!important;border-color:rgba(62,207,116,.4)!important}
 .rp-fg-flight{stroke-linecap:round;stroke-dasharray:8 5;filter:drop-shadow(0 0 3px rgba(245,197,66,.35))}
 @media(max-width:760px){.rpfollow{font-size:10px!important;padding:4px 6px!important}}
+
+/* ================= Survivor v1.6 — game-day first, no redundant mini-metrics ================= */
+#surv{--sv16-safe:#3ecf74;--sv16-risk:#ff6b6b}
+.sv16-hero{padding:14px 16px 12px;display:flex;flex-direction:column;gap:12px}
+.sv16-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.sv16-brand{display:flex;flex-direction:column;gap:5px;min-width:0}.sv16-brand .svt{font-size:17px;font-weight:800;line-height:1.15}.sv16-meta{font-size:11px;color:var(--mute)}
+.sv16-tools{display:flex;align-items:center;gap:10px;justify-content:flex-end}.sv16-sync{font-size:10px;color:var(--mute);white-space:nowrap}
+.sv16-weekpick{position:relative;z-index:10}.sv16-weekpick summary{list-style:none;cursor:pointer;border:1px solid rgba(167,133,255,.5);border-radius:8px;padding:6px 10px;background:var(--s2);font-weight:800;font-size:12px;min-width:88px;text-align:center}.sv16-weekpick summary::-webkit-details-marker{display:none}.sv16-weekpick summary span{color:var(--mute);margin-left:5px}.sv16-weekpick[open]>.svwk{position:absolute;top:calc(100% + 7px);right:0;width:288px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--s1);box-shadow:0 16px 36px rgba(0,0,0,.5);z-index:10}.sv16-weekpick .wkb{width:100%;height:32px}
+.sv16-main{display:grid;grid-template-columns:minmax(220px,1.2fr) minmax(0,3fr);gap:14px;align-items:stretch}
+.sv16-signal{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:11px;background:rgba(62,207,116,.06);border:1px solid rgba(62,207,116,.25);min-width:0}.sv16-signal.watch{background:rgba(240,163,35,.06);border-color:rgba(240,163,35,.35)}.sv16-signal.danger{background:rgba(255,107,107,.08);border-color:rgba(255,107,107,.45)}
+.sv16-sigico{flex:none;width:35px;height:35px;border-radius:50%;display:grid;place-items:center;font-size:21px;font-weight:900;background:rgba(62,207,116,.15);color:var(--pos)}.sv16-signal.watch .sv16-sigico{background:rgba(240,163,35,.15);color:var(--up)}.sv16-signal.danger .sv16-sigico{background:rgba(255,107,107,.15);color:var(--neg)}
+.sv16-signal>div:last-child{display:flex;flex-direction:column;gap:4px;min-width:0}.sv16-signal b{font-size:17px;letter-spacing:-.015em}.sv16-signal small{font-size:11px;line-height:1.4;color:var(--mute)}
+.sv16-nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.sv16-nums>div{background:rgba(255,255,255,.028);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;min-width:0;gap:4px}.sv16-nums small{font-size:9px;letter-spacing:.05em;color:var(--mute);font-weight:800}.sv16-nums strong{font:800 28px/1 var(--fnum);font-variant-numeric:tabular-nums;color:var(--ink)}.sv16-nums strong.danger{color:var(--neg)}.sv16-nums em{font-style:normal;font-size:13px;font-weight:600;color:var(--mute)}.sv16-nums span{font-size:10px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sv16-choices{display:flex;align-items:center;gap:12px;min-width:0;flex-wrap:wrap}.sv16-label{font-size:10px;font-weight:800;letter-spacing:.07em;color:var(--mute)}.sv16-picks{display:flex;gap:7px;flex-wrap:wrap}.sv16-pick{display:flex;align-items:center;gap:5px;border:1px solid var(--line);padding:5px 9px;border-radius:999px;font-size:11px;min-width:0}.sv16-pick .tl{width:17px;height:17px;margin:0}.sv16-pick b{color:var(--ink)}.sv16-pick i{font-style:normal;color:var(--mute)}.sv16-pick strong{font-size:13px;color:var(--mute)}.sv16-pick.won{border-color:rgba(62,207,116,.4);background:rgba(62,207,116,.07)}.sv16-pick.won strong{color:var(--pos)}.sv16-pick.lost{border-color:rgba(255,107,107,.45)}.sv16-pick.lost strong{color:var(--neg)}.sv16-pick.live strong{color:var(--up)}
+.sv16-foot{display:flex;justify-content:space-between;gap:12px;font-size:10px;color:var(--mute);border-top:1px solid var(--line);padding-top:9px}.sv16-foot b{color:var(--ink)}
+.sv16-rootgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:9px;padding:10px}.sv16-rootcard{display:flex;flex-direction:column;gap:8px;background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:11px;padding:12px;box-shadow:inset 3px 0 0 var(--b)}.sv16-rootcard.own{box-shadow:inset 3px 0 0 var(--a)}.sv16-roothead,.sv16-rootstatus{display:flex;justify-content:space-between;align-items:center;gap:10px}.sv16-roothead strong{font-size:11px;color:var(--b)}.sv16-rootflag{font-size:9px;font-weight:900;letter-spacing:.06em;color:var(--mute)}.sv16-rootflag.live{color:var(--pos)}
+.sv16-rootaction{display:flex;align-items:center;justify-content:space-between;gap:12px}.sv16-rootaction>span{font-size:10px;color:var(--mute);font-weight:800;letter-spacing:.06em}.sv16-rootaction>b{display:flex;align-items:center;gap:7px;font-size:17px;color:var(--ink)}.sv16-rootaction .tl{width:24px;height:24px;margin:0}.sv16-rootwhy{font-size:12px;line-height:1.45;color:var(--ink)}.sv16-rootstatus{padding-top:7px;border-top:1px solid rgba(255,255,255,.05);font-size:10px;color:var(--mute)}
+.sv16-teamsdone{display:flex;align-items:center;gap:12px;padding:10px 12px;flex-wrap:wrap}.sv16-teamsdone>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));flex:1;gap:8px;min-width:0}.sv16-teamcard{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.025);font-size:12px;min-width:0}.sv16-teamcard>div{display:flex;align-items:center;gap:4px;min-width:0}.sv16-teamcard .tl{width:20px;height:20px;margin:0}.sv16-teamcard>span{color:var(--mute)}.sv16-teamcard>strong{margin-left:auto;white-space:nowrap;font-size:11px;color:var(--pos)}.sv16-teamcard.lost>strong{color:var(--neg)}.sv16-teamletters{font-weight:700;color:var(--a)!important}
+.sv16-finished{padding:14px;display:flex;flex-direction:column;gap:10px}.sv16-finished>b{font-size:12px}.sv16-finished>div{display:flex;flex-wrap:wrap;gap:8px}.sv16-finished span{display:inline-flex;align-items:center;gap:4px;background:var(--s2);padding:8px 10px;border-radius:8px;font-size:11px}.sv16-finished .tl{width:18px;height:18px;margin:0}
+.sv16-race{padding:6px 10px 0}.sv16-rival{display:grid;grid-template-columns:42px minmax(140px,1.25fr) 50px minmax(100px,.7fr) 96px minmax(190px,1.65fr);gap:10px;align-items:center;padding:6px 8px;min-height:55px;border-radius:8px;border-bottom:1px solid rgba(255,255,255,.04)}.sv16-rival.hdr{font-size:10px;text-transform:uppercase;font-weight:800;color:var(--mute);min-height:22px;border:0;padding:0 8px}.sv16-rival.me{background:rgba(167,133,255,.1);box-shadow:inset 3px 0 0 var(--a)}.sv16-rrank{font-size:11px;color:var(--mute);font-weight:800}.sv16-rival.me .sv16-rrank{color:var(--a)}.sv16-rname{display:flex;flex-direction:column;gap:3px;min-width:0}.sv16-rname b{font-size:12px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.sv16-rname small{font-size:10px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sv16-rnum{display:flex;gap:3px;align-items:baseline}.sv16-rnum b{font:800 22px/1 var(--fnum)}.sv16-rnum small{color:var(--mute);font-size:9px}.sv16-rprogress{height:6px;border-radius:3px;background:var(--line);overflow:hidden}.sv16-rprogress i{display:block;height:100%;border-radius:3px;background:var(--b)}.sv16-rival.me .sv16-rprogress i{background:var(--a)}.sv16-rstate{font-size:10px}.sv16-rstate .w{color:var(--up)}.sv16-rstate .s{color:var(--pos)}.sv16-rchips{display:flex;gap:4px;flex-wrap:wrap;min-width:0}.sv16-rchips .chip{padding:3px 6px 3px 3px}.sv16-rchips .tl{margin:0;width:15px;height:15px}
+@media(max-width:1250px){.sv16-main{grid-template-columns:1fr}.sv16-rival{grid-template-columns:42px minmax(120px,1.25fr) 50px minmax(90px,.65fr) 82px minmax(150px,1.4fr);gap:7px}}
+@media(max-width:760px){.sv16-hero{padding:12px;gap:10px}.sv16-head{align-items:flex-start;gap:8px}.sv16-brand .svt{font-size:15px}.sv16-meta{font-size:10px;max-width:230px}.sv16-sync{display:none}.sv16-weekpick[open]>.svwk{right:0;width:min(288px,85vw)}.sv16-signal{padding:10px 12px}.sv16-signal b{font-size:15px}.sv16-nums{grid-template-columns:repeat(2,minmax(0,1fr))}.sv16-nums>div{padding:10px}.sv16-nums strong{font-size:25px}.sv16-foot{flex-wrap:wrap}.sv16-rootgrid{grid-template-columns:minmax(0,1fr);padding:8px}.sv16-race{padding:6px}.sv16-rival,.sv16-rival.hdr{grid-template-columns:34px minmax(0,1fr) 50px 80px;gap:7px}.sv16-rival.hdr>span:nth-child(4),.sv16-rival.hdr>span:nth-child(6){display:none}.sv16-rival .sv16-rprogress,.sv16-rival .sv16-rchips{display:none}.sv16-teamsdone{align-items:stretch}.sv16-teamsdone>div{grid-template-columns:minmax(0,1fr)}.sv16-teamcard{padding:8px 9px}.sv16-rname small{font-size:9px}.sv16-rnum b{font-size:19px}.sv16-rstate{text-align:right}.sv16-rival{min-height:50px}.sv16-rival.hdr{min-height:20px}.sv16-choices{gap:8px}.sv16-picks{gap:5px}}
+@media(min-width:761px) and (max-width:1100px){.sv16-rootgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+html[data-theme=light] .sv16-signal{background:rgba(22,146,74,.07)}html[data-theme=light] .sv16-nums>div,html[data-theme=light] .sv16-rootcard{background:#f6f7fa}
+
+/* Wingman v1.9 · readable live TD status in player cells.
+   NEVER reuse .td here: the generic touchdown/label class paints the background gold.
+   The possession football is displayed separately by .posball when the offense has possession. */
+.pm .pg.pg-touchdown {
+  display:inline-flex;align-items:center;box-sizing:border-box;max-width:100%;
+  color:#ffe08a!important;background:#10131c!important;
+  border:1px solid rgba(245,197,66,.66);border-radius:5px;
+  font-size:10px;font-weight:900;line-height:14px;letter-spacing:.025em;
+  padding:0 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  text-shadow:none!important;box-shadow:none!important;
+}
+html[data-theme=light] .pm .pg.pg-touchdown {
+  color:#ffe08a!important;background:#10131c!important;
+  border-color:#b58410;
+}
+/* Retain an obvious TD sweep/burst WITHOUT inserting another football emoji into the player cell. */
+.fx-td .tdrush,.fx-otd .tdrush,.fx-dtd .tdrush {
+  position:absolute;top:50%;height:4px;width:27px;margin-top:-2px;
+  border-radius:4px;background:linear-gradient(90deg,transparent,var(--fc,#f5c542));
+  box-shadow:0 0 10px var(--fc,#f5c542);
+  animation:wmTdSweep var(--fxd,2.5s) cubic-bezier(.35,0,.2,1) both;
+}
+@keyframes wmTdSweep {
+  0%,15% {left:20%;opacity:0}
+  22% {opacity:1}
+  67% {left:89%;opacity:1}
+  87%,100% {left:91%;opacity:0}
+}
+@media(prefers-reduced-motion:reduce) {
+  .fx-td .tdrush,.fx-otd .tdrush,.fx-dtd .tdrush{animation:none;opacity:0}
+}
 </style>
 </head>
 <body>
@@ -1884,7 +1937,7 @@ tr.pr:hover td.fxc>.fx::after,tr.pr:hover td.fxc>.fx.fxR::after,tr.pr:hover td.f
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.5</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.9</span></div>
   </div>
 </header>
 <main>
@@ -1908,7 +1961,7 @@ tr.pr:hover td.fxc>.fx::after,tr.pr:hover td.fxc>.fx.fxR::after,tr.pr:hover td.f
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.5";
+const WM_VERSION="1.9";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -2340,7 +2393,7 @@ const slotPill=pos=>{const k=/^(QB|RB|WR|TE|K|DEF|BN|IR)$/.test(pos)?pos:"FLX";r
 /* progressive live info: what matters right now replaces the normal team/clock line */
 function progLine(p,r){
   const fx=S.fx[p.id],g=S.games[p.team],lg=S.rlg;
-  if(fx&&/^(td|otd|dtd)$/.test(fx.k)&&Date.now()-fx.t<20000)return`<span class="pg td">🏈 TD${fx.pts!=null?" "+(fx.pts>=0?"+":"")+(+fx.pts).toFixed(1):""}</span>`;
+  if(fx&&/^(td|otd|dtd)$/.test(fx.k)&&Date.now()-fx.t<20000)return`<span class="pg pg-touchdown">TD${fx.pts!=null?" "+(fx.pts>=0?"+":"")+(+fx.pts).toFixed(1):""}</span>`;
   if(fx&&/^(int|fr|sack|safe|blk)$/.test(fx.k)&&Date.now()-fx.t<15000)return`<span class="pg big">${{int:"🙌 INT",fr:"🔁 Fumble recovery",sack:"💥 Sack",safe:"🛡 Safety",blk:"✋ Blocked kick"}[fx.k]}</span>`;
   if(r&&r.need)return miniTrack(r.a,r.need,"nd",`Needs about ${f2(r.need)} to reach the opponent's projected final (has ${f2(r.a)})`,[f2(r.a).replace(/\.00$/,""),f2(r.need)]);
   if(isRZ(p)&&p.pos==="DEF")return`<span class="pgv rz" title="${esc(g.oppT)} offense is in your D/ST red zone · defensive points allowed at risk"><i class="rzd"></i>⚠ ${esc(g.oppT)} inside 20</span>`;
@@ -2366,7 +2419,7 @@ function hotCold(r){const p=r.p,g=S.games[p.team];if(!g||g.state==="pre"||!/^(QB
 function levTag(p){const lg=S.rlg,L=lg&&S.sig&&S.sig.lev[lg.id],v=L&&L[p.id];if(!v||!v.top)return"";
   const k=Math.min(1,Math.abs(v.sw)/.25);
   const detail=`Swing factor: A big performance from ${p.name} could change who wins this matchup.`;
-  return`<span class="lev swing ${v.sw>=0?"me":"op"}" style="--k:${k.toFixed(2)}" data-tip="${esc(detail)}" title="${esc(detail)}" role="img" aria-label="${esc(detail)}">⚖</span>`}
+  return`<span class="lev swing ${v.sw>=0?"me":"op"}" style="--k:${k.toFixed(2)}" data-tip="${esc(detail)}" title="${esc(detail)}" role="img" aria-label="${esc(detail)}">⚖️</span>`}
 /* portrait (natural crop, never stretched) + NFL team mark bottom-right; initials when no headshot */
 const NFLCODE={LAR:"LA",WAS:"WAS"};
 const teamLogo=(t,px=40)=>`https://static.www.nfl.com/f_auto,h_${px},dpr_2.0,q_auto,w_${px}/league/api/clubs/logos/${NFLCODE[t]||t}`;
@@ -2400,7 +2453,10 @@ function ncell(lg,r,right){
   if(!r||r.empty)return`<td class="${c0}">–</td>`;
   const d=lg.delta[r.key],age=d?Date.now()-d.t:1e9;
   const dl=age<30000?`<i class="dlv ${d.d<0?"m":"p"}">${sg(d.d)}</i> `:"",hd=dl?" hasd":"";
-  const fin=settled(r.p),c=ou(r.e,r.b,.01),gm=S.games[r.p.team],hurt=fin&&gm&&gm.state==="in";
+  const gm=S.games[r.p.team],gameStarted=!!gm&&(gm.state==="in"||gm.state==="post");
+  // Only live/finished NFL games may tint player projections green/red.
+  // Pregame forecast adjustments remain neutral, with no direction arrow.
+  const fin=settled(r.p),c=gameStarted?ou(r.e,r.b,.01):"e",hurt=fin&&gm&&gm.state==="in";
   /* original projection: pre-game baseline, else current projection, else his season average */
   const pr0=lg.proj&&lg.proj[r.p.id],sa=seasonAvg(lg,r.p.id),ref=r.b>0?r.b:pr0>0?pr0:sa!=null?sa:(r.b!=null?r.b:pr0),refSrc=r.b>0||pr0>0?"pre-game projection":sa!=null?"season average (no pre-game projection was available)":"projection";
   const hasP=ref!=null;
@@ -2906,7 +2962,7 @@ const FXDUR={fg:1500,fg50:1750,td:1500,otd:1500,dtd:1600,sack:1300,int:1500,fr:1
   lead:1500,comeback:1600,hi:1500,lo:1500,upset:1600,win:1700,loss:1500,upwin:1800};
 Object.keys(FXDUR).forEach(k=>FXDUR[k]=Math.round(FXDUR[k]*1.65));
 const MODFX=new Set(["lead","comeback","hi","lo","upset","win","loss","upwin"]);
-const FXLAB={fg:["ⵖ","FIELD GOAL"],fg50:["ⵖ","50+ YARD FG"],sack:["💥","SACK"],int:["🙌","INTERCEPTION"],fr:["🏈","FUMBLE"],dtd:["🏈","DEFENSIVE TD"],safe:["🛡","SAFETY"],blk:["✋","BLOCKED"],td:["🏈","TOUCHDOWN"],otd:["🏈","OPPONENT TD"],
+const FXLAB={fg:["ⵖ","FIELD GOAL"],fg50:["ⵖ","50+ YARD FG"],sack:["💥","SACK"],int:["🙌","INTERCEPTION"],fr:["🏈","FUMBLE"],dtd:["","DEFENSIVE TD"],safe:["🛡","SAFETY"],blk:["✋","BLOCKED"],td:["","TOUCHDOWN"],otd:["","OPPONENT TD"],
   live:["●","LIVE"],rz:["🔴","RED ZONE"],regret:["↑","BENCH"],q:["Q","QUESTIONABLE"],out:["O","OUT"],inj:["✚","STATUS"],
   lead:["🔄","OPPONENT TAKES LEAD"],comeback:["⚡","YOU TAKE THE LEAD"],hi:["🔥","LEAGUE HIGH"],lo:["🧊","LEAGUE LOW"],upset:["⚠","UPSET ALERT"],win:["🏆","WIN"],loss:["","FINAL · LOSS"],upwin:["🎉","UPSET WIN"]};
 const prefersRM=()=>!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -2919,7 +2975,7 @@ function fxMarkup(k,o){
   const B='<i class="bl">🏈</i>',lab=L[1];
   const scene={
     fg:`<i class="fp"></i>${B}`,fg50:`<i class="fp"></i>${B}`,
-    td:`<i class="ez"></i><i class="gl"></i>${B}<i class="bst"></i>`,otd:`<i class="ez"></i><i class="gl"></i>${B}<i class="bst"></i>`,dtd:`<i class="ez"></i><i class="gl"></i>${B}<i class="bst"></i>`,
+    td:`<i class="ez"></i><i class="gl"></i><i class="tdrush"></i><i class="bst"></i>`,otd:`<i class="ez"></i><i class="gl"></i><i class="tdrush"></i><i class="bst"></i>`,dtd:`<i class="ez"></i><i class="gl"></i><i class="tdrush"></i><i class="bst"></i>`,
     sack:`<i class="qb"></i><i class="dl"></i><i class="sh"></i><i class="sh s2"></i>`,
     int:`${B}<i class="hd">🧤</i><i class="flash"></i>`,
     fr:`${B}<i class="scoop"></i>`,
@@ -3854,10 +3910,10 @@ document.addEventListener("click",()=>{if(Date.now()-(window._tipAt||0)>400)fltH
    default position without invalidating a saved order. Grips: drag (pointer), tap for ▲/▼, or focus + arrow keys.
    ===================================================================== */
 const MODDEF={m:["hero","lineup","plays","hook","tiles","bench"],f:["reel","stage","timeline","film"],t:["board","trades"],
-  e:["now","adds","stash","alerts","stream","ideal"],s:["overview","watch","rivals","swim","stand","chart","plan","rules"],p:["overview","help","cons","live","ins","board","hist","cfg"]};
-const MODWIDE={f:["reel","stage","timeline","film"],p:["overview","help","board"],e:["now","ideal"],t:["board","trades"],s:["overview","watch","rivals","swim","stand","chart","plan","rules"]};
+  e:["now","adds","stash","alerts","stream","ideal"],s:["overview","root","watch","rivals","stand","swim","chart","plan","rules"],p:["overview","help","cons","live","ins","board","hist","cfg"]};
+const MODWIDE={f:["reel","stage","timeline","film"],p:["overview","help","board"],e:["now","ideal"],t:["board","trades"],s:["overview","root","watch","rivals","stand","swim","chart","plan","rules"]};
 const MODNAME={hero:"Scoreboard",lineup:"Lineups",plays:"Plays",hook:"Low/high",tiles:"Matchups",bench:"Bench",reel:"Highlight reel",stage:"Replay stage",timeline:"Timeline",film:"Filmroom",log:"All plays",
-  board:"Rankings",trades:"Trades",now:"Do this now",adds:"Pickups",stash:"Watchlist",alerts:"Roster alerts",stream:"Streamers",ideal:"Ideal lineup",overview:"Overview",watch:"Survival Watch",
+  board:"Rankings",trades:"Trades",now:"Do this now",adds:"Pickups",stash:"Watchlist",alerts:"Roster alerts",stream:"Streamers",ideal:"Ideal lineup",overview:"Overview",root:"Rooting Guide",watch:"My Teams",
   rivals:"Rivals",swim:"Swimlanes",stand:"Standings",chart:"Elimination",plan:"Planner",rules:"Rules",help:"Picks helper",cons:"You vs pool",live:"My picks",ins:"Insights",hist:"History",cfg:"Settings"};
 const modBase=sc=>String(sc).split(":")[0];
 const layKey=sc=>sc==="m"?"order":"lay_"+sc;
@@ -4010,7 +4066,7 @@ async function connectAll(){
    SURVIVOR TAB — reads the pool's own Google Sheet (linked on the connections page),
    with live ESPN scores, win probabilities and a pick planner. Nothing about any pool is stored in this page.
    ===================================================================== */
-const SV={wph:{},d:{sheet:"",by:{}},cfg:null,st:"idle",err:"",lanes:null,res:{},week:null,src:"",syncAt:0,open:{watch:true,plan:false,rivals:true,chart:false,swim:false,stand:false,rules:false},q:"",lastHtml:"",known:{},late:{}};
+const SV={wph:{},d:{sheet:"",by:{}},cfg:null,st:"idle",err:"",lanes:null,res:{},week:null,src:"",syncAt:0,open:{root:true,watch:true,plan:false,rivals:true,chart:false,swim:false,stand:false,rules:false},q:"",lastHtml:"",known:{},late:{}};
 /* pool settings are stored with the linked sheet on this device: nothing about any pool ships in the page */
 const POOLDEF={survivor:{name:"Survivor Pool",me:"",split:1,price:0,reuse:"once",noThu:false,missed:"out"},pickem:{name:"Pick'em",me:"",dues:0,first:0,second:0,weekly:0}};
 function poolCfg(p){const c=(S.conns||getConns()).find(x=>x.p===p),sc=p==="survivor"?(typeof SV!=="undefined"&&SV.sheetCfg):(typeof PK!=="undefined"&&PK.sheetCfg);return Object.assign({},POOLDEF[p],sc||{},c&&c.cfg||{})}
@@ -4245,17 +4301,38 @@ function svRender(){
   const eKeep=dist?dist.reduce((s,p,k)=>s+p*k,0):eOur;
   const rp=p=>p<.05?"<5%":p>.95?">95%":Math.round(p*20)*5+"%";
   const distViz=dist&&!weekDone?`<div class="sdist" role="img" aria-label="Chance of keeping each number of lives this week">${dist.map((p,k)=>`<span class="sdb${k===dist.indexOf(Math.max(...dist))?" top":""}" data-tip="${esc(`${k} of ${myIn.length} lives survive W${V}: ${rp(p)}`)}"><i style="height:${Math.max(p>0?4:0,p/Math.max(...dist)*100).toFixed(0)}%"></i><b>${k}</b></span>`).join("")}</div>`:"";
-  let h=`<div class="svgrid svmods"><!--M:overview--><div class="card hero svhero"><div class="svtop"><div class="svti"><a class="svt lnk" href="https://docs.google.com/spreadsheets/d/${esc(SV.d.sheet)}/edit" target="_blank" rel="noopener" title="Open the pool's Google Sheet">🛟 ${esc(C.name)} <span class="ext">↗</span></a><span class="hu">${[hasMe?`${esc(C.me)} · ${start.our} ${start.our===1?"entry":"entries"}`:"Following the pool",C.split>1?`split ${C.split} ways`:"",C.price?`${svMoney(C.price)} each · jackpot ${svMoney(jackpot)}`:`${pool0} in the pool`].filter(Boolean).join(" · ")}</span></div>
-    <div class="svwk">${Array.from({length:18},(_,i)=>i+1).map(w=>`<button class="wkb ${w===V?"on":""} ${w>SV.maxPick?"fut":""}" data-w="${w}" title="Week ${w}${w>SV.maxPick?" (no picks yet)":""}">${w}</button>`).join("")}</div>
-    <span class="mt" title="Picks read from your Google Sheet${SV.syncAt?" at "+hm(new Date(SV.syncAt)):""}; results from the live NFL feed${SV.broken?` · ${SV.broken} row${SV.broken>1?"s":""} in the sheet show #REF! errors and were skipped`:""}">${SV.fails?"⚠ sheet unreachable · retrying":"● synced "+ago(SV.syncAt)}${SV.broken?" · ⚠ "+SV.broken+" #REF!":""}</span></div>
-    ${hasMe?`<div class="toks">${tok}</div>`:""}
-    <div class="kpis svk">
-      ${!hasMe?"":kpi("Your lives",`<b>${st.our}</b><small> of ${start.our}</small>`,weekDone?`entered W${V} with ${enter.our}`:`${myIn.length} in play this week`)}
-      ${!hasMe||weekDone||!myIn.length?"":kpi(`Expected after W${V}`,`<b>${eKeep.toFixed(1)}</b><small> of ${myIn.length}</small>`,`${unk?"some games have no line yet · ":""}most likely ${dist?dist.indexOf(Math.max(...dist)):"–"} survive`,"kd")+(distViz?`<div class="kpi kdv"><div class="kl">Lives kept in W${V}</div>${distViz}</div>`:"")}
-      ${kpi("Pool entries alive",`<b>${st.pool}</b><small> of ${pool0}</small>`,weekDone?`${enter.pool-st.pool} eliminated in W${V}`:`${ePool.toFixed(0)} expected after W${V}`)}
-      ${!hasMe?"":kpi("Share of remaining entries",`<b>${svFmtPct(share)}</b>`,C.price?`entry share × jackpot ≈ ${svMoney(share*jackpot)}${F>1?` · ${svMoney(share*jackpot/F)} each`:""} (not a win probability)`:"your entries ÷ entries still alive")}
-      ${!hasMe?"":kpi("Pool rank",`<b>${tie?"T-":""}${myRank}</b><small> of ${aliveParts}</small>`,lead&&lead.who!==C.me?`${esc(lead.who)} leads with ${lead.left}`:"leading the pool","k2")}
-    </div></div>`;
+  // v1.6: the hero reports FINAL vs PENDING lives, never combines a hypothetical expected pool size with confirmed survivors.
+  const gameForLife=l=>svPicks(l,V).map(t=>svRes(V,t));
+  const mySecured=myIn.filter(l=>{const a=gameForLife(l);return a.length&&a.every(R=>R&&R.r==="W")}).length;
+  const myUnresolved=myIn.filter(l=>gameForLife(l).some(R=>!R||!R.r)).length;
+  const myTrailing=myIn.filter(l=>gameForLife(l).some(R=>R&&R.st==="in"&&R.me<R.op)).length;
+  const myEliminated=Math.max(0,enter.our-st.our);
+  const myAllLost=myEliminated>0&&st.our===0;
+  const fieldUnresolved=inPlay.filter(l=>!isOurs(l)&&svPicks(l,V).some(t=>{const R=svRes(V,t);return!R||!R.r})).length;
+  const allMySettled=!!myIn.length&&myUnresolved===0;
+  const currentHeadline=!hasMe?"The pool is still in play":myTrailing?`${myTrailing} ${myTrailing===1?"entry is":"entries are"} trailing`:
+    myUnresolved?`${myUnresolved} ${myUnresolved===1?"entry still needs":"entries still need"} to survive`:
+    allMySettled?`${mySecured} of ${myIn.length} survived Week ${V}`:`${st.our} ${st.our===1?"life":"lives"} still standing`;
+  const gameDayHint=!myIn.length?"No picks recorded for this week yet":myUnresolved?"Watch your teams first · every pick has to win":
+    fieldUnresolved?"Your games are settled. Root for rivals to lose.":"Your games are settled. Check who else survived.";
+  const myChoices=Object.entries(myIn.reduce((o,l)=>{svPicks(l,V).forEach(t=>{const x=o[t]||(o[t]={team:t,letters:[]});x.letters.push(l.let)});return o},{}));
+  const chosenLine=myChoices.map(([t,x])=>{const R=svRes(V,t)||{},state=R.r==="W"?"won":R.r?"lost":R.st==="in"?"live":"pre";
+    return`<span class="sv16-pick ${state}" title="${esc(svGameTxt(V,t))}">${svLogo(V,t)}<b>${esc(t)}</b><i>${x.letters.join(", ")}</i><strong>${state==="won"?"✓":state==="lost"?"✕":state==="live"?"●":"○"}</strong></span>`}).join("");
+  const pills=ours.filter(l=>l.out&&l.out<V).length;
+  let h=`<div class="svgrid svmods"><!--M:overview--><div class="card hero svhero sv16-hero">
+    <div class="sv16-head"><div class="sv16-brand"><a class="svt lnk" href="https://docs.google.com/spreadsheets/d/${esc(SV.d.sheet)}/edit" target="_blank" rel="noopener" title="Open the pool spreadsheet">🛟 ${esc(C.name)} ↗</a>
+       <span class="sv16-meta">${esc(C.me||"")} · ${pool0} original entries${C.price?` · ${svMoney(C.price)} per entry`:""}${C.split>1?` · split ${C.split} ways`:""}</span></div>
+      <div class="sv16-tools"><details class="sv16-weekpick"><summary>Week ${V} <span>⌄</span></summary><div class="svwk">${Array.from({length:18},(_,i)=>i+1).map(w=>`<button class="wkb ${w===V?"on":""} ${w>SV.maxPick?"fut":""}" data-w="${w}" title="Week ${w}">${w}</button>`).join("")}</div></details>
+      <span class="sv16-sync" title="NFL results are live; picks sync from your Google Sheet">${SV.fails?"⚠ Sheet unavailable":`● synced ${ago(SV.syncAt)}`}</span></div></div>
+    ${hasMe?`<div class="sv16-main"><div class="sv16-signal ${myTrailing||myAllLost?"danger":myUnresolved||myEliminated?"watch":"safe"}"><div class="sv16-sigico">${myTrailing||myAllLost?"⚠":myUnresolved||myEliminated?"◉":"✓"}</div><div><b>${esc(currentHeadline)}</b><small>${esc(gameDayHint)}</small></div></div>
+      <div class="sv16-nums"><div><small>YOUR LIVES</small><strong>${st.our}<em> / ${start.our}</em></strong><span>${myEliminated?myEliminated+" lost this week":mySecured+" secured this week"}</span></div>
+      <div><small>STILL IN PLAY</small><strong class="${myTrailing?"danger":""}">${myUnresolved}</strong><span>${myTrailing?myTrailing+" currently behind":"Your entries unresolved"}</span></div>
+      <div><small>POOL STILL IN</small><strong>${st.pool}<em> / ${pool0}</em></strong><span>${Math.max(0,enter.pool-st.pool)} eliminated this week</span></div>
+      <div><small>YOUR POOL RANK</small><strong>${tie?"T-":""}${myRank}<em> / ${aliveParts}</em></strong><span>${lead&&lead.who!==C.me?`Leader: ${esc(lead.who)} · ${lead.left} lives`:"Currently leading"}</span></div></div></div>`:
+      `<div class="sv16-main"><div class="sv16-signal"><div class="sv16-sigico">◎</div><div><b>${currentHeadline}</b><small>${st.pool} of ${pool0} entries are not eliminated</small></div></div></div>`}
+    ${hasMe&&myChoices.length?`<div class="sv16-choices"><span class="sv16-label">YOUR W${V} PICKS</span><div class="sv16-picks">${chosenLine}</div></div>`:""}
+    ${hasMe?`<div class="sv16-foot"><span title="Share of surviving entries, not your probability of winning">Your entry share: <b>${svFmtPct(share)}</b> of entries still in (not win odds)</span><span>${fieldUnresolved} other entries awaiting outcomes</span></div>`:""}
+    </div>`;
   /* ---------- Survival Watch: one row per game that carries your lives ---------- */
   const fieldOn={};inPlay.filter(l=>!isOurs(l)).forEach(l=>svPicks(l,V).forEach(t=>fieldOn[t]=(fieldOn[t]||0)+1));
   const myOn={};myIn.forEach(l=>svPicks(l,V).forEach(t=>(myOn[t]=myOn[t]||[]).push(l.let)));
@@ -4288,17 +4365,47 @@ function svRender(){
   const fieldG={};Object.keys(fieldOn).forEach(t=>{if(myOn[t])return;const R=svRes(V,t)||{};if(R.oppN&&myOn[R.oppN])return;const k=gKey(t);if(!fieldG[k]||fieldOn[t]>fieldG[k].n)fieldG[k]={t,n:fieldOn[t],R,p:pT(t)}});
   const FG=Object.values(fieldG).filter(x=>!x.R.r||x.R.r!=="W").sort((a,b)=>(!!a.R.r-!!b.R.r)||b.n*(1-(b.p??.5))-a.n*(1-(a.p??.5))),FGs=SV.fAll?FG:FG.slice(0,4);
   const fRow=x=>`<div class="vwr fld${x.R.r?" fin":""}"><span class="vwt">${svLogo(V,x.t)}<b>${esc(nick(x.t))}</b></span><span class="vwl"><span class="vwf">${x.n} rival entr${x.n>1?"ies":"y"}</span></span><span class="vwp" data-tip="${esc(src(x.R))}">${x.p==null?"–":pctS(x.p)}</span><span class="vwe">${x.R.r?`<span class="vwx ok">${x.n} out</span>`:`<span class="pm">root for the upset</span>`}</span><span class="vws"><span class="vwss ${x.R.st==="in"?"l":"u"}">${x.R.st==="in"?`<b>${x.R.me}–${x.R.op}</b> ${esc((x.R.detail||"").replace(/\s*-\s*/," · "))}`:esc(x.R.r?"Final":x.R.date?new Date(x.R.date).toLocaleDateString([],{weekday:"short"})+" "+hm(new Date(x.R.date)):x.R.day||"")}</span></span></div>`;
-  const watch=`${gameRows.length?`<div class="vw0"><div class="vwh"><span>Team</span><span>Your entries</span><span>Win</span><span>Expected loss</span><span>Status</span></div>${gameRows.map(wRow).join("")}</div>`:`<div class="none">${hasMe?`None of your entries has a pick for W${V} yet.`:"Choose your entries in Rules & settings to watch them."}</div>`}
-    ${FG.length?`<div class="vw0 fl"><div class="vwh2">Field only · games that eliminate rivals, not you</div>${FGs.map(fRow).join("")}${FG.length>4?`<button class="mvb" id="swfall">${SV.fAll?"Show fewer":`All ${FG.length} field games`}</button>`:""}</div>`:""}`;
+  const pendingGames=gameRows.filter(g=>!g.fin),completedGames=gameRows.filter(g=>g.fin);
+  const settledCard=g=>{const mine=g.mine||[],R=mine[0]?.R||{},won=mine.every(x=>x.R.r==="W");
+    return`<div class="sv16-teamcard ${won?"won":"lost"}"><div>${mine.map(x=>`${svLogo(V,x.t)}<b>${esc(nick(x.t))}</b>`).join('<span class="pm">/</span>')}</div><span class="sv16-teamletters">${mine.flatMap(x=>x.my).join(", ")}</span><span>${R.me!=null?`${R.me}–${R.op}`:"Final"}</span><strong>${won?"✓ WON":"✕ LOST"}</strong></div>`};
+  const watch=gameRows.length?`${pendingGames.length?`<div class="vw0"><div class="vwh"><span>Team</span><span>Your entries</span><span>Win</span><span>Expected loss</span><span>Status</span></div>${pendingGames.map(wRow).join("")}</div>`:""}${completedGames.length?`<div class="sv16-teamsdone"><span class="sv16-label">${completedGames.length} FINISHED GAMES</span><div>${completedGames.map(settledCard).join("")}</div></div>`:""}`:
+    `<div class="none">${hasMe?`No entries with picks for Week ${V}.`:"Choose your entries to watch your picks."}</div>`;
+  // Week-specific rooting advice: maximize visible rivals eliminated, without ever recommending a result that kills our own entry.
+  const rootGroups=new Map();
+  Object.keys(fieldOn).forEach(t=>{const R=svRes(V,t);if(!R||R.r)return;const opp=R.oppN||"",k=gKey(t);
+    if(!rootGroups.has(k))rootGroups.set(k, new Set());rootGroups.get(k).add(t);if(opp)rootGroups.get(k).add(opp)});
+  const rooting=[];
+  for(const [k, sides] of rootGroups){const ts=[...sides];if(ts.length<2)continue;
+    const a=ts[0],b=ts[1],A=fieldOn[a]||0,B=fieldOn[b]||0,oursA=(myOn[a]||[]).length,oursB=(myOn[b]||[]).length;
+    if(oursA&&oursB)continue; // must never recommend eliminating one of our entries to harm a rival
+    let target,forTeam;
+    if(oursA){target=b;forTeam=a}else if(oursB){target=a;forTeam=b}
+    else {target=A>=B?a:b;forTeam=target===a?b:a}
+    const doomed=fieldOn[target]||0;if(!doomed)continue;
+    const R=svRes(V,target)||{},m=R.st==="in"?"live":"pre",personal=(myOn[forTeam]||[]).length;
+    rooting.push({target,forTeam,doomed,saved:fieldOn[forTeam]||0,personal,R,m,k,score:doomed+(personal?9999:0)+(m==="live"?500:0)})
+  }
+  rooting.sort((a,b)=>b.score-a.score);
+  const finishedRoot=Object.entries(fieldOn).map(([t,n])=>({t,n,R:svRes(V,t)})).filter(x=>x.n&&x.R&&x.R.r==="L"&&!(myOn[x.t]||[]).length).sort((a,b)=>b.n-a.n);
+  const rootCard=x=>{const live=x.m==="live",count=x.doomed,xR=svRes(V,x.forTeam)||{};
+    const status=live?`${x.R.me??"–"}–${x.R.op??"–"} · ${esc((x.R.detail||"Live").replace(/\s*-\s*/," · "))}`:
+      x.R.date?new Date(x.R.date).toLocaleDateString([],{weekday:"short"})+" · "+hm(new Date(x.R.date)):(x.R.day||"Upcoming");
+    return`<div class="sv16-rootcard ${x.personal?"own":""}"><div class="sv16-roothead"><span class="sv16-rootflag ${live?"live":"up"}">${live?"● LIVE":"UPCOMING"}</span><strong>${count} rival ${count===1?"entry":"entries"} at stake</strong></div>
+      <div class="sv16-rootaction"><span>ROOT FOR</span><b>${svLogo(V,x.forTeam)}${esc(x.forTeam)}</b></div>
+      <div class="sv16-rootwhy">${x.personal?`${x.personal} of your ${x.personal===1?"entries needs":"entries need"} ${esc(x.forTeam)} to win. `:""}${esc(x.target)} losing would eliminate ${count} rival ${count===1?"entry":"entries"}.</div>
+      <div class="sv16-rootstatus"><span>${status}</span><span>Other side: ${x.saved} rival ${x.saved===1?"entry":"entries"}</span></div></div>`};
+  const rootBody=rooting.length?`<div class="sv16-rootgrid">${rooting.slice(0,6).map(rootCard).join("")}</div>${rooting.length>6?`<div class="svnote">Showing 6 of ${rooting.length} games with rival elimination potential.</div>`:""}`:
+    finishedRoot.length?`<div class="sv16-finished"><b>Rival eliminations already confirmed</b><div>${finishedRoot.slice(0,5).map(x=>`<span>${svLogo(V,x.t)} <b>${esc(x.t)}</b> lost · ${x.n} rival ${x.n===1?"entry":"entries"} out</span>`).join("")}</div></div>`:
+    `<div class="none">${fieldUnresolved?"No games with an actionable rival-only result yet.":"No unresolved rival eliminations. Your pool results are up to date."}</div>`;
+  h+="<!--M:root-->"+svSec("root",rooting.length?"🎯 What to root for":"🎯 Rival outcomes",rooting.length?`${rooting.length} opportunities to eliminate rivals · your survival comes first`:"Confirmed eliminations and remaining rivals",rootBody);
   /* ---------- insights: only what moves a decision, nothing the watch rows already say ---------- */
   const ins=[];
   const stack=gameRows.filter(g=>!g.fin).map(g=>({g,n:g.mine.reduce((a,x)=>a+x.my.length,0)})).sort((a,b)=>b.n-a.n)[0];
   if(stack&&stack.n>=2&&myIn.length>2)ins.push(`<span class="ins r" data-tip="These entries win or lose together">🔗 ${stack.g.mine.map(x=>x.my.join(", ")).join(" + ")} rise or fall together with ${esc(stack.g.mine.map(x=>nick(x.t)).join("/"))}</span>`);
-  const up=FG.filter(x=>!x.R.r)[0];if(up&&up.n>=Math.max(3,st.pool*.02))ins.push(`<span class="ins g" data-tip="${esc(`If ${up.t} lose, ${up.n} rival entries are out and your share rises to ${svFmtPct(shareIf(0,up.n))}`)}">🎯 A ${esc(nick(up.t))} loss knocks out ${up.n} rival entries · share → ${svFmtPct(shareIf(0,up.n))}</span>`);
   if(hasMe&&!weekDone&&SV.prevE!=null&&Math.abs(eKeep-SV.prevE.v)>=.3)ins.push(`<span class="ins ${eKeep>SV.prevE.v?"g":"r"}" data-tip="Change in expected surviving lives since ${hm(new Date(SV.prevE.t))}">${eKeep>SV.prevE.v?"▲":"▼"} ${Math.abs(eKeep-SV.prevE.v).toFixed(1)} expected lives since ${hm(new Date(SV.prevE.t))}</span>`);
   if(!SV.prevE||SV.prevE.w!==V||Date.now()-SV.prevE.t>900000)SV.prevE={v:eKeep,t:Date.now(),w:V};
   if(ins.length)h+=`<div class="insrow">${ins.join("")}</div>`;
-  h+="<!--M:watch-->"+svSec("watch",`🛟 Survival Watch · W${V}`,`${gameRows.filter(g=>!g.fin).length} games carry your lives${gameRows.some(g=>g.lv)?" · live now":""}`,watch);
+  h+="<!--M:watch-->"+svSec("watch",`🛡 My teams · W${V}`,myUnresolved?`${myUnresolved} entries unresolved · ${myTrailing} currently trailing`:`${mySecured} entries secured · ${myEliminated} eliminated this week`,watch);
   /* ---------- planner for next week ---------- */
   const needV=svStarted(V)?[]:ours.filter(l=>l.alive&&!svSplit(l.p[V-1]).length);N=needV.length?V:V+1;const aliveNow=N===V?needV:ours.filter(l=>l.alive);
   const NR=SV.res[N]||{},sched=Object.keys(NR).filter(k=>NR[k]&&NR[k].st&&(!NR[k].sheet||NR[k].oppN));
@@ -4357,13 +4464,27 @@ function svRender(){
     plan=`${sug}${upset}${rows}<div class="svnote">💥 = lives lost at once if that team loses. ${blocked.length?`Not allowed this week (game day): ${blocked.map(esc).join(", ")}. `:""}${C.reuse==="once"?"Teams an entry already used are excluded for it. ":C.reuse==="gap1"?"Each entry's previous-week team is excluded. ":""}💎 = the team projects stronger in an upcoming week, so the plan prefers to save it. Win % from betting lines when posted, otherwise from each team's scoring margin this season.</div>`;
   }
   const PLAN="<!--M:plan-->"+svSec("plan",`🧺 Week ${N} portfolio planner`,aliveNow.length?`${aliveNow.length} lives to place · optimized together`:"",plan);
-  /* ---------- rivals ---------- */
-  const rivals=parts.filter(p=>p.left>0&&p.who!==C.me).slice(0,6);
-  const riv=[me.left?{...me,us:1}:null,...rivals].filter(Boolean).map(p=>{
-    const ls=SV.lanes.filter(l=>l.who===p.who&&(!l.out||l.out>=V)),dist={};ls.forEach(l=>{const t=svPick(l,V);if(t)dist[t]=(dist[t]||0)+1});
-    const ourT=new Set(ours.filter(l=>!l.out||l.out>=V).map(l=>svPick(l,V)).filter(Boolean)),seen=ls.filter(l=>svPick(l,V)),ov=seen.length&&ourT.size?Math.round(seen.filter(l=>ourT.has(svPick(l,V))).length/seen.length*100):null;
-    return`<div class="rvc ${p.us?"me":""}"><div class="rvh"><b>${p.us?"🟣 Us":esc(p.who)}</b><span class="pm">#${rankOf(p.left)} · ${p.left} ${p.left===1?"life":"lives"}</span></div>${p.us?"":ov==null?`<div class="rvo na" data-tip="${esc(ourT.size?"Their picks for this week aren't visible in the sheet yet":"Our picks for this week aren't in the sheet yet")}"><span class="rvob"></span>overlap — picks not visible yet</div>`:`<div class="rvo" data-tip="Share of their visible entries on the same teams as ours this week"><span class="rvob"><i style="width:${ov}%"></i></span>${ov}% same picks as us</div>`}<div class="rvd">${"●".repeat(Math.min(p.left,30))}</div><div class="chips">${Object.entries(dist).sort((a,b)=>b[1]-a[1]).map(([t,n])=>{const R=svRes(V,t)||{};return`<span class="chip ${R.r==="W"?"w":R.r?"l":R.st==="in"?(R.me>=R.op?"lv":"rk"):""}">${svLogo(V,t)}${n}</span>`}).join("")}</div></div>`}).join("");
-  h+="<!--M:rivals-->"+svSec("rivals","🏁 Rivals this week",`${aliveParts} participants alive`,`<div class="rvgrid">${riv}</div>`);
+  /* ---------- game-day rival race: leaders + people near our position, instead of tall card grids ---------- */
+  const rivals=parts.filter(p=>p.left>0&&p.who!==C.me);
+  const meIdx=parts.findIndex(p=>p.who===C.me),rmap=new Map();
+  [...parts.slice(0,3),...parts.slice(Math.max(0,meIdx-2),meIdx+3),...parts.filter(p=>p.left===me.left).slice(0,2)].filter(Boolean)
+    .forEach(p=>{if(p.left>0||p.who===C.me)rmap.set(p.who,p)});
+  const nearby=[...rmap.values()].sort((a,b)=>b.left-a.left||a.who.localeCompare(b.who)).slice(0,9);
+  const riv=nearby.map(p=>{const ls=SV.lanes.filter(l=>l.who===p.who&&(!l.out||l.out>=V));
+    const dist={};ls.forEach(l=>svPicks(l,V).forEach(t=>dist[t]=(dist[t]||0)+1));
+    const safe=ls.filter(l=>{const rs=svPicks(l,V).map(t=>svRes(V,t));return rs.length&&rs.every(R=>R&&R.r==="W")}).length;
+    const pending=ls.filter(l=>svPicks(l,V).some(t=>{const R=svRes(V,t);return!R||!R.r})).length;
+    const ourT=new Set(myIn.flatMap(l=>svPicks(l,V)));const seen=ls.filter(l=>svPicks(l,V).length);
+    const aligned=seen.filter(l=>svPicks(l,V).some(t=>ourT.has(t))).length;
+    const isMe=p.who===C.me;
+    const chips=Object.entries(dist).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([t,n])=>{const R=svRes(V,t)||{};return`<span class="chip ${R.r==="W"?"w":R.r?"l":R.st==="in"?(R.me>=R.op?"lv":"rk"):""}">${svLogo(V,t)}<b>${n}</b></span>`}).join("");
+    return`<div class="sv16-rival ${isMe?"me":""}"><span class="sv16-rrank">${isMe?"YOU":`#${rankOf(p.left)}`}</span>
+      <span class="sv16-rname" title="${esc(p.who)}"><b>${esc(p.who)}</b><small>${isMe?"Your entries":seen.length?`${aligned} of ${seen.length} entries on teams you also picked`:"Picks not available"}</small></span>
+      <span class="sv16-rnum"><b>${p.left}</b><small>${p.left===1?"life":"lives"}</small></span>
+      <span class="sv16-rprogress"><i style="width:${Math.round(p.left/Math.max(1,lead.left)*100)}%"></i></span>
+      <span class="sv16-rstate">${pending?`<b class="w">${pending} pending</b>`:`<b class="s">${safe} secured</b>`}</span>
+      <span class="sv16-rchips">${chips}</span></div>`}).join("");
+  h+="<!--M:rivals-->"+svSec("rivals","🏁 The rival race",`${aliveParts} managers with lives · leader has ${lead?lead.left:0}`,`<div class="sv16-race"><div class="sv16-rival hdr"><span>Rank</span><span>Manager</span><span>Lives</span><span>Share of leader</span><span>Week status</span><span>W${V} teams</span></div>${riv}</div><div class="svnote">Ranked by lives still in. Showing the leaders and managers closest to you. Picks come from the connected pool sheet.</div>`);
   /* ---------- elimination chart ---------- */
   const CW=Math.max(1,prog.length),mx=pool0,bw=100/CW;
   const bars=prog.map((x,i)=>{const hh=x.pool/mx*100,s=x.pool?x.our/x.pool:0;return`<g><rect x="${(i*bw+bw*.18).toFixed(2)}" y="${(100-hh).toFixed(2)}" width="${(bw*.64).toFixed(2)}" height="${hh.toFixed(2)}" rx="1.2" fill="url(#svbar)"><title>${i?"After W"+x.w:"Start"}: ${x.pool} pool lives · ${x.our} ours · share ${svFmtPct(s)}</title></rect></g>`}).join("");
@@ -4386,7 +4507,10 @@ function svRender(){
   h+="<!--M:stand-->"+svSec("stand","🏆 Pool standings",`${parts.length} participants`,`<div class="tw sws"><table class="svtab"><colgroup><col style="width:60px"><col><col style="width:64px"><col style="width:64px"><col style="width:16%"><col style="width:80px"></colgroup><thead><tr><th class="n">#</th><th>Participant</th><th class="n">Orig</th><th class="n">Left</th><th></th><th class="n">Win %</th></tr></thead><tbody>${stand}</tbody></table></div>`);
   const ovr=(S.conns||getConns()).find(c=>c.p==="survivor"),hasOvr=SV.sheetCfg&&ovr&&ovr.cfg&&Object.keys(ovr.cfg).length;
   h+=PLAN+"<!--M:rules-->"+svSec("rules","📜 Rules & settings",SV.sheetCfg?(hasOvr?"sheet + your changes":"from the sheet's Config tab"):"stored on this device",`<div class="svrules">${svRulesHtml().map(([k,v])=>`<div><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join("")}</div>${svSettingsHtml()}${hasOvr?`<div class="svnote"><button class="rep" id="svcfgreset">↺ Use the sheet's settings</button></div>`:""}`);
-  h=modWrap(h+"<!--M:/--></div>","s:"+hash32(SV.d.sheet||"").toString(36));
+  // Adapt default placement to own stakes; custom saved order remains authoritative.
+  const survivorDefault=MODDEF.s;
+  MODDEF.s=["overview",...(myUnresolved?["watch","root"]:["root","watch"]),"rivals","stand","swim","chart","plan","rules"];
+  try{h=modWrap(h+"<!--M:/--></div>","s:"+hash32(SV.d.sheet||"").toString(36))}finally{MODDEF.s=survivorDefault}
   if(S.dragging||h===SV.lastHtml)return;SV.lastHtml=h;
   const qf=document.activeElement&&document.activeElement.id==="svq",pos=qf?document.activeElement.selectionStart:0;
   el.innerHTML=h;bindMods(el);
