@@ -1582,6 +1582,17 @@ html[data-theme=light] .tbb{background:#e6e7ee}
 
 .nkw{display:flex;flex-direction:column;gap:6px}.nkw textarea{width:100%;min-height:76px;resize:vertical;border-radius:8px;border:1px solid var(--line);background:var(--s2);color:var(--ink);font:12px/1.4 ui-monospace,Menlo,monospace;padding:6px 8px}
 @media(pointer:coarse){.nkw textarea{font-size:16px}}
+/* Sleeper direct reader: scoped to prevent regressions outside Pick'em */
+.pks-root{padding:12px 14px;display:flex;flex-direction:column;gap:10px;border-color:rgba(167,133,255,.3)}
+.pks-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.pks-head b{font-size:14px}.pks-muted,.pks-note,.pks-end{color:var(--mute);font-size:11px}.pks-actions{display:flex;gap:6px}
+.pks-auth{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pks-auth label{font-weight:700;font-size:11px}.pks-auth input{height:34px;min-width:220px;border:1px solid var(--line);background:var(--s2);color:var(--ink);border-radius:8px;padding:0 10px}.pks-auth small{flex-basis:100%;color:var(--mute)}
+.pks-stats{display:flex;gap:16px;flex-wrap:wrap;font-size:12px}.pks-stats b{color:var(--a);font-size:16px;margin-right:4px}.pks-note{padding:9px 12px;background:rgba(167,133,255,.07);border-radius:8px;line-height:1.5}.pks-note b{color:var(--ink)}
+.pks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}.pks-game{padding:10px;background:var(--s2);border-radius:8px;min-width:0;display:flex;flex-direction:column;gap:7px;border:1px solid var(--line)}
+.pks-match{display:flex;justify-content:space-between;gap:6px;align-items:center;font-size:12px}.pks-match span{font-size:10px}.pks-ok{color:var(--pos)}.pks-vote{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px}.pks-vote b{font-size:12px}.pks-meter{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:4px}.pks-meter i{display:block;height:4px;background:var(--a)}
+.pks-game details{border-top:1px solid var(--line);padding-top:7px;font-size:11px;line-height:1.45;overflow-wrap:anywhere}.pks-game summary{cursor:pointer;color:var(--b)}.pks-game p{margin:6px 0}.pks-sub{font-size:12px;font-weight:800;color:var(--mute)}
+.pks-error{padding:8px;color:var(--neg);background:rgba(255,107,107,.08);border-radius:8px;font-size:12px}.pks-empty{padding:8px;font-size:12px;color:var(--mute)}.pks-end{margin-top:2px}
+@media(max-width:760px){.pks-root{padding:10px}.pks-auth input{flex:1;min-width:0;width:100%}.pks-grid{grid-template-columns:minmax(0,1fr)}}
+
 </style>
 </head>
 <body>
@@ -3121,7 +3132,7 @@ function connState(c){const st=(S.connStat||{})[c.key]||{};
 function renderConns(){
   const box=$("pcards");if(!box)return;const cs=S.conns||getConns();
   box.innerHTML=PCARDS.map(c=>{const mine=cs.filter(x=>x.p===c.p),st=mine.map(x=>(S.connStat||{})[x.key]||{}),n=st.reduce((s,x)=>s+(x.n||0),0),err=st.find(x=>x.st==="err"),ok=mine.length&&!err;
-    const acct=c.p==="manual"&&mine.length?"Snapshot · doesn't auto-sync":c.sheet&&mine.length?"Sheet linked":mine.map(x=>x.username||x.name||(x.leagueId?"League "+x.leagueId:"")).filter(Boolean).slice(0,2).join(", ");
+    const acct=c.p==="manual"&&mine.length?"Snapshot · doesn't auto-sync":c.p==='pickem'&&mine.some(x=>x.source==='sleeper')?(mine.some(x=>x.sheet)?'Sleeper reader + sheet linked':'Sleeper reader linked'):c.sheet&&mine.length?"Sheet linked":mine.map(x=>x.username||x.name||(x.leagueId?"League "+x.leagueId:"")).filter(Boolean).slice(0,2).join(", ");
     return`<div class="pcard ${mine.length?"on":""}" data-p="${c.p}"><div class="pch">${provLogo(c)}<span class="psig" title="${esc(c.sig[1])}">${c.sig[0]}</span>${mine.length?`<i class="pdot ${err?"err":ok?"ok":"sync"}" title="${esc(err?err.err:ok?"Connected":"Connecting")}"></i>`:""}</div>
       <b class="pname">${esc(c.name)}</b><span class="pmeta">${mine.length?`${esc(acct)}${n?` · ${n} league${n>1?"s":""}`:""}`:"&nbsp;"}</span><button class="pcta ${mine.length?"ghost":""}" data-p="${c.p}">${mine.length?"Manage":c.cta}</button></div>`}).join("");
   box.querySelectorAll(".pcta").forEach(b=>b.onclick=()=>pvForm(b.dataset.p));
@@ -3132,9 +3143,18 @@ function renderConns(){
 const SHEETMODES={survivor:{tab:"s",name:"Survivor",icon:"🛟",probe:"🏊 Swimlanes",alt:"Swimlanes"},pickem:{tab:"p",name:"Pick'em",icon:"🎯",probe:"Picks"}};
 const hasMode=p=>(S.conns||getConns()).some(c=>c.p===p);
 const sheetIdOf=v=>{v=String(v||"").trim();const m=v.match(/\/d\/([a-zA-Z0-9_-]{20,})/);return m?m[1]:/^[a-zA-Z0-9_-]{20,}$/.test(v)?v:null};
-function sheetForm(p,f,mine){const M=SHEETMODES[p],c=mine[0];
+function sheetForm(p,f,mine){const M=SHEETMODES[p],c=mine.find(x=>x.sheet)||mine[0],direct=mine.find(x=>x.source==='sleeper');
+  if(p==='pickem'&&direct){
+    f.innerHTML=`<div class="pmng"><div class="crow"><i class="pdot ok"></i><span class="cnm">🎯 Sleeper Pick'em · direct reader (beta)</span><button class="cx" id="pkSleeperUnlink" title="Unlink reader">✕</button></div>${mine.some(x=>x.sheet)?`<div class="crow"><i class="pdot ok"></i><span class="cnm">Google Sheets · grading fallback</span><button class="cx" id="pkSheetUnlink" title="Unlink sheet">✕</button></div>`:''}<small>Completed-game picks only. Verify Sleeper API access before relying on the reader.</small></div>`;
+    const btn=f.querySelector('#pkSleeperUnlink');if(btn)btn.onclick=()=>{S.conns=(S.conns||getConns()).filter(x=>x.key!==direct.key);saveConns();try{sessionStorage.removeItem('wm_pk_view_key')}catch(e){}PKS.data=null;PKS.error='';applySheetModes(false);renderConns();updateNav();pvForm('pickem');if(S.tab==='p')pkRender()};
+    const unlinkSheet=f.querySelector('#pkSheetUnlink');if(unlinkSheet)unlinkSheet.onclick=()=>{const sh=mine.find(x=>x.sheet);if(!sh)return;S.conns=(S.conns||getConns()).filter(x=>x.key!==sh.key);saveConns();resetPool('pickem');applySheetModes(false);renderConns();updateNav();pvForm('pickem');if(S.tab==='p')pkRender()};return;
+  }
   f.innerHTML=c?`<div class="pmng"><div class="crow"><i class="pdot ok"></i><span class="cnm">${esc(M.icon+" "+M.name)} · <a href="https://docs.google.com/spreadsheets/d/${esc(c.sheet)}" target="_blank" rel="noopener">open sheet ↗</a></span><button class="cx" data-k="${esc(c.key)}" title="Unlink">✕</button></div></div>`
     :`<div class="wrow"><input id="shurl" placeholder="Paste the Google Sheet link" spellcheck="false" autocapitalize="none" inputmode="url"><button class="pcta" id="shgo">Link sheet</button></div><small class="shnote">In Google Sheets: Share → General access → <b>Anyone with the link</b> (Viewer).</small>`;
+  if(p==='pickem'&&!direct){
+    const b=document.createElement('div');b.className='cna';b.innerHTML=`<b>Or connect Sleeper directly (beta)</b><div style="margin:5px 0 8px">Automatically reads managers' picks once each game becomes final. Verified locked spreads are still required for ATS grading.</div><button class="pcta sm" id="pkSleeperAdd">Use Sleeper pool</button>`;f.appendChild(b);
+    b.querySelector('#pkSleeperAdd').onclick=()=>{S.conns=(S.conns||getConns()).filter(x=>x.source!=='sleeper'||x.p!=='pickem').concat({p:'pickem',key:'pickem:sleeper:1392587441361129472',source:'sleeper'});saveConns();applySheetModes(false);PKS.data=null;PKS.at=0;PKS.error='';renderConns();updateNav();pvForm('pickem');setTab('p')};
+  }
   f.querySelectorAll(".cx").forEach(b=>b.onclick=()=>{S.conns=(S.conns||getConns()).filter(x=>x.key!==b.dataset.k);saveConns();resetPool(p);renderConns();updateNav();pvForm(p)});
   const go=$("shgo");if(!go)return;const inp=$("shurl");inp.onkeydown=e=>{if(e.key==="Enter")go.click()};
   go.onclick=async()=>{const id=sheetIdOf(inp.value);$("werr").textContent="";if(!id){$("werr").textContent="That doesn't look like a Google Sheets link.";return}
@@ -3149,12 +3169,13 @@ function resetPool(p){
   if(p==="survivor"){Object.assign(SV,{d:{sheet:"",by:{}},cfg:null,st:"idle",err:"",lanes:null,res:{},week:null,src:"",syncAt:0,syncBackoff:0,fails:0,broken:0,maxPick:0,known:{},late:{},wph:{},q:"",lastHtml:""})}
   else{Object.assign(PK,{d:{sheet:"",stand:[],players:[],games:[],picks:[]},cfg:null,st:"idle",err:"",rows:null,games:null,weeks:0,src:"",syncAt:0,syncBackoff:0,fails:0,missing:null,mism:null,odds:null,oddsKey:"",lastHtml:""});
     try{const ks=[];for(let i=0;i<localStorage.length;i++)ks.push(localStorage.key(i));ks.filter(k=>/^lm_pk_mine_/.test(k)).forEach(k=>localStorage.removeItem(k))}catch(e){}}}
-function applySheetModes(start){const sv=(S.conns||getConns()).find(c=>c.p==="survivor"),pk=(S.conns||getConns()).find(c=>c.p==="pickem");
+function applySheetModes(start){const sv=(S.conns||getConns()).find(c=>c.p==="survivor"),pk=(S.conns||getConns()).find(c=>c.p==="pickem"&&c.sheet),direct=(S.conns||getConns()).some(c=>c.p==="pickem"&&c.source==='sleeper');
   if(!sv&&SV.d.sheet)resetPool("survivor");if(!pk&&PK.d.sheet)resetPool("pickem");
   if(sv&&SV.d.sheet!==sv.sheet){resetPool("survivor");SV.d.sheet=sv.sheet;SV.cfg=poolCfg("survivor")}
   if(pk&&PK.d.sheet!==pk.sheet){resetPool("pickem");PK.d.sheet=pk.sheet;PK.cfg=poolCfg("pickem")}
+  if(direct&&!pk)PK.cfg=PK.cfg||poolCfg('pickem');
   if(start&&sv&&!SV.lanes)svInit().then(()=>{if(S.tab==="s")setTab("s")});
-  if(start&&pk&&!PK.rows)pkTick();}
+  if(start&&((pk&&!PK.rows)||direct))pkTick();}
 function updateNav(){{const eb=document.querySelector('header .tb[data-t="e"]');if(eb)eb.style.display=edgeOK()?"":"none"}for(const k in SHEETMODES){const b=document.querySelector(`header .tb[data-t="${SHEETMODES[k].tab}"]`);if(b)b.style.display=hasMode(k)?"":"none"}
   if((S.tab==="s"&&!hasMode("survivor"))||(S.tab==="p"&&!hasMode("pickem")))setTab("m")}
 const PVHINT={sleeper:"Your Sleeper username. No password needed.",espn:"Your league ID is in the ESPN league web address (leagueId=…).",yahoo:"You'll sign in on Yahoo and come straight back.",mfl:"Your league ID is in the MFL league web address.",fleaflicker:"Your league ID is in the Fleaflicker league web address.",manual:""};
@@ -3998,6 +4019,74 @@ async function svInit(synced){
   SV.lastHtml="";if(S.tab==="s")svRender();
 }
 
+/* ============================================================================
+   Wingman Sleeper Pick'em reader (beta): finalized games only.
+   This is independent of, and does not override, official Google Sheet grading.
+   ============================================================================ */
+const PKS = { data:null, error:'', busy:false, at:0 };
+function pkSleeperActive(){return (S.conns||getConns()).some(c=>c.p==='pickem'&&c.source==='sleeper')}
+function pkSleeperSecret(){try{return sessionStorage.getItem('wm_pk_view_key')||''}catch(e){return ''}}
+function pkSleeperSection(){
+  if(!pkSleeperActive())return '';
+  const D=PKS.data, E=PKS.error;
+  const names=new Map((D&&D.pool&&D.pool.entries||[]).map(e=>[e.id,e.name]));
+  const weeks=D&&D.weeks||[], week=weeks.length?weeks[weeks.length-1]:null;
+  const allGames=weeks.flatMap(w=>w.games||[]);
+  const finals=allGames.filter(g=>g.final),revealed=finals.reduce((n,g)=>n+(g.picks||[]).length,0);
+  const gameRow=g=>{
+    const ps=g.picks||[],nH=ps.filter(p=>p.team===g.home).length,nA=ps.filter(p=>p.team===g.away).length;
+    const fmt=t=>ps.filter(p=>p.team===t).map(p=>esc(names.get(p.entryId)||'Entry '+p.entryId)).join(', ')||'No revealed selections';
+    return `<div class="pks-game ${g.final?'fin':''}"><div class="pks-match">
+      <b>${esc(g.away)} ${g.awayScore==null?'–':g.awayScore}  :  ${g.homeScore==null?'–':g.homeScore} ${esc(g.home)}</b>
+      <span class="${g.final?'pks-ok':'pks-muted'}">${g.final?'Final · picks revealed':esc(g.status||'Pending')}</span></div>
+      ${g.final?`<div class="pks-vote"><div><b>${esc(g.away)}</b> ${nA}<div class="pks-meter"><i style="width:${ps.length?100*nA/ps.length:0}%"></i></div></div>
+        <div><b>${esc(g.home)}</b> ${nH}<div class="pks-meter"><i style="width:${ps.length?100*nH/ps.length:0}%"></i></div></div></div>
+        <details><summary>${ps.length} publicly revealed pool picks · see managers</summary>
+        <p><b>${esc(g.away)}:</b> ${fmt(g.away)}</p><p><b>${esc(g.home)}:</b> ${fmt(g.home)}</p></details>`:
+        `<small class="pks-muted">Other managers' picks withheld until this game is final.</small>`}</div>`;
+  };
+  return `<section class="card pks-root">
+    <div class="pks-head"><div><b>🎯 Sleeper Pick'em · Direct Sync</b><div class="pks-muted">Pool 1392587441361129472 · read-only beta · completed-game picks only</div></div>
+      <div class="pks-actions">${pkSleeperSecret()?'<button class="rep" id="pksforget">Lock</button>':''}<button class="rep" id="pkssync" ${PKS.busy?'disabled':''}>${PKS.busy?'Syncing…':'↻ Refresh'}</button></div></div>
+    ${!pkSleeperSecret()?`<div class="pks-auth"><label for="pkskey">Your Wingman viewing key (NOT your Sleeper token)</label><input id="pkskey" type="password" autocomplete="off" placeholder="Enter Worker viewing key"/><button class="pcta sm" id="pksgo">Unlock reader</button><small>Stored in this browser tab only. Sleeper authentication stays in Cloudflare Worker secrets.</small></div>`:''}
+    ${E?`<div class="pks-error">${esc(E)}</div>`:''}
+    ${D?`<div class="pks-stats"><span><b>${D.pool.entries.length}</b> identified entries</span><span><b>${finals.length}</b> final games</span><span><b>${revealed}</b> released picks</span><span><b>${weeks.length}</b> weeks fetched</span></div>
+      <div class="pks-note">This feed imports actual Sleeper selections, but <b>does not grade ATS</b> until we verify official, pool-locked spreads. Existing Google Sheet standings remain authoritative where connected. "No revealed selection" is not necessarily a missed pick.</div>
+      ${week?`<div class="pks-sub">W${week.week} · Most recent week in sync</div><div class="pks-grid">${(week.games||[]).map(gameRow).join('')||'<span class="pks-muted">No game data from Sleeper</span>'}</div>`:''}
+      <div class="pks-end">Sync ${esc(D.syncedAt||'')} · <span class="pks-muted">GraphQL fields are unofficial and may change</span></div>`:
+      `<div class="pks-empty">${PKS.busy?'Contacting Sleeper through Wingman Connect…':'Unlock then refresh to test pool access. No test or real data has been prefilled.'}</div>`}
+  </section>`;
+}
+async function pkSleeperSync(force){
+  if(!pkSleeperActive()||!pkSleeperSecret()||PKS.busy)return;
+  if(!force && Date.now()-PKS.at<90000)return;
+  PKS.busy=true;PKS.error='';if(S.tab==='p')pkRender();
+  try{
+    const w=Math.max(1,Math.min(18,Number(S.nflWeek||5)));
+    const r=await fetch(`${workerURL()}/pickem/season?week=1&upto=${w}`,{
+      headers:{'X-WM-Pickem-Key':pkSleeperSecret(),'Accept':'application/json'},
+      cache:'no-store'
+    });
+    const j=await r.json().catch(()=>({error:`Worker returned HTTP ${r.status} without JSON`}));
+    if(!r.ok || !j.ok)throw new Error(j.error||`HTTP ${r.status}`);
+    if(!j.weeks||!j.pool||j.pool.id!=='1392587441361129472')throw new Error('Returned pool does not match the configured ID');
+    PKS.data=j;PKS.at=Date.now();PKS.error='';
+  }catch(e){PKS.error=String(e.message||e).slice(0,240);PKS.at=Date.now()}
+  finally{PKS.busy=false;PK.lastHtml='';if(S.tab==='p')pkRender()}
+}
+function pkSleeperWire(el){
+  if(!pkSleeperActive())return;
+  const b=el.querySelector('#pkssync');if(b)b.onclick=()=>pkSleeperSync(true);
+  const forget=el.querySelector('#pksforget');if(forget)forget.onclick=()=>{
+    try{sessionStorage.removeItem('wm_pk_view_key')}catch(e){} PKS.data=null;PKS.at=0;PK.lastHtml='';pkRender()
+  };
+  const go=el.querySelector('#pksgo'),key=el.querySelector('#pkskey');
+  if(go&&key){const submit=()=>{const k=key.value.trim();if(k.length<16){PKS.error='Viewing key must have at least 16 characters';PK.lastHtml='';pkRender();return}
+      try{sessionStorage.setItem('wm_pk_view_key',k)}catch(e){PKS.error='Browser session storage unavailable';PK.lastHtml='';pkRender();return}
+      PKS.at=0;PK.lastHtml='';pkRender();pkSleeperSync(true)};
+    go.onclick=submit;key.onkeydown=e=>{if(e.key==='Enter')submit()};}
+}
+
 /* =====================================================================
    PICK'EM TAB — against-the-spread pool (1 pt per cover), read from the pool's own linked Google Sheet.
    Data contract: a "Picks" tab (header row starting "Season") + a "Standings" tab (header row starting "Rank").
@@ -4178,8 +4267,10 @@ function autoMember(ids,names){const H=new Set(myHandles().map(normH).filter(x=>
   const hits=ids.filter(u=>[u,names&&names[u]].some(x=>x&&H.has(normH(x))));return hits.length===1?hits[0]:null}
 function pkRender(){
   const el=$("pick");if(!el)return;PK.cfg=PK.cfg||poolCfg("pickem");
+  if(pkSleeperActive()&&!PK.d.sheet){const h=pkSleeperSection();if(PK.lastHtml!==h){PK.lastHtml=h;el.innerHTML=h;pkSleeperWire(el)}return}
   if(!PK.rows){const s=PK.st==="error"?`<div class="card none svstate"><b>🎯 Pick'em</b><p>${esc(PK.err)}</p><div class="wrow"><button class="pcta" id="pkretry">Try again</button><a class="pcta ghost" href="https://docs.google.com/spreadsheets/d/${esc(PK.d.sheet)}/edit" target="_blank" rel="noopener">Open sheet ↗</a></div></div>`:`<div class="card none svstate"><b>🎯 Pick'em</b><p>Reading your pool's sheet…</p></div>`;
-    if(s!==PK.lastHtml){PK.lastHtml=s;el.innerHTML=s;const b=el.querySelector("#pkretry");if(b)b.onclick=()=>{PK.syncBackoff=0;PK.st="loading";pkRender();pkTick(true)}}return}
+    const v=pkSleeperSection()+s;
+    if(v!==PK.lastHtml){PK.lastHtml=v;el.innerHTML=v;pkSleeperWire(el);const b=el.querySelector("#pkretry");if(b)b.onclick=()=>{PK.syncBackoff=0;PK.st="loading";pkRender();pkTick(true)}}return}
   if(!PK.cfg.me){const a=autoMember(PK.rows.map(r=>r.u),PK.names);if(a){savePoolCfg("pickem",{me:a,meAuto:1});PK.cfg=poolCfg("pickem")}}
   if(!PK.cfg.me){const s=`<div class="card hero svhero svsetup"><b class="svt">🎯 Which member are you?</b><span class="hu">None of the members matches your Sleeper name, so pick yourself once.</span><span class="hu">${PK.rows.length} members in this sheet. This stays on this device.</span><div class="wrow"><select id="pkme"><option value="">Choose…</option>${PK.rows.map(r=>`<option value="${esc(r.u)}">${esc(r.u)}</option>`).join("")}<option value="__none">Nobody, just follow the pool</option></select><button class="pcta" id="pkmego">Continue</button></div></div>`;
     if(s!==PK.lastHtml){PK.lastHtml=s;el.innerHTML=s;el.querySelector("#pkmego").onclick=()=>{const v=el.querySelector("#pkme").value;if(!v)return;savePoolCfg("pickem",{me:v});pkRender()}}return}
@@ -4279,8 +4370,8 @@ function pkRender(){
       return`<span class="phx ${c} ${pop!=null&&pop<.5?"ct":""}" title="${esc(g.a)} @ ${esc(g.b)} · ${pick?"picked "+esc(pick):c==="M"?"pick not captured":"no pick"}${g.ats?" · covered: "+esc(g.ats):""}${pop!=null?" · "+Math.round(pop*100)+"% of pool agreed":""}">${pick?esc(pick):"·"}</span>`}).join("")}</div><span class="phs" title="Week ${i+1} score">${+me.w[i]||0}<small>/${gs.length}</small></span></div>`}).join("");
   h+="<!--M:hist-->"+pkSec("hist","🗂 My pick history","green = covered · red = missed · gold underline = against the pool",`<div class="phist">${hist}</div>`);
   h+="<!--M:cfg-->"+pkSec("cfg","⚙️ Pool settings","stored on this device",pkSettingsHtml())+"<!--M:/--></div>";
-  h=modWrap(h,"p:"+hash32(PK.d.sheet||"").toString(36));
-  if(S.dragging||h===PK.lastHtml)return;PK.lastHtml=h;el.innerHTML=h;bindMods(el);
+  h=pkSleeperSection()+modWrap(h,"p:"+hash32(PK.d.sheet||"").toString(36));
+  if(S.dragging||h===PK.lastHtml)return;PK.lastHtml=h;el.innerHTML=h;bindMods(el);pkSleeperWire(el);
   el.querySelectorAll(".svh").forEach(x=>x.onclick=()=>{PK.open[x.dataset.k]=PK.open[x.dataset.k]===false;save("pk_open",JSON.stringify(PK.open));pkRender()});
   const cf=el.querySelector(".svcfg");if(cf)cf.onchange=()=>{const g=id=>cf.querySelector("#"+id),n=id=>Math.max(0,+g(id).value||0);savePoolCfg("pickem",{name:g("pkc_name").value.trim()||"Pick'em",me:g("pkc_me").value,meAuto:g("pkc_me").value===PK.cfg.me?PK.cfg.meAuto:0,dues:n("pkc_dues"),first:n("pkc_first"),second:n("pkc_second"),weekly:n("pkc_weekly")});PK.oddsKey="";pkRender()};
   el.querySelectorAll(".pat").forEach(b=>b.onclick=()=>{if(b.disabled)return;const p=pkMine(N);p[b.dataset.k]=p[b.dataset.k]===b.dataset.t?undefined:b.dataset.t;save("pk_mine_"+N,JSON.stringify(p));pkRender()});
@@ -4303,6 +4394,7 @@ function pkOdds(){
 const pctX=x=>x>0&&x<.01?"<1%":Math.round(x*100)+"%";
 function pkSec(key,title,sub,body){const o=PK.open[key]!==false;return`<div class="card svc"><div class="lh svh" data-k="${key}"><span><span class="chev">${o?"▾":"▸"}</span>${title}</span><small>${sub||""}</small></div>${o?body:""}</div>`}
 async function pkTick(){
+  if(pkSleeperActive())void pkSleeperSync(false);
   if(!PK.d.sheet)return;PK.cfg=PK.cfg||poolCfg("pickem");
   if(!PK.rows||Date.now()-PK.syncAt>600000){PK.syncAt=PK.rows?Date.now():PK.syncAt;await pkSync();if(!PK.rows){if(S.tab==="p")pkRender();return}}
   /* the sheet's latest week and the one after are polled live (scores grade picks the moment a game ends); then next week's lines */
