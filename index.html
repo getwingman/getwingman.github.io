@@ -290,6 +290,7 @@ td.sw.w{background:rgba(62,207,116,.12);color:var(--pos)}td.sw.l{background:rgba
 .elab{position:absolute;left:12px;right:12px;bottom:6px;height:40px}
 .elab div{position:absolute;transform:translateX(-50%);text-align:center;display:flex;flex-direction:column;line-height:1.15;font-size:10px;color:var(--mute);white-space:nowrap}.elab b{font-size:12px;color:var(--ink)}.elab em{font-style:normal;color:var(--a)}
 .tls{width:22px;height:22px;object-fit:contain;vertical-align:middle}.swt td.sw{min-width:44px;text-align:center}.swt th.c{text-align:center}
+.swt .swmulti{display:inline-flex;align-items:center;justify-content:center;gap:3px;white-space:nowrap}.swt .swmulti .tls{width:18px;height:18px}.swt .swjoin{font-size:9px;color:var(--mute);font-weight:900}
 .svtab tr.me td{background:rgba(167,133,255,.08)}
 /* tabs: hide matchup-only controls elsewhere */
 body.tab-x .mctl,body.tab-x .key{display:none!important}
@@ -1952,7 +1953,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.12</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.13</span></div>
   </div>
 </header>
 <main>
@@ -1976,7 +1977,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.11";
+const WM_VERSION="1.13";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -3640,7 +3641,7 @@ function sheetForm(p,f,mine){const M=SHEETMODES[p],c=mine.find(x=>x.sheet)||mine
    Switching or unlinking a sheet clears everything from the previous pool (members, picks, settings view, alerts, my picks). */
 function resetPool(p){
   if(p==="survivor"){Object.assign(SV,{d:{sheet:"",by:{}},cfg:null,st:"idle",err:"",lanes:null,res:{},week:null,src:"",syncAt:0,syncBackoff:0,fails:0,broken:0,maxPick:0,known:{},late:{},wph:{},q:"",lastHtml:""})}
-  else{Object.assign(PK,{d:{sheet:"",stand:[],players:[],games:[],picks:[]},cfg:null,st:"idle",err:"",rows:null,games:null,weeks:0,src:"",syncAt:0,syncBackoff:0,fails:0,missing:null,mism:null,odds:null,oddsKey:"",lastHtml:""});
+  else{Object.assign(PK,{d:{sheet:"",stand:[],players:[],games:[],picks:[]},cfg:null,st:"idle",err:"",rows:null,games:null,weeks:0,wSheet:0,base:null,apiN:0,gx:null,names:null,tb:null,cov:null,nx:{},nxt:{},fpi:{},sheetCfg:null,layout:null,src:"",syncAt:0,syncBackoff:0,fails:0,missing:null,mism:null,odds:null,oddsKey:"",lastHtml:""});
     try{const ks=[];for(let i=0;i<localStorage.length;i++)ks.push(localStorage.key(i));ks.filter(k=>/^lm_pk_mine_/.test(k)).forEach(k=>localStorage.removeItem(k))}catch(e){}}}
 function applySheetModes(start){const sv=(S.conns||getConns()).find(c=>c.p==="survivor"),pk=(S.conns||getConns()).find(c=>c.p==="pickem"&&c.sheet),direct=(S.conns||getConns()).some(c=>c.p==="pickem"&&c.source==='sleeper');
   if(!sv&&SV.d.sheet)resetPool("survivor");if(!pk&&PK.d.sheet)resetPool("pickem");
@@ -4318,7 +4319,7 @@ function svRender(){
     const R=t?svRes(V,t):null,wp=R&&!R.r&&R.wp!=null?` · ${pctS(R.wp)} to win`:"";
     return`<div class="tok ${c}" title="Life ${l.let}${who?" · picked by "+esc(who):""}${t&&c!=="out"?" · "+esc(t)+" ("+esc(svGameTxt(V,t))+")":""}${wp}\n${esc(hist)}">${c==="out"?`<span class="tx">✗</span>`:svLogo(V,t,"tokl")}<b>${l.let}</b>${c==="out"?`<small>W${l.out}</small>`:""}</div>`}).join("");
   const kpi=(lab,big,sub,cls="")=>`<div class="kpi${cls?" "+cls:""}"><div class="kl">${lab}</div><div class="kb">${big}</div><div class="ks">${sub}</div></div>`;
-  const weekDone=Object.values(SV.res[V]||{}).filter(x=>x&&x.st).every(x=>x.st==="post");
+  const weekDone=svDone(V);
   /* ---------- this week's exact survival distribution ----------
      Every entry in play is evaluated per scenario of game outcomes: entries on the same team win or lose together, two sides of
      one game can't both win, multi-pick entries need every pick to win. Finals are 0/1; live games use ESPN's live win
@@ -4542,9 +4543,12 @@ function svRender(){
   /* ---------- swimlanes: alive lanes first and bright, out lanes dimmed with the week they fell ---------- */
   const q=SV.q.trim().toLowerCase(),allSwim=q?SV.lanes.filter(l=>l.who.toLowerCase().includes(q)):ours;
   const pool=allSwim.slice(0,150),WM=Math.max(V,SV.maxPick);
-  svEval(WM,false);
-  const cell=(l,w)=>{const p=svPick(l,w);if(!p)return`<td class="sw e">${l.out&&w>l.out?"":""}</td>`;const s=l.s[w],c=s==="W"?"w":s==="L"||s==="T"?"l":s==="winning"?"lv":s==="losing"||s==="tied"?"rk":"p";
-    return`<td class="sw ${c}" title="W${w}: ${esc(p)}${l.def[w]?" (default)":""}${c==="l"?" · eliminated":""}">${svLogo(w,p,"tls")}${c==="l"?'<span class="xo">✗</span>':""}</td>`};
+  // Future selections are shown for planning, but must never alter this week's alive/out grouping.
+  svEval(V,false);
+  const cell=(l,w)=>{const ps=svPicks(l,w);if(!ps.length)return`<td class="sw e"></td>`;
+    const state=w<=V?l.s[w]:null,c=state==="W"?"w":state==="L"||state==="T"?"l":state==="winning"?"lv":state==="losing"||state==="tied"?"rk":"p";
+    const logos=ps.map(t=>svLogo(w,t,"tls")).join('<span class="swjoin">+</span>');
+    return`<td class="sw ${c}" title="W${w}: ${esc(ps.join(" + "))}${l.def[w]?" (default)":""}${c==="l"?" · eliminated":""}">${ps.length>1?'<span class="swmulti">'+logos+'</span>':logos}${c==="l"?'<span class="xo">✗</span>':""}</td>`};
   const al=pool.filter(l=>l.alive),ot=pool.filter(l=>!l.alive).sort((a,b)=>b.out-a.out);
   const row=l=>`<tr class="${l.alive?"lal":"lot"} ${isOurs(l)?"me":""}"><td>${esc(l.who)}</td><td class="svl"><span class="lnt ${l.alive?"al":"ot"}">${l.let}</span></td><td>${l.alive?'<span class="pill alive">Alive</span>':`<span class="pill out">Out W${l.out}</span>`}</td>${Array.from({length:WM},(_,i)=>cell(l,i+1)).join("")}</tr>`;
   const grp=(lab,arr,c)=>arr.length?`<tr class="lgrp ${c}"><td colspan="${3+WM}">${lab} · ${arr.length}</td></tr>${arr.map(row).join("")}`:"";
@@ -4735,14 +4739,14 @@ async function pkSyncNormalized(id){
   const players=parts.map(p=>p.player_id).filter(Boolean),names={};parts.forEach(p=>{if(p.player_id&&p.display_name)names[p.player_id]=p.display_name});
   const GI={},games=[],gx=[];games0.forEach(g=>{const w=parseInt(g.week);if(!w||!g.game_id||!g.team_a||!g.team_b)return;const n=x=>x===""||x==null||isNaN(+x)?null:+x;
     GI[g.game_id]=games.length;games.push([w,g.team_a,g.team_b,n(g.score_a),n(g.score_b),"",""]);gx.push({id:g.game_id,spread:n(g.spread_a),src:g.spread_source||"",status:g.game_status||""})});
-  const code={correct:"C",incorrect:"I","hidden/pending":"H",hidden:"H","no pick":"N",pending:"P"},pts={},graded={},cap={},rows={};
+  const code={correct:"C",incorrect:"I",push:"I",pushed:"I","hidden/pending":"H",hidden:"H","no pick":"N",pending:"P"},pts={},graded={},cap={},rows={};
   const picks=[];picks0.forEach(x=>{const gi=GI[x.game_id],w=parseInt(x.week);if(gi==null||!x.player_id)return;if(!players.includes(x.player_id))players.push(x.player_id);
     const g=games[gi],st=lc(x.pick_status),gr=lc(x.grade),c=st==="missing"?"M":st==="no pick"?"N":st==="hidden"?"H":code[gr]||(x.pick_team?"P":"M"),side=x.pick_team===g[1]?0:x.pick_team===g[2]?1:-1;
+    if((gr==="push"||gr==="pushed")&&!g[5])g[5]="PUSH"; // official pool push, even when the member made no pick
     picks.push([players.indexOf(x.player_id),gi,side,c]);(rows[w]=rows[w]||0);rows[w]++;if(c!=="M")cap[w]=(cap[w]||0)+1;
     if(c==="C"||c==="I"){graded[w]=1;const k=x.player_id+"|"+w;pts[k]=(pts[k]||0)+(x.points!==""&&!isNaN(+x.points)?+x.points:c==="C"?1:0);
-      // Never infer the ATS winning side from an incorrect pick: a push could make both sides incorrect.
-      if(side>=0&&!g[5]&&gr==="push")g[5]="PUSH";
-      else if(side>=0&&!g[5]&&c==="C")g[5]=x.pick_team}});
+      // Incorrect picks cannot establish the winning ATS side.
+      if(side>=0&&!g[5]&&c==="C")g[5]=x.pick_team}});
   games.forEach(g=>{if(g[3]!=null&&g[4]!=null&&g[3]!==g[4])g[6]=g[3]>g[4]?g[1]:g[2]});
   const W=Math.max(0,...Object.keys(graded).map(Number));
   const stand=players.map(u=>[u,Array.from({length:W},(_,i)=>pts[u+"|"+(i+1)]||0)]);
@@ -4875,7 +4879,7 @@ function pkRender(){
   const nm=u=>esc(nickOf(u)||nickOf(PK.names&&PK.names[u])||(PK.names&&PK.names[u])||u);
   /* week state from the sheet */
   const wkGames=w=>PK.games.filter(g=>g.w===w),wkDone=w=>{const games=wkGames(w);
-    return games.length>0&&games.every(g=>!!g.ats&&g.picks.every(p=>!/[HMP]/.test(p.c)))&&!(PK.mism||[]).includes(w)&&!(PK.missing||[]).includes(w)&&(!PK.cov||PK.cov[w]==null||PK.cov[w]>=.999)};
+    return games.length>0&&games.every(g=>!!g.ats&&g.picks.length>=PK.rows.length&&g.picks.every(p=>!/[HMP]/.test(p.c)))&&!(PK.mism||[]).includes(w)&&!(PK.missing||[]).includes(w)&&(!PK.cov||PK.cov[w]==null||PK.cov[w]>=.999)};
   const winners=Array.from({length:W},(_,i)=>{const mx=Math.max(...PK.rows.map(r=>+r.w[i]||0));let who=PK.rows.filter(r=>(+r.w[i]||0)===mx),tbk=null;const T=PK.tb&&PK.tb[i+1];
     if(who.length>1&&T){const er=r=>{const x=T[r.u];return x&&x.a!=null?Math.abs(x.g-x.a):1e9},m=Math.min(...who.map(er));if(m<1e9){const w2=who.filter(r=>er(r)===m);if(w2.length<who.length){tbk={from:who.length,err:m};who=w2}}}
     return{w:i+1,mx,who,fin:wkDone(i+1),tbk}});
