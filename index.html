@@ -1987,7 +1987,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.16</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.17</span></div>
   </div>
 </header>
 <main>
@@ -2011,13 +2011,13 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.16";
+const WM_VERSION="1.17";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
 const $=id=>document.getElementById(id);
 const quiet=()=>Date.now()<(S.quietUntil||0);
-const S={fx:{},drv:{},msq:{},eff:{},box:{},fl:{},fltxt:{},reg:{},effPrimed:false,okFast:false,e2s:null,pc:{},dirty:true,gsig:"",stxt:"",nflWeek:1,L:[],players:null,games:{},okGames:false,stats:{},statsHave:false,statsVol:0,statsRej:0,statsAt:0,okStats:false,desc:{},raw:null,rawAt:0,rawWeek:0,okProj:false,
+const S={fx:{},drv:{},msq:{},eff:{},box:{},fl:{},fltxt:{},reg:{},liveInj:{},effPrimed:false,okFast:false,e2s:null,pc:{},dirty:true,gsig:"",stxt:"",nflWeek:1,L:[],players:null,games:{},okGames:false,stats:{},statsHave:false,statsVol:0,statsRej:0,statsAt:0,okStats:false,desc:{},raw:null,rawAt:0,rawWeek:0,okProj:false,
   base:{},baseWeek:0,userId:null,season:null,week:1,timer:null,updated:0,busy:false,err:false,rz:{},rzAt:{},fired:{},cel:{},sound:true};
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const r2=n=>Math.round((n||0)*100)/100;
@@ -2170,7 +2170,11 @@ async function loadGames(){
     if(flip.length&&!quiet())vis().forEach(lg=>(lg.matchups||[]).forEach(m=>(m.starters||[]).forEach(id=>{const player=pinfo(id),g=S.games[player.team];const f=flip.find(x=>x[1]==="live"&&x[0]===player.team||(x[1]==="rz"&&(player.pos==="DEF"?g&&g.oppT===x[0]:x[0]===player.team)));if(f&&!(S.fx[id]&&now0-S.fx[id].t<3000)){S.fx[id]={k:f[1],t:now0};S.dirty=true}})));
   }catch(e){S.okGames=false}
 }
-const frac=g=>!g?0:g.state==="post"?1:g.state==="pre"?0:g.period>4?.98:Math.min(.98,((g.period-1)*900+(900-(g.clock||0)))/3600);
+// ESPN reports MM:SS strings. Arithmetic on those strings used to make remaining time NaN.
+const clockSec=v=>{if(typeof v==="number")return Number.isFinite(v)?v:0;const t=String(v||"0").trim(),m=t.match(/^(\d{1,2}):(\d{2})$/);if(m)return(+m[1])*60+(+m[2]);const n=Number(t);return Number.isFinite(n)?n:0};
+const frac=g=>{if(!g)return 0;if(g.state==="post")return 1;if(g.state==="pre")return 0;
+  if(g.period>4)return .98;const p=Math.max(1,Math.min(4,+g.period||1)),sec=Math.max(0,Math.min(900,clockSec(g.clock)));
+  return Math.max(0,Math.min(.98,((p-1)*900+(900-sec))/3600))};
 const POSQ=["QB","RB","WR","TE","K","DEF"].map(p=>"position[]="+p).join("&");
 async function loadRaw(){
   if(S.raw&&Date.now()-S.rawAt<3e5&&S.rawWeek===S.week)return false;
@@ -2325,7 +2329,7 @@ function pinfo(id){return S.pc[id]||(S.pc[id]=pinfo0(id))}
 function pinfo0(id){
   const p=S.players&&S.players[id];if(!p)return{id,name:id,pos:"",team:"",inj:"",rook:false};
   if(p.position==="DEF")return{id,name:(p.team||id)+" D/ST",pos:"DEF",team:p.team||id,inj:"",rook:false};
-  return{id,name:p.full_name||((p.first_name||"")+" "+(p.last_name||"")),pos:p.position||"",team:NT(p.team||"")||"FA",inj:p.injury_status||"",rook:p.years_exp===0};
+  return{id,name:p.full_name||((p.first_name||"")+" "+(p.last_name||"")),pos:p.position||"",team:NT(p.team||"")||"FA",inj:effectiveInjury(id,p),rook:p.years_exp===0};
 }
 function team(lg,rid){const c=lg.tc||(lg.tc={});return c[rid]||(c[rid]=team0(lg,rid))}
 function team0(lg,rid){
@@ -2343,7 +2347,27 @@ function rosterPlayers(){
   });
   return out;
 }
+
 const OUTS=/^(Questionable|Doubtful|Out|IR)$/i;
+const MAY_RETURN=/^(Questionable|Doubtful)$/i;
+const INJ_ACTIVITY=["pass_att","rush_att","rec_tgt","rec","pass_cmp","fga","fgm","xpa","xpm"];
+// Do not consider pre-injury points as a return. A later NEW attempt/target confirms participation.
+function injuryVolume(id){const out={};for(const k of INJ_ACTIVITY)out[k]=Math.max(0,...[S.eff[id],S.box[id],S.stats[id]].map(x=>x&&Number.isFinite(+x[k])?+x[k]:0));return out}
+function effectiveInjury(id,raw){const q=raw||S.players&&S.players[id],x=S.liveInj&&S.liveInj[id],g=q&&S.games[NT(q.team||"")];
+  return x&&x.returned&&q&&MAY_RETURN.test(q.injury_status||"")&&S.week===S.nflWeek&&g&&g.state==="in"?"":q&&q.injury_status||""}
+function syncLiveInjuries(){
+  if(!S.players||S.week!==S.nflWeek)return;
+  const ids=new Set();S.L.forEach(lg=>(lg.mu||[]).forEach(m=>[...(m.players||[]),...(m.starters||[])].forEach(id=>{if(id&&id!=="0")ids.add(id)})));
+  const watching=new Set();
+  ids.forEach(id=>{const p=S.players[id];if(!p)return;const g=S.games[NT(p.team||"")],tag=p.injury_status||"",prev=S.liveInj[id];
+    if(!g||g.state!=="in"||!MAY_RETURN.test(tag)){if(prev){delete S.liveInj[id];delete S.pc[id];S.dirty=true}return}
+    watching.add(id);const game=S.season+":"+S.week+":"+g.eid;
+    if(!prev||prev.game!==game||prev.tag!==tag){S.liveInj[id]={game,tag,baseline:injuryVolume(id),returned:false};delete S.pc[id];S.dirty=true;return}
+    if(prev.returned)return;
+    const now=injuryVolume(id);if(INJ_ACTIVITY.some(k=>now[k]>prev.baseline[k])){prev.returned=true;delete S.pc[id];S.dirty=true}
+  });
+  for(const id in S.liveInj)if(!watching.has(id)){delete S.liveInj[id];delete S.pc[id];S.dirty=true}
+}
 const settled=p=>{const g=S.games[p.team];return !!g&&(g.state==="post"||(g.state==="in"&&OUTS.test(p.inj||"")))};
 function gcls(p){
   if(!p.team||p.team==="FA")return"";const g=S.games[p.team];
@@ -2363,7 +2387,11 @@ function gtext(p){
 }
 function expected(lg,p,a){
   const g=S.games[p.team];if(!g)return{e:a,r:0};
-  const pr=lg.proj?lg.proj[p.id]:null,pj=pr==null?a:pr,f=frac(g);
+  
+  const pr=lg.proj?lg.proj[p.id]:null,base=S.base[lg.id+":"+p.id];
+  const returned=S.liveInj[p.id]&&S.liveInj[p.id].returned&&g.state==="in";
+  // The feed may have zeroed his projection while hurt: resume from pregame pace for time left.
+  const pj=returned&&Number.isFinite(+base)&&+base>0?+base:pr==null?a:pr,f=frac(g);
   if(settled(p))return{e:a,r:0};if(g.state==="pre")return{e:pj,r:1};
   return{e:Math.max(a,a+pj*(1-f)),r:1-f};
 }
@@ -2805,13 +2833,13 @@ function alerts(now){
   if(tdO.length)toast("warn",`😬 ${esc(tdO.map(p=>p.name).join(" + "))} TD (${esc(tdO[0].who)})${wpTag(tdO[0].id)}`,5000);
 }
 function injCheck(){
-  if(S.injChecked||!S.players)return;const V=vis();if(!V.length||!V.every(l=>l.matchups))return;S.injChecked=true;
+  if(!S.players)return;const V=vis();if(!V.length||!V.every(l=>l.matchups))return;
   let snap={};try{snap=JSON.parse(load("injsnap")||"{}")}catch(e){}const now=Date.now(),next={};
-  V.forEach(lg=>(lg.matchups||[]).forEach(m=>(m.starters||[]).forEach(id=>{if(!id||id==="0")return;const st=(S.players[id]||{}).injury_status||"";next[id]=st;
+  V.forEach(lg=>(lg.matchups||[]).forEach(m=>(m.starters||[]).forEach(id=>{if(!id||id==="0")return;const st=pinfo(id).inj||"";next[id]=st;
     if(id in snap&&snap[id]!==st){const k=!st?"inj":/^(Out|IR|Suspended)$/i.test(st)?"out":/^(Questionable|Doubtful)$/i.test(st)?"q":"inj";S.fx[id]={k,t:now};S.dirty=true;if(!S.injQ)S.injQ=[];if(!S.injQ.some(x=>x.id===id))S.injQ.push({id,st,mine:m.roster_id===lg.mineRid})}})));
   /* status changes are found while the page warms up; announce them right after (once) */
   if(S.injQ&&S.injQ.length){const q=S.injQ.slice(0,6);S.injQ=[];setTimeout(()=>{q.forEach((x,i)=>setTimeout(()=>{const p=pinfo(x.id),out=/^(Out|IR|Suspended)$/i.test(x.st);
-      toast(out?"bad":"status",`${out?"⛔":"🩺"} ${esc(p.name)} · ${x.st?esc(x.st):"cleared"}${x.mine?"":" · opponent"}`,5000);
+      const returned=!!(S.liveInj[x.id]&&S.liveInj[x.id].returned);toast(out?"bad":"status",`${out?"⛔":returned?"↩":"🩺"} ${esc(p.name)} · ${x.st?esc(x.st):returned?"back in the game (new play confirmed)":"cleared"}${x.mine?"":" · opponent"}`,5000);
       const lg=vis()[0];if(lg&&lg.el){const td=lg.el.querySelector(`td[data-pos][data-pid="${x.id}"]`);if(td)playEventAnimation(out?"out":/^(Questionable|Doubtful)$/i.test(x.st)?"q":"inj",td,{age:FX_DELAY,side:td.classList.contains("r")?"L":"R"})}},i*900))},Math.max(0,(S.quietUntil||0)-Date.now())+800)}
   save("injsnap",JSON.stringify(next));
 }
@@ -2865,6 +2893,11 @@ async function refresh(){
     if(await loadRaw()){S.L.forEach(calcProj);S.dirty=true}
     if(st!==undefined)applyStats(st,now);
     computeEff(now);
+    syncLiveInjuries(); // badges, forecast and win odds read the same corrected status
+    // Poll large player status data only every 10m while starters actually have a live NFL game.
+    if(S.players&&S.week===S.nflWeek&&S.L.some(lg=>(lg.mu||[]).some(m=>(m.starters||[]).some(id=>{
+      const p=S.players[id],g=p&&S.games[NT(p.team||"")];return g&&g.state==="in"
+    }))))void refreshPlayers(10*60e3);
     S.L.forEach(lg=>{if(!lg.mu)return;if(!lg.proj)calcProj(lg);const M=buildView(lg,now);lg.matchups=M;
       if(lg.hidden)return;captureBase(lg,M);track(lg,M,now);recordHist(lg,now);try{recordWP(lg,now)}catch(e){}});
     wpSnap(now);buildSignals();
@@ -5427,8 +5460,15 @@ function mvRender(){
    Solved with the exact optimizer, so following it maximizes expected Lineup IQ.
    ===================================================================== */
 const IL={res:{},busy:{}};
-async function refreshPlayers(maxAge){if(S.playersAt&&Date.now()-S.playersAt<maxAge)return false;
-  try{const d=await getJ(SLP+"/players/nfl",true);if(d&&Object.keys(d).length>1000){S.players=d;S.playersAt=Date.now();S.pc={};try{await idbSet("players",{at:S.playersAt,data:d})}catch(e){}return true}}catch(e){}return false}
+async function refreshPlayers(maxAge){
+  if(S.playersRefreshing||Date.now()<(S.playersRetryAt||0)||(S.playersAt&&Date.now()-S.playersAt<maxAge))return false;
+  S.playersRefreshing=true;
+  try{const d=await getJ(SLP+"/players/nfl",true);if(d&&Object.keys(d).length>1000){
+    S.players=d;S.playersAt=Date.now();S.pc={};S.dirty=true;
+    try{await idbSet("players",{at:S.playersAt,data:d})}catch(e){}return true}
+    S.playersRetryAt=Date.now()+120000
+  }catch(e){S.playersRetryAt=Date.now()+120000}
+  finally{S.playersRefreshing=false}return false}
 function ilGames(j){const G={};(j&&j.events||[]).forEach(ev=>{const c=ev.competitions[0],cs=c.competitors,H=cs.find(x=>x.homeAway==="home")||cs[0],A=cs.find(x=>x!==H),o=(c.odds||[])[0]||{};
   const home=NT(H.team.abbreviation),away=NT(A.team.abbreviation),tot=o.overUnder!=null?+o.overUnder:null;let hs=null;
   {const m=String(o.details||"").match(/([A-Z]{2,4})\s*([+-]?\d+(\.\d+)?)/);if(m){const fav=NT(m[1]),x=Math.abs(+m[2]);hs=fav===home?-x:fav===away?x:null}else if(/EVEN|PK/i.test(o.details||""))hs=0;else if(o.spread!=null&&!isNaN(+o.spread))hs=+o.spread}   /* "KC -3.5" is unambiguous; the bare number is the fallback */
