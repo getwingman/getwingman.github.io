@@ -2391,7 +2391,11 @@ function expected(lg,p,a){
   const pr=lg.proj?lg.proj[p.id]:null,base=S.base[lg.id+":"+p.id];
   const returned=S.liveInj[p.id]&&S.liveInj[p.id].returned&&g.state==="in";
   // The feed may have zeroed his projection while hurt: resume from pregame pace for time left.
-  const pj=returned&&Number.isFinite(+base)&&+base>0?+base:pr==null?a:pr,f=frac(g);
+  const f=frac(g),season=returned&&!(Number.isFinite(+base)&&+base>0)&&!(pr>0)?seasonAvg(lg,p.id):null;
+  // If opened after the injury, neither pregame baseline nor season form may be available.
+  // In that case use capped observed pace rather than leaving the return permanently frozen at actual points.
+  const pace=a>0?a/Math.max(.5,f):0;
+  const pj=returned?(Number.isFinite(+base)&&+base>0?+base:pr>0?pr:season!=null&&season>0?season:pace):pr==null?a:pr;
   if(settled(p))return{e:a,r:0};if(g.state==="pre")return{e:pj,r:1};
   return{e:Math.max(a,a+pj*(1-f)),r:1-f};
 }
