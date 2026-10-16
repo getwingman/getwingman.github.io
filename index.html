@@ -1987,7 +1987,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.17</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.18</span></div>
   </div>
 </header>
 <main>
@@ -2011,7 +2011,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.17";
+const WM_VERSION="1.18";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -3712,7 +3712,7 @@ function sheetForm(p,f,mine){const M=SHEETMODES[p],c=mine.find(x=>x.sheet)||mine
    Switching or unlinking a sheet clears everything from the previous pool (members, picks, settings view, alerts, my picks). */
 function resetPool(p){
   if(p==="survivor"){Object.assign(SV,{d:{sheet:"",by:{}},cfg:null,st:"idle",err:"",lanes:null,res:{},week:null,src:"",syncAt:0,syncBackoff:0,fails:0,broken:0,maxPick:0,known:{},late:{},wph:{},q:"",lastHtml:""})}
-  else{Object.assign(PK,{d:{sheet:"",stand:[],players:[],games:[],picks:[]},cfg:null,st:"idle",err:"",rows:null,games:null,weeks:0,wSheet:0,base:null,apiN:0,gx:null,names:null,tb:null,cov:null,nx:{},nxt:{},fpi:{},sheetCfg:null,layout:null,src:"",syncAt:0,syncBackoff:0,fails:0,missing:null,mism:null,odds:null,oddsKey:"",lastHtml:""});
+  else{Object.assign(PK,{d:{sheet:"",stand:[],players:[],games:[],picks:[]},cfg:null,st:"idle",err:"",rows:null,games:null,weeks:0,wSheet:0,base:null,apiN:0,gx:null,names:null,tb:null,cov:null,nx:{},nxt:{},fpi:{},sheetCfg:null,layout:null,src:"",syncAt:0,nflAt:0,syncing:false,syncBackoff:0,fails:0,missing:null,mism:null,odds:null,oddsKey:"",lastHtml:""});
     try{const ks=[];for(let i=0;i<localStorage.length;i++)ks.push(localStorage.key(i));ks.filter(k=>/^lm_pk_mine_/.test(k)).forEach(k=>localStorage.removeItem(k))}catch(e){}}}
 function applySheetModes(start){const sv=(S.conns||getConns()).find(c=>c.p==="survivor"),pk=(S.conns||getConns()).find(c=>c.p==="pickem"&&c.sheet),direct=(S.conns||getConns()).some(c=>c.p==="pickem"&&c.source==='sleeper');
   if(!sv&&SV.d.sheet)resetPool("survivor");if(!pk&&PK.d.sheet)resetPool("pickem");
@@ -4748,7 +4748,7 @@ function pkSleeperWire(el){
    Data contract: a "Picks" tab (header row starting "Season") + a "Standings" tab (header row starting "Rank").
    ===================================================================== */
 const ago=t=>{if(!t)return"";const s=(Date.now()-t)/1000;return s<60?"just now":s<3600?Math.round(s/60)+"m ago":s<86400?Math.round(s/3600)+"h ago":Math.round(s/86400)+"d ago"};
-const PK={odds:null,oddsKey:"",d:{sheet:"",stand:[],players:[],games:[],picks:[]},cfg:null,st:"idle",err:"",rows:null,src:"",syncAt:0,lastHtml:"",open:{help:true,live:true,ins:true,board:true,hist:false},nx:{},nxt:{},fpi:{}};
+const PK={odds:null,oddsKey:"",d:{sheet:"",stand:[],players:[],games:[],picks:[]},cfg:null,st:"idle",err:"",rows:null,src:"",syncAt:0,nflAt:0,syncing:false,lastHtml:"",open:{help:true,live:true,ins:true,board:true,hist:false},nx:{},nxt:{},fpi:{}};
 const pkMine=N=>{try{return JSON.parse(load("pk_mine_"+N)||"{}")||{}}catch(e){return{}}};
 function pkLoad(){try{PK.open=Object.assign(PK.open,JSON.parse(load("pk_open")||"{}"))}catch(e){}pkIndex()}
 function pkIndex(){
@@ -4758,12 +4758,24 @@ function pkIndex(){
   PK.weeks=Math.max(...PK.rows.map(r=>r.w.length),0);PK.wSheet=PK.weeks;
   PK.base={rows:PK.rows.map(r=>r.w.slice()),games:PK.games.map(g=>({ats:g.ats,su:g.su,c:g.picks.map(p=>p.c)}))};PK.apiN=0;
 }
+/* The current NFL week and last week graded in the connected sheet are different.
+   W5 sheet grades must not pin the dashboard to Week 5 while NFL is in Week 7. */
+function pkCurrentWeek(){
+  const nfl=+S.nflWeek||+S.dispWeek||0,source=PK.wSheet||0;
+  return Math.max(1,Math.min(18,nfl>1?nfl:source||1));
+}
+function pkSheetLatestWeek(){
+  return Math.max(0,...(PK.games||[]).filter(g=>g.ats||g.su||g.picks.some(p=>p.c==="C"||p.c==="I")).map(g=>g.w));
+}
+function pkHelperWeek(w){const gs=PK.nx[w];return gs&&gs.length&&gs.every(g=>g.st!=="pre")?Math.min(18,w+1):w}
 /* the moment ESPN marks a game final, grade it against the spread with the line Wingman used (Sleeper, locked at kickoff,
    else the sheet's verified line). Sheet grades stay authoritative: games the sheet has graded are never touched, and when the
    sheet catches up its grade replaces this one. Hidden picks stay hidden; pushes count as not covered (the pool's rule). */
 function pkApiGrade(){
   if(!PK.rows||!PK.games||!PK.base)return;const B=PK.base;
-  PK.weeks=PK.wSheet;PK.rows.forEach((r,i)=>{r.w=B.rows[i].slice()});PK.games.forEach((g,i)=>{const b=B.games[i];g.ats=b.ats;g.su=b.su;g.api=0;g.picks.forEach((p,k)=>{p.c=b.c[k];p.api=0})});
+  PK.weeks=pkCurrentWeek();
+  PK.rows.forEach((r,i)=>{r.w=B.rows[i].slice(0,PK.weeks);while(r.w.length<PK.weeks)r.w.push(0)});
+  PK.games.forEach((g,i)=>{const b=B.games[i];g.ats=b.ats;g.su=b.su;g.api=0;g.picks.forEach((p,k)=>{p.c=b.c[k];p.api=0})});
   let n=0;const add={};
   PK.games.forEach(g=>{if(g.ats)return;const L=PK.nx[g.w];if(!L)return;const x=L.find(y=>(y.home===g.a&&y.away===g.b)||(y.home===g.b&&y.away===g.a));
     if(!x||x.st!=="post"||x.hs==null||x.hsVerified!==true||!Number.isFinite(x.hsc)||!Number.isFinite(x.asc))return;
@@ -4771,7 +4783,7 @@ function pkApiGrade(){
     g.ats=winT||"PUSH";g.su=x.hsc>x.asc?x.home:x.asc>x.hsc?x.away:"";g.api=1;n++;
     g.picks.forEach(p=>{if(p.side<0||p.c!=="P")return;const t=p.side?g.b:g.a;p.c=t===winT?"C":"I";p.api=1;if(p.c==="C"){const k=p.u+"|"+g.w;add[k]=(add[k]||0)+1}})});
   if(!n){PK.apiN=0;return}
-  const wmax=Math.max(PK.wSheet,...PK.games.filter(g=>g.api).map(g=>g.w));
+  const wmax=PK.weeks;
   PK.rows.forEach(r=>{for(let k=r.w.length;k<wmax;k++)r.w[k]=0;for(let w=1;w<=wmax;w++){const a=add[r.u+"|"+w];if(a)r.w[w-1]=(+r.w[w-1]||0)+a}});
   PK.weeks=wmax;PK.apiN=n}
 /* live sync from the sheet (works when it's shared "anyone with the link can view") */
@@ -4830,14 +4842,22 @@ async function pkSyncNormalized(id){
 /* the sheet's line for a game, when it's a verified one (Sleeper lock / screenshot); proxies are labeled */
 function pkSheetLine(w,home,away){if(!PK.gx||!PK.d.games)return null;for(let i=0;i<PK.d.games.length;i++){const g=PK.d.games[i],x=PK.gx[i];if(g[0]!==w||x.spread==null||/not_captured/i.test(x.src))continue;
   const ta=NT(g[1]),tb=NT(g[2]);if(ta===home&&tb===away)return{hs:x.spread,src:x.src};if(ta===away&&tb===home)return{hs:-x.spread,src:x.src}}return null}
-async function pkSync(){
-  if(!PK.d.sheet||Date.now()<(PK.syncBackoff||0))return;if(!PK.rows)PK.st="loading";
-  try{if(await pkSyncNormalized(PK.d.sheet)){PK.st="ok";PK.err="";PK.src="sheet";PK.syncAt=Date.now();PK.fails=0;PK.syncBackoff=0;return}
-    const[R,SR]=await Promise.all([gvizCsv(PK.d.sheet,"Picks"),gvizCsv(PK.d.sheet,"Standings")]);const x=pkParse(R,SR);if(x.err)throw new Error(x.err);
-    PK.d=Object.assign({},PK.d,{stand:x.stand,players:x.players,games:x.games,picks:x.picks});PK.missing=x.missing;PK.mism=x.mism;PK.layout="legacy";PK.gx=null;PK.tb={};PK.sheetCfg=null;pkIndex();
+async function pkSync(force=false){
+  if(!PK.d.sheet||PK.syncing||(!force&&Date.now()<(PK.syncBackoff||0)))return;
+  PK.syncing=true;if(!PK.rows)PK.st="loading";
+  try{
+    if(await pkSyncNormalized(PK.d.sheet)){PK.st="ok";PK.err="";PK.src="sheet";PK.syncAt=Date.now();PK.fails=0;PK.syncBackoff=0;return}
+    const[R,SR]=await Promise.all([gvizCsv(PK.d.sheet,"Picks"),gvizCsv(PK.d.sheet,"Standings")]),x=pkParse(R,SR);
+    if(x.err)throw new Error(x.err);
+    PK.d=Object.assign({},PK.d,{stand:x.stand,players:x.players,games:x.games,picks:x.picks});
+    PK.missing=x.missing;PK.mism=x.mism;PK.layout="legacy";PK.gx=null;PK.tb={};PK.sheetCfg=null;pkIndex();
     PK.st="ok";PK.err="";PK.src="sheet";PK.syncAt=Date.now();PK.fails=0;PK.syncBackoff=0;
-  }catch(e){PK.fails=(PK.fails||0)+1;PK.syncBackoff=Date.now()+Math.min(30*60e3,30e3*2**PK.fails);
-    if(!PK.rows){PK.st="error";PK.err=e.message==="private"?"Wingman can't read this sheet. In Google Sheets: Share → General access → Anyone with the link (Viewer).":/layout|nopicks|nostand/.test(e.message)?"This sheet needs WM_Config, WM_Games (week, game_id, team_a, team_b, spread_a…) and WM_Picks (week, game_id, player_id, pick_team, pick_status, grade, points) tabs.":"Couldn't reach Google Sheets. Wingman will keep trying."}}
+  }catch(e){
+    PK.fails=(PK.fails||0)+1;
+    PK.syncBackoff=Date.now()+Math.min(5*60e3,15000*2**Math.min(5,PK.fails));
+    PK.err=e.message==="private"?"Wingman can't read this sheet. Check its sharing settings.":/layout|nopicks|nostand/.test(e.message)?"The linked sheet's Pick'em tabs are missing or invalid.":"Couldn't refresh the Google Sheet. Existing standings may be outdated.";
+    PK.st=PK.rows?"stale":"error";
+  }finally{PK.syncing=false}
 }
 /* =====================================================================
    SLEEPER PICK'EM LINES — the only odds source for Pick'em.
@@ -5062,15 +5082,25 @@ function pkOdds(){
 }
 const pctX=x=>x>0&&x<.01?"<1%":Math.round(x*100)+"%";
 function pkSec(key,title,sub,body){const o=PK.open[key]!==false;return`<div class="card svc"><div class="lh svh" data-k="${key}"><span><span class="chev">${o?"▾":"▸"}</span>${title}</span><small>${sub||""}</small></div>${o?body:""}</div>`}
-async function pkTick(){
-  if(pkSleeperActive())void pkSleeperSync(false);
-  if(!PK.d.sheet)return;PK.cfg=PK.cfg||poolCfg("pickem");
-  if(!PK.rows||Date.now()-PK.syncAt>600000){PK.syncAt=PK.rows?Date.now():PK.syncAt;await pkSync();if(!PK.rows){if(S.tab==="p")pkRender();return}}
-  /* the sheet's latest week and the one after are polled live (scores grade picks the moment a game ends); then next week's lines */
-  const ws=PK.wSheet||PK.weeks;await Promise.all([pkLoadNext(ws,2500),pkLoadNext(ws+1,15000),pkLoadNext(ws+2,600000)]);
+async function pkTick(force=false){
+  // A week rollover must be detected while the page remains open, including pool-only setups.
+  if(!PK.nflAt||Date.now()-PK.nflAt>600000){
+    PK.nflAt=Date.now();const before=S.season+":"+S.nflWeek;
+    await nflState();
+    if(before!==S.season+":"+S.nflWeek){PK.nx={};PK.nxt={};PK.fpi={};PK.oddsKey="";PK.lastHtml=""}
+  }
+  if(pkSleeperActive())void pkSleeperSync(force);
+  if(!PK.d.sheet){if(S.tab==="p")pkRender();return}
+  PK.cfg=PK.cfg||poolCfg("pickem");
+  if(!PK.rows||force||Date.now()-PK.syncAt>(S.tab==="p"?120000:600000)){
+    await pkSync(force);
+    if(!PK.rows){if(S.tab==="p")pkRender();return}
+  }
+  const cw=pkCurrentWeek(),sw=PK.wSheet||cw;
+  const weeks=[cw-1,cw,cw+1,sw,sw+1].filter((w,i,a)=>w>=1&&w<=18&&a.indexOf(w)===i);
+  await Promise.all(weeks.map(w=>pkLoadNext(w,force?0:w===cw?15000:w===cw+1?60000:120000)));
   if(S.tab==="p")pkRender();
 }
-
 /* =====================================================================
    MOVES TAB — trades (2- and 3-way, everyone improves) and waiver pickups
    Value = rest-of-season points per week: Sleeper's next 4 weekly projections (your scoring),
@@ -6044,7 +6074,7 @@ function setTab(t){
 }
 document.querySelectorAll("header .tb[data-t]").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
 
-SV.lastTick=0;setInterval(async()=>{if(document.hidden)return;const n=Date.now(),secs=+$("every").value;if(!secs)return;const every=secs*1000;if(n-SV.lastTick>=(S.tab==="s"||S.tab==="p"?every:60000)){SV.lastTick=n;if(hasMode("survivor"))await svTick();if(hasMode("pickem")){if(S.tab==="p")await pkTick();else if(PK.weeks){await pkLoadNext(PK.wSheet||PK.weeks,15000);await pkLoadNext((PK.wSheet||PK.weeks)+1,30000)}}try{renderSweat()}catch(e){}}},1000);
+SV.lastTick=0;setInterval(async()=>{if(document.hidden)return;const n=Date.now(),secs=+$("every").value;if(!secs)return;const every=secs*1000;if(n-SV.lastTick>=(S.tab==="s"||S.tab==="p"?every:60000)){SV.lastTick=n;if(hasMode("survivor"))await svTick();if(hasMode("pickem")){if(S.tab==="p")await pkTick();else if(PK.weeks){const w=pkCurrentWeek();await Promise.all([pkLoadNext(w,30000),pkLoadNext(w+1,60000)])}}try{renderSweat()}catch(e){}}},1000);
 setInterval(()=>{if((S.tab==="t"||S.tab==="e")&&!document.hidden)mvTick()},30000);
 pkLoad();applySheetModes(false);updateNav();
 if(hasMode("survivor"))svInit().then(()=>{if(S.tab!=="m")setTab(S.tab)});else if(S.tab!=="m"&&S.tab!=="s"&&S.tab!=="p")setTab(S.tab);
