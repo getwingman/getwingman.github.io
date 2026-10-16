@@ -1987,7 +1987,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.20</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.21</span></div>
   </div>
 </header>
 <main>
@@ -2011,7 +2011,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.20";
+const WM_VERSION="1.21";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -4768,37 +4768,54 @@ function pkCurrentWeek(){
 // Only sheet-supplied graded PICK rows count as ingested pool results.
 // An ESPN final / known ATS winner without any participant picks is NOT a graded pool week.
 function pkSheetLatestWeek(){
-  const base=PK.base&&PK.base.games;
-  return Math.max(0,...(PK.games||[]).filter((g,i)=>(base&&base[i]?base[i].c:g.picks.map(p=>p.c)).some(c=>c==="C"||c==="I")).map(g=>g.w));
+  return Math.max(0,...(PK.games||[]).filter(g=>g.ats&&g.picks.some(p=>p.c==="C"||p.c==="I")).map(g=>g.w));
 }
 function pkWeekImport(w){
   const gs=PK.games||[],base=PK.base&&PK.base.games,participants=(PK.rows||[]).length;
   let games=0,captured=0,graded=0;
   gs.forEach((g,i)=>{if(g.w!==w)return;games++;
-    const states=base&&base[i]?base[i].c:g.picks.map(p=>p.c);
+    const states=g.picks.map(p=>p.c);
     states.forEach(c=>{if(c!=="M")captured++;if(c==="C"||c==="I")graded++})
   });
   return{games,expected:games*participants,captured,graded};
 }
+// Historical migration from verified 2026 W1–W4 official pool grades. Never extend with market proxies.
+// This is not a live score source; it preserves old standings until official pool-locked lines can be recovered.
+const PK_HIST_2026={"2026-W1-SEA-NE":"NE","2026-W1-CAR-CHI":"CHI","2026-W1-CIN-TB":"CIN","2026-W1-JAX-CLE":"JAX","2026-W1-PIT-ATL":"PIT","2026-W1-MIN-GB":"MIN","2026-W1-LAC-ARI":"ARI","2026-W1-KC-DEN":"KC","2026-W1-HOU-BUF":"BUF","2026-W1-IND-BAL":"BAL","2026-W1-LV-MIA":"LV","2026-W1-NYG-DAL":"NYG","2026-W1-LAR-SF":"SF","2026-W1-TEN-NYJ":"NYJ","2026-W1-PHI-WAS":"WAS","2026-W1-DET-NO":"NO","2026-W2-DET-BUF":"BUF","2026-W2-CAR-ATL":"CAR","2026-W2-NO-BAL":"NO","2026-W2-CHI-MIN":"MIN","2026-W2-HOU-CIN":"CIN","2026-W2-NE-PIT":"NE","2026-W2-NYJ-GB":"NYJ","2026-W2-TB-CLE":"CLE","2026-W2-TEN-PHI":"TEN","2026-W2-DEN-JAX":"DEN","2026-W2-LAC-LV":"LV","2026-W2-DAL-WAS":"DAL","2026-W2-SF-MIA":"SF","2026-W2-KC-IND":"IND","2026-W2-LAR-NYG":"LAR","2026-W2-ARI-SEA":"SEA","2026-W3-ATL-GB":"ATL","2026-W3-CAR-CLE":"CLE","2026-W3-DET-NYJ":"DET","2026-W3-IND-HOU":"IND","2026-W3-JAX-NE":"JAX","2026-W3-MIA-KC":"KC","2026-W3-NYG-TEN":"TEN","2026-W3-PIT-CIN":"PIT","2026-W3-SF-ARI":"ARI","2026-W3-TB-MIN":"MIN","2026-W3-DAL-BAL":"DAL","2026-W3-NO-LV":"LV","2026-W3-DEN-LAR":"DEN","2026-W3-LAC-BUF":"BUF","2026-W3-WAS-SEA":"WAS","2026-W3-CHI-PHI":"CHI","2026-W4-WAS-IND":"IND","2026-W4-PHI-LAR":"LAR","2026-W4-TB-GB":"TB","2026-W4-LV-KC":"LV","2026-W4-SEA-LAC":"SEA","2026-W4-SF-DEN":"SF","2026-W4-BAL-TEN":"TEN","2026-W4-CHI-NYJ":"CHI","2026-W4-CIN-JAX":"JAX","2026-W4-HOU-DAL":"DAL","2026-W4-MIN-MIA":"MIA","2026-W4-CLE-PIT":"CLE","2026-W4-NYG-ARI":"NYG","2026-W4-CAR-DET":"CAR","2026-W4-BUF-NE":"NE"};
 function pkHelperWeek(w){const gs=PK.nx[w];return gs&&gs.length&&gs.every(g=>g.st!=="pre")?Math.min(18,w+1):w}
 /* the moment ESPN marks a game final, grade it against the spread with the line Wingman used (Sleeper, locked at kickoff,
    else the sheet's verified line). Sheet grades stay authoritative: games the sheet has graded are never touched, and when the
    sheet catches up its grade replaces this one. Hidden picks stay hidden; pushes count as not covered (the pool's rule). */
 function pkApiGrade(){
-  if(!PK.rows||!PK.games||!PK.base)return;const B=PK.base;
-  PK.weeks=pkCurrentWeek();
-  PK.rows.forEach((r,i)=>{r.w=B.rows[i].slice(0,PK.weeks);while(r.w.length<PK.weeks)r.w.push(0)});
-  PK.games.forEach((g,i)=>{const b=B.games[i];g.ats=b.ats;g.su=b.su;g.api=0;g.picks.forEach((p,k)=>{p.c=b.c[k];p.api=0})});
-  let n=0;const add={};
-  PK.games.forEach(g=>{if(g.ats)return;const L=PK.nx[g.w];if(!L)return;const x=L.find(y=>(y.home===g.a&&y.away===g.b)||(y.home===g.b&&y.away===g.a));
-    if(!x||x.st!=="post"||x.hs==null||x.hsVerified!==true||!Number.isFinite(x.hsc)||!Number.isFinite(x.asc))return;
-    const cov=(x.hsc-x.asc)+x.hs,winT=cov>0?x.home:cov<0?x.away:null;
-    g.ats=winT||"PUSH";g.su=x.hsc>x.asc?x.home:x.asc>x.hsc?x.away:"";g.api=1;n++;
-    g.picks.forEach(p=>{if(p.side<0||p.c!=="P")return;const t=p.side?g.b:g.a;p.c=t===winT?"C":"I";p.api=1;if(p.c==="C"){const k=p.u+"|"+g.w;add[k]=(add[k]||0)+1}})});
-  if(!n){PK.apiN=0;return}
-  const wmax=PK.weeks;
-  PK.rows.forEach(r=>{for(let k=r.w.length;k<wmax;k++)r.w[k]=0;for(let w=1;w<=wmax;w++){const a=add[r.u+"|"+w];if(a)r.w[w-1]=(+r.w[w-1]||0)+a}});
-  PK.weeks=wmax;PK.apiN=n}
+  if(!PK.rows||!PK.games||!PK.base)return;
+  const B=PK.base,year=String(S.season||"");PK.weeks=pkCurrentWeek();
+  PK.rows.forEach(r=>{r.w=Array(PK.weeks).fill(0)});
+  let counted=0;
+  PK.games.forEach((g,i)=>{
+    const b=B.games[i];g.ats="";g.su="";g.api=0;g.atsSrc="";
+    g.picks.forEach((p,k)=>{p.c=b.c[k];p.api=0});
+    const x=(PK.nx[g.w]||[]).find(y=>(y.home===NT(g.a)&&y.away===NT(g.b))||(y.home===NT(g.b)&&y.away===NT(g.a)));
+    if(x&&x.st==="post"&&Number.isFinite(x.hsc)&&Number.isFinite(x.asc)){
+      g.su=x.hsc>x.asc?x.home:x.asc>x.hsc?x.away:"";
+      if(x.hsVerified===true&&Number.isFinite(x.hs)){
+        const margin=x.hsc-x.asc+x.hs;
+        g.ats=margin>0?x.home:margin<0?x.away:"PUSH";
+        g.atsSrc="espn_verified";g.api=1;counted++;
+      }
+    }
+    if(!g.ats&&year==="2026"&&g.w<=4&&PK.gx&&PK.gx[i]&&PK_HIST_2026[PK.gx[i].id]){
+      g.ats=PK_HIST_2026[PK.gx[i].id];g.atsSrc="historical_pool_archive";g.api=2;
+    }
+    if(g.ats)g.picks.forEach(p=>{
+      if(p.side<0||p.c==="M"||p.c==="H"||p.c==="N")return;
+      p.c=(p.side?g.b:g.a)===g.ats?"C":"I";p.api=g.api;
+    });
+  });
+  const byId=new Map(PK.rows.map(r=>[r.u,r]));
+  PK.games.forEach(g=>{if(g.w>PK.weeks)return;g.picks.forEach(p=>{
+    if(p.c!=="C")return;const r=byId.get(p.u);if(r)r.w[g.w-1]++;
+  })});PK.apiN=counted;
+}
 /* live sync from the sheet (works when it's shared "anyone with the link can view") */
 /* parse both tabs whole (no row cap: a season is ~23 members × 16 games × 18 weeks ≈ 6,600 pick rows) and check they agree */
 function pkParse(R,SR){
@@ -4824,7 +4841,7 @@ function pkParse(R,SR){
 /* normalized Wingman tables (WM_Config / WM_Games / WM_Picks / WM_Participants / WM_Tiebreakers).
    Grades and points in WM_Picks are authoritative (never recomputed from proxy spreads); standings, cover rates,
    popularity and completeness are derived here. team_a/team_b are NOT home/away. */
-const PKCOLS={games:["season","week","game_id","team_a","team_b","spread_a","spread_source","score_a","score_b","game_status"],picks:["week","game_id","player_id","pick_team","pick_status","grade","points"],
+const PKCOLS={games:["season","week","game_id","team_a","team_b","spread_a","spread_source"],picks:["week","game_id","player_id","pick_team","pick_status"],
   parts:["player_id","display_name"],tb:["week","player_id","guess","actual","guess_status"]};
 async function pkSyncNormalized(id){
   const[c0,c1]=await Promise.all([gvizCsv(id,"WM_Config").catch(e=>e),gvizCsv(id,"WM_Config",1).catch(()=>null)]);
@@ -4834,20 +4851,21 @@ async function pkSyncNormalized(id){
   if(!games0||!games0.length||!picks0)throw new Error("layout");
   const players=parts.map(p=>p.player_id).filter(Boolean),names={};parts.forEach(p=>{if(p.player_id&&p.display_name)names[p.player_id]=p.display_name});
   const GI={},games=[],gx=[];games0.forEach(g=>{const w=parseInt(g.week);if(!w||!g.game_id||!g.team_a||!g.team_b)return;const n=x=>x===""||x==null||isNaN(+x)?null:+x;
-    GI[g.game_id]=games.length;games.push([w,g.team_a,g.team_b,n(g.score_a),n(g.score_b),"",""]);gx.push({id:g.game_id,spread:n(g.spread_a),src:g.spread_source||"",status:g.game_status||""})});
-  const code={correct:"C",incorrect:"I",push:"I",pushed:"I","hidden/pending":"H",hidden:"H","no pick":"N",pending:"P"},pts={},graded={},cap={},rows={};
-  const picks=[];picks0.forEach(x=>{const gi=GI[x.game_id],w=parseInt(x.week);if(gi==null||!x.player_id)return;if(!players.includes(x.player_id))players.push(x.player_id);
-    const g=games[gi],st=lc(x.pick_status),gr=lc(x.grade),c=st==="missing"?"M":st==="no pick"?"N":st==="hidden"?"H":code[gr]||(x.pick_team?"P":"M"),side=x.pick_team===g[1]?0:x.pick_team===g[2]?1:-1;
-    if((gr==="push"||gr==="pushed")&&!g[5])g[5]="PUSH"; // official pool push, even when the member made no pick
-    picks.push([players.indexOf(x.player_id),gi,side,c]);(rows[w]=rows[w]||0);rows[w]++;if(c!=="M")cap[w]=(cap[w]||0)+1;
-    if(c==="C"||c==="I"){graded[w]=1;const k=x.player_id+"|"+w;pts[k]=(pts[k]||0)+(x.points!==""&&!isNaN(+x.points)?+x.points:c==="C"?1:0);
-      // Incorrect picks cannot establish the winning ATS side.
-      if(side>=0&&!g[5]&&c==="C")g[5]=x.pick_team}});
-  games.forEach(g=>{if(g[3]!=null&&g[4]!=null&&g[3]!==g[4])g[6]=g[3]>g[4]?g[1]:g[2]});
-  const W=Math.max(0,...Object.keys(graded).map(Number));
-  const stand=players.map(u=>[u,Array.from({length:W},(_,i)=>pts[u+"|"+(i+1)]||0)]);
-  /* completeness: every game needs one row per participant; MISSING = not captured yet (different from a forfeited "No Pick") */
-  const exp=+C.expected_participants||players.length,missing=[],cov={};for(let w=1;w<=W;w++){const ng=games.filter(g=>g[0]===w).length,need=ng*exp;cov[w]=need?Math.min(1,(cap[w]||0)/need):1;if(cov[w]<.999)missing.push(w)}
+    GI[g.game_id]=games.length;games.push([w,g.team_a,g.team_b,null,null,"",""]);gx.push({id:g.game_id,spread:n(g.spread_a),src:g.spread_source||""})});
+  // Input-only: do not inspect sheet score_a, score_b, game_status, grade or points.
+  const picks=[];picks0.forEach(x=>{const gi=GI[x.game_id];if(gi==null||!x.player_id)return;
+    if(!players.includes(x.player_id))players.push(x.player_id);
+    const g=games[gi],st=lc(x.pick_status),side=x.pick_team===g[1]?0:x.pick_team===g[2]?1:-1;
+    const c=st==="missing"?"M":st==="no pick"?"N":st==="hidden"?"H":side>=0?"P":"M";
+    picks.push([players.indexOf(x.player_id),gi,side,c]);
+  });
+  const W=pkCurrentWeek(),stand=players.map(u=>[u,Array(W).fill(0)]);
+  const exp=+C.expected_participants||players.length,missing=[],cov={};
+  for(let w=1;w<=W;w++){const ng=games.filter(g=>g[0]===w).length,
+    got=picks.filter(p=>games[p[1]]&&games[p[1]][0]===w&&p[3]!=="M").length;
+    const need=ng*exp;cov[w]=need?Math.min(1,got/need):0;
+    if(cov[w]<.999)missing.push(w);
+  }
   const tb={};tbs.forEach(t=>{const w=parseInt(t.week);if(!w||!t.player_id||t.guess===""||isNaN(+t.guess))return;(tb[w]=tb[w]||{})[t.player_id]={g:+t.guess,a:t.actual===""||isNaN(+t.actual)?null:+t.actual}});
   PK.d=Object.assign({},PK.d,{stand,players,games,picks});PK.gx=gx;PK.names=names;PK.tb=tb;PK.cov=cov;PK.missing=missing;PK.mism=[];PK.layout="normalized";PK.tbRule=lc(C.tiebreak_rule||"absolute_error");
   PK.sheetCfg=Object.fromEntries(Object.entries({name:C.pool_name,dues:C.entry_fee_usd!=null&&C.entry_fee_usd!==""?+C.entry_fee_usd:undefined}).filter(([,v])=>v!==undefined&&v!==""));PK.cfg=poolCfg("pickem");
@@ -4925,7 +4943,7 @@ const lineOf=(det,home,away)=>{const m=String(det||"").match(/([A-Z]{2,4})\s*([+
 async function pkLoadNext(w,maxAge){
   if(w<1||w>18)return;if(PK.nx[w]&&Date.now()-(PK.nxt[w]||0)<maxAge)return;PK.nxt[w]=Date.now();
   try{
-    const j=await getJ(`${ESPN}?seasontype=2&week=${w}&limit=100`,true),out=[];
+    const j=await getJ(`${ESPN}?dates=${encodeURIComponent(S.season||new Date().getFullYear())}&seasontype=2&week=${w}&limit=100`,true),out=[];
     (j.events||[]).forEach(ev=>{const c=ev.competitions[0],cs=c.competitors,H=cs.find(x=>x.homeAway==="home")||cs[0],A=cs.find(x=>x!==H),o=(c.odds||[])[0]||{};
       const home=NT(H.team.abbreviation),away=NT(A.team.abbreviation);
       out.push({id:ev.id,date:ev.date,home,away,hn:H.team.name,an:A.team.name,hs:null,ou:null,st:ev.status.type.state,hsc:+H.score||0,asc:+A.score||0,detail:ev.status.type.shortDetail,day:new Date(ev.date).toLocaleDateString("en-US",{weekday:"short",timeZone:"America/New_York"})})});
@@ -5121,9 +5139,9 @@ async function pkTick(force=false){
     await pkSync(force);
     if(!PK.rows){if(S.tab==="p")pkRender();return}
   }
-  const cw=pkCurrentWeek(),sw=PK.wSheet||cw;
-  const weeks=[cw-1,cw,cw+1,sw,sw+1].filter((w,i,a)=>w>=1&&w<=18&&a.indexOf(w)===i);
-  await Promise.all(weeks.map(w=>pkLoadNext(w,force?0:w===cw?15000:w===cw+1?60000:120000)));
+  const cw=pkCurrentWeek();
+  const weeks=Array.from({length:Math.min(18,cw+1)},(_,i)=>i+1);
+  await Promise.all(weeks.map(w=>pkLoadNext(w,force?0:w===cw?15000:w<cw?3600000:60000)));
   if(S.tab==="p")pkRender();
 }
 /* =====================================================================
@@ -6099,7 +6117,7 @@ function setTab(t){
 }
 document.querySelectorAll("header .tb[data-t]").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
 
-SV.lastTick=0;setInterval(async()=>{if(document.hidden)return;const n=Date.now(),secs=+$("every").value;if(!secs)return;const every=secs*1000;if(n-SV.lastTick>=(S.tab==="s"||S.tab==="p"?every:60000)){SV.lastTick=n;if(hasMode("survivor"))await svTick();if(hasMode("pickem")){if(S.tab==="p")await pkTick();else if(PK.weeks){const w=pkCurrentWeek();await Promise.all([pkLoadNext(w,30000),pkLoadNext(w+1,60000)])}}try{renderSweat()}catch(e){}}},1000);
+SV.lastTick=0;setInterval(async()=>{if(document.hidden)return;const n=Date.now(),secs=+$("every").value;if(!secs)return;const every=secs*1000;if(n-SV.lastTick>=(S.tab==="s"||S.tab==="p"?every:60000)){SV.lastTick=n;if(hasMode("survivor"))await svTick();if(hasMode("pickem")){if(S.tab==="p")await pkTick();else if(PK.weeks){const w=pkCurrentWeek();await Promise.all(Array.from({length:Math.min(18,w+1)},(_,i)=>i+1).map(x=>pkLoadNext(x,x===w?30000:3600000)))}}try{renderSweat()}catch(e){}}},1000);
 setInterval(()=>{if((S.tab==="t"||S.tab==="e")&&!document.hidden)mvTick()},30000);
 pkLoad();applySheetModes(false);updateNav();
 if(hasMode("survivor"))svInit().then(()=>{if(S.tab!=="m")setTab(S.tab)});else if(S.tab!=="m"&&S.tab!=="s"&&S.tab!=="p")setTab(S.tab);
