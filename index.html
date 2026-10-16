@@ -1987,7 +1987,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.22</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.23</span></div>
   </div>
 </header>
 <main>
@@ -2011,7 +2011,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.22";
+const WM_VERSION="1.23";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -4783,9 +4783,8 @@ function pkWeekImport(w){
 // This is not a live score source; it preserves old standings until official pool-locked lines can be recovered.
 const PK_HIST_2026={"2026-W1-SEA-NE":"NE","2026-W1-CAR-CHI":"CHI","2026-W1-CIN-TB":"CIN","2026-W1-JAX-CLE":"JAX","2026-W1-PIT-ATL":"PIT","2026-W1-MIN-GB":"MIN","2026-W1-LAC-ARI":"ARI","2026-W1-KC-DEN":"KC","2026-W1-HOU-BUF":"BUF","2026-W1-IND-BAL":"BAL","2026-W1-LV-MIA":"LV","2026-W1-NYG-DAL":"NYG","2026-W1-LAR-SF":"SF","2026-W1-TEN-NYJ":"NYJ","2026-W1-PHI-WAS":"WAS","2026-W1-DET-NO":"NO","2026-W2-DET-BUF":"BUF","2026-W2-CAR-ATL":"CAR","2026-W2-NO-BAL":"NO","2026-W2-CHI-MIN":"MIN","2026-W2-HOU-CIN":"CIN","2026-W2-NE-PIT":"NE","2026-W2-NYJ-GB":"NYJ","2026-W2-TB-CLE":"CLE","2026-W2-TEN-PHI":"TEN","2026-W2-DEN-JAX":"DEN","2026-W2-LAC-LV":"LV","2026-W2-DAL-WAS":"DAL","2026-W2-SF-MIA":"SF","2026-W2-KC-IND":"IND","2026-W2-LAR-NYG":"LAR","2026-W2-ARI-SEA":"SEA","2026-W3-ATL-GB":"ATL","2026-W3-CAR-CLE":"CLE","2026-W3-DET-NYJ":"DET","2026-W3-IND-HOU":"IND","2026-W3-JAX-NE":"JAX","2026-W3-MIA-KC":"KC","2026-W3-NYG-TEN":"TEN","2026-W3-PIT-CIN":"PIT","2026-W3-SF-ARI":"ARI","2026-W3-TB-MIN":"MIN","2026-W3-DAL-BAL":"DAL","2026-W3-NO-LV":"LV","2026-W3-DEN-LAR":"DEN","2026-W3-LAC-BUF":"BUF","2026-W3-WAS-SEA":"WAS","2026-W3-CHI-PHI":"CHI","2026-W4-WAS-IND":"IND","2026-W4-PHI-LAR":"LAR","2026-W4-TB-GB":"TB","2026-W4-LV-KC":"LV","2026-W4-SEA-LAC":"SEA","2026-W4-SF-DEN":"SF","2026-W4-BAL-TEN":"TEN","2026-W4-CHI-NYJ":"CHI","2026-W4-CIN-JAX":"JAX","2026-W4-HOU-DAL":"DAL","2026-W4-MIN-MIA":"MIA","2026-W4-CLE-PIT":"CLE","2026-W4-NYG-ARI":"NYG","2026-W4-CAR-DET":"CAR","2026-W4-BUF-NE":"NE"};
 function pkHelperWeek(w){const gs=PK.nx[w];return gs&&gs.length&&gs.every(g=>g.st!=="pre")?Math.min(18,w+1):w}
-/* the moment ESPN marks a game final, grade it against the spread with the line Wingman used (Sleeper, locked at kickoff,
-   else the sheet's verified line). Sheet grades stay authoritative: games the sheet has graded are never touched, and when the
-   sheet catches up its grade replaces this one. Hidden picks stay hidden; pushes count as not covered (the pool's rule). */
+/* Wingman owns final NFL scores and ATS grading: ESPN post-state + VERIFIED pool-locked spread.
+   Historical pre-migration pool outcomes are explicitly grandfathered only for 2026 W1-W4. */
 function pkSleeperOverlay(){
   if(!PK.rows||!PK.games||!PK.base||!PKS.data||!Array.isArray(PKS.data.weeks))return 0;
   const norm=x=>String(x||"").trim().toLowerCase().replace(/[^a-z0-9]/g,"");
@@ -4878,9 +4877,8 @@ function pkParse(R,SR){
     const ids=new Set(gi.map(([,i])=>i)),bad=stand.filter(([u,ws])=>{const pi=players.indexOf(u),c=picks.filter(p=>p[0]===pi&&ids.has(p[1])&&p[3]==="C").length;return picks.some(p=>p[0]===pi&&ids.has(p[1]))&&c!==(ws[w-1]||0)});if(bad.length)mism.push(w)}
   return{stand,players,games,picks,missing,mism};
 }
-/* normalized Wingman tables (WM_Config / WM_Games / WM_Picks / WM_Participants / WM_Tiebreakers).
-   Grades and points in WM_Picks are authoritative (never recomputed from proxy spreads); standings, cover rates,
-   popularity and completeness are derived here. team_a/team_b are NOT home/away. */
+/* Input-only WM_Config / WM_Games / WM_Picks / WM_Participants / WM_Tiebreakers.
+   No sheet scores, ATS results, or points are used. team_a/team_b do NOT mean home/away. */
 const PKCOLS={games:["season","week","game_id","team_a","team_b","spread_a","spread_source"],picks:["week","game_id","player_id","pick_team","pick_status"],
   parts:["player_id","display_name"],tb:["week","player_id","guess","actual","guess_status"]};
 async function pkSyncNormalized(id){
@@ -5066,8 +5064,9 @@ function pkRender(){
   const suCover=decided.filter(g=>g.su&&g.su===g.ats).length/Math.max(1,decided.length);
   const kpi=(lab,big,sub)=>`<div class="kpi" title="${lab==="Payout odds"?"3,000 simulations of the rest of the season using each member's hit rate so far (shrunk toward 50%). 1st pays "+svMoney(d.pay.first)+", 2nd "+svMoney(d.pay.second)+".":""}"><div class="kl">${lab}</div><div class="kb">${big}</div><div class="ks">${sub}</div></div>`;
   let h=`<div class="svgrid pkgrid"><!--M:overview--><div class="card hero svhero"><div class="svtop"><div class="svti"><span class="svtl"><a class="svt lnk" href="https://docs.google.com/spreadsheets/d/${esc(d.sheet)}/edit" target="_blank" rel="noopener" title="Open the pick'em Google Sheet">🎯 ${esc(C.name)} <span class="ext">↗</span></a><span class="fmt">ATS</span></span><span class="hu">${[`${d.members} members`,d.dues?`${svMoney(d.dues)} buy-in · pot ${svMoney(pot)}`:"",d.pay.first?`1st ${svMoney(d.pay.first)}`:"",d.pay.second?`2nd ${svMoney(d.pay.second)}`:"",d.pay.weekly?`${svMoney(d.pay.weekly)} weekly top score`:""].filter(Boolean).join(" · ")}</span></div>
-    <span class="mt" title="Read from your Google Sheet${PK.layout==="normalized"?" (WM tables)":""}${PK.syncAt?" at "+hm(new Date(PK.syncAt)):""}${PK.missing&&PK.missing.length?` · picks not captured yet for W${PK.missing.join(", W")}`:""}${PK.mism&&PK.mism.length?` · Picks and Standings tabs disagree for W${PK.mism.join(", W")} (Standings shown)`:""}">${PK.fails?"⚠ source read failed · retrying":"● sheet checked "+ago(PK.syncAt)}${(PK.missing&&PK.missing.length)||(PK.mism&&PK.mism.length)?" · ⚠ check sheet":""}${sourceBehind?" · ⚠ results through W"+(sourceLast||"—"):""}</span><button class="rep" id="pkrefresh" type="button" ${PK.syncing?"disabled":""}>↻ Refresh</button></div>
-      ${sourceBehind?`<div class="svnote pkstale"><b>Pool results are behind.</b> The NFL is in W${cw}, but the Google Sheet only has graded picks through W${sourceLast||"—"}. ${cw>1&&prevImport.expected?`W${cw-1}: ${prevImport.captured}/${prevImport.expected} pick records imported, ${prevImport.graded} graded. `:""}${nowImport.expected?`W${cw}: ${nowImport.captured}/${nowImport.expected} imported.`:""} The sheet was read successfully, but Sleeper picks have not been imported. Game schedules refresh independently; pool standings need actual picks and official grades.</div>`:""}
+    <span class="mt" title="Read from your Google Sheet${PK.layout==="normalized"?" (WM tables)":""}${PK.syncAt?" at "+hm(new Date(PK.syncAt)):""}${PK.missing&&PK.missing.length?` · picks not captured yet for W${PK.missing.join(", W")}`:""}${PK.mism&&PK.mism.length?` · Picks and Standings tabs disagree for W${PK.mism.join(", W")} (Standings shown)`:""}">${PK.fails?"⚠ picks input unavailable · retrying":"● picks checked "+ago(PK.syncAt)}${(PK.missing&&PK.missing.length)||(PK.mism&&PK.mism.length)?" · ⚠ missing picks":""}${sourceBehind?" · scored through W"+(sourceLast||"—"):""}</span><button class="rep" id="pkrefresh" type="button" ${PK.syncing?"disabled":""}>↻ Refresh</button></div>
+      ${sourceBehind?`<div class="svnote pkstale"><b>Waiting on pool selections.</b> NFL W${cw} is current; Wingman has scored available selections through W${sourceLast||"—"}. ${cw>1&&prevImport.expected?`W${cw-1}: ${prevImport.captured}/${prevImport.expected} pick records imported, ${prevImport.graded} graded. `:""}${nowImport.expected?`W${cw}: ${nowImport.captured}/${nowImport.expected} imported.`:""} ESPN finals refresh automatically. Missing member selections must come through authenticated Sleeper sync, and ATS scoring requires verified pool-locked spreads.
+        ${!pkSleeperActive()?'<button class="rep" type="button" id="pkreaderhelp" style="margin:7px 0">Set up Sleeper reader</button>':""}</div>`:""}
     <div class="kpis">
       ${kpi("Overall rank",`<b>${tie(me)?"T":""}${rank(me)}</b><small> of ${PK.rows.length}</small>`,chg?`<span class="${chg>0?"up":"dn"}">${chg>0?"▲":"▼"}${Math.abs(chg)}</span> this week`:"no change this week")}
       ${kpi("Points ATS",`<b>${tot(me)}</b>`,`${tot(lead)-tot(me)} behind ${nm(lead.u)} · ${Math.round(myAcc*100)}% hit rate (pool ${Math.round(allC.filter(x=>x.p.c==="C").length/Math.max(1,allC.length)*100)}%)`)}
@@ -5141,6 +5140,7 @@ function pkRender(){
   h=pkSleeperSection()+modWrap(h,"p:"+hash32(PK.d.sheet||"").toString(36));
   if(S.dragging||h===PK.lastHtml)return;PK.lastHtml=h;el.innerHTML=h;bindMods(el);pkSleeperWire(el);
   const rf=el.querySelector("#pkrefresh");if(rf)rf.onclick=async()=>{rf.disabled=true;await pkTick(true);PK.lastHtml="";pkRender()};
+  const reader=el.querySelector("#pkreaderhelp");if(reader)reader.onclick=()=>pvForm("pickem");
   el.querySelectorAll(".svh").forEach(x=>x.onclick=()=>{PK.open[x.dataset.k]=PK.open[x.dataset.k]===false;save("pk_open",JSON.stringify(PK.open));pkRender()});
   const cf=el.querySelector(".svcfg");if(cf)cf.onchange=()=>{const g=id=>cf.querySelector("#"+id),n=id=>Math.max(0,+g(id).value||0);savePoolCfg("pickem",{name:g("pkc_name").value.trim()||"Pick'em",me:g("pkc_me").value,meAuto:g("pkc_me").value===PK.cfg.me?PK.cfg.meAuto:0,dues:n("pkc_dues"),first:n("pkc_first"),second:n("pkc_second"),weekly:n("pkc_weekly")});PK.oddsKey="";pkRender()};
   el.querySelectorAll(".pat").forEach(b=>b.onclick=()=>{if(b.disabled)return;const p=pkMine(N);p[b.dataset.k]=p[b.dataset.k]===b.dataset.t?undefined:b.dataset.t;save("pk_mine_"+N,JSON.stringify(p));pkRender()});
