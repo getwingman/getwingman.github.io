@@ -30,7 +30,8 @@ with sync_playwright() as p:
             fl=pg.evaluate("""(()=>{const r=[...document.querySelectorAll('#pick .pah')].map(x=>({flip:x.classList.contains('flip'),star:!!x.querySelector('.lz'),bar:!!x.querySelector('.cov i'),toss:!!x.querySelector('.tossup')}));return{n:r.length,bad:r.filter(x=>x.flip&&(x.star||x.bar)||(!x.flip&&x.toss)).length,flips:r.filter(x=>x.flip).length}})()""")
             chk("pick'em: coin flips (<55%) get no star / bar, only a muted toss-up",fl["bad"]==0,fl)
             st=pg.evaluate("[PK.layout,PK.rows.length,PK.weeks,PK.d.games.length,PK.missing,PK.cfg.name,PK.cfg.dues]")
-            chk("pick'em: WM tables parsed",st[0]=="normalized" and st[1]==23 and st[2]==4 and st[3]>=270 and st[5]=="Test Pick'em" and st[6]==50,st)
+            chk("pick'em: WM tables parsed; current week independent of last graded week",st[0]=="normalized" and st[1]==23 and st[2]==max(4,pg.evaluate("S.nflWeek")) and pg.evaluate("PK.wSheet")==4 and st[3]>=270 and st[5]=="Test Pick'em" and st[6]==50,st)
+            chk("pick'em: live week and manual refresh visible",pg.is_visible("#pkrefresh") and pg.evaluate("pkCurrentWeek()")==pg.evaluate("S.nflWeek"))
             # standings = authoritative points from WM_Picks; compare to legacy Standings tab
             leg={r[1]:sum(int(x) for x in r[2:6] if x.strip()) for r in __import__('csv').reader(open('fixtures/v2/pk2_Standings.csv')) if r and r[0] and r[0][0] in "0123456789T" and r[0]!="Rank"}
             mine=pg.evaluate("Object.fromEntries(PK.rows.map(r=>[r.u,r.w.reduce((a,b)=>a+b,0)]))")
