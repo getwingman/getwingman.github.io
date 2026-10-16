@@ -72,7 +72,7 @@ PK.games=savedGames;PK.base=savedBase;
  ok("ungraded weeks labeled unreported",src.includes('unreported=imp.captured===0'));
  ok("future pick schedule anchored to current slate",src.includes('const N=pkHelperWeek(cw)'));
  ok("source check not called a data sync",src.includes('sheet checked '));
- ok("direct reader setup available when sheet incomplete",src.includes('id="pkdirect"')&&src.includes('querySelector("#pkdirect")'));
+ ok("unverified live reader isn't presented as working source",!src.includes('id="pkdirect"'));
  ok("no silent normalized-to-legacy downgrade",src.includes('if(PK.layout==="normalized")throw new Error("layout")'));
  console.log("PASS pickem-refresh: "+n+" regression checks");
 })().catch(e=>{console.error("FAIL",e.stack||e);process.exitCode=1});
