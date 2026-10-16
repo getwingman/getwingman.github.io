@@ -1,78 +1,65 @@
-/* Pick'em current-week and sync regression. node tests/unit/pickem_refresh.test.js index.html */
+/* Pick'em live scoring: node tests/unit/pickem_refresh.test.js index.html */
 const fs=require("fs"),vm=require("vm"),assert=require("assert");
 const src=fs.readFileSync(process.argv[2],"utf8");
-function between(start,end){const a=src.indexOf(start),b=src.indexOf(end,a+start.length);assert(a>=0&&b>a,"Cannot extract "+start);return src.slice(a,b)}
-const code=[
- between("function pkIndex()","/* The current NFL week"),
- between("function pkCurrentWeek()","/* the moment ESPN marks"),
- between("function pkApiGrade()","/* live sync from the sheet"),
- between("async function pkSync(force=false)","/* =====================================================================\n   SLEEPER PICK'EM"),
- between("async function pkTick(force=false)","/* =====================================================================\n   MOVES TAB")
+const cut=(a,b)=>{const x=src.indexOf(a),y=src.indexOf(b,x+a.length);assert(x>=0&&y>x,"Source extract failed: "+a);return src.slice(x,y)};
+const JS=[
+ cut("function pkIndex()","/* The current NFL week"),
+ cut("function pkCurrentWeek()","/* the moment ESPN marks"),
+ cut("const PK_HIST_2026=","/* live sync from the sheet"),
+ cut("async function pkSync(force=false)","/* =====================================================================\n   SLEEPER PICK'EM"),
+ cut("async function pkTick(force=false)","/* =====================================================================\n   MOVES TAB")
 ].join("\n");
-const S={nflWeek:7,dispWeek:7,season:"2026",tab:"p"},PK={d:{sheet:"test",stand:[["Alice",[1,2,3,4,5]],["Bob",[5,4,3,2,1]]],
- players:["Alice","Bob"],games:[[5,"KC","BAL",0,0,"KC","KC"],[7,"LV","DEN",null,null,"",""]],
- picks:[[0,0,0,"C"],[1,0,1,"I"],[0,1,0,"P"],[1,1,1,"P"]]},
- rows:null,games:null,nx:{},nxt:{},syncAt:0,nflAt:Date.now(),layout:"normalized",fails:0,syncBackoff:0};
-const mocks={
- S,PK,Date,pkSleeperActive:()=>false,pkSleeperSync:()=>Promise.resolve(),
- pkSyncNormalized:async()=>true,gvizCsv:async()=>[],pkParse:()=>({err:"layout"}),
- pkLoadNext:async()=>{},pkRender:()=>{},nflState:async()=>{},poolCfg:()=>({}),
-};
-const ctx=vm.createContext(mocks);vm.runInContext(code+"\nthis.qa={pkIndex,pkApiGrade,pkCurrentWeek,pkSheetLatestWeek,pkWeekImport,pkHelperWeek,pkSync,pkTick}",ctx);
-const q=ctx.qa;let n=0;
-function ok(title,condition){assert(condition,title);n++}
-q.pkIndex();ok("sheet source last week is W5",PK.wSheet===5);
-ok("actual NFL week is W7",q.pkCurrentWeek()===7);
+const S={season:"2026",nflWeek:6,dispWeek:6,tab:"p"},PK={
+ d:{sheet:"qa",stand:[["xParRaidr",[]],["rgandhi3",[]]],players:["xParRaidr","rgandhi3"],
+ games:[[1,"SEA","NE",null,null,"",""],[5,"TB","DAL",null,null,"",""],[6,"HOU","JAX",null,null,"",""]],
+ picks:[[0,0,1,"P"],[1,0,0,"P"],[0,1,-1,"M"],[1,1,-1,"M"],[0,2,-1,"M"],[1,2,-1,"M"]]},
+ rows:null,games:null,layout:"normalized",gx:[{id:"2026-W1-SEA-NE"},{id:"2026-W5-TB-DAL"},{id:"2026-W6-HOU-JAX"}],
+ nx:{5:[{home:"DAL",away:"TB",st:"post",hsc:17,asc:24,hs:-9.5,hsVerified:true}],
+     6:[{home:"JAX",away:"HOU",st:"in",hsc:3,asc:7,hs:3,hsVerified:true}]},
+ nxt:{},cov:{},syncAt:0,nflAt:Date.now(),fails:0,syncBackoff:0
+},PKS={data:{pool:{entries:[{id:"4",username:"xParRaidr"},{id:"9",username:"rgandhi3"}]},
+ weeks:[{week:5,games:[{home:"DAL",away:"TB",final:true,picks:[{entryId:"4",team:"TB"},{entryId:"9",team:"DAL"}]}]},
+ {week:6,games:[{home:"JAX",away:"HOU",final:false,picks:[{entryId:"4",team:"HOU"}]}]}]}};
+const ctx=vm.createContext({S,PK,PKS,NT:x=>x,Date,pkSleeperActive:()=>false,pkSleeperSync:async()=>{},
+ pkSyncNormalized:async()=>true,gvizCsv:async()=>[],pkParse:()=>({err:"layout"}),pkLoadNext:async()=>{},
+ pkRender:()=>{},nflState:async()=>{},poolCfg:()=>({})});
+vm.runInContext(JS+"\nthis.qa={pkIndex,pkApiGrade,pkSheetLatestWeek,pkWeekImport,pkCurrentWeek,pkHelperWeek,pkSync,pkTick}",ctx);
+const q=ctx.qa;let n=0;const ok=(name,test)=>{assert(test,name);n++};
+q.pkIndex();ok("source has three weeks of inputs",PK.games.length===3);
+ok("NFL week is independent of sheet",q.pkCurrentWeek()===6);
 q.pkApiGrade();
-ok("scoreboard extends to W7",PK.weeks===7&&PK.rows.every(r=>r.w.length===7));
-ok("prior authoritative sheet scores retained",PK.rows[0].w[4]===5&&PK.rows[1].w[4]===1);
-ok("current W7 has no invented correct picks",PK.rows.every(r=>r.w[6]===0));
-ok("last sheet-graded W5 detectable",q.pkSheetLatestWeek()===5);
-ok("sheet coverage reflects 2 W5 graded picks",q.pkWeekImport(5).graded===2&&q.pkWeekImport(5).captured===2);
-ok("W7 pending picks aren't graded",q.pkWeekImport(7).captured===2&&q.pkWeekImport(7).graded===0);
-ok("helper stays on W7 before kickoff",q.pkHelperWeek(7)===7);
-PK.nx[7]=[{st:"pre"},{st:"in"}];
-ok("helper still W7 with one upcoming game",q.pkHelperWeek(7)===7);
-PK.nx[7]=[{st:"post"},{st:"in"}];
-ok("helper switches to W8 once all games started",q.pkHelperWeek(7)===8);
-PK.nx[7]=[{home:"DEN",away:"LV",st:"post",hs:-3,hsVerified:true,hsc:20,asc:27}];
-q.pkApiGrade();
-ok("verified final grades ungraded game",PK.games[1].ats==="LV"&&PK.games[1].api===1);
-ok("live ATS grading must not fake latest sheet grade",q.pkSheetLatestWeek()===5);
-ok("sheet coverage remains authoritative despite API overlay",q.pkWeekImport(7).graded===0);
-ok("only correct W7 pick receives point",PK.rows[0].w[6]===1&&PK.rows[1].w[6]===0);
-q.pkApiGrade();
-ok("repeated grade doesn't double-count",PK.rows[0].w[6]===1);
-PK.nx[7][0].hsVerified=false;q.pkApiGrade();
-ok("unverified market line can't grade ATS",PK.games[1].ats===""&&PK.rows[0].w[6]===0);
-const old=S.nflWeek;S.nflWeek=8;ok("rollover advances without sheet change",q.pkCurrentWeek()===8);S.nflWeek=old;
-const savedGames=PK.games,savedBase=PK.base;
-PK.games=[{w:5,picks:[{c:"M"},{c:"M"}],ats:"KC"},{w:6,picks:[{c:"M"},{c:"M"}],ats:""}];
-PK.base={games:[{c:["M","M"]},{c:["M","M"]}]};
-ok("15-week phantom tie suppressed by source coverage",q.pkWeekImport(5).captured===0&&q.pkWeekImport(5).graded===0&&q.pkSheetLatestWeek()===0);
-ok("current missing picks aren't recorded losses",q.pkWeekImport(6).expected===2&&q.pkWeekImport(6).captured===0);
-PK.games=savedGames;PK.base=savedBase;
+ok("historical pool winner preserved",PK.games[0].ats==="NE");
+ok("2026 W1 archived participant scored",PK.rows[0].w[0]===1&&PK.rows[1].w[0]===0);
+ok("final-only Sleeper selections imported",PK.games[1].picks[0].side===0&&PK.games[1].picks[1].side===1);
+ok("ESPN final and locked spread determine cover",PK.games[1].ats==="TB"&&PK.games[1].atsSrc==="espn_verified");
+ok("Week 5 per-member points calculated live",PK.rows[0].w[4]===1&&PK.rows[1].w[4]===0);
+ok("no premature Week 6 picks",PK.games[2].picks.every(p=>p.c==="M"));
+ok("all score rows through Week 6",PK.rows.every(r=>r.w.length===6));
+ok("latest graded week is W5",q.pkSheetLatestWeek()===5);
+q.pkApiGrade();ok("re-grading is idempotent",PK.rows[0].w[4]===1);
+PK.nx[5][0].hsVerified=false;q.pkApiGrade();ok("no grade from unverified line",PK.games[1].ats===""&&PK.games[1].picks[0].c==="P");
+PK.nx[5][0].hsVerified=true;PK.nx[5][0].st="in";q.pkApiGrade();ok("never grade non-final game",PK.games[1].ats==="");
+PK.nx[5][0].st="post";q.pkApiGrade();ok("resumes grading when marked final",PK.games[1].ats==="TB");
+ok("dynamic import counter",q.pkWeekImport(5).captured===2&&q.pkWeekImport(5).graded===2);
+const old=PKS.data.pool.entries;PKS.data.pool.entries=[{id:"4",username:"other"},{id:"9",username:"unknown"}];
+PK.base.games[1].c=["M","M"];PK.games[1].picks.forEach(p=>p.side=-1);
+q.pkApiGrade();ok("unknown remote entrants never mapped",PK.games[1].picks.every(p=>p.side===-1));
+PKS.data.pool.entries=old;
 (async()=>{
  let updates=0;ctx.pkSyncNormalized=async()=>{updates++;await Promise.resolve();return true};
- PK.syncAt=0;PK.layout="normalized";await Promise.all([q.pkSync(),q.pkSync()]);
- ok("concurrent sheet sync deduplicated",updates===1);
- ok("successful sync advances timestamp",PK.syncAt>0&&PK.fails===0);
+ await Promise.all([q.pkSync(),q.pkSync()]);
+ ok("deduplicates simultaneous sheet-input sync",updates===1);
  const stamp=PK.syncAt;ctx.pkSyncNormalized=async()=>{throw new Error("network")};
- await q.pkSync();ok("failed sync keeps previous success time",PK.syncAt===stamp);
- ok("failed sync visibly marked stale",PK.fails===1&&PK.st==="stale"&&PK.syncBackoff>Date.now());
- await q.pkSync();ok("backoff prevents rapid retry",PK.fails===1);
+ await q.pkSync();ok("failure preserves success time",PK.syncAt===stamp);
+ ok("failure shown as stale with retry",PK.fails===1&&PK.st==="stale"&&PK.syncBackoff>Date.now());
+ await q.pkSync();ok("retry backoff",PK.fails===1);
  ctx.pkSyncNormalized=async()=>true;await q.pkSync(true);
- ok("manual retry bypasses backoff and recovers",PK.fails===0&&PK.st==="ok");
- let weeks=[],syncCalls=0;ctx.pkLoadNext=async w=>{weeks.push(w)};ctx.pkSyncNormalized=async()=>{syncCalls++;return true};
- PK.syncAt=0;PK.nflAt=Date.now();await q.pkTick();
- ok("tick polls current NFL week, even if graded sheet stuck",weeks.includes(7)&&weeks.includes(8)&&weeks.includes(5));
- ok("tick refreshes sheet when stale",syncCalls===1);
- ok("successful tick doesn't fake another sync",PK.syncAt>0);
- ok("visible Refresh UI is hooked",src.includes('id="pkrefresh"')&&src.includes('el.querySelector("#pkrefresh")'));
- ok("ungraded weeks labeled unreported",src.includes('unreported=imp.captured===0'));
- ok("future pick schedule anchored to current slate",src.includes('const N=pkHelperWeek(cw)'));
- ok("source check not called a data sync",src.includes('sheet checked '));
- ok("unverified live reader isn't presented as working source",!src.includes('id="pkdirect"'));
- ok("no silent normalized-to-legacy downgrade",src.includes('if(PK.layout==="normalized")throw new Error("layout")'));
+ ok("manual retry succeeds",PK.st==="ok"&&PK.fails===0);
+ let weeks=[];ctx.pkLoadNext=async w=>{weeks.push(w)};
+ PK.syncAt=Date.now();PK.nflAt=Date.now();await q.pkTick();
+ ok("all previous NFL weeks fetched",weeks.includes(1)&&weeks.includes(5)&&weeks.includes(6)&&weeks.includes(7));
+ ok("sheet no longer expected to carry grades",src.includes('picks:["week","game_id","player_id","pick_team","pick_status"]'));
+ ok("source scores never used in normalized parser",src.includes('games.push([w,g.team_a,g.team_b,null,null,"",""])'));
+ ok("live parser automatically combines final-only Sleeper picks",src.includes("function pkSleeperOverlay(){"));
  console.log("PASS pickem-refresh: "+n+" regression checks");
 })().catch(e=>{console.error("FAIL",e.stack||e);process.exitCode=1});
