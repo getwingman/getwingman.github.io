@@ -6,7 +6,7 @@ const code=[
  between("function pkIndex()","/* The current NFL week"),
  between("function pkCurrentWeek()","/* the moment ESPN marks"),
  between("function pkApiGrade()","/* live sync from the sheet"),
- between("async function pkSync(force=false)","/* =====================================================================\n    SLEEPER PICK'EM"),
+ between("async function pkSync(force=false)","/* =====================================================================\n   SLEEPER PICK'EM"),
  between("async function pkTick(force=false)","/* =====================================================================\n   MOVES TAB")
 ].join("\n");
 const S={nflWeek:7,dispWeek:7,season:"2026",tab:"p"},PK={d:{sheet:"test",stand:[["Alice",[1,2,3,4,5]],["Bob",[5,4,3,2,1]]],
@@ -53,7 +53,7 @@ const old=S.nflWeek;S.nflWeek=8;ok("rollover advances without sheet change",q.pk
  await q.pkSync();ok("backoff prevents rapid retry",PK.fails===1);
  ctx.pkSyncNormalized=async()=>true;await q.pkSync(true);
  ok("manual retry bypasses backoff and recovers",PK.fails===0&&PK.st==="ok");
- let weeks=[],syncCalls=0;ctx.pkLoadNext=async w=>{weeks.push(w)};ctx.pkSync=async()=>{syncCalls++;PK.syncAt=Date.now()};
+ let weeks=[],syncCalls=0;ctx.pkLoadNext=async w=>{weeks.push(w)};ctx.pkSyncNormalized=async()=>{syncCalls++;return true};
  PK.syncAt=0;PK.nflAt=Date.now();await q.pkTick();
  ok("tick polls current NFL week, even if graded sheet stuck",weeks.includes(7)&&weeks.includes(8)&&weeks.includes(5));
  ok("tick refreshes sheet when stale",syncCalls===1);
