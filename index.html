@@ -1987,7 +1987,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.21</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.22</span></div>
   </div>
 </header>
 <main>
@@ -2011,7 +2011,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.21";
+const WM_VERSION="1.22";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -4679,7 +4679,7 @@ async function svInit(synced){
    Wingman Sleeper Pick'em reader (beta): finalized games only.
    This is independent of, and does not override, official Google Sheet grading.
    ============================================================================ */
-const PKS = { data:null, error:'', busy:false, at:0 };
+const PKS = { data:null, error:'', busy:false, at:0, merged:0, unmapped:0 };
 function pkSleeperActive(){return (S.conns||getConns()).some(c=>c.p==='pickem'&&c.source==='sleeper')}
 function pkSleeperSecret(){try{return sessionStorage.getItem('wm_pk_view_key')||''}catch(e){return ''}}
 function pkSleeperSection(){
@@ -4708,7 +4708,7 @@ function pkSleeperSection(){
     ${!pkSleeperSecret()?`<div class="pks-auth"><label for="pkskey">Your Wingman viewing key (NOT your Sleeper token)</label><input id="pkskey" type="password" autocomplete="off" placeholder="Enter Worker viewing key"/><button class="pcta sm" id="pksgo">Unlock reader</button><small>Stored in this browser tab only. Sleeper authentication stays in Cloudflare Worker secrets.</small></div>`:''}
     ${E?`<div class="pks-error">${esc(E)}</div>`:''}
     ${D?`<div class="pks-stats"><span><b>${D.pool.entries.length}</b> identified entries</span><span><b>${finals.length}</b> final games</span><span><b>${revealed}</b> released picks</span><span><b>${weeks.length}</b> weeks fetched</span></div>
-      <div class="pks-note">This feed imports actual Sleeper selections, but <b>does not grade ATS</b> until we verify official, pool-locked spreads. Existing Google Sheet standings remain authoritative where connected. "No revealed selection" is not necessarily a missed pick.</div>
+      <div class="pks-note">Finalized Sleeper selections are scored inside Wingman using ESPN final scores and verified pool-locked spreads. Games without trustworthy spreads remain pending. "No revealed selection" is not necessarily a missed pick.</div>
       ${week?`<div class="pks-sub">W${week.week} · ${+week.week===+S.nflWeek?"current NFL week":"latest week returned by reader"}</div>${+week.week<+S.nflWeek?`<div class="pks-error">Reader is through W${week.week}; the NFL is on W${S.nflWeek}. This data hasn't caught up.</div>`:""}<div class="pks-grid">${(week.games||[]).map(gameRow).join('')||'<span class="pks-muted">No game data from Sleeper</span>'}</div>`:''}
       <div class="pks-end">Sync ${esc(D.syncedAt||'')} · <span class="pks-muted">GraphQL fields are unofficial and may change</span></div>`:
       `<div class="pks-empty">${PKS.busy?'Contacting Sleeper through Wingman Connect…':'Unlock then refresh to test pool access. No test or real data has been prefilled.'}</div>`}
@@ -4720,14 +4720,14 @@ async function pkSleeperSync(force){
   PKS.busy=true;PKS.error='';if(S.tab==='p')pkRender();
   try{
     const w=pkCurrentWeek();
-    const r=await fetch(`${workerURL()}/pickem/season?week=1&upto=${w}`,{
+    const r=await fetch(`${workerURL()}/pickem/season?week=1&upto=${w}&season=${encodeURIComponent(S.season||new Date().getFullYear())}`,{
       headers:{'X-WM-Pickem-Key':pkSleeperSecret(),'Accept':'application/json'},
       cache:'no-store'
     });
     const j=await r.json().catch(()=>({error:`Worker returned HTTP ${r.status} without JSON`}));
     if(!r.ok || !j.ok)throw new Error(j.error||`HTTP ${r.status}`);
     if(!j.weeks||!j.pool||j.pool.id!=='1392587441361129472')throw new Error('Returned pool does not match the configured ID');
-    PKS.data=j;PKS.at=Date.now();PKS.error='';
+    PKS.data=j;PKS.at=Date.now();PKS.error='';PKS.merged=0;PKS.unmapped=0;
   }catch(e){PKS.error=String(e.message||e).slice(0,240);PKS.at=Date.now()}
   finally{PKS.busy=false;PK.lastHtml='';if(S.tab==='p')pkRender()}
 }
@@ -4786,9 +4786,49 @@ function pkHelperWeek(w){const gs=PK.nx[w];return gs&&gs.length&&gs.every(g=>g.s
 /* the moment ESPN marks a game final, grade it against the spread with the line Wingman used (Sleeper, locked at kickoff,
    else the sheet's verified line). Sheet grades stay authoritative: games the sheet has graded are never touched, and when the
    sheet catches up its grade replaces this one. Hidden picks stay hidden; pushes count as not covered (the pool's rule). */
+function pkSleeperOverlay(){
+  if(!PK.rows||!PK.games||!PK.base||!PKS.data||!Array.isArray(PKS.data.weeks))return 0;
+  const norm=x=>String(x||"").trim().toLowerCase().replace(/[^a-z0-9]/g,"");
+  const member=new Map(PK.rows.map(r=>[norm(r.u),r.u]));
+  const entries=new Map((PKS.data.pool&&PKS.data.pool.entries||[]).map(e=>{
+    const u=member.get(norm(e.username))||member.get(norm(e.name));
+    return[String(e.id),u||null];
+  }));
+  let inserted=0,unmapped=0;
+  const gamesByWeek=new Map();
+  PK.games.forEach((g,i)=>gamesByWeek.set(g.w,(gamesByWeek.get(g.w)||[]).concat([[g,i]])));
+  PKS.data.weeks.forEach(week=>(week.games||[]).forEach(remote=>{
+    if(remote.final!==true)return; // never reveal or score early
+    const target=(gamesByWeek.get(+week.week)||[]).find(([g])=>
+      (NT(g.a)===NT(remote.home)&&NT(g.b)===NT(remote.away))||
+      (NT(g.a)===NT(remote.away)&&NT(g.b)===NT(remote.home)));
+    if(!target)return;
+    const [g,i]=target;
+    (remote.picks||[]).forEach(pick=>{
+      const u=entries.get(String(pick.entryId));
+      if(!u){unmapped++;return}
+      const side=NT(pick.team)===NT(g.a)?0:NT(pick.team)===NT(g.b)?1:-1;
+      if(side<0)return;
+      const k=g.picks.findIndex(p=>p.u===u);if(k<0)return;
+      const existing=g.picks[k];
+      if(existing.side===side&&PK.base.games[i].c[k]==="P")return;
+      if(existing.side>=0&&existing.side!==side){unmapped++;return}
+      existing.side=side;PK.base.games[i].c[k]="P";inserted++;
+    });
+  }));
+  PKS.merged=inserted;PKS.unmapped=unmapped;
+  PK.missing=[];const expected=PK.rows.length;
+  for(let w=1;w<=pkCurrentWeek();w++){
+    const gs=PK.games.filter(g=>g.w===w),need=gs.length*expected;
+    const captured=gs.reduce((n,g)=>n+g.picks.filter(p=>p.side>=0||p.c==="N"||p.c==="H").length,0);
+    PK.cov=PK.cov||{};PK.cov[w]=need?Math.min(1,captured/need):0;
+    if(PK.cov[w]<.999)PK.missing.push(w);
+  }
+  return inserted;
+}
 function pkApiGrade(){
   if(!PK.rows||!PK.games||!PK.base)return;
-  const B=PK.base,year=String(S.season||"");PK.weeks=pkCurrentWeek();
+  pkSleeperOverlay();const B=PK.base,year=String(S.season||"");PK.weeks=pkCurrentWeek();
   PK.rows.forEach(r=>{r.w=Array(PK.weeks).fill(0)});
   let counted=0;
   PK.games.forEach((g,i)=>{
