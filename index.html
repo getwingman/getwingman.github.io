@@ -1987,7 +1987,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.24</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.25</span></div>
   </div>
 </header>
 <main>
@@ -2011,7 +2011,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.24";
+const WM_VERSION="1.25";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -4998,7 +4998,7 @@ async function pkLoadNext(w,maxAge){
       if(sheet&&/(locked|verified|screenshot)/i.test(sheet.src)&&!/(proxy|unverified|not_captured)/i.test(sheet.src)){g.hs=sheet.hs;g.hsSrc="sheet";g.hsVerified=true}
       else if(g.hs==null&&sheet){g.hs=sheet.hs;g.hsSrc="proxy";g.hsVerified=false}
     });
-    PK.nx[w]=out.sort((a,b)=>new Date(a.date)-new Date(b.date));PK.nxt[w]=Date.now();
+    PK.nx[w]=out.sort((a,b)=>new Date(a.date)-new Date(b.date));PK.nxt[w]=Date.now();PK.scoreErr="";
     await Promise.all(out.filter(g=>g.st==="pre"&&!PK.fpi[g.id]).map(async g=>{try{const s=await getJ(ESPN.replace("scoreboard","summary")+"?event="+g.id);const p=s.predictor||{},hp=p.homeTeam&&parseFloat(p.homeTeam.gameProjection);if(!isNaN(hp))PK.fpi[g.id]=hp/100}catch(e){}}));
   }catch(e){if(!PK.nx[w])PK.nxt[w]=0;PK.scoreErr=String(e.message||e).slice(0,100)}
 }
