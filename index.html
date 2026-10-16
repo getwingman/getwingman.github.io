@@ -4686,7 +4686,8 @@ function pkSleeperSection(){
   if(!pkSleeperActive())return '';
   const D=PKS.data, E=PKS.error;
   const names=new Map((D&&D.pool&&D.pool.entries||[]).map(e=>[e.id,e.name]));
-  const weeks=D&&D.weeks||[], week=weeks.length?weeks[weeks.length-1]:null;
+  const weeks=(D&&D.weeks||[]).slice().sort((a,b)=>(+a.week||0)-(+b.week||0));
+  const week=weeks.find(w=>+w.week===+S.nflWeek)||weeks[weeks.length-1]||null;
   const allGames=weeks.flatMap(w=>w.games||[]);
   const finals=allGames.filter(g=>g.final),revealed=finals.reduce((n,g)=>n+(g.picks||[]).length,0);
   const gameRow=g=>{
@@ -4708,7 +4709,7 @@ function pkSleeperSection(){
     ${E?`<div class="pks-error">${esc(E)}</div>`:''}
     ${D?`<div class="pks-stats"><span><b>${D.pool.entries.length}</b> identified entries</span><span><b>${finals.length}</b> final games</span><span><b>${revealed}</b> released picks</span><span><b>${weeks.length}</b> weeks fetched</span></div>
       <div class="pks-note">This feed imports actual Sleeper selections, but <b>does not grade ATS</b> until we verify official, pool-locked spreads. Existing Google Sheet standings remain authoritative where connected. "No revealed selection" is not necessarily a missed pick.</div>
-      ${week?`<div class="pks-sub">W${week.week} · Most recent week in sync</div><div class="pks-grid">${(week.games||[]).map(gameRow).join('')||'<span class="pks-muted">No game data from Sleeper</span>'}</div>`:''}
+      ${week?`<div class="pks-sub">W${week.week} · ${+week.week===+S.nflWeek?"current NFL week":"latest week returned by reader"}</div>${+week.week<+S.nflWeek?`<div class="pks-error">Reader is through W${week.week}; the NFL is on W${S.nflWeek}. This data hasn't caught up.</div>`:""}<div class="pks-grid">${(week.games||[]).map(gameRow).join('')||'<span class="pks-muted">No game data from Sleeper</span>'}</div>`:''}
       <div class="pks-end">Sync ${esc(D.syncedAt||'')} · <span class="pks-muted">GraphQL fields are unofficial and may change</span></div>`:
       `<div class="pks-empty">${PKS.busy?'Contacting Sleeper through Wingman Connect…':'Unlock then refresh to test pool access. No test or real data has been prefilled.'}</div>`}
   </section>`;
@@ -4765,7 +4766,7 @@ function pkCurrentWeek(){
   return Math.max(1,Math.min(18,nfl>1?nfl:source||1));
 }
 function pkSheetLatestWeek(){
-  return Math.max(0,...(PK.games||[]).filter(g=>g.ats||g.su||g.picks.some(p=>p.c==="C"||p.c==="I")).map(g=>g.w));
+  return Math.max(0,...(PK.games||[]).filter(g=>g.ats||g.picks.some(p=>p.c==="C"||p.c==="I")).map(g=>g.w));
 }
 function pkHelperWeek(w){const gs=PK.nx[w];return gs&&gs.length&&gs.every(g=>g.st!=="pre")?Math.min(18,w+1):w}
 /* the moment ESPN marks a game final, grade it against the spread with the line Wingman used (Sleeper, locked at kickoff,
@@ -4975,7 +4976,9 @@ function pkRender(){
     if(who.length>1&&T){const er=r=>{const x=T[r.u];return x&&x.a!=null?Math.abs(x.g-x.a):1e9},m=Math.min(...who.map(er));if(m<1e9){const w2=who.filter(r=>er(r)===m);if(w2.length<who.length){tbk={from:who.length,err:m};who=w2}}}
     return{w:i+1,mx,who,fin:wkDone(i+1),tbk}});
   const won=winners.filter(x=>x.fin&&x.who.includes(me)).reduce((s,x)=>s+d.pay.weekly/x.who.length,0);
-  const cw=W,lw=winners[cw-1]||{mx:0,who:[]},myW=+me.w[cw-1]||0,pend=wkGames(cw).filter(g=>!g.ats),myPend=pend.filter(g=>g.picks.some(p=>p.u===C.me&&p.side>=0)).length,maxP=myW+myPend;
+  const cw=pkCurrentWeek(),currentGames=wkGames(cw),sourceLast=pkSheetLatestWeek(),sourceBehind=sourceLast<cw;
+  const lw=winners[cw-1]||{mx:0,who:[]},myW=+me.w[cw-1]||0,pend=currentGames.filter(g=>!g.ats),
+    myPend=pend.filter(g=>g.picks.some(p=>p.u===C.me&&p.side>=0)).length,maxP=myW+myPend;
   /* pick-level analytics */
   const mine=PK.games.flatMap(g=>g.picks.filter(p=>p.u===C.me&&(p.c==="C"||p.c==="I")).map(p=>({g,p})));
   const popOf=(g,side)=>{const v=g.picks.filter(x=>x.side>=0);return v.length?v.filter(x=>x.side===side).length/v.length:null};
@@ -4988,19 +4991,20 @@ function pkRender(){
   const suCover=decided.filter(g=>g.su&&g.su===g.ats).length/Math.max(1,decided.length);
   const kpi=(lab,big,sub)=>`<div class="kpi" title="${lab==="Payout odds"?"3,000 simulations of the rest of the season using each member's hit rate so far (shrunk toward 50%). 1st pays "+svMoney(d.pay.first)+", 2nd "+svMoney(d.pay.second)+".":""}"><div class="kl">${lab}</div><div class="kb">${big}</div><div class="ks">${sub}</div></div>`;
   let h=`<div class="svgrid pkgrid"><!--M:overview--><div class="card hero svhero"><div class="svtop"><div class="svti"><span class="svtl"><a class="svt lnk" href="https://docs.google.com/spreadsheets/d/${esc(d.sheet)}/edit" target="_blank" rel="noopener" title="Open the pick'em Google Sheet">🎯 ${esc(C.name)} <span class="ext">↗</span></a><span class="fmt">ATS</span></span><span class="hu">${[`${d.members} members`,d.dues?`${svMoney(d.dues)} buy-in · pot ${svMoney(pot)}`:"",d.pay.first?`1st ${svMoney(d.pay.first)}`:"",d.pay.second?`2nd ${svMoney(d.pay.second)}`:"",d.pay.weekly?`${svMoney(d.pay.weekly)} weekly top score`:""].filter(Boolean).join(" · ")}</span></div>
-    <span class="mt" title="Read from your Google Sheet${PK.layout==="normalized"?" (WM tables)":""}${PK.syncAt?" at "+hm(new Date(PK.syncAt)):""}${PK.missing&&PK.missing.length?` · picks not captured yet for W${PK.missing.join(", W")}`:""}${PK.mism&&PK.mism.length?` · Picks and Standings tabs disagree for W${PK.mism.join(", W")} (Standings shown)`:""}">${PK.fails?"⚠ sheet unreachable · retrying":"● synced "+ago(PK.syncAt)}${(PK.missing&&PK.missing.length)||(PK.mism&&PK.mism.length)?" · ⚠ check sheet":""}</span></div>
+    <span class="mt" title="Read from your Google Sheet${PK.layout==="normalized"?" (WM tables)":""}${PK.syncAt?" at "+hm(new Date(PK.syncAt)):""}${PK.missing&&PK.missing.length?` · picks not captured yet for W${PK.missing.join(", W")}`:""}${PK.mism&&PK.mism.length?` · Picks and Standings tabs disagree for W${PK.mism.join(", W")} (Standings shown)`:""}">${PK.fails?"⚠ sheet refresh failed · retrying":"● synced "+ago(PK.syncAt)}${(PK.missing&&PK.missing.length)||(PK.mism&&PK.mism.length)?" · ⚠ check sheet":""}${sourceBehind?" · ⚠ latest graded W"+sourceLast:""}</span><button class="rep" id="pkrefresh" type="button" ${PK.syncing?"disabled":""}>↻ Refresh</button></div>
+      ${sourceBehind?`<div class="svnote pkstale">NFL Week ${cw} is current. Your sheet has graded results through ${sourceLast?"Week "+sourceLast:"no weeks yet"}. This page shows the current NFL schedule, but pool picks and standings cannot update until the source adds them.</div>`:""}
     <div class="kpis">
       ${kpi("Overall rank",`<b>${tie(me)?"T":""}${rank(me)}</b><small> of ${PK.rows.length}</small>`,chg?`<span class="${chg>0?"up":"dn"}">${chg>0?"▲":"▼"}${Math.abs(chg)}</span> this week`:"no change this week")}
       ${kpi("Points ATS",`<b>${tot(me)}</b>`,`${tot(lead)-tot(me)} behind ${nm(lead.u)} · ${Math.round(myAcc*100)}% hit rate (pool ${Math.round(allC.filter(x=>x.p.c==="C").length/Math.max(1,allC.length)*100)}%)`)}
-      ${kpi(`Week ${cw}`,`<b>${myW}</b><small> pts</small>`,`${myPend?`${myPend} pick${myPend>1?"s":""} pending · max ${maxP}`:"all graded"} · top ${lw.mx}`)}
-      ${!d.pay.weekly?"":kpi(`W${cw} ${svMoney(d.pay.weekly)}`,`<b class="${wkDone(cw)?(lw.who.includes(me)?"up":"dn"):maxP>=lw.mx?"up":"dn"}">${wkDone(cw)?(lw.who.includes(me)?"Won":"Missed"):maxP>=lw.mx?"Alive":"Out"}</b>`,wkDone(cw)?`${lw.who.map(r=>nm(r.u)).join(", ")} with ${lw.mx}`:maxP>=lw.mx?`can still reach ${lw.mx}`:`${lw.mx-maxP} short even if you sweep`)}
+      ${kpi(`Week ${cw}`,`<b>${myW}</b><small> pts</small>`,`${!currentGames.length?"awaiting sheet entries":myPend?`${myPend} pick${myPend>1?"s":""} pending · max ${maxP}`:wkDone(cw)?"all graded":"picks not graded yet"} · top ${lw.mx}`)}
+      ${!d.pay.weekly?"":kpi(`W${cw} ${svMoney(d.pay.weekly)}`,`<b class="${wkDone(cw)?(lw.who.includes(me)?"up":"dn"):!currentGames.length?"":maxP>=lw.mx?"up":"dn"}">${!currentGames.length?"Pending":wkDone(cw)?(lw.who.includes(me)?"Won":"Missed"):maxP>=lw.mx?"Alive":"Out"}</b>`,!currentGames.length?"No picks in the linked sheet for W"+cw:wkDone(cw)?`${lw.who.map(r=>nm(r.u)).join(", ")} with ${lw.mx}`:maxP>=lw.mx?`can still reach ${lw.mx}`:`${lw.mx-maxP} short even if you sweep`)}
       ${(()=>{const o=pkOdds();return o?kpi("Payout odds",`<b>${pctX(o.first+o.second)}</b><small> top 2</small>`,`1st ${pctX(o.first)} · 2nd ${pctX(o.second)}${o.weekly>0?` · +${svMoney(o.weekly)} wkly`:""}`):""})()}
     </div></div>`;
   /* weekly winners */
   h+=`<div class="pkw">${Array.from({length:18},(_,i)=>{const x=winners[i];if(!x)return`<div class="pkwc fut"><b>W${i+1}</b><span>${d.pay.weekly?svMoney(d.pay.weekly):"—"}</span></div>`;
-    const mineW=x.who.includes(me);return`<div class="pkwc ${x.fin?"fin":"live"} ${mineW?"me":""}" title="Week ${x.w}${x.fin?"":" (in progress)"}: top score ${x.mx} · ${x.who.map(r=>r.u).join(", ")}${x.who.length>1?" (tie: split assumed)":""}"><b>W${x.w} ${x.fin?"👑":"⏳"}</b><span>${x.who.length>1?x.who.length+" tied":nm(x.who[0].u)}${x.tbk?` <i data-tip="${x.tbk.from}-way tie on ${x.mx}, decided by the tiebreak guess (off by ${x.tbk.err})">🎲</i>`:""}</span><em>${x.mx}</em>${PK.cov&&PK.cov[x.w]!=null&&PK.cov[x.w]<.999?`<small class="cov" data-tip="${Math.round(PK.cov[x.w]*100)}% of this week's picks are in the sheet">${Math.round(PK.cov[x.w]*100)}%</small>`:""}</div>`}).join("")}</div>`;
+    const mineW=x.who.includes(me),unreported=!wkGames(x.w).length;return`<div class="pkwc ${unreported?"fut":x.fin?"fin":"live"} ${!unreported&&mineW?"me":""}" title="Week ${x.w}${unreported?" (not reported in sheet)":x.fin?"":" (in progress)"}${unreported?"":": top score "+x.mx}"><b>W${x.w} ${x.fin?"👑":"⏳"}</b><span>${unreported?"Not reported":x.who.length>1?x.who.length+" tied":nm(x.who[0].u)}${x.tbk?` <i data-tip="${x.tbk.from}-way tie on ${x.mx}, decided by the tiebreak guess (off by ${x.tbk.err})">🎲</i>`:""}</span><em>${unreported?"–":x.mx}</em>${PK.cov&&PK.cov[x.w]!=null&&PK.cov[x.w]<.999?`<small class="cov" data-tip="${Math.round(PK.cov[x.w]*100)}% of this week's picks are in the sheet">${Math.round(PK.cov[x.w]*100)}%</small>`:""}</div>`}).join("")}</div>`;
   /* ---------- next week's picks helper ---------- */
-  const N=wkDone(cw)?cw+1:cw+1,G=PK.nx[N]||[],myP=pkMine(N);
+  const N=pkHelperWeek(cw),G=PK.nx[N]||[],myP=pkMine(N);
   /* how often this pool backs the favorite (from graded weeks); with it, each side's value vs the field is P(cover) − share of the pool on it */
   let favQ=null;if(PK.gx){let fp=0,np=0;PK.games.forEach((g,i)=>{const x=PK.gx[i];if(!x||x.spread==null||x.spread===0)return;const fav=x.spread<0?g.a:g.b;g.picks.forEach(p=>{if(p.side<0||p.u===C.me)return;np++;if((p.side?g.b:g.a)===fav)fp++})});if(np>=40)favQ=fp/np}
   const behind=rank(me)>1,EDGE=.55;
@@ -5039,7 +5043,7 @@ function pkRender(){
     const dis=rowsC.filter(r=>r.mt&&!r.agree),disW=dis.filter(r=>r.res==="ok").length,disL=dis.filter(r=>r.res==="no").length;
     const tbl=`<div class="tw"><table class="svtab pkc"><colgroup><col><col style="width:64px"><col style="width:38%"><col style="width:52px"></colgroup><thead><tr><th>Game</th><th>You</th><th><span data-tip="Most popular side among the other members whose picks are visible, and its share">Pool</span></th><th class="n"><span data-tip="Who covered: you / the pool">Result</span></th></tr></thead><tbody>${rowsC.map(r=>`<tr class="${r.mt&&!r.agree?"dis":""}"><td>${esc(r.g.a)} @ ${esc(r.g.b)}</td><td>${r.mt?`<b class="${r.res}">${esc(r.mt)}</b>${r.agree?"":` <i class="pkx" data-tip="Against the pool">↯</i>`}`:`<span class="pm">–</span>`}</td><td><span class="pkcp"><b class="${r.cres}">${esc(r.ct)}</b><span class="ppb${r.split?" sp":""}"><i style="width:${Math.round(r.cp*100)}%"></i></span><em>${Math.round(r.cp*100)}%</em></span></td><td class="n">${r.res?`<span class="${r.res}">${r.res==="ok"?"✓":"✗"}</span>`:"<span class='pm'>·</span>"}<span class="pm">/</span>${r.cres?`<span class="${r.cres}">${r.cres==="ok"?"✓":"✗"}</span>`:"<span class='pm'>·</span>"}</td></tr>`).join("")}</tbody></table></div>`;
     h+="<!--M:cons-->"+pkSec("cons",`🧭 You vs the pool · Week ${visW}`,`${rowsC.filter(r=>r.mt&&r.agree).length} with the pool · ${dis.length} against${disW+disL?` (${disW}–${disL})`:""}`,tbl+`<div class="svnote">Only picks the sheet shows are counted; hidden picks stay hidden. ↯ = you went against the pool: those are the games that move you in the standings.</div>`)}
-  h+="<!--M:live-->"+pkSec("live",`📡 Week ${cw} · my picks`,`${myW} correct${myPend?` · ${myPend} pending`:""}`,`<div class="pcl">${myCur}</div>`);
+  h+="<!--M:live-->"+pkSec("live",`📡 Week ${cw} · my picks`,`${myW} correct${myPend?` · ${myPend} pending`:""}`,`<div class="pcl">${myCur||`<div class="none">No Week ${cw} picks have been published in the linked sheet. Live NFL games are ${(PK.nx[cw]||[]).length?"available in the picks helper":"loading"}; pool scores will appear when the sheet is updated.</div>`}</div>`);
   /* ---------- insights from the pool's own data ---------- */
   const ins=[[pctX(majCover),"Pool majority covered",`Fading the crowd would have hit ${pctX(1-majCover)}`,majCover<.5?"g":""],
     [pctX(contraWin),"Picks against the pool won",`You go against the pool on ${pctX(myContraRate)} of picks`,contraWin>.5?"g":""],
@@ -5061,6 +5065,7 @@ function pkRender(){
   h+="<!--M:cfg-->"+pkSec("cfg","⚙️ Pool settings","stored on this device",pkSettingsHtml())+"<!--M:/--></div>";
   h=pkSleeperSection()+modWrap(h,"p:"+hash32(PK.d.sheet||"").toString(36));
   if(S.dragging||h===PK.lastHtml)return;PK.lastHtml=h;el.innerHTML=h;bindMods(el);pkSleeperWire(el);
+  const rf=el.querySelector("#pkrefresh");if(rf)rf.onclick=async()=>{rf.disabled=true;await pkTick(true);PK.lastHtml="";pkRender()};
   el.querySelectorAll(".svh").forEach(x=>x.onclick=()=>{PK.open[x.dataset.k]=PK.open[x.dataset.k]===false;save("pk_open",JSON.stringify(PK.open));pkRender()});
   const cf=el.querySelector(".svcfg");if(cf)cf.onchange=()=>{const g=id=>cf.querySelector("#"+id),n=id=>Math.max(0,+g(id).value||0);savePoolCfg("pickem",{name:g("pkc_name").value.trim()||"Pick'em",me:g("pkc_me").value,meAuto:g("pkc_me").value===PK.cfg.me?PK.cfg.meAuto:0,dues:n("pkc_dues"),first:n("pkc_first"),second:n("pkc_second"),weekly:n("pkc_weekly")});PK.oddsKey="";pkRender()};
   el.querySelectorAll(".pat").forEach(b=>b.onclick=()=>{if(b.disabled)return;const p=pkMine(N);p[b.dataset.k]=p[b.dataset.k]===b.dataset.t?undefined:b.dataset.t;save("pk_mine_"+N,JSON.stringify(p));pkRender()});
