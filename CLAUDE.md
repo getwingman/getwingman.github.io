@@ -24,8 +24,11 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   Filmroom (player filter + scoring composition incl. "Unattributed" = official − plays). Live refresh patches only changed
   `[data-rp]` parts (selection + animation survive). Pregame = calm kickoff list (`.kfr`).
 - Results: the live API decides. Survivor: an ESPN final beats the sheet's Results; the sheet only fills games ESPN can't
-  resolve (`src:"sheet"`). Pick'em: `pkApiGrade()` grades a finished game ATS from the final score + locked line the moment
-  ESPN marks it final (pushes = not covered), adds the points to standings, extends `PK.weeks`; sheet grades replace it.
+  resolve (`src:"sheet"`). Pick'em: `pkApiGrade()` recomputes **all points and standings inside Wingman** using ESPN final scores,
+  only verified Sleeper pool-locked spreads, and authenticated final-only Sleeper picks delivered via the Worker.
+  The linked normalized sheet is input-only (teams/verified spread, members, selection inputs); never read grades,
+  scores or points from it. The immutable 2026 W1–W4 historical pool outcomes are a migration-only fallback
+  because the historical locked spreads were never captured. Never grade using unverified market odds.
 - **Survivor** / **Pick'em** are sheet modes (`SHEETMODES`): hidden until the user links a Google Sheet from the
   connections page. NO pool data, member names or sheet IDs live in the page: everything is read from the linked sheet
   (`gvizCsv`, whole tab, `headers=0`, columns found by header name) and per-pool settings (`poolCfg`/`savePoolCfg`: whose
