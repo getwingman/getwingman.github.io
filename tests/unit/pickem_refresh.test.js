@@ -4,7 +4,7 @@ const src=fs.readFileSync(process.argv[2],"utf8");
 const cut=(a,b)=>{const x=src.indexOf(a),y=src.indexOf(b,x+a.length);assert(x>=0&&y>x,"Source extract failed: "+a);return src.slice(x,y)};
 const JS=[
  cut("function pkIndex()","/* The current NFL week"),
- cut("function pkCurrentWeek()","/* the moment ESPN marks"),
+ cut("function pkCurrentWeek()","// Historical migration"),
  cut("const PK_HIST_2026=","/* live sync from the sheet"),
  cut("async function pkSync(force=false)","/* =====================================================================\n   SLEEPER PICK'EM"),
  cut("async function pkTick(force=false)","/* =====================================================================\n   MOVES TAB")
