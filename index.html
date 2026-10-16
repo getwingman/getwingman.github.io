@@ -4848,6 +4848,9 @@ async function pkSync(force=false){
   PK.syncing=true;if(!PK.rows)PK.st="loading";
   try{
     if(await pkSyncNormalized(PK.d.sheet)){PK.st="ok";PK.err="";PK.src="sheet";PK.syncAt=Date.now();PK.fails=0;PK.syncBackoff=0;return}
+    // A temporary Config read failure must not silently downgrade an established WM_* pool
+    // to an older Picks/Standings layout.
+    if(PK.layout==="normalized")throw new Error("layout");
     const[R,SR]=await Promise.all([gvizCsv(PK.d.sheet,"Picks"),gvizCsv(PK.d.sheet,"Standings")]),x=pkParse(R,SR);
     if(x.err)throw new Error(x.err);
     PK.d=Object.assign({},PK.d,{stand:x.stand,players:x.players,games:x.games,picks:x.picks});
@@ -5002,7 +5005,7 @@ function pkRender(){
     </div></div>`;
   /* weekly winners */
   h+=`<div class="pkw">${Array.from({length:18},(_,i)=>{const x=winners[i];if(!x)return`<div class="pkwc fut"><b>W${i+1}</b><span>${d.pay.weekly?svMoney(d.pay.weekly):"—"}</span></div>`;
-    const mineW=x.who.includes(me),unreported=!wkGames(x.w).length;return`<div class="pkwc ${unreported?"fut":x.fin?"fin":"live"} ${!unreported&&mineW?"me":""}" title="Week ${x.w}${unreported?" (not reported in sheet)":x.fin?"":" (in progress)"}${unreported?"":": top score "+x.mx}"><b>W${x.w} ${x.fin?"👑":"⏳"}</b><span>${unreported?"Not reported":x.who.length>1?x.who.length+" tied":nm(x.who[0].u)}${x.tbk?` <i data-tip="${x.tbk.from}-way tie on ${x.mx}, decided by the tiebreak guess (off by ${x.tbk.err})">🎲</i>`:""}</span><em>${unreported?"–":x.mx}</em>${PK.cov&&PK.cov[x.w]!=null&&PK.cov[x.w]<.999?`<small class="cov" data-tip="${Math.round(PK.cov[x.w]*100)}% of this week's picks are in the sheet">${Math.round(PK.cov[x.w]*100)}%</small>`:""}</div>`}).join("")}</div>`;
+    const mineW=x.who.includes(me),unreported=!wkGames(x.w).some(g=>g.ats||g.picks.some(p=>p.side>=0||p.c==="C"||p.c==="I"));return`<div class="pkwc ${unreported?"fut":x.fin?"fin":"live"} ${!unreported&&mineW?"me":""}" title="Week ${x.w}${unreported?" (not reported in sheet)":x.fin?"":" (in progress)"}${unreported?"":": top score "+x.mx}"><b>W${x.w} ${x.fin?"👑":"⏳"}</b><span>${unreported?"Not reported":x.who.length>1?x.who.length+" tied":nm(x.who[0].u)}${x.tbk?` <i data-tip="${x.tbk.from}-way tie on ${x.mx}, decided by the tiebreak guess (off by ${x.tbk.err})">🎲</i>`:""}</span><em>${unreported?"–":x.mx}</em>${PK.cov&&PK.cov[x.w]!=null&&PK.cov[x.w]<.999?`<small class="cov" data-tip="${Math.round(PK.cov[x.w]*100)}% of this week's picks are in the sheet">${Math.round(PK.cov[x.w]*100)}%</small>`:""}</div>`}).join("")}</div>`;
   /* ---------- next week's picks helper ---------- */
   const N=pkHelperWeek(cw),G=PK.nx[N]||[],myP=pkMine(N);
   /* how often this pool backs the favorite (from graded weeks); with it, each side's value vs the field is P(cover) − share of the pool on it */
@@ -5075,8 +5078,11 @@ function pkRender(){
 }
 /* season simulation: each member's weekly score ~ their hit rate, heavily shrunk toward 50% (ATS skill is mostly noise), over the remaining weeks */
 function pkOdds(){
-  const C=PK.cfg||POOLDEF.pickem,d={me:C.me,pay:{first:+C.first||0,second:+C.second||0,weekly:+C.weekly||0,weeks:18}},W=PK.weeks,key=W+"|"+PK.rows.map(r=>r.w.join(".")).join(";");if(PK.oddsKey===key)return PK.odds;
-  const G=Math.max(1,PK.games.filter(g=>g.w<=W&&(g.ats||g.su)).length),R=Math.max(0,18-W),wk=Math.max(0,d.pay.weeks-W),gpw=16;
+  const C=PK.cfg||POOLDEF.pickem,d={me:C.me,pay:{first:+C.first||0,second:+C.second||0,weekly:+C.weekly||0,weeks:18}},W=PK.weeks,
+    // Unreported current weeks are still opportunities, not zero-point completed weeks.
+    graded=Math.max(pkSheetLatestWeek(),...PK.games.filter(g=>g.api).map(g=>g.w),0),
+    key=W+"|"+graded+"|"+PK.rows.map(r=>r.w.join(".")).join(";");if(PK.oddsKey===key)return PK.odds;
+  const G=Math.max(1,PK.games.filter(g=>g.w<=W&&(g.ats||g.su)).length),R=Math.max(0,18-graded),wk=Math.max(0,d.pay.weeks-graded),gpw=16;
   const base=PK.rows.map(r=>{const t=r.w.reduce((a,b)=>a+(+b||0),0);return{u:r.u,t,p:(t+150)/(G+300)}}),meI=base.findIndex(x=>x.u===C.me);if(meI<0)return null;
   const N=3000;let c1=0,c2=0,ws=0;RND=rng32(hash32("pk|"+W));
   for(let n=0;n<N;n++){const tot=base.map(x=>x.t+RND()*1e-3);
