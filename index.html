@@ -3555,7 +3555,7 @@ function getConns(){let c=[];try{c=JSON.parse(load("conns")||"[]")}catch(e){}
 function saveConns(){save("conns",JSON.stringify(S.conns||[]))}
 async function nflState(){
   try{const st=await getJ(SLP+"/state/nfl");S.season=st.season;S.nflWeek=+st.week||+st.display_week||1;S.dispWeek=+st.display_week||S.nflWeek;return}catch(e){}
-  try{const j=await getJ(ESPN,true);S.season=String((j.season||{}).year||new Date().getFullYear());S.nflWeek=S.dispWeek=+((j.week||{}).number)||1}catch(e){S.season=String(new Date().getFullYear());S.nflWeek=S.dispWeek=1}
+  try{const j=await getJ(ESPN,true);S.season=String((j.season||{}).year||new Date().getFullYear());S.nflWeek=S.dispWeek=+((j.week||{}).number)||S.nflWeek||1}catch(e){S.season=S.season||String(new Date().getFullYear());S.nflWeek=S.nflWeek||S.dispWeek||1;S.dispWeek=S.dispWeek||S.nflWeek}
 }
 
 /* =====================================================================
@@ -4719,7 +4719,7 @@ async function pkSleeperSync(force){
   if(!force && Date.now()-PKS.at<90000)return;
   PKS.busy=true;PKS.error='';if(S.tab==='p')pkRender();
   try{
-    const w=Math.max(1,Math.min(18,Number(S.nflWeek||5)));
+    const w=pkCurrentWeek();
     const r=await fetch(`${workerURL()}/pickem/season?week=1&upto=${w}`,{
       headers:{'X-WM-Pickem-Key':pkSleeperSecret(),'Accept':'application/json'},
       cache:'no-store'
@@ -4762,7 +4762,7 @@ function pkIndex(){
 /* The current NFL week and last week graded in the connected sheet are different.
    W5 sheet grades must not pin the dashboard to Week 5 while NFL is in Week 7. */
 function pkCurrentWeek(){
-  const nfl=+S.nflWeek||+S.dispWeek||0,source=PK.wSheet||0;
+  const nfl=Math.max(+S.nflWeek||0,+S.dispWeek||0),source=PK.wSheet||0;
   return Math.max(1,Math.min(18,nfl>1?nfl:source||1));
 }
 function pkSheetLatestWeek(){
@@ -5096,9 +5096,9 @@ function pkSec(key,title,sub,body){const o=PK.open[key]!==false;return`<div clas
 async function pkTick(force=false){
   // A week rollover must be detected while the page remains open, including pool-only setups.
   if(!PK.nflAt||Date.now()-PK.nflAt>600000){
-    PK.nflAt=Date.now();const before=S.season+":"+S.nflWeek;
+    PK.nflAt=Date.now();const before=S.season+":"+S.nflWeek+":"+S.dispWeek;
     await nflState();
-    if(before!==S.season+":"+S.nflWeek){PK.nx={};PK.nxt={};PK.fpi={};PK.oddsKey="";PK.lastHtml=""}
+    if(before!==S.season+":"+S.nflWeek+":"+S.dispWeek){PK.nx={};PK.nxt={};PK.fpi={};PK.oddsKey="";PK.lastHtml=""}
   }
   if(pkSleeperActive())void pkSleeperSync(force);
   if(!PK.d.sheet){if(S.tab==="p")pkRender();return}
