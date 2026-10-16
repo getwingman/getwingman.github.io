@@ -32,7 +32,7 @@ export default {
     const url = new URL(req.url);
     const cors = {
       "Access-Control-Allow-Origin": env.ALLOWED_ORIGIN,
-      "Access-Control-Allow-Headers": "X-WM-Session, Content-Type",
+      "Access-Control-Allow-Headers": "X-WM-Session, X-WM-Pickem-Key, Content-Type",
       "Access-Control-Expose-Headers": "X-WM-Session",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Vary": "Origin",
@@ -46,6 +46,7 @@ export default {
       if (url.pathname === "/vision/roster" && req.method === "POST") return await visionRoster(req, env, cors);
       if (url.pathname === "/vision/ping") return await visionPing(req, env, cors);
       if (url.pathname === "/news/quip") return await newsQuip(req, url, env, cors);
+      if (url.pathname === "/pickem/season" && req.method === "GET") return await pickemSeason(req, url, env, cors);
       if (url.pathname.startsWith("/mfl/")) return await passThrough("https://api.myfantasyleague.com" + url.pathname.slice(4) + url.search, cors);
       if (url.pathname.startsWith("/sleeper/scores/")) return await passThrough("https://api.sleeper.app" + url.pathname.slice(8) + url.search, cors);
       if (url.pathname.startsWith("/ff/api/")) return await passThrough("https://www.fleaflicker.com" + url.pathname.slice(3) + url.search, cors);
@@ -55,6 +56,74 @@ export default {
     }
   },
 };
+
+
+/* -------- Authenticated, read-only Sleeper Pick'em pool reader --------
+   Secrets (worker ONLY): SLEEPER_TOKEN (Sleeper session authorization header),
+   WM_PICKEM_VIEW_KEY (separate random 24+ char viewer key), WM_PICKEM_POOL_ID.
+   Picks are exposed only once a particular game's Sleeper score is complete.
+   "outcome" is NOT a scoring result; Wingman uses ESPN final + verified pool lock instead.
+   This endpoint never accepts writes or returns any secrets.
+*/
+async function pickemSeason(req, url, env, cors) {
+  const H={...cors,"Content-Type":"application/json","Cache-Control":"private, no-store"};
+  const J=(code,obj)=>new Response(JSON.stringify(obj),{status:code,headers:H});
+  const origin=req.headers.get("Origin")||"";
+  if(env.ALLOWED_ORIGIN&&origin&&origin!==env.ALLOWED_ORIGIN)return J(403,{ok:false,error:"Origin not authorized"});
+  if(!env.SLEEPER_TOKEN||!env.WM_PICKEM_VIEW_KEY)return J(503,{ok:false,error:"Sleeper reader is not configured in Wingman Connect"});
+  const a=new TextEncoder().encode(req.headers.get("X-WM-Pickem-Key")||""),
+        b=new TextEncoder().encode(String(env.WM_PICKEM_VIEW_KEY));
+  if(a.length!==b.length||a.length<16)return J(401,{ok:false,error:"Invalid viewer key"});
+  let same=0;for(let i=0;i<a.length;i++)same|=a[i]^b[i];
+  if(same)return J(401,{ok:false,error:"Invalid viewer key"});
+  const from=Math.max(1,Math.min(18,Number.parseInt(url.searchParams.get("week")||"1")||1)),
+        upto=Math.max(from,Math.min(18,Number.parseInt(url.searchParams.get("upto")||String(from))||from));
+  const season=String(Number.parseInt(url.searchParams.get("season")||String(new Date().getUTCFullYear()))||"");
+  if(!/^(20[2-9]\d)$/.test(season))return J(400,{ok:false,error:"Bad season"});
+  const league=String(env.WM_PICKEM_POOL_ID||"1392587441361129472");
+  if(!/^\d{12,24}$/.test(league))return J(503,{ok:false,error:"Pool ID not configured"});
+  const UA="Wingman-Pickem/1.0 (+https://getwingman.github.io)";
+  const get=async path=>{const r=await fetch("https://api.sleeper.app"+path,{headers:{"Accept":"application/json","User-Agent":UA}});
+    if(!r.ok)throw Error("Sleeper REST HTTP "+r.status);return r.json()};
+  const gql=async w=>{
+    const leg="v1:regular:"+w;
+    const query='query { get_pickem_picks_for_league(league_id: "'+league+'", leg_id: "'+leg+'", include_tiebreaker: true) }';
+    const r=await fetch("https://sleeper.com/graphql",{method:"POST",headers:{
+      "Authorization":String(env.SLEEPER_TOKEN),"Content-Type":"application/json","Accept":"application/json","User-Agent":UA
+    },body:JSON.stringify({query})});
+    if(!r.ok)throw Error("Sleeper authenticated picks HTTP "+r.status);
+    const j=await r.json();if(j.errors&&j.errors.length)throw Error("Sleeper pick query: "+String(j.errors[0].message||"failed").slice(0,90));
+    const d=j.data&&j.data.get_pickem_picks_for_league;
+    if(!d||typeof d!=="object"||Array.isArray(d))throw Error("Sleeper returned no readable pool picks");
+    return d;
+  };
+  try {
+    const [rosters,users]=await Promise.all([get("/v1/league/"+league+"/rosters"),get("/v1/league/"+league+"/users")]);
+    if(!Array.isArray(rosters)||!Array.isArray(users))throw Error("Sleeper pool roster mapping unavailable");
+    const byId=new Map(users.map(u=>[String(u.user_id),u]));
+    const entries=rosters.map(r=>{
+      const u=byId.get(String(r.owner_id))||{},id=String(r.roster_id||"");
+      return{id,name:String(u.display_name||u.username||id),username:String(u.username||"")};
+    }).filter(e=>e.id);
+    if(!entries.length)throw Error("Sleeper pool entries unavailable");
+    const weeks=await Promise.all(Array.from({length:upto-from+1},(_,i)=>from+i).map(async w=>{
+      const [picks,scores]=await Promise.all([gql(w),get("/scores/nfl/regular/"+season+"/"+w)]);
+      if(!Array.isArray(scores))throw Error("Sleeper scoreboard unavailable for W"+w);
+      const games=scores.map(g=>{
+        const m=g.metadata||{},final=g.status==="complete";
+        return{id:String(g.game_id||g.id||""),home:String(m.home_team||"").toUpperCase(),
+          away:String(m.away_team||"").toUpperCase(),homeScore:final?Number(m.home_score):null,
+          awayScore:final?Number(m.away_score):null,status:String(g.status||""),final,
+          picks:final?Object.entries(picks).flatMap(([entryId,item])=>{
+            const raw=item&&item.picks&&item.picks[g.game_id];const team=raw&&String(raw.team||"").toUpperCase();
+            return team?[{entryId:String(entryId),team}]:[];
+          }):[]};
+      }).filter(g=>g.id&&g.home&&g.away);
+      return{week:w,games};
+    }));
+    return J(200,{ok:true,pool:{id:league,entries},weeks,syncedAt:new Date().toISOString()});
+  } catch(e){return J(502,{ok:false,error:String(e.message||e).slice(0,160)})}
+}
 
 /* ---------------- Yahoo OAuth ---------------- */
 function yahooLogin(url, env) {
