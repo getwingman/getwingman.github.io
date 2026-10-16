@@ -1987,7 +1987,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.23</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.24</span></div>
   </div>
 </header>
 <main>
@@ -2011,7 +2011,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.23";
+const WM_VERSION="1.24";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -4986,7 +4986,10 @@ async function pkLoadNext(w,maxAge){
       const home=NT(H.team.abbreviation),away=NT(A.team.abbreviation);
       out.push({id:ev.id,date:ev.date,home,away,hn:H.team.name,an:A.team.name,hs:null,ou:null,st:ev.status.type.state,hsc:+H.score||0,asc:+A.score||0,detail:ev.status.type.shortDetail,day:new Date(ev.date).toLocaleDateString("en-US",{weekday:"short",timeZone:"America/New_York"})})});
     /* lines come ONLY from Sleeper (locked at kickoff); ESPN supplies schedule/scores/status */
-    const yr=S.season||String(new Date().getFullYear()),L=await sleeperLines(yr,w,out.some(g=>g.st==="in")?120000:600000);
+    const yr=S.season||String(new Date().getFullYear());
+    // A broken market feed must never suppress ESPN final scores or historical grading.
+    const allFinal=out.length&&out.every(g=>g.st==="post");
+    const L=allFinal?{}:await sleeperLines(yr,w,out.some(g=>g.st==="in")?120000:600000).catch(()=>({}));
     out.forEach(g=>{const k=g.away+"@"+g.home,x=L[k]||{},started=g.st!=="pre";
       g.hs=sloLocked(yr,w,k,x.hs!=null?x.hs:null,started);g.hsVerified=false; // a pregame observation is not proof of the pool's official locked ATS spread
       g.hsSrc=g.hs!=null?(g.hsVerified?"sleeper":"proxy"):"";g.ou=x.total||null;
@@ -4995,9 +4998,9 @@ async function pkLoadNext(w,maxAge){
       if(sheet&&/(locked|verified|screenshot)/i.test(sheet.src)&&!/(proxy|unverified|not_captured)/i.test(sheet.src)){g.hs=sheet.hs;g.hsSrc="sheet";g.hsVerified=true}
       else if(g.hs==null&&sheet){g.hs=sheet.hs;g.hsSrc="proxy";g.hsVerified=false}
     });
-    PK.nx[w]=out.sort((a,b)=>new Date(a.date)-new Date(b.date));
+    PK.nx[w]=out.sort((a,b)=>new Date(a.date)-new Date(b.date));PK.nxt[w]=Date.now();
     await Promise.all(out.filter(g=>g.st==="pre"&&!PK.fpi[g.id]).map(async g=>{try{const s=await getJ(ESPN.replace("scoreboard","summary")+"?event="+g.id);const p=s.predictor||{},hp=p.homeTeam&&parseFloat(p.homeTeam.gameProjection);if(!isNaN(hp))PK.fpi[g.id]=hp/100}catch(e){}}));
-  }catch(e){}
+  }catch(e){if(!PK.nx[w])PK.nxt[w]=0;PK.scoreErr=String(e.message||e).slice(0,100)}
 }
 const QBOUT=t=>{if(!S.players)return null;for(const id in S.players){const p=S.players[id];if(p.position==="QB"&&NT(p.team||"")===t&&p.depth_chart_order===1&&/^(Out|IR|Doubtful|Suspended)$/i.test(p.injury_status||""))return p.full_name}return null};
 function pkModel(g){
@@ -5064,7 +5067,7 @@ function pkRender(){
   const suCover=decided.filter(g=>g.su&&g.su===g.ats).length/Math.max(1,decided.length);
   const kpi=(lab,big,sub)=>`<div class="kpi" title="${lab==="Payout odds"?"3,000 simulations of the rest of the season using each member's hit rate so far (shrunk toward 50%). 1st pays "+svMoney(d.pay.first)+", 2nd "+svMoney(d.pay.second)+".":""}"><div class="kl">${lab}</div><div class="kb">${big}</div><div class="ks">${sub}</div></div>`;
   let h=`<div class="svgrid pkgrid"><!--M:overview--><div class="card hero svhero"><div class="svtop"><div class="svti"><span class="svtl"><a class="svt lnk" href="https://docs.google.com/spreadsheets/d/${esc(d.sheet)}/edit" target="_blank" rel="noopener" title="Open the pick'em Google Sheet">🎯 ${esc(C.name)} <span class="ext">↗</span></a><span class="fmt">ATS</span></span><span class="hu">${[`${d.members} members`,d.dues?`${svMoney(d.dues)} buy-in · pot ${svMoney(pot)}`:"",d.pay.first?`1st ${svMoney(d.pay.first)}`:"",d.pay.second?`2nd ${svMoney(d.pay.second)}`:"",d.pay.weekly?`${svMoney(d.pay.weekly)} weekly top score`:""].filter(Boolean).join(" · ")}</span></div>
-    <span class="mt" title="Read from your Google Sheet${PK.layout==="normalized"?" (WM tables)":""}${PK.syncAt?" at "+hm(new Date(PK.syncAt)):""}${PK.missing&&PK.missing.length?` · picks not captured yet for W${PK.missing.join(", W")}`:""}${PK.mism&&PK.mism.length?` · Picks and Standings tabs disagree for W${PK.mism.join(", W")} (Standings shown)`:""}">${PK.fails?"⚠ picks input unavailable · retrying":"● picks checked "+ago(PK.syncAt)}${(PK.missing&&PK.missing.length)||(PK.mism&&PK.mism.length)?" · ⚠ missing picks":""}${sourceBehind?" · scored through W"+(sourceLast||"—"):""}</span><button class="rep" id="pkrefresh" type="button" ${PK.syncing?"disabled":""}>↻ Refresh</button></div>
+    <span class="mt" title="Read from your Google Sheet${PK.layout==="normalized"?" (WM tables)":""}${PK.syncAt?" at "+hm(new Date(PK.syncAt)):""}${PK.missing&&PK.missing.length?` · picks not captured yet for W${PK.missing.join(", W")}`:""}${PK.mism&&PK.mism.length?` · Picks and Standings tabs disagree for W${PK.mism.join(", W")} (Standings shown)`:""}">${PK.scoreErr?"⚠ NFL score feed unavailable":PK.fails?"⚠ picks input unavailable · retrying":"● picks checked "+ago(PK.syncAt)}${(PK.missing&&PK.missing.length)||(PK.mism&&PK.mism.length)?" · ⚠ missing picks":""}${sourceBehind?" · scored through W"+(sourceLast||"—"):""}</span><button class="rep" id="pkrefresh" type="button" ${PK.syncing?"disabled":""}>↻ Refresh</button></div>
       ${sourceBehind?`<div class="svnote pkstale"><b>Waiting on pool selections.</b> NFL W${cw} is current; Wingman has scored available selections through W${sourceLast||"—"}. ${cw>1&&prevImport.expected?`W${cw-1}: ${prevImport.captured}/${prevImport.expected} pick records imported, ${prevImport.graded} graded. `:""}${nowImport.expected?`W${cw}: ${nowImport.captured}/${nowImport.expected} imported.`:""} ESPN finals refresh automatically. Missing member selections must come through authenticated Sleeper sync, and ATS scoring requires verified pool-locked spreads.
         ${!pkSleeperActive()?'<button class="rep" type="button" id="pkreaderhelp" style="margin:7px 0">Set up Sleeper reader</button>':""}</div>`:""}
     <div class="kpis">
