@@ -6,6 +6,7 @@ run "optimizer vs brute force" node unit/optimizer.test.js "$H"
 run "Edge trade analyzer: search, scoring, roster cuts" node unit/trade_analyzer.test.js "$H"
 run "live injury reentry: forecasts, odds and clock strings" node unit/live_injury.test.js "$H"
 run "Pick’em live ESPN scoring and imported Sleeper picks" node unit/pickem_refresh.test.js "$H"
+run "Survivor elimination drilldown, who/why, mobile searches" node unit/survivor_eliminations.test.js "$H"
 run "authenticated pickem worker final-only disclosure" node unit/pickem_worker.test.js
 cp "${WORKER:-$(dirname "$H")/wingman-connect-worker.js}" unit/worker.mjs 2>/dev/null; run "worker OAuth" node unit/worker.test.mjs
 run "v38 features + desktop/phone" python3 qa60.py file://$H . $O
