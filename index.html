@@ -1992,6 +1992,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 }
 
 .sv-scope{display:flex;gap:6px;flex-wrap:wrap}.sv-scope .rep.on{border-color:var(--b);color:var(--ink);background:rgba(61,214,230,.1)}.sv-more{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;font-size:11px;color:var(--mute)}.svc .lh.svh:focus-visible{outline:2px solid var(--b);outline-offset:2px}@media(max-width:760px){.sv-scope .rep{font-size:11px}}
+.sv16-weeknotice{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:10px 12px;border:1px solid rgba(245,158,11,.35);border-radius:9px;background:rgba(245,158,11,.055);font-size:11px;color:var(--mute)}.sv16-weeknotice button{white-space:nowrap}@media(max-width:760px){.sv16-weeknotice{align-items:flex-start}}
 </style>
 </head>
 <body>
@@ -2021,7 +2022,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.27</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.28</span></div>
   </div>
 </header>
 <main>
@@ -2045,7 +2046,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.27";
+const WM_VERSION="1.28";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -4442,7 +4443,7 @@ function svRender(){
   if(!SV.lanes){const s=svStateHtml();if(s!==SV.lastHtml){SV.lastHtml=s;el.innerHTML=s;const b=el.querySelector("#svretry");if(b)b.onclick=()=>{SV.syncBackoff=0;SV.st="loading";svRender();svInit()}}return}
   if(!SV.cfg.me&&!SV.flagged){const s=svSetupHtml();if(s!==SV.lastHtml){SV.lastHtml=s;el.innerHTML=s;el.querySelector("#svmego").onclick=()=>{const v=el.querySelector("#svme").value;if(!v)return;savePoolCfg("survivor",{me:v==="__none"?"__none":v,meSet:1});svRender()}}return}
   const C=SV.cfg,hasMe=C.me&&C.me!=="__none";
-  const V=svWeek();let N=V+1;
+  const V=svWeek(),nflWeek=Math.max(+S.nflWeek||0,+S.dispWeek||0);let N=V+1;
   /* history */
   const prog=[{w:0,our:SV.lanes.filter(isOurs).length,pool:SV.lanes.length}];for(let w=1;w<=V;w++)prog.push({w,...svCount(w,false)});
   const proj=svCount(V,true);svEval(V,false);
@@ -4510,12 +4511,12 @@ function svRender(){
     ${hasMe?`<div class="sv16-main"><div class="sv16-signal ${myTrailing||myAllLost?"danger":myUnresolved||myEliminated?"watch":"safe"}"><div class="sv16-sigico">${myTrailing||myAllLost?"⚠":myUnresolved||myEliminated?"◉":"✓"}</div><div><b>${esc(currentHeadline)}</b><small>${esc(gameDayHint)}</small></div></div>
       <div class="sv16-nums"><div><small>YOUR LIVES</small><strong>${st.our}<em> / ${start.our}</em></strong><span>${myEliminated?myEliminated+" lost this week":mySecured+" secured this week"}</span></div>
       <div><small>STILL IN PLAY</small><strong class="${myTrailing?"danger":""}">${myUnresolved}</strong><span>${myTrailing?myTrailing+" currently behind":"Your entries unresolved"}</span></div>
-      <div><small>POOL STILL IN</small><strong>${st.pool}<em> / ${pool0}</em></strong><span>${elimData.rows.length} eliminated this week · <a class="sv16-elim-jump" href="#svelim">See who &amp; why ↓</a></span></div>
+      <div><small>POOL STILL IN</small><strong>${st.pool}<em> / ${pool0}</em></strong><span>${elimData.rows.length} eliminated in W${V} · <a class="sv16-elim-jump" href="#svelim">See who &amp; why ↓</a></span></div>
       <div><small>YOUR POOL RANK</small><strong>${tie?"T-":""}${myRank}<em> / ${aliveParts}</em></strong><span>${lead&&lead.who!==C.me?`Leader: ${esc(lead.who)} · ${lead.left} lives`:"Currently leading"}</span></div></div></div>`:
       `<div class="sv16-main"><div class="sv16-signal"><div class="sv16-sigico">◎</div><div><b>${currentHeadline}</b><small>${st.pool} of ${pool0} entries are not eliminated</small></div></div></div>`}
     ${hasMe&&myChoices.length?`<div class="sv16-choices"><span class="sv16-label">YOUR W${V} PICKS</span><div class="sv16-picks">${chosenLine}</div></div>`:""}
     ${hasMe?`<div class="sv16-foot"><span title="Share of surviving entries, not your probability of winning">Your entry share: <b>${svFmtPct(share)}</b> of entries still in (not win odds)</span><span>${fieldUnresolved} other entries awaiting outcomes</span></div>`:""}
-    </div>`;
+    </div>${nflWeek&&nflWeek!==V?`<div class="sv16-weeknotice"><span>Viewing pool W${V} · current NFL week W${nflWeek}.${SV.maxPick<nflWeek?" Sheet picks only through W"+SV.maxPick+".":""}</span><button type="button" class="rep" id="svtoday">View NFL W${nflWeek}</button></div>`:""}`;
   h+="<!--M:elim-->"+svSec("elim",`💀 Who got eliminated · W${V}`,`${elimData.rows.length} confirmed · ${elimData.risk.length} trailing`,svElimHtml(V,elimData));
   /* ---------- Survival Watch: one row per game that carries your lives ---------- */
   const fieldOn={};inPlay.filter(l=>!isOurs(l)).forEach(l=>svPicks(l,V).forEach(t=>fieldOn[t]=(fieldOn[t]||0)+1));
@@ -4719,6 +4720,7 @@ function svRender(){
   el.innerHTML=h;bindMods(el);
   el.querySelectorAll("[data-wo]").forEach(x=>{const go=()=>{SV.wo=SV.wo===x.dataset.wo?null:x.dataset.wo;svRender()};x.onclick=go;x.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});
   const fa=el.querySelector("#swfall");if(fa)fa.onclick=()=>{SV.fAll=!SV.fAll;svRender()};
+  const today=el.querySelector("#svtoday");if(today)today.onclick=async()=>{SV.week=nflWeek;await Promise.all([svLoadWeek(nflWeek,true),svLoadWeek(nflWeek+1,false)]);svRender()};
   el.querySelectorAll(".svh").forEach(x=>{const toggle=()=>{SV.open[x.dataset.k]=SV.open[x.dataset.k]===false;save("svopen2",JSON.stringify(SV.open));svRender()};x.onclick=toggle;x.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}}});
   el.querySelectorAll(".wkb").forEach(x=>x.onclick=async()=>{SV.week=+x.dataset.w;await Promise.all([svLoadWeek(SV.week,true),svLoadWeek(SV.week+1,false)]);svRender()});
   el.querySelectorAll("tr.lgrp.tog").forEach(r=>r.onclick=()=>{SV.showOut=!SV.showOut;svRender()});
