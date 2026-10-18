@@ -61,5 +61,7 @@ ok("Large elimination groups collapse initially",!big.includes('<details class="
 const unsafe=mk("<img src=x onerror=alert(1)>","J",6);unsafe.p[5]="Chiefs";SV.lanes=[unsafe];
 const safe=ctx.api.svElimHtml(6,ctx.api.svEliminationData(6));
 ok("Escapes names from sheet data",safe.includes("&lt;img")&&!safe.includes("<img src=x"));
-ok("Version shipped",source.includes('WM_VERSION="1.27"'));
+ok("NFL week mismatch warning visible",source.includes("sv16-weeknotice")&&source.includes('id="svtoday"'));
+ok("Return to live NFL week wired",source.includes('today.onclick=async()=>{SV.week=nflWeek'));
+ok("Version shipped",source.includes('WM_VERSION="1.28"'));
 console.log("PASS survivor-eliminations: "+checks+" focused checks");
