@@ -1958,6 +1958,39 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 .tw-signals{display:flex;flex-direction:column;gap:7px;color:var(--mute);font-size:11px;line-height:1.4}.tw-signals .tw-risk{color:var(--up)}.tw-note{color:var(--mute);font-size:10px;line-height:1.5;margin:8px 0 0}
 @media(max-width:760px){.tw-workbench{padding:12px}.tw-head{flex-wrap:wrap}.tw-actions{width:100%}.tw-sides,.tw-results,.tw-insightgrid{grid-template-columns:minmax(0,1fr)}.tw-workbench select,.tw-workbench input{font-size:16px}.tw-suggest{min-width:0}.tw-grade-body>strong{font-size:36px}}
 
+
+/* Survivor elimination drilldown — responsive, grouped by losing team */
+.sve-wrap{padding:12px 14px 14px;min-width:0;scroll-margin-top:90px}
+.sve-intro{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.sve-intro>div:first-child{display:flex;align-items:baseline;gap:8px}.sve-intro>div:first-child strong{font:850 24px/1 var(--fnum);color:var(--neg)}
+.sve-intro span{font-size:12px;color:var(--mute)}.sve-intro .sve-at-risk{font-size:11px}.sve-at-risk strong{font-weight:850;color:var(--up)}
+.sve-search{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;font-size:11px;color:var(--mute)}
+.sve-search input{min-width:0;width:min(330px,65%);background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--ink);font:inherit;font-size:13px}
+.sve-search input:focus-visible{outline:2px solid var(--b);outline-offset:1px}
+.sve-groups{display:flex;flex-direction:column;gap:8px}.sve-group{border:1px solid var(--line);background:var(--s2);border-radius:10px;min-width:0;overflow:hidden}
+.sve-group>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;min-height:46px;padding:9px 12px}
+.sve-group>summary::-webkit-details-marker{display:none}.sve-team{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.sve-team>.tl{width:22px;height:22px;object-fit:contain;flex:none}.sve-team b{font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sve-team small{font-size:10px;color:var(--mute)}.sve-count{font-size:11px;font-weight:800;color:var(--neg);white-space:nowrap}
+.sve-arrow{color:var(--mute);font-size:13px}.sve-group[open] .sve-arrow{transform:rotate(180deg)}
+.sve-nologo{display:grid;place-items:center;width:22px;height:22px;border:1px solid var(--up);border-radius:50%;font-weight:900;color:var(--up)}
+.sve-entries{border-top:1px solid var(--line)}.sve-entry{display:grid;grid-template-columns:minmax(130px,1.1fr) minmax(0,2fr) auto;gap:12px;align-items:center;min-width:0;padding:9px 12px;border-top:1px solid rgba(140,140,160,.10)}
+.sve-entry:first-child{border-top:0}.sve-entry.mine{background:rgba(167,133,255,.08);box-shadow:inset 3px 0 0 var(--a)}
+.sve-person{min-width:0;display:flex;flex-direction:column;gap:2px}.sve-person>b{font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sve-person small{font-size:10px;color:var(--mute)}.sve-picks{display:flex;gap:5px;align-items:center;flex-wrap:wrap;min-width:0}
+.sve-pick{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:6px;padding:3px 6px;font-size:11px}
+.sve-pick.lost{border-color:rgba(255,107,107,.35);color:var(--neg);background:rgba(255,107,107,.06)}
+.sve-pick.safe{color:var(--mute)}.sve-pick .tl{width:17px;height:17px;object-fit:contain;margin:0}.sve-pick i{font-style:normal;font-weight:900}
+.sve-why{font-size:10px;color:var(--neg);font-weight:750;white-space:nowrap}.sve-empty{padding:20px;color:var(--mute);font-size:12px;text-align:center;background:var(--s2);border-radius:9px}
+.sve-note{margin:10px 0 0;font-size:10px;color:var(--mute);line-height:1.5}.sv16-elim-jump{color:var(--neg);font-size:11px;font-weight:800;text-decoration:none}
+.sv16-elim-jump:hover,.sv16-elim-jump:focus-visible{text-decoration:underline}
+@media(max-width:760px){
+.sve-wrap{padding:10px}.sve-search{flex-direction:column;align-items:stretch;gap:6px}.sve-search input{width:100%;font-size:16px}
+.sve-team{flex-wrap:wrap;gap:5px}.sve-team small{flex-basis:100%;padding-left:27px}
+.sve-entry{grid-template-columns:minmax(0,1fr) auto;gap:6px 8px;padding:10px}.sve-person{grid-column:1}.sve-picks{grid-column:1/-1;grid-row:2}.sve-why{grid-column:2;grid-row:1}
+.sve-intro>div:first-child strong{font-size:21px}
+}
+
 </style>
 </head>
 <body>
@@ -1987,7 +2020,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.25</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.26</span></div>
   </div>
 </header>
 <main>
@@ -2011,7 +2044,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.25";
+const WM_VERSION="1.26";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -4008,10 +4041,10 @@ document.addEventListener("click",()=>{if(Date.now()-(window._tipAt||0)>400)fltH
    default position without invalidating a saved order. Grips: drag (pointer), tap for ▲/▼, or focus + arrow keys.
    ===================================================================== */
 const MODDEF={m:["hero","lineup","plays","hook","tiles","bench"],f:["reel","stage","timeline","film"],t:["board","trades"],
-  e:["now","adds","stash","alerts","stream","ideal"],s:["overview","root","watch","rivals","stand","swim","chart","plan","rules"],p:["overview","help","cons","live","ins","board","hist","cfg"]};
-const MODWIDE={f:["reel","stage","timeline","film"],p:["overview","help","board"],e:["now","ideal"],t:["board","trades"],s:["overview","root","watch","rivals","stand","swim","chart","plan","rules"]};
+  e:["now","adds","stash","alerts","stream","ideal"],s:["overview","elim","root","watch","rivals","stand","swim","chart","plan","rules"],p:["overview","help","cons","live","ins","board","hist","cfg"]};
+const MODWIDE={f:["reel","stage","timeline","film"],p:["overview","help","board"],e:["now","ideal"],t:["board","trades"],s:["overview","elim","root","watch","rivals","stand","swim","chart","plan","rules"]};
 const MODNAME={hero:"Scoreboard",lineup:"Lineups",plays:"Plays",hook:"Low/high",tiles:"Matchups",bench:"Bench",reel:"Highlight reel",stage:"Replay stage",timeline:"Timeline",film:"Filmroom",log:"All plays",
-  board:"Rankings",trades:"Trades",now:"Do this now",adds:"Pickups",stash:"Watchlist",alerts:"Roster alerts",stream:"Streamers",ideal:"Ideal lineup",overview:"Overview",root:"Rooting Guide",watch:"My Teams",
+  board:"Rankings",trades:"Trades",now:"Do this now",adds:"Pickups",stash:"Watchlist",alerts:"Roster alerts",stream:"Streamers",ideal:"Ideal lineup",overview:"Overview",elim:"Eliminated entries",root:"Rooting Guide",watch:"My Teams",
   rivals:"Rivals",swim:"Swimlanes",stand:"Standings",chart:"Elimination",plan:"Planner",rules:"Rules",help:"Picks helper",cons:"You vs pool",live:"My picks",ins:"Insights",hist:"History",cfg:"Settings"};
 const modBase=sc=>String(sc).split(":")[0];
 const layKey=sc=>sc==="m"?"order":"lay_"+sc;
@@ -4359,6 +4392,50 @@ function svSettingsHtml(){const c=SV.cfg,who=[...new Set(SV.lanes.map(l=>l.who))
     <label>Buy-in per entry ($)<input id="svc_price" type="number" min="0" step="1" inputmode="decimal" value="${+c.price||0}"></label>
     <label>Split between<input id="svc_split" type="number" min="1" max="20" step="1" inputmode="numeric" value="${+c.split||1}"></label>
     <label class="cbx"><input id="svc_thu" type="checkbox"${c.noThu?" checked":""}> Block Wed/Thu games</label></div>`}
+
+/* Exact confirmed eliminations, counted ONCE per lane, including multi-pick entries. */
+function svEliminationData(w){
+  svEval(w,false);const rows=[],risk=[];
+  (SV.lanes||[]).forEach(l=>{
+    if(l.out===w){
+      const ps=svPicks(l,w),tieOK=(SV.cfg||{}).tieOut===false;
+      const losers=ps.filter(t=>{const R=svRes(w,t);return R&&R.r&&R.r!=="W"&&!(R.r==="T"&&tieOK)});
+      const missed=l.flag&&l.flag[w]==="missed"||!ps.length;
+      const reason=missed?"missed":losers.some(t=>(svRes(w,t)||{}).r==="L")?"lost":losers.length?"tied":"other";
+      rows.push({l,ps,losers,primary:losers[0]||"",reason,key:missed?"__missed":losers[0]||"__other"});
+    }else if(l.alive&&l.s[w]==="losing")risk.push({l,ps:svPicks(l,w)});
+  });
+  return{rows,risk};
+}
+function svElimHtml(w,data){
+  const q=String(SV.elimQ||"").trim().toLowerCase(),all=data.rows;
+  const matches=x=>!q||[x.l.who,x.l.let,x.primary,x.reason,...x.ps].join(" ").toLowerCase().includes(q);
+  const groups=new Map();
+  all.filter(matches).forEach(x=>{if(!groups.has(x.key))groups.set(x.key,[]);groups.get(x.key).push(x)});
+  const ordered=[...groups.entries()].sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0]));
+  const entry=x=>'<div class="sve-entry'+(isOurs(x.l)?" mine":"")+'"><div class="sve-person"><b>'+
+    esc(x.l.who)+'</b><small>Entry '+esc(x.l.let)+(isOurs(x.l)?" · Yours":"")+'</small></div>'+
+    '<div class="sve-picks">'+(x.ps.length?x.ps.map(t=>'<span class="sve-pick '+(x.losers.includes(t)?"lost":"safe")+'">'+
+    svLogo(w,t)+'<b>'+esc(t)+'</b>'+(x.losers.includes(t)?'<i>✕</i>':'')+'</span>').join(""):'<span class="sve-pick missing">No selection recorded</span>')+'</div>'+
+    '<span class="sve-why">'+esc(x.reason==="missed"?"Missed pick":x.reason==="tied"?"Tie":x.reason==="other"?"Eliminated":"Lost")+'</span></div>';
+  const groupsHtml=ordered.map(([key,entries])=>{
+    const special=key.startsWith("__"),R=special?null:svRes(w,key),
+      label=key==="__missed"?"No valid pick":key==="__other"?"Other ruling":key;
+    const desc=key==="__missed"?"No selection or valid default":key==="__other"?"Check pool ruling":R&&R.r==="T"?"Tied":R&&R.r==="L"?"Lost":"Elimination pick";
+    return'<details class="sve-group" '+(all.length<=30||q?'open':'')+'><summary><span class="sve-team">'+
+      (special?'<span class="sve-nologo">!</span>':svLogo(w,key))+'<b>'+esc(label)+'</b><small>'+esc(desc)+
+      '</small></span><span class="sve-count">'+entries.length+' '+(entries.length===1?"entry":"entries")+
+      '</span><span class="sve-arrow">⌄</span></summary><div class="sve-entries">'+entries.map(entry).join("")+'</div></details>';
+  }).join("");
+  const empty=all.length?"No entries match that search.":"No confirmed eliminations yet. A team trailing during a live game is not eliminated until final.";
+  return'<div class="sve-wrap" id="svelim"><div class="sve-intro"><div><strong>'+all.length+
+    '</strong><span>confirmed eliminated in Week '+w+'</span></div>'+
+    (data.risk.length?'<span class="sve-at-risk"><strong>'+data.risk.length+'</strong> currently trailing · not yet out</span>':
+    '<span class="sve-at-risk">Only final outcomes count as eliminated</span>')+'</div>'+
+    (all.length?'<label class="sve-search"><span>Find a participant or team</span><input id="svelq" type="search" autocomplete="off" placeholder="Search name, lane, team…" value="'+esc(SV.elimQ||"")+'"></label>':"")+
+    (ordered.length?'<div class="sve-groups">'+groupsHtml+'</div>':'<div class="sve-empty">'+empty+'</div>')+
+    '<p class="sve-note">One entry counted once, including multi-pick weeks. Every picked team is shown; ✕ marks a losing pick. Missed selections are separate. Live trailing entries are not confirmed losses.</p></div>';
+}
 function svRender(){
   const el=$("surv");if(!el)return;SV.cfg=SV.cfg||poolCfg("survivor");
   if(!SV.lanes){const s=svStateHtml();if(s!==SV.lastHtml){SV.lastHtml=s;el.innerHTML=s;const b=el.querySelector("#svretry");if(b)b.onclick=()=>{SV.syncBackoff=0;SV.st="loading";svRender();svInit()}}return}
@@ -4368,7 +4445,7 @@ function svRender(){
   /* history */
   const prog=[{w:0,our:SV.lanes.filter(isOurs).length,pool:SV.lanes.length}];for(let w=1;w<=V;w++)prog.push({w,...svCount(w,false)});
   const proj=svCount(V,true);svEval(V,false);
-  const st=prog[V],enter=prog[V-1],start=prog[0],pool0=SV.lanes.length,jackpot=C.jackpot||pool0*(+C.price||0),F=Math.max(1,+C.split||1);
+  const st=prog[V],enter=prog[V-1],start=prog[0],elimData=svEliminationData(V),pool0=SV.lanes.length,jackpot=C.jackpot||pool0*(+C.price||0),F=Math.max(1,+C.split||1);
   const ours=SV.lanes.filter(isOurs).sort((a,b)=>a.let.localeCompare(b.let));
   /* this week: lives at stake and expected survivors */
   const inPlay=SV.lanes.filter(l=>(!l.out||l.out>=V)&&svPicks(l,V).length),teams={};
@@ -4432,12 +4509,13 @@ function svRender(){
     ${hasMe?`<div class="sv16-main"><div class="sv16-signal ${myTrailing||myAllLost?"danger":myUnresolved||myEliminated?"watch":"safe"}"><div class="sv16-sigico">${myTrailing||myAllLost?"⚠":myUnresolved||myEliminated?"◉":"✓"}</div><div><b>${esc(currentHeadline)}</b><small>${esc(gameDayHint)}</small></div></div>
       <div class="sv16-nums"><div><small>YOUR LIVES</small><strong>${st.our}<em> / ${start.our}</em></strong><span>${myEliminated?myEliminated+" lost this week":mySecured+" secured this week"}</span></div>
       <div><small>STILL IN PLAY</small><strong class="${myTrailing?"danger":""}">${myUnresolved}</strong><span>${myTrailing?myTrailing+" currently behind":"Your entries unresolved"}</span></div>
-      <div><small>POOL STILL IN</small><strong>${st.pool}<em> / ${pool0}</em></strong><span>${Math.max(0,enter.pool-st.pool)} eliminated this week</span></div>
+      <div><small>POOL STILL IN</small><strong>${st.pool}<em> / ${pool0}</em></strong><span>${elimData.rows.length} eliminated this week · <a class="sv16-elim-jump" href="#svelim">See who &amp; why ↓</a></span></div>
       <div><small>YOUR POOL RANK</small><strong>${tie?"T-":""}${myRank}<em> / ${aliveParts}</em></strong><span>${lead&&lead.who!==C.me?`Leader: ${esc(lead.who)} · ${lead.left} lives`:"Currently leading"}</span></div></div></div>`:
       `<div class="sv16-main"><div class="sv16-signal"><div class="sv16-sigico">◎</div><div><b>${currentHeadline}</b><small>${st.pool} of ${pool0} entries are not eliminated</small></div></div></div>`}
     ${hasMe&&myChoices.length?`<div class="sv16-choices"><span class="sv16-label">YOUR W${V} PICKS</span><div class="sv16-picks">${chosenLine}</div></div>`:""}
     ${hasMe?`<div class="sv16-foot"><span title="Share of surviving entries, not your probability of winning">Your entry share: <b>${svFmtPct(share)}</b> of entries still in (not win odds)</span><span>${fieldUnresolved} other entries awaiting outcomes</span></div>`:""}
     </div>`;
+  h+="<!--M:elim-->"+svSec("elim",`💀 Who got eliminated · W${V}`,`${elimData.rows.length} confirmed · ${elimData.risk.length} trailing`,svElimHtml(V,elimData));
   /* ---------- Survival Watch: one row per game that carries your lives ---------- */
   const fieldOn={};inPlay.filter(l=>!isOurs(l)).forEach(l=>svPicks(l,V).forEach(t=>fieldOn[t]=(fieldOn[t]||0)+1));
   const myOn={};myIn.forEach(l=>svPicks(l,V).forEach(t=>(myOn[t]=myOn[t]||[]).push(l.let)));
@@ -4632,10 +4710,11 @@ function svRender(){
   h+=PLAN+"<!--M:rules-->"+svSec("rules","📜 Rules & settings",SV.sheetCfg?(hasOvr?"sheet + your changes":"from the sheet's Config tab"):"stored on this device",`<div class="svrules">${svRulesHtml().map(([k,v])=>`<div><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join("")}</div>${svSettingsHtml()}${hasOvr?`<div class="svnote"><button class="rep" id="svcfgreset">↺ Use the sheet's settings</button></div>`:""}`);
   // Adapt default placement to own stakes; custom saved order remains authoritative.
   const survivorDefault=MODDEF.s;
-  MODDEF.s=["overview",...(myUnresolved?["watch","root"]:["root","watch"]),"rivals","stand","swim","chart","plan","rules"];
+  MODDEF.s=["overview","elim",...(myUnresolved?["watch","root"]:["root","watch"]),"rivals","stand","swim","chart","plan","rules"];
   try{h=modWrap(h+"<!--M:/--></div>","s:"+hash32(SV.d.sheet||"").toString(36))}finally{MODDEF.s=survivorDefault}
   if(S.dragging||h===SV.lastHtml)return;SV.lastHtml=h;
   const qf=document.activeElement&&document.activeElement.id==="svq",pos=qf?document.activeElement.selectionStart:0;
+  const ef=document.activeElement&&document.activeElement.id==="svelq",epos=ef?document.activeElement.selectionStart:0;
   el.innerHTML=h;bindMods(el);
   el.querySelectorAll("[data-wo]").forEach(x=>{const go=()=>{SV.wo=SV.wo===x.dataset.wo?null:x.dataset.wo;svRender()};x.onclick=go;x.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});
   const fa=el.querySelector("#swfall");if(fa)fa.onclick=()=>{SV.fAll=!SV.fAll;svRender()};
@@ -4643,6 +4722,7 @@ function svRender(){
   el.querySelectorAll(".wkb").forEach(x=>x.onclick=async()=>{SV.week=+x.dataset.w;await Promise.all([svLoadWeek(SV.week,true),svLoadWeek(SV.week+1,false)]);svRender()});
   el.querySelectorAll("tr.lgrp.tog").forEach(r=>r.onclick=()=>{SV.showOut=!SV.showOut;svRender()});
   const qi=el.querySelector("#svq");if(qi){qi.oninput=()=>{SV.q=qi.value;svRender()};if(qf){qi.focus();qi.setSelectionRange(pos,pos)}}
+  const ei=el.querySelector("#svelq");if(ei){ei.oninput=()=>{SV.elimQ=ei.value;svRender()};if(ef){ei.focus();ei.setSelectionRange(epos,epos)}}
   const rs=el.querySelector("#svcfgreset");if(rs)rs.onclick=()=>{clearPoolCfg("survivor");svRender()};
   const cf=el.querySelector(".svcfg");if(cf)cf.onchange=()=>{const g=id=>cf.querySelector("#"+id),sm=(SV.sheetCfg||{}).me;savePoolCfg("survivor",{name:g("svc_name").value.trim()||"Survivor Pool",me:g("svc_me").value,meSet:g("svc_me").value!==sm?1:0,reuse:g("svc_reuse").value,missed:g("svc_missed").value,price:Math.max(0,+g("svc_price").value||0),split:Math.max(1,Math.round(+g("svc_split").value||1)),noThu:g("svc_thu").checked});svRender()};
 }
