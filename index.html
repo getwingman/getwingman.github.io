@@ -1991,6 +1991,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 .sve-intro>div:first-child strong{font-size:21px}
 }
 
+.sv-scope{display:flex;gap:6px;flex-wrap:wrap}.sv-scope .rep.on{border-color:var(--b);color:var(--ink);background:rgba(61,214,230,.1)}.sv-more{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;font-size:11px;color:var(--mute)}.svc .lh.svh:focus-visible{outline:2px solid var(--b);outline-offset:2px}@media(max-width:760px){.sv-scope .rep{font-size:11px}}
 </style>
 </head>
 <body>
@@ -2020,7 +2021,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.26</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.27</span></div>
   </div>
 </header>
 <main>
@@ -2044,7 +2045,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.26";
+const WM_VERSION="1.27";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -4366,7 +4367,7 @@ function svGameTxt(w,t){
   if(R.date){const d=new Date(R.date);return`${d.toLocaleDateString([],{weekday:"short"})} ${hm(d)} ${vs}`}
   return`${R.day||""} ${vs}`;
 }
-function svSec(key,title,sub,body){const o=SV.open[key]!==false;return`<div class="card svc"><div class="lh svh" data-k="${key}"><span><span class="chev">${o?"▾":"▸"}</span>${title}</span><small>${sub||""}</small></div>${o?body:""}</div>`}
+function svSec(key,title,sub,body){const o=SV.open[key]!==false;return`<div class="card svc"><div class="lh svh" data-k="${key}" role="button" tabindex="0" aria-expanded="${o}"><span><span class="chev">${o?"▾":"▸"}</span>${title}</span><small>${sub||""}</small></div>${o?body:""}</div>`}
 const tokState=(l,V)=>{if(l.out&&l.out<V)return["out",`Out W${l.out}`];const s=l.s[V];
   return s==="W"?["alive","Survived"]:s==="L"||s==="T"?["out",s==="T"?"Out (tie)":"Out"]:s==="winning"?["live","Winning"]:s==="losing"?["risk","Losing"]:s==="tied"?["risk","Tied"]:s==="await"?["pend","Awaiting pick"]:["pend","Pending"]};
 
@@ -4690,8 +4691,8 @@ function svRender(){
   const labels=prog.map((x,i)=>`<div style="left:${(i*bw+bw/2).toFixed(2)}%"><b>${x.pool}</b><span>${i?"W"+x.w:"Start"}</span><em>${x.our} · ${svFmtPct(sh[i])}</em></div>`).join("");
   h+="<!--M:chart-->"+svSec("chart","📉 Pool elimination",`teal bars = pool lives · purple line = our share`,`<div class="elim"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="svbar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3dd6e6" stop-opacity=".85"/><stop offset="1" stop-color="#3dd6e6" stop-opacity=".15"/></linearGradient></defs>${bars}<polyline points="${line}" fill="none" stroke="#a785ff" stroke-width="2.4" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg><div class="elab">${labels}</div></div>`);
   /* ---------- swimlanes: alive lanes first and bright, out lanes dimmed with the week they fell ---------- */
-  const q=SV.q.trim().toLowerCase(),allSwim=q?SV.lanes.filter(l=>l.who.toLowerCase().includes(q)):ours;
-  const pool=allSwim.slice(0,150),WM=Math.max(V,SV.maxPick);
+  const q=String(SV.q||"").trim().toLowerCase(),allSwim=q?SV.lanes.filter(l=>l.who.toLowerCase().includes(q)||l.let.toLowerCase().includes(q)||svPicks(l,V).some(t=>t.toLowerCase().includes(q))):(SV.swimScope==="all"?SV.lanes:ours);
+  const pool=allSwim.slice(0,Math.max(50,SV.swimLimit||150)),WM=Math.max(V,SV.maxPick);
   // Future selections are shown for planning, but must never alter this week's alive/out grouping.
   svEval(V,false);
   const cell=(l,w)=>{const ps=svPicks(l,w);if(!ps.length)return`<td class="sw e"></td>`;
@@ -4701,9 +4702,9 @@ function svRender(){
   const al=pool.filter(l=>l.alive),ot=pool.filter(l=>!l.alive).sort((a,b)=>b.out-a.out);
   const row=l=>`<tr class="${l.alive?"lal":"lot"} ${isOurs(l)?"me":""}"><td>${esc(l.who)}</td><td class="svl"><span class="lnt ${l.alive?"al":"ot"}">${l.let}</span></td><td>${l.alive?'<span class="pill alive">Alive</span>':`<span class="pill out">Out W${l.out}</span>`}</td>${Array.from({length:WM},(_,i)=>cell(l,i+1)).join("")}</tr>`;
   const grp=(lab,arr,c)=>arr.length?`<tr class="lgrp ${c}"><td colspan="${3+WM}">${lab} · ${arr.length}</td></tr>${arr.map(row).join("")}`:"";
-  const swim=grp("🟢 Alive",al,"al")+(ot.length?`<tr class="lgrp ot tog" title="${SV.showOut?"Hide":"Show"} eliminated lanes"><td colspan="${3+WM}">⚫ Out · ${ot.length} ${SV.showOut?"▾":"▸"}</td></tr>${SV.showOut?ot.map(row).join(""):""}`:"");
+  const reveal=SV.showOut||!!q,swim=grp("🟢 Alive",al,"al")+(ot.length?`<tr class="lgrp ot tog" title="${reveal?"Hide":"Show"} eliminated lanes"><td colspan="${3+WM}">⚫ Out · ${ot.length} ${reveal?"▾":"▸"}</td></tr>${reveal?ot.map(row).join(""):""}`:"");
   svEval(V,false);
-  h+="<!--M:swim-->"+svSec("swim","🏊 Swimlanes",q?`${allSwim.length} matching entries${allSwim.length>pool.length?` · showing first ${pool.length}`:""}`:`our lanes: ${al.length} alive · ${ot.length} out`,`<div class="svq"><input id="svq" placeholder="Search a participant…" value="${esc(SV.q)}"></div><div class="tw sws"><table class="svtab swt"><thead><tr><th>Participant</th><th>Lane</th><th>Status</th>${Array.from({length:WM},(_,i)=>`<th class="c">W${i+1}</th>`).join("")}</tr></thead><tbody>${swim}</tbody></table></div>`);
+  h+="<!--M:swim-->"+svSec("swim","🏊 Swimlanes",q?`${allSwim.length} matching entries${allSwim.length>pool.length?` · showing first ${pool.length}`:""}`:`our lanes: ${al.length} alive · ${ot.length} out`,`<div class="svq"><div class="sv-scope"><button type="button" class="rep ${SV.swimScope==="all"?"on":""}" id="svall">All ${SV.lanes.length} entries</button><button type="button" class="rep ${SV.swimScope!=="all"?"on":""}" id="svmine">My entries</button></div><input id="svq" placeholder="Find participant, entry, or team…" value="${esc(SV.q)}"></div><div class="tw sws"><table class="svtab swt"><thead><tr><th>Participant</th><th>Lane</th><th>Status</th>${Array.from({length:WM},(_,i)=>`<th class="c">W${i+1}</th>`).join("")}</tr></thead><tbody>${swim}</tbody></table></div>${allSwim.length>pool.length?`<div class="sv-more"><span>Showing ${pool.length} of ${allSwim.length} matching entries</span><button class="rep" id="svmore">Show 150 more</button></div>`:""}`);
   const stand=parts.map(p=>`<tr class="${p.who===C.me?"me":""} ${p.left?"":"dim"}"><td class="n">${p.left?(parts.filter(x=>x.left===p.left).length>1?"T-":"")+rankOf(p.left):"—"}</td><td>${esc(p.who)}</td><td class="n">${p.orig}</td><td class="n">${p.left}</td><td><div class="wpb"><i style="width:${(p.left/Math.max(1,lead.left))*100}%"></i></div></td><td class="n">${p.left?svFmtPct(p.left/st.pool):"OUT"}</td></tr>`).join("");
   h+="<!--M:stand-->"+svSec("stand","🏆 Pool standings",`${parts.length} participants`,`<div class="tw sws"><table class="svtab"><colgroup><col style="width:60px"><col><col style="width:64px"><col style="width:64px"><col style="width:16%"><col style="width:80px"></colgroup><thead><tr><th class="n">#</th><th>Participant</th><th class="n">Orig</th><th class="n">Left</th><th></th><th class="n">Win %</th></tr></thead><tbody>${stand}</tbody></table></div>`);
   const ovr=(S.conns||getConns()).find(c=>c.p==="survivor"),hasOvr=SV.sheetCfg&&ovr&&ovr.cfg&&Object.keys(ovr.cfg).length;
@@ -4718,10 +4719,13 @@ function svRender(){
   el.innerHTML=h;bindMods(el);
   el.querySelectorAll("[data-wo]").forEach(x=>{const go=()=>{SV.wo=SV.wo===x.dataset.wo?null:x.dataset.wo;svRender()};x.onclick=go;x.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});
   const fa=el.querySelector("#swfall");if(fa)fa.onclick=()=>{SV.fAll=!SV.fAll;svRender()};
-  el.querySelectorAll(".svh").forEach(x=>x.onclick=()=>{SV.open[x.dataset.k]=SV.open[x.dataset.k]===false;save("svopen2",JSON.stringify(SV.open));svRender()});
+  el.querySelectorAll(".svh").forEach(x=>{const toggle=()=>{SV.open[x.dataset.k]=SV.open[x.dataset.k]===false;save("svopen2",JSON.stringify(SV.open));svRender()};x.onclick=toggle;x.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}}});
   el.querySelectorAll(".wkb").forEach(x=>x.onclick=async()=>{SV.week=+x.dataset.w;await Promise.all([svLoadWeek(SV.week,true),svLoadWeek(SV.week+1,false)]);svRender()});
   el.querySelectorAll("tr.lgrp.tog").forEach(r=>r.onclick=()=>{SV.showOut=!SV.showOut;svRender()});
-  const qi=el.querySelector("#svq");if(qi){qi.oninput=()=>{SV.q=qi.value;svRender()};if(qf){qi.focus();qi.setSelectionRange(pos,pos)}}
+  const qi=el.querySelector("#svq");if(qi){qi.oninput=()=>{SV.q=qi.value;SV.swimLimit=150;svRender()};if(qf){qi.focus();qi.setSelectionRange(pos,pos)}}
+  const sa=el.querySelector("#svall");if(sa)sa.onclick=()=>{SV.swimScope="all";SV.showOut=true;SV.swimLimit=150;svRender()};
+  const sm=el.querySelector("#svmine");if(sm)sm.onclick=()=>{SV.swimScope="mine";SV.showOut=false;SV.swimLimit=150;SV.q="";svRender()};
+  const more=el.querySelector("#svmore");if(more)more.onclick=()=>{SV.swimLimit=(SV.swimLimit||150)+150;svRender()};
   const ei=el.querySelector("#svelq");if(ei){ei.oninput=()=>{SV.elimQ=ei.value;svRender()};if(ef){ei.focus();ei.setSelectionRange(epos,epos)}}
   const rs=el.querySelector("#svcfgreset");if(rs)rs.onclick=()=>{clearPoolCfg("survivor");svRender()};
   const cf=el.querySelector(".svcfg");if(cf)cf.onchange=()=>{const g=id=>cf.querySelector("#"+id),sm=(SV.sheetCfg||{}).me;savePoolCfg("survivor",{name:g("svc_name").value.trim()||"Survivor Pool",me:g("svc_me").value,meSet:g("svc_me").value!==sm?1:0,reuse:g("svc_reuse").value,missed:g("svc_missed").value,price:Math.max(0,+g("svc_price").value||0),split:Math.max(1,Math.round(+g("svc_split").value||1)),noThu:g("svc_thu").checked});svRender()};
@@ -4738,7 +4742,7 @@ function svAlerts(V){
 async function svTick(force){
   if(!SV.d.sheet)return;if(!SV.lanes){await svSync();if(SV.lanes)await svInit(true);else if(S.tab==="s")svRender();return}
   const V=svWeek();
-  if(force||Date.now()-SV.syncAt>600000){SV.syncAt=Date.now();await svSync()}
+  if(force||Date.now()-SV.syncAt>600000){if(force)SV.syncBackoff=0;await svSync()}
   await Promise.all([svLoadWeek(V,true),svLoadWeek(V+1,false)]);
   svAlerts(V);
   if(S.tab==="s")svRender();
