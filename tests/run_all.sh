@@ -5,6 +5,7 @@ run(){ echo "=== $1"; shift; "$@" 2>&1 | grep -E "^(PASS|FAIL)|passed|FAILED" ; 
 run "optimizer vs brute force" node unit/optimizer.test.js "$H"
 run "Edge trade analyzer: search, scoring, roster cuts" node unit/trade_analyzer.test.js "$H"
 run "live injury reentry: forecasts, odds and clock strings" node unit/live_injury.test.js "$H"
+run "alerts: injury status never repeats across tabs/reloads; toast HTML stays intact" node unit/alert_repeat.test.js "$H"
 run "Pick’em live ESPN scoring and imported Sleeper picks" node unit/pickem_refresh.test.js "$H"
 run "Survivor elimination drilldown, who/why, mobile searches" node unit/survivor_eliminations.test.js "$H"
 run "authenticated pickem worker final-only disclosure" node unit/pickem_worker.test.js

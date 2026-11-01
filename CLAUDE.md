@@ -108,6 +108,10 @@ The current version label is in Settings: `<span class="ver">vNN</span>` — bum
   Live: cells carry `data-fx`; `applyFx()` re-applies after re-render with a negative delay (resume, never restart).
 - Effects cover the full player cell; transient labels render in the fixed `#fxlayer` overlay (never clipped).
 - First ~25s after load is a quiet warm-up (`quiet()`): no toasts/sounds/confetti/effects for pre-existing events.
+- Injury alerts (`injCheck`) compare against THIS tab's snapshot (`S.injSnap`; storage only seeds the first check after a
+  load), announce each player+status at most once per 3h (`injann`, shared by every tab on the device), and a confirmed
+  in-game return persists per game + tag (`liveret`) so a reload doesn't re-flag the player. Toasts split "title · sub" only
+  outside HTML tags (`splitDot`): badges such as `wpTag` carry " · " in their tooltip. Test: tests/unit/alert_repeat.test.js.
 - Respect `prefers-reduced-motion` (`.rm` static variant). No layout shift; rows stay 36px.
 
 ## Design rules

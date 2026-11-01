@@ -2022,7 +2022,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
     <div class="nkw"><textarea id="nicks" rows="4" spellcheck="false" placeholder="username = Name (one per line)" aria-label="Nicknames"></textarea><div class="labc"><button id="nicksave" class="labp">Save</button><small class="pm" id="nickh">League names are built in; lines here override them on this device (leave a name blank to hide one).</small></div></div>
     <div class="sph">Layout</div>
     <div class="labc"><button id="layr" class="labp" title="Put this page's sections back in their default order">↺ Reset this page</button><button id="layra" class="labp" title="Reset the section order on every page">Reset all pages</button></div>
-    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.28</span></div>
+    <div class="about"><b>Wingman</b> · Never fantasy alone. <span class="ver">v1.29</span></div>
   </div>
 </header>
 <main>
@@ -2046,7 +2046,7 @@ html[data-theme=light] .pm .pg.pg-touchdown {
 <div id="toasts"></div>
 <script>
 /* Wingman v1.5: Replay follow-live, kick paths, fixed Plays, trade status, projections, starter exposure. */
-const WM_VERSION="1.28";
+const WM_VERSION="1.29";
 try{const el=document.querySelector(".about .ver");if(el)el.textContent="v"+WM_VERSION}catch(e){}
 const SLP="https://api.sleeper.app/v1",SLP2="https://api.sleeper.com";
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard";
@@ -2139,10 +2139,13 @@ function soundSwitch(on){
 const sounds={score:()=>notes([[660,0],[880,.09]],"sine",.16,.12),big:()=>notes([[523,0],[784,.05],[1047,.1],[1568,.16]],"sine",.32,.14),ms:()=>notes([[1047,0],[1319,.1],[1568,.2],[2093,.32]],"sine",.28,.22),boom:()=>notes([[147,0],[294,.08],[440,.16]],"triangle",.45,.25),win:()=>notes([[523,0],[659,.12],[784,.24],[1047,.4]],"triangle",.45,.3),loss:()=>notes([[294,0],[247,.2],[196,.4]],"triangle",.4,.35),td:()=>notes([[523,0],[659,.12],[784,.24],[1047,.36],[784,.54],[1047,.66]],"triangle",.5,.2),rz:()=>notes([[880,0],[1175,.14]],"sine",.4,.25),
   good:()=>notes([[660,0],[880,.12]],"sine",.35,.2),bad:()=>notes([[330,0],[247,.14]],"triangle",.4,.25),warn:()=>notes([[392,0],[330,.14]],"triangle",.3,.2),info:()=>notes([[784,0]],"sine",.22,.12),status:()=>notes([[523,0],[440,.13]],"sine",.28,.18)};
 const TACC={score:"green",status:"amber",td:"gold",boom:"gold",win:"gold",good:"green",bad:"red",loss:"red",warn:"amber",rz:"red",info:"cyan",big:"cyan",ms:"purple"},TPRI={score:0,status:1,td:3,win:3,boom:2,bad:2,rz:2,loss:2,good:1,big:1,ms:1,warn:1,info:0};
+/* split "title · sub" on separators outside HTML tags (a tag's title attribute may contain " · ") */
+function splitDot(t){const out=[];let d=0,cur="";for(let i=0;i<t.length;i++){const c=t[i];if(c==="<")d++;else if(c===">")d=Math.max(0,d-1);
+  if(!d&&t.startsWith(" · ",i)){out.push(cur);cur="";i+=2;continue}cur+=c}out.push(cur);return out}
 function toast(kind,html,ms=4500,o){
   if(quiet()&&!(o&&o.force))return;
   const box=$("toasts");let raw=String(html),icon="";const m=raw.match(/^\s*((?:\p{Extended_Pictographic}|\p{Emoji_Presentation})(?:\uFE0F|\u200D\p{Extended_Pictographic})*)\s*/u);if(m){icon=m[1];raw=raw.slice(m[0].length)}
-  const parts=raw.split(" · ");let title=parts.shift()||"",sub=parts.join(" · "),val="";
+  const parts=splitDot(raw);let title=parts.shift()||"",sub=parts.join(" · "),val="";
   const vm=title.match(/^(.*?)\s+([+−-]\d+(?:\.\d+)?)(\s.*|<.*)?$/);if(vm&&!/<[^>]*$/.test(vm[1])){title=vm[1];val=vm[2];if(vm[3])sub=(vm[3]+(sub?" · "+sub:"")).trim()}
   const d=document.createElement("div");d.className=`toast t-${TACC[kind]||"cyan"}`;d.dataset.pri=TPRI[kind]||0;d.setAttribute("role","status");
   /* Touchdown: one football, one visible, high-contrast action label.
@@ -2390,6 +2393,9 @@ const INJ_ACTIVITY=["pass_att","rush_att","rec_tgt","rec","pass_cmp","fga","fgm"
 function injuryVolume(id){const out={};for(const k of INJ_ACTIVITY)out[k]=Math.max(0,...[S.eff[id],S.box[id],S.stats[id]].map(x=>x&&Number.isFinite(+x[k])?+x[k]:0));return out}
 function effectiveInjury(id,raw){const q=raw||S.players&&S.players[id],x=S.liveInj&&S.liveInj[id],g=q&&S.games[NT(q.team||"")];
   return x&&x.returned&&q&&MAY_RETURN.test(q.injury_status||"")&&S.week===S.nflWeek&&g&&g.state==="in"?"":q&&q.injury_status||""}
+/* players confirmed back in their game, kept per device so a reload doesn't re-flag them Questionable (and re-alert "cleared") */
+function liveRet(){if(!S.liveRet){try{S.liveRet=JSON.parse(load("liveret")||"{}")||{}}catch(e){S.liveRet={}}}return S.liveRet}
+function liveRetSave(id,v){const o=liveRet();o[id]=v;const pre=S.season+":"+S.week+":";for(const k in o)if(!String(o[k]).startsWith(pre))delete o[k];save("liveret",JSON.stringify(o))}
 function syncLiveInjuries(){
   if(!S.players||S.week!==S.nflWeek)return;
   const ids=new Set();S.L.forEach(lg=>(lg.mu||[]).forEach(m=>[...(m.players||[]),...(m.starters||[])].forEach(id=>{if(id&&id!=="0")ids.add(id)})));
@@ -2397,9 +2403,9 @@ function syncLiveInjuries(){
   ids.forEach(id=>{const p=S.players[id];if(!p)return;const g=S.games[NT(p.team||"")],tag=p.injury_status||"",prev=S.liveInj[id];
     if(!g||g.state!=="in"||!MAY_RETURN.test(tag)){if(prev){delete S.liveInj[id];delete S.pc[id];S.dirty=true}return}
     watching.add(id);const game=S.season+":"+S.week+":"+g.eid;
-    if(!prev||prev.game!==game||prev.tag!==tag){S.liveInj[id]={game,tag,baseline:injuryVolume(id),returned:false};delete S.pc[id];S.dirty=true;return}
+    if(!prev||prev.game!==game||prev.tag!==tag){const kept=liveRet()[id]===game+"|"+tag;S.liveInj[id]={game,tag,baseline:injuryVolume(id),returned:kept};delete S.pc[id];S.dirty=true;return}
     if(prev.returned)return;
-    const now=injuryVolume(id);if(INJ_ACTIVITY.some(k=>now[k]>prev.baseline[k])){prev.returned=true;delete S.pc[id];S.dirty=true}
+    const now=injuryVolume(id);if(INJ_ACTIVITY.some(k=>now[k]>prev.baseline[k])){prev.returned=true;liveRetSave(id,prev.game+"|"+prev.tag);delete S.pc[id];S.dirty=true}
   });
   for(const id in S.liveInj)if(!watching.has(id)){delete S.liveInj[id];delete S.pc[id];S.dirty=true}
 }
@@ -2873,14 +2879,20 @@ function alerts(now){
 }
 function injCheck(){
   if(!S.players)return;const V=vis();if(!V.length||!V.every(l=>l.matchups))return;
-  let snap={};try{snap=JSON.parse(load("injsnap")||"{}")}catch(e){}const now=Date.now(),next={};
+  /* compare against THIS tab's last view; storage only seeds the first check after a load. A shared snapshot let two open
+     tabs (one that saw the player return, one that didn't) overwrite each other and re-alert on every refresh. */
+  if(!S.injSnap){try{S.injSnap=JSON.parse(load("injsnap")||"{}")||{}}catch(e){S.injSnap={}}}
+  const snap=S.injSnap,now=Date.now(),next={};
+  let ann={};try{ann=JSON.parse(load("injann")||"{}")||{}}catch(e){}const annK=(id,st)=>id+"|"+(st||"-"),ANN_MS=3*3600e3;
   V.forEach(lg=>(lg.matchups||[]).forEach(m=>(m.starters||[]).forEach(id=>{if(!id||id==="0")return;const st=pinfo(id).inj||"";next[id]=st;
-    if(id in snap&&snap[id]!==st){const k=!st?"inj":/^(Out|IR|Suspended)$/i.test(st)?"out":/^(Questionable|Doubtful)$/i.test(st)?"q":"inj";S.fx[id]={k,t:now};S.dirty=true;if(!S.injQ)S.injQ=[];if(!S.injQ.some(x=>x.id===id))S.injQ.push({id,st,mine:m.roster_id===lg.mineRid})}})));
+    if(id in snap&&snap[id]!==st){if(now-(ann[annK(id,st)]||0)<ANN_MS)return;   /* this player+status was already announced: never repeat */
+      ann[annK(id,st)]=now;const k=!st?"inj":/^(Out|IR|Suspended)$/i.test(st)?"out":/^(Questionable|Doubtful)$/i.test(st)?"q":"inj";S.fx[id]={k,t:now};S.dirty=true;if(!S.injQ)S.injQ=[];if(!S.injQ.some(x=>x.id===id))S.injQ.push({id,st,mine:m.roster_id===lg.mineRid})}})));
   /* status changes are found while the page warms up; announce them right after (once) */
   if(S.injQ&&S.injQ.length){const q=S.injQ.slice(0,6);S.injQ=[];setTimeout(()=>{q.forEach((x,i)=>setTimeout(()=>{const p=pinfo(x.id),out=/^(Out|IR|Suspended)$/i.test(x.st);
       const returned=!!(S.liveInj[x.id]&&S.liveInj[x.id].returned);toast(out?"bad":"status",`${out?"⛔":returned?"↩":"🩺"} ${esc(p.name)} · ${x.st?esc(x.st):returned?"back in the game (new play confirmed)":"cleared"}${x.mine?"":" · opponent"}`,5000);
       const lg=vis()[0];if(lg&&lg.el){const td=lg.el.querySelector(`td[data-pos][data-pid="${x.id}"]`);if(td)playEventAnimation(out?"out":/^(Questionable|Doubtful)$/i.test(x.st)?"q":"inj",td,{age:FX_DELAY,side:td.classList.contains("r")?"L":"R"})}},i*900))},Math.max(0,(S.quietUntil||0)-Date.now())+800)}
-  save("injsnap",JSON.stringify(next));
+  S.injSnap=next;save("injsnap",JSON.stringify(next));
+  for(const k in ann)if(now-ann[k]>ANN_MS)delete ann[k];save("injann",JSON.stringify(ann));
 }
 function leadChange(){
   injCheck();
