@@ -8,6 +8,7 @@ run "live injury reentry: forecasts, odds and clock strings" node unit/live_inju
 run "alerts: injury status never repeats across tabs/reloads; toast HTML stays intact" node unit/alert_repeat.test.js "$H"
 run "Pick’em live ESPN scoring and imported Sleeper picks" node unit/pickem_refresh.test.js "$H"
 run "Survivor elimination drilldown, who/why, mobile searches" node unit/survivor_eliminations.test.js "$H"
+run "Survivor elimination filters, default picks and live-risk disclosure" node unit/survivor_elimination_ui.test.js "$H"
 run "authenticated pickem worker final-only disclosure" node unit/pickem_worker.test.js
 cp "${WORKER:-$(dirname "$H")/wingman-connect-worker.js}" unit/worker.mjs 2>/dev/null; run "worker OAuth" node unit/worker.test.mjs
 run "v38 features + desktop/phone" python3 qa60.py file://$H . $O
