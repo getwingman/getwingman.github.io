@@ -4416,9 +4416,10 @@ function svEliminationData(w){
   svEval(w,false);const rows=[],risk=[];
   (SV.lanes||[]).forEach(l=>{
     if(l.out===w){
-      const ps=svPicks(l,w),tieOK=(SV.cfg||{}).tieOut===false;
+      // Defaulted picks are recorded in l.def rather than the participant's original selections.
+      const raw=svPicks(l,w),auto=l.def&&l.def[w],ps=raw.length?raw:auto?[auto]:[],tieOK=(SV.cfg||{}).tieOut===false;
       const losers=ps.filter(t=>{const R=svRes(w,t);return R&&R.r&&R.r!=="W"&&!(R.r==="T"&&tieOK)});
-      const missed=l.flag&&l.flag[w]==="missed"||!ps.length;
+      const missed=!!(l.flag&&l.flag[w]==="missed")||!ps.length;
       const reason=missed?"missed":losers.some(t=>(svRes(w,t)||{}).r==="L")?"lost":losers.length?"tied":"other";
       rows.push({l,ps,losers,primary:losers[0]||"",reason,key:missed?"__missed":losers[0]||"__other"});
     }else if(l.alive&&l.s[w]==="losing")risk.push({l,ps:svPicks(l,w)});
@@ -4433,7 +4434,7 @@ function svElimHtml(w,data){
   all.filter(matches).forEach(x=>{if(!groups.has(x.key))groups.set(x.key,[]);groups.get(x.key).push(x)});
   const ordered=[...groups.entries()].sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0]));
   const entry=x=>'<div class="sve-entry'+(isOurs(x.l)?" mine":"")+'"><div class="sve-person"><b>'+
-    esc(x.l.who)+'</b><small>Entry '+esc(x.l.let)+(isOurs(x.l)?" · Yours":"")+'</small></div>'+
+    esc(x.l.who)+'</b><small>Entry '+esc(x.l.let)+(x.l.def&&x.l.def[w]?" · Default pick":"")+(isOurs(x.l)?" · Yours":"")+'</small></div>'+
     '<div class="sve-picks">'+(x.ps.length?x.ps.map(t=>'<span class="sve-pick '+(x.losers.includes(t)?"lost":"safe")+'">'+
     svLogo(w,t)+'<b>'+esc(t)+'</b>'+(x.losers.includes(t)?'<i>✕</i>':'')+'</span>').join(""):'<span class="sve-pick missing">No selection recorded</span>')+'</div>'+
     '<span class="sve-why">'+esc(x.reason==="missed"?"Missed pick":x.reason==="tied"?"Tie":x.reason==="other"?"Eliminated":"Lost")+'</span></div>';
